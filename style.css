@@ -32,7 +32,7 @@
 
 /* ---- Base overrides ---------------------------------------------------- */
 body {
-  font-family: var(--body) !important;
+  font-family: "Hanken Grotesk", -apple-system, sans-serif !important;
   background-color: var(--cream);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
@@ -43,14 +43,14 @@ body {
 p,
 .wp-block-paragraph,
 .wp-block-list li {
-  font-family: var(--body) !important;
+  font-family: "Hanken Grotesk", -apple-system, sans-serif !important;
   font-style: normal;
 }
 
 /* Headings: Fraunces with automatic optical sizing */
 h1, h2, h3, h4, h5, h6,
 .wp-block-heading {
-  font-family: var(--display) !important;
+  font-family: "Fraunces", Georgia, serif !important;
   font-optical-sizing: auto;
   font-weight: 500;
   line-height: 1.05;
@@ -74,7 +74,7 @@ a:hover { color: var(--kumkum); }
 .wcblr-meta,
 .wcblr-micro,
 .wcblr-spk__role {
-  font-family: var(--mono) !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
 }
 
 /* ---- Display elements: force Fraunces + optical sizing ---------------- */
@@ -84,24 +84,24 @@ a:hover { color: var(--kumkum); }
 .wcblr-stub__val--big,
 .wcblr-tier__label .wcblr-vt,
 .wcblr-sponsor-cta strong {
-  font-family: var(--display) !important;
+  font-family: "Fraunces", Georgia, serif !important;
   font-optical-sizing: auto;
 }
 
 /* ---- Shared helpers ---------------------------------------------------- */
 .wcblr-eyebrow {
-  font-family: var(--mono);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 12.5px;
   letter-spacing: 0.04em;
   color: var(--kumkum);
 }
-.wcblr-mono { font-family: var(--mono); }
+.wcblr-mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
 .wcblr-arrow { transition: transform 0.2s; }
 a:hover .wcblr-arrow { transform: translateX(3px); }
 
 /* ---- Top / bottom code strips ----------------------------------------- */
 .wcblr-strip {
-  font-family: var(--mono);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 12px;
 }
 .wcblr-strip .wcblr-strip__cmd  { color: var(--turmeric); margin: 0; }
@@ -128,7 +128,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   position: absolute;
   right: -40px;
   top: 30px;
-  font-family: var(--display);
+  font-family: "Fraunces", Georgia, serif;
   font-weight: 600;
   font-size: clamp(220px, 34vw, 460px);
   line-height: 0.8;
@@ -157,7 +157,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 
 /* Kannada kicker */
 .wcblr-kn {
-  font-family: var(--kannada);
+  font-family: "Noto Sans Kannada", sans-serif;
   font-size: 21px;
   color: var(--turmeric-deep);
   font-weight: 600;
@@ -186,7 +186,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   top: -16px;
   right: -12px;
   transform: rotate(5deg);
-  font-family: var(--mono);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11px;
   color: var(--turmeric-deep);
   border: 1.5px dashed var(--turmeric);
@@ -217,7 +217,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 .wcblr-marquee .wcblr-marquee__track {
   display: inline-block;
   animation: wcblr-scroll 26s linear infinite;
-  font-family: var(--mono);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 14px;
   font-weight: 500;
   color: var(--ink);
@@ -259,7 +259,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 .wcblr-cell--track { grid-column: span 4; }
 .wcblr-cell--feat  { grid-column: span 8; }
 .wcblr-cell .wcblr-num {
-  font-family: var(--display);
+  font-family: "Fraunces", Georgia, serif;
   font-weight: 600;
   font-size: clamp(56px, 7vw, 92px);
   line-height: 0.85;
@@ -286,7 +286,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 .wcblr-index__item:last-child { border-bottom: 1px solid var(--line); }
 .wcblr-index__item:hover      { padding-left: 18px; }
 .wcblr-index__num {
-  font-family: var(--display);
+  font-family: "Fraunces", Georgia, serif;
   font-weight: 600;
   font-size: clamp(40px, 5vw, 68px);
   line-height: 1;
@@ -321,7 +321,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 .wcblr-tier__label .wcblr-vt {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
-  font-family: var(--display);
+  font-family: "Fraunces", Georgia, serif;
   font-weight: 600;
   font-size: 18px;
   margin: 0;
@@ -357,7 +357,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--display);
+  font-family: "Fraunces", Georgia, serif;
   font-weight: 600;
   min-height: 88px;
   transition: border-color 0.15s, transform 0.15s;
@@ -386,7 +386,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   border-color: var(--ink);
 }
 .wcblr-ncard .wcblr-meta {
-  font-family: var(--mono);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 12px;
   color: var(--ink-muted);
 }
@@ -400,7 +400,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 /* ---- Newsletter ------------------------------------------------------- */
 .wcblr-newsletter { border-top: 1px solid var(--line); }
 .wcblr-newsletter .wcblr-micro {
-  font-family: var(--mono);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 12.5px;
   color: var(--turmeric-deep);
 }
@@ -416,7 +416,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   position: absolute;
   left: -18px;
   bottom: -78px;
-  font-family: var(--display);
+  font-family: "Fraunces", Georgia, serif;
   font-weight: 600;
   font-size: clamp(160px, 26vw, 360px);
   line-height: 0.8;
@@ -432,7 +432,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 
 /* ---- Plain eyebrow (speakers, venue) ---------------------------------- */
 .wcblr-eyebrow--plain {
-  font-family: var(--mono);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11.5px;
   letter-spacing: 0.18em;
   color: var(--turmeric-deep);
@@ -525,7 +525,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 
 /* H1: full display size with Fraunces optical sizing */
 .wcblr-hero h1 {
-  font-family: var(--display) !important;
+  font-family: "Fraunces", Georgia, serif !important;
   font-optical-sizing: auto;
   font-variation-settings: "opsz" 108;
   font-size: clamp(52px, 7.5vw, 108px) !important;
@@ -540,7 +540,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 
 /* Lead: Hanken Grotesk, never italic */
 .wcblr-lead {
-  font-family: var(--body) !important;
+  font-family: "Hanken Grotesk", -apple-system, sans-serif !important;
   font-style: normal !important;
   font-weight: 400 !important;
   color: var(--ink-muted);
@@ -557,7 +557,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   margin-bottom: 24px;
 }
 .wcblr-kicker__tag {
-  font-family: var(--mono);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11.5px;
   letter-spacing: 0.18em;
   color: var(--ink-muted);
@@ -592,14 +592,14 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   margin-bottom: 14px;
 }
 .wcblr-stub__lbl {
-  font-family: var(--mono);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 10.5px;
   letter-spacing: 0.14em;
   color: rgba(244,239,230,0.5);
   margin: 0;
 }
 .wcblr-stub__val {
-  font-family: var(--display);
+  font-family: "Fraunces", Georgia, serif;
   font-size: 19px;
   font-weight: 500;
   text-align: right;
@@ -610,14 +610,14 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   line-height: 1;
 }
 .wcblr-stub__seat {
-  font-family: var(--mono);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11px;
   color: var(--turmeric);
 }
 
 /* ---- Bento sub-elements ----------------------------------------------- */
 .wcblr-cell__label {
-  font-family: var(--mono);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11.5px;
   letter-spacing: 0.14em;
   color: var(--ink-muted);
@@ -631,7 +631,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--kannada);
+  font-family: "Noto Sans Kannada", sans-serif;
   font-size: 24px;
   font-weight: 600;
   margin-bottom: 18px;
@@ -639,7 +639,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 
 /* ---- Speaker sub-elements --------------------------------------------- */
 .wcblr-spk__role {
-  font-family: var(--mono);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 12px;
   color: var(--ink-muted);
   margin-top: 3px;
@@ -651,7 +651,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   line-height: 1.45;
 }
 .wcblr-spk-note {
-  font-family: var(--mono);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 12.5px;
   color: var(--ink-muted);
   margin-top: 28px;
@@ -667,7 +667,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   background: var(--kumkum);
 }
 .wcblr-ncard--feature .wp-block-post-title {
-  font-family: var(--display);
+  font-family: "Fraunces", Georgia, serif;
   font-size: clamp(28px, 3.4vw, 42px);
   font-weight: 500;
   line-height: 1.05;
