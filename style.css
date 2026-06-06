@@ -1,23 +1,444 @@
-/* ============================================================
-   WCBLR 2026 — Remote CSS
-   Push this file to a public GitHub repo, then paste the
-   raw URL into WordCamp Admin → Appearance → Remote CSS.
-   ============================================================ */
+/* =========================================================================
+   WordCamp Bengaluru 2026 — Remote CSS
+   https://raw.githubusercontent.com/wpblr/wcblr2026/main/style.css
 
+   Loaded via WordCamp Admin → Appearance → Remote CSS.
+   No child theme / no theme.json required — all tokens defined here.
+   ========================================================================= */
 
-/* ── Hero min-height ──────────────────────────────────────── */
-.wcblr-hero {
-  min-height: 88vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+/* ---- Design tokens (direct hex — no theme.json dependency) ------------- */
+:root {
+  /* Colours */
+  --ink:           #2A1D14;
+  --ink-muted:     #7A6757;
+  --cream:         #F2ECE0;
+  --paper:         #FBF8F1;
+  --kumkum:        #C8344B;
+  --kumkum-deep:   #A12339;
+  --turmeric:      #E0A526;
+  --turmeric-deep: #A8760F;
+  --teal:          #1D8B6E;
+  --teal-deep:     #136451;
+  --silver:        #8C7E6F;
+  --line:          rgba(42,29,20,0.16);
+
+  /* Fonts — map WP Font Library presets, with Google Fonts fallback */
+  --display: var(--wp--preset--font-family--fraunces,      "Fraunces", Georgia, serif);
+  --body:    var(--wp--preset--font-family--hanken-grotesk,"Hanken Grotesk", -apple-system, sans-serif);
+  --mono:    var(--wp--preset--font-family--jetbrains-mono,"JetBrains Mono", ui-monospace, monospace);
+  --kannada: var(--wp--preset--font-family--noto-sans-kannada,"Noto Sans Kannada", sans-serif);
 }
 
+/* ---- Base overrides (cream bg, ink text, smooth rendering) ------------- */
+body {
+  background-color: var(--cream);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
 
-/* ── Get Involved — icon boxes ────────────────────────────── */
-/* Icons are <img> tags pointing to /icons/*.svg on GitHub.  */
-/* CSS only handles the box geometry and tint background.    */
+/* Headings default to display font */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--display);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
 
+/* Links */
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--kumkum); }
+
+/* ---- Shared helpers ---------------------------------------------------- */
+.wcblr-eyebrow {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  color: var(--kumkum);
+}
+.wcblr-mono { font-family: var(--mono); }
+.wcblr-arrow { transition: transform 0.2s; }
+a:hover .wcblr-arrow { transform: translateX(3px); }
+
+/* ---- Top / bottom code strips ----------------------------------------- */
+.wcblr-strip {
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.wcblr-strip .wcblr-strip__cmd  { color: var(--turmeric); margin: 0; }
+.wcblr-strip .wcblr-strip__note { color: rgba(244,239,230,0.55); margin: 0; }
+
+/* ---- Header (template part class: wcblr-header) ----------------------- */
+.wcblr-header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: rgba(242,236,224,0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+
+/* ---- Hero -------------------------------------------------------------- */
+.wcblr-hero {
+  position: relative;
+  overflow: hidden;
+  padding-top: 72px;
+}
+/* Ghost year — Heading block, class wcblr-ghost, text = "26" */
+.wcblr-hero .wcblr-ghost {
+  position: absolute;
+  right: -40px;
+  top: 30px;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(220px, 34vw, 460px);
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(42,29,20,0.07);
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  margin: 0;
+}
+.wcblr-hero > .wp-block-group__inner-container,
+.wcblr-hero > * { position: relative; z-index: 2; }
+
+/* Hero h1 */
+.wcblr-hero h1 {
+  font-weight: 500;
+  font-size: clamp(56px, 9.5vw, 128px);
+  line-height: 0.86;
+  letter-spacing: -0.03em;
+}
+/* Wrap "Bengaluru" in <em> in the rich-text editor to get italic + kumkum */
+.wcblr-hero h1 em {
+  font-style: italic;
+  color: var(--kumkum);
+}
+
+/* Kannada kicker */
+.wcblr-kn {
+  font-family: var(--kannada);
+  font-size: 21px;
+  color: var(--turmeric-deep);
+  font-weight: 600;
+}
+
+/* Ticket stub (Group block, bg = Ink, text = Cream, class wcblr-stub) */
+.wcblr-stub {
+  position: relative;
+  border-radius: 14px;
+  box-shadow: 0 18px 40px -22px rgba(42,29,20,0.5);
+}
+/* Punch-hole notch */
+.wcblr-stub::before {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: var(--cream);
+  border-radius: 50%;
+  left: -11px;
+  top: 42%;
+}
+/* Rotated stamp — Paragraph block, class wcblr-stamp */
+.wcblr-stub .wcblr-stamp {
+  position: absolute;
+  top: -16px;
+  right: -12px;
+  transform: rotate(5deg);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--turmeric-deep);
+  border: 1.5px dashed var(--turmeric);
+  border-radius: 50px;
+  padding: 7px 14px;
+  background: var(--cream);
+  z-index: 4;
+  white-space: nowrap;
+  margin: 0;
+}
+/* Perforation line — Separator block, class wcblr-perf */
+.wcblr-stub .wcblr-perf {
+  border-top: 1.5px dashed rgba(244,239,230,0.3);
+}
+
+/* Skyline image */
+.wcblr-skyline { border-bottom: 2px solid var(--ink); }
+
+/* ---- Marquee ----------------------------------------------------------- */
+.wcblr-marquee {
+  overflow: hidden;
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  padding: 13px 0;
+  white-space: nowrap;
+}
+/* Paragraph block holding the text twice, class wcblr-marquee__track */
+.wcblr-marquee .wcblr-marquee__track {
+  display: inline-block;
+  animation: wcblr-scroll 26s linear infinite;
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  margin: 0;
+}
+@keyframes wcblr-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wcblr-marquee .wcblr-marquee__track { animation: none; }
+}
+
+/* ---- About image (Image block class: wcblr-frame) --------------------- */
+.wcblr-frame img {
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  width: 100%;
+}
+
+/* ---- Bento stats (Group block class: wcblr-bento) --------------------- */
+.wcblr-bento {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 18px;
+}
+.wcblr-cell {
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  padding: 34px;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+}
+.wcblr-cell--scale { grid-column: span 7; }
+.wcblr-cell--speak { grid-column: span 5; }
+.wcblr-cell--track { grid-column: span 4; }
+.wcblr-cell--feat  { grid-column: span 8; }
+.wcblr-cell .wcblr-num {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(56px, 7vw, 92px);
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  margin: 6px 0 18px;
+}
+@media (max-width: 820px) {
+  .wcblr-cell--scale,
+  .wcblr-cell--speak,
+  .wcblr-cell--track,
+  .wcblr-cell--feat { grid-column: span 12; }
+}
+
+/* ---- Get involved index ------------------------------------------------ */
+.wcblr-index__item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 36px;
+  align-items: center;
+  padding: 34px 0;
+  border-top: 1px solid var(--line);
+  transition: padding-left 0.25s;
+}
+.wcblr-index__item:last-child { border-bottom: 1px solid var(--line); }
+.wcblr-index__item:hover      { padding-left: 18px; }
+.wcblr-index__num {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(40px, 5vw, 68px);
+  line-height: 1;
+  min-width: 80px;
+}
+.wcblr-index__go {
+  font-size: 30px;
+  transition: transform 0.25s;
+}
+.wcblr-index__item:hover .wcblr-index__go {
+  transform: translateX(8px);
+  color: var(--kumkum);
+}
+@media (max-width: 760px) {
+  .wcblr-index__item { grid-template-columns: auto 1fr; gap: 20px; }
+  .wcblr-index__go   { display: none; }
+}
+
+/* ---- Sponsor tiers ----------------------------------------------------- */
+.wcblr-tier {
+  align-items: center;
+  border-top: 1px solid var(--line);
+  padding: 26px 0;
+}
+.wcblr-tier:last-of-type { border-bottom: 1px solid var(--line); }
+.wcblr-tier__label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.wcblr-tier__label .wcblr-vt {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 18px;
+  margin: 0;
+}
+.wcblr-tier__label .wcblr-accent {
+  width: 4px;
+  height: 26px;
+  border-radius: 2px;
+  background: currentColor;
+}
+.wcblr-tier__label .wcblr-dots {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.wcblr-tier__label .wcblr-dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+}
+.wcblr-tier__label .wcblr-dots i.on { background: currentColor; }
+
+.wcblr-tier--plat   .wcblr-tier__label { color: var(--ink); }
+.wcblr-tier--gold   .wcblr-tier__label { color: var(--turmeric-deep); }
+.wcblr-tier--silver .wcblr-tier__label { color: var(--silver); }
+.wcblr-tier--comm   .wcblr-tier__label { color: var(--teal-deep); }
+
+.wcblr-logo {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-weight: 600;
+  min-height: 88px;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.wcblr-logo:hover {
+  border-color: var(--ink);
+  transform: translateY(-3px);
+}
+@media (max-width: 760px) {
+  .wcblr-tier__label { flex-direction: row; }
+  .wcblr-tier__label .wcblr-vt    { writing-mode: horizontal-tb; transform: none; }
+  .wcblr-tier__label .wcblr-accent { display: none; }
+  .wcblr-tier__label .wcblr-dots  { flex-direction: row; }
+}
+
+/* ---- News cards (Query Loop post template class: wcblr-ncard) ---------- */
+.wcblr-ncard {
+  background: #ffffff;
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.18s, border-color 0.18s;
+}
+.wcblr-ncard:hover {
+  transform: translateY(-4px);
+  border-color: var(--ink);
+}
+.wcblr-ncard .wcblr-meta {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+/* Post card internals */
+.wcblr-ncard .wp-block-post-featured-image { margin: 0; line-height: 0; }
+.wcblr-ncard .wp-block-post-featured-image img { width: 100%; display: block; border-radius: 0; }
+.wcblr-ncard .wp-block-post-title a { text-decoration: none; color: inherit; }
+.wcblr-ncard .wp-block-post-title a:hover { color: var(--kumkum); }
+.wcblr-ncard .wp-block-read-more { color: var(--kumkum); font-weight: 600; text-decoration: none; }
+
+/* ---- Newsletter ------------------------------------------------------- */
+.wcblr-newsletter { border-top: 1px solid var(--line); }
+.wcblr-newsletter .wcblr-micro {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--turmeric-deep);
+}
+
+/* ---- Footer (template part class: wcblr-footer) ----------------------- */
+.wcblr-footer {
+  position: relative;
+  overflow: hidden;
+  border-top: 2px solid var(--ink);
+}
+/* Ghost "2026" — Heading block, class wcblr-ghost, aria-hidden="true" */
+.wcblr-footer .wcblr-ghost {
+  position: absolute;
+  left: -18px;
+  bottom: -78px;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(160px, 26vw, 360px);
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(42,29,20,0.06);
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  margin: 0;
+  white-space: nowrap;
+}
+.wcblr-footer > * { position: relative; z-index: 1; }
+
+/* ---- Plain eyebrow (speakers, venue) ---------------------------------- */
+.wcblr-eyebrow--plain {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.18em;
+  color: var(--turmeric-deep);
+}
+
+/* ---- Speakers (Query Loop on speaker CPT, post template: wcblr-spk) --- */
+.wcblr-spk {
+  background: #ffffff;
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 24px;
+  transition: transform 0.18s, border-color 0.18s;
+}
+.wcblr-spk:hover {
+  transform: translateY(-4px);
+  border-color: var(--ink);
+}
+.wcblr-spk .wcblr-ava {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.wcblr-spk--apply {
+  border-style: dashed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ---- Venue ------------------------------------------------------------ */
+.wcblr-venue .wcblr-vmeta li {
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.wcblr-venue .wcblr-vmeta li:last-child { border-bottom: 1px solid var(--line); }
+.wcblr-venue .wcblr-map {
+  aspect-ratio: 4/3;
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.wcblr-venue .wcblr-map iframe { width: 100%; height: 100%; border: 0; }
+
+/* ---- Icon boxes (Get Involved cards) ---------------------------------- */
 .wcblr-icon {
   width: 52px;
   height: 52px;
@@ -27,61 +448,10 @@
   justify-content: center;
   flex-shrink: 0;
 }
-
-.wcblr-icon img {
-  width: 24px;
-  height: 24px;
-  display: block;
-}
-
+.wcblr-icon img { width: 24px; height: 24px; display: block; }
 .wcblr-icon--speak   { background-color: rgba(205,38,83,0.12); }
 .wcblr-icon--sponsor { background-color: rgba(176,125,16,0.12); }
 .wcblr-icon--attend  { background-color: rgba(45,106,79,0.12); }
 
-
-/* ── News / Blog post cards ───────────────────────────────── */
-
-/* Hover lift */
-.wcblr-post-card {
-  transition: box-shadow 0.15s, transform 0.15s;
-}
-.wcblr-post-card:hover {
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-  transform: translateY(-2px);
-}
-
-/* Featured image: flush to card edges, no gap */
-.wcblr-post-card .wp-block-post-featured-image {
-  margin: 0;
-  line-height: 0;
-}
-.wcblr-post-card .wp-block-post-featured-image img {
-  width: 100%;
-  display: block;
-  border-radius: 0;
-}
-
-/* Date pill */
-.wcblr-post-date {
-  display: inline-flex;
-  align-items: center;
-  align-self: flex-start;
-}
-
-/* Title link — no underline, inherits colour */
-.wcblr-post-card .wp-block-post-title a {
-  text-decoration: none;
-  color: inherit;
-}
-.wcblr-post-card .wp-block-post-title a:hover {
-  color: #cd2653;
-}
-
-/* Read more link */
-.wcblr-post-card .wp-block-read-more {
-  text-decoration: none;
-  align-self: flex-start;
-}
-.wcblr-post-card .wp-block-read-more:hover {
-  text-decoration: underline;
-}
+/* ---- Accessibility ---------------------------------------------------- */
+/* Ghost numerals and marquee track: add aria-hidden="true" in the editor */
