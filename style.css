@@ -195,15 +195,26 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   padding: 13px 0;
   white-space: nowrap;
 }
-/* Paragraph block holding the text twice, class wcblr-marquee__track */
+/* Track — now a <div> inside wp:html, not a paragraph */
 .wcblr-marquee .wcblr-marquee__track {
   display: inline-block;
+  white-space: nowrap;
   animation: wcblr-scroll 26s linear infinite;
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 14px;
   font-weight: 500;
   color: #2A1D14;
   margin: 0;
+  padding: 0;
+}
+/* Separator dots — kumkum red */
+.wcblr-marquee .wcblr-marquee__dot {
+  color: #C8344B;
+  margin: 0 20px;
+}
+/* Text items */
+.wcblr-marquee .wcblr-marquee__item {
+  letter-spacing: 0.04em;
 }
 @keyframes wcblr-scroll {
   from { transform: translateX(0); }
