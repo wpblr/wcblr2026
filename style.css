@@ -139,7 +139,9 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   position: relative;
   border-radius: 14px;
   box-shadow: 0 18px 40px -22px rgba(42,29,20,0.5);
-  overflow: visible !important; /* stamp needs to bleed outside */
+  overflow: visible !important;
+  max-width: 394px;
+  margin-left: auto;
 }
 /* Punch-hole notch */
 .wcblr-stub::before {
@@ -150,13 +152,13 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   background: #F2ECE0;
   border-radius: 50%;
   left: -11px;
-  top: 42%;
+  top: 46%;
 }
 /* Rotated stamp — Paragraph block, class wcblr-stamp */
 .wcblr-stub .wcblr-stamp {
   position: absolute;
-  top: -16px;
-  right: -12px;
+  top: -44px;
+  right: -42px;
   transform: rotate(5deg);
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11px;
