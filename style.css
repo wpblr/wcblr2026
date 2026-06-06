@@ -470,8 +470,22 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 .wcblr-involved__head { margin-bottom: clamp(32px,4vw,46px); }
 
 /* ---- Hero sub-elements ------------------------------------------------ */
+
+/* Force wide columns so hero uses 1200px not TT5's 650px contentSize */
+.wcblr-hero .wp-block-columns {
+  max-width: var(--wp--style--global--wide-size, 1200px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Lead paragraph must never inherit italic from em/headings */
+.wcblr-lead {
+  font-style: normal !important;
+}
+
 .wcblr-kicker {
-  display: flex;
+  display: flex !important;
+  flex-direction: row !important;
   align-items: center;
   gap: 14px;
   margin-bottom: 24px;
@@ -484,7 +498,20 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   border-left: 1px solid var(--line);
   padding-left: 14px;
   margin: 0;
+  white-space: nowrap;
 }
+
+/* Stub rows must be flex — TT5 can override group layout */
+.wcblr-stub__row {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.wcblr-stub__val { text-align: right; }
+.wcblr-stub .wp-block-buttons { margin-top: 18px; }
 .wcblr-lead {
   font-size: 18px;
   color: var(--ink-muted);
