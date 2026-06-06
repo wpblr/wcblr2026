@@ -141,7 +141,14 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
 .wcblr-stub__val { text-align: right; }
 
 /* ---- Marquee ------------------------------------------------------------- */
-.wcblr-marquee { overflow: hidden; white-space: nowrap; }
+.wcblr-marquee {
+  background-color: #E0A526;
+  border-top: 2px solid #2A1D14;
+  border-bottom: 2px solid #2A1D14;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 13px 0;
+}
 
 .wcblr-marquee .wcblr-marquee__track {
   display: inline-block;
@@ -153,6 +160,15 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
   color: #2A1D14;
   margin: 0;
   padding: 0;
+}
+
+.wcblr-marquee__item {
+  letter-spacing: 0.04em;
+}
+
+.wcblr-marquee__dot {
+  color: #C8344B;
+  margin: 0 20px;
 }
 
 @keyframes wcblr-scroll {
