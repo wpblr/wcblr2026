@@ -25,6 +25,26 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
 /* ---- Hero ---------------------------------------------------------------- */
 .wcblr-hero { position: relative; overflow: hidden; }
 
+/* Ghost "26" — heading block with class wcblr-ghost */
+.wcblr-hero .wcblr-ghost {
+  position: absolute;
+  right: -40px;
+  top: 30px;
+  font-size: clamp(220px, 34vw, 460px);
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(42,29,20,0.07);
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  margin: 0;
+}
+
+/* Keep all other hero content above the ghost */
+.wcblr-hero > *:not(.wcblr-ghost) { position: relative; z-index: 2; }
+
+
+
 
 
 .wcblr-hero h1 {
