@@ -147,6 +147,10 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
   display: inline-block;
   white-space: nowrap;
   animation: wcblr-scroll 26s linear infinite;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2A1D14;
   margin: 0;
   padding: 0;
 }
