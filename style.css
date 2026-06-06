@@ -297,3 +297,11 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
   flex: 1;
   height: 100%;
 }
+
+/* Marquee wrapper — kill default block gap and constrained padding */
+.wcblr-marquee {
+  margin: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  display: block !important;
+}
