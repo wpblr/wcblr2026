@@ -23,7 +23,7 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
 }
 
 /* ---- Hero ---------------------------------------------------------------- */
-.wcblr-hero { position: relative; }
+.wcblr-hero { position: relative; overflow: hidden; }
 
 .wcblr-hero .wcblr-ghost {
   position: absolute;
