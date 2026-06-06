@@ -224,6 +224,28 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   .wcblr-marquee .wcblr-marquee__track { animation: none; }
 }
 
+
+/* ---- About image tag pill --------------------------------------------- */
+.wcblr-about__image {
+  position: relative;
+}
+.wcblr-tagpill {
+  position: absolute;
+  top: -16px;
+  left: -16px;
+  background: #E0A526;
+  color: #2A1D14;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border: 2px solid #2A1D14;
+  border-radius: 30px;
+  transform: rotate(-4deg);
+  white-space: nowrap;
+  z-index: 2;
+  margin: 0;
+}
 /* ---- About image (Image block class: wcblr-frame) --------------------- */
 .wcblr-frame img {
   border: 2px solid #2A1D14;
