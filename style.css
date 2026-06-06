@@ -231,7 +231,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 }
 .wcblr-tagpill {
   position: absolute;
-  top: -16px;
+  top: 5px;
   left: -16px;
   background: #E0A526;
   color: #2A1D14;
