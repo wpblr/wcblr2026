@@ -171,9 +171,17 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   white-space: nowrap;
   margin: 0;
 }
-/* Perforation line — Separator block, class wcblr-perf */
-.wcblr-stub .wcblr-perf {
-  border-top: 1.5px dashed rgba(244,239,230,0.3);
+/* Perforation — override TT25 :root :where(.wp-block-separator) rule */
+.wcblr-stub .wcblr-perf,
+.wcblr-stub .wp-block-separator {
+  border-top: 1.5px dashed rgba(244,239,230,0.3) !important;
+  border-bottom: 0 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-color: rgba(244,239,230,0.3) !important;
+  color: rgba(244,239,230,0.3) !important;
+  background: transparent !important;
+  opacity: 1 !important;
 }
 
 /* Skyline image */
