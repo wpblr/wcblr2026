@@ -471,16 +471,33 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 
 /* ---- Hero sub-elements ------------------------------------------------ */
 
-/* Force wide columns so hero uses 1200px not TT5's 650px contentSize */
-.wcblr-hero .wp-block-columns {
-  max-width: var(--wp--style--global--wide-size, 1200px) !important;
+/* Hero wide-width override — TT5 contentSize is 650px by default.
+   The .alignwide class is added by WordPress when a block is set to Wide width.
+   We also target the class directly as a fallback. */
+.wcblr-hero .wp-block-columns,
+.wcblr-hero .wcblr-hero__grid {
+  max-width: 1200px !important;
+  width: 100% !important;
   margin-left: auto !important;
   margin-right: auto !important;
+  padding-left: 32px !important;
+  padding-right: 32px !important;
 }
 
-/* Lead paragraph must never inherit italic from em/headings */
+/* H1: scale down slightly so "WordCamp" fits the 60% column at all viewports */
+.wcblr-hero h1 {
+  font-size: clamp(40px, 5.5vw, 88px) !important;
+  font-weight: 500;
+  line-height: 0.88;
+  letter-spacing: -0.03em;
+}
+
+/* Lead: force Hanken Grotesk, never inherit Fraunces or italic */
 .wcblr-lead {
+  font-family: "Hanken Grotesk", -apple-system, BlinkMacSystemFont, sans-serif !important;
   font-style: normal !important;
+  font-weight: 400 !important;
+  color: var(--ink-muted);
 }
 
 .wcblr-kicker {
