@@ -34,8 +34,8 @@
 /* Body + heading font-family is set via Site Editor → Styles → Typography.
    We only override colour, smoothing, and optical sizing here.           */
 body {
-  background-color: var(--cream);
-  color: var(--ink);
+  background-color: #F2ECE0;
+  color: #2A1D14;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -53,7 +53,7 @@ h1, h2, h3, h4, h5, h6,
 
 /* Links */
 a { color: inherit; text-decoration: none; }
-a:hover { color: var(--kumkum); }
+a:hover { color: #C8344B; }
 
 /* ---- Mono elements: force JetBrains Mono everywhere it's used ---------- */
 .wcblr-eyebrow,
@@ -87,7 +87,7 @@ a:hover { color: var(--kumkum); }
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 12.5px;
   letter-spacing: 0.04em;
-  color: var(--kumkum);
+  color: #C8344B;
 }
 .wcblr-mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
 .wcblr-arrow { transition: transform 0.2s; }
@@ -98,7 +98,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 12px;
 }
-.wcblr-strip .wcblr-strip__cmd  { color: var(--turmeric); margin: 0; }
+.wcblr-strip .wcblr-strip__cmd  { color: #E0A526; margin: 0; }
 .wcblr-strip .wcblr-strip__note { color: rgba(244,239,230,0.55); margin: 0; }
 
 /* ---- Header (template part class: wcblr-header) ----------------------- */
@@ -108,7 +108,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   z-index: 60;
   background: rgba(242,236,224,0.92);
   backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid rgba(42,29,20,0.16);
 }
 
 /* ---- Hero -------------------------------------------------------------- */
@@ -146,14 +146,14 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 /* Wrap "Bengaluru" in <em> in the rich-text editor to get italic + kumkum */
 .wcblr-hero h1 em {
   font-style: italic;
-  color: var(--kumkum);
+  color: #C8344B;
 }
 
 /* Kannada kicker */
 .wcblr-kn {
   font-family: "Noto Sans Kannada", sans-serif;
   font-size: 21px;
-  color: var(--turmeric-deep);
+  color: #A8760F;
   font-weight: 600;
 }
 
@@ -169,7 +169,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   position: absolute;
   width: 22px;
   height: 22px;
-  background: var(--cream);
+  background: #F2ECE0;
   border-radius: 50%;
   left: -11px;
   top: 42%;
@@ -182,11 +182,11 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   transform: rotate(5deg);
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11px;
-  color: var(--turmeric-deep);
-  border: 1.5px dashed var(--turmeric);
+  color: #A8760F;
+  border: 1.5px dashed #E0A526;
   border-radius: 50px;
   padding: 7px 14px;
-  background: var(--cream);
+  background: #F2ECE0;
   z-index: 4;
   white-space: nowrap;
   margin: 0;
@@ -197,13 +197,13 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 }
 
 /* Skyline image */
-.wcblr-skyline { border-bottom: 2px solid var(--ink); }
+.wcblr-skyline { border-bottom: 2px solid #2A1D14; }
 
 /* ---- Marquee ----------------------------------------------------------- */
 .wcblr-marquee {
   overflow: hidden;
-  border-top: 2px solid var(--ink);
-  border-bottom: 2px solid var(--ink);
+  border-top: 2px solid #2A1D14;
+  border-bottom: 2px solid #2A1D14;
   padding: 13px 0;
   white-space: nowrap;
 }
@@ -214,7 +214,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 14px;
   font-weight: 500;
-  color: var(--ink);
+  color: #2A1D14;
   margin: 0;
 }
 @keyframes wcblr-scroll {
@@ -227,7 +227,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 
 /* ---- About image (Image block class: wcblr-frame) --------------------- */
 .wcblr-frame img {
-  border: 2px solid var(--ink);
+  border: 2px solid #2A1D14;
   border-radius: 14px;
   aspect-ratio: 4/5;
   object-fit: cover;
@@ -241,12 +241,12 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   gap: 18px;
 }
 .wcblr-cell {
-  border: 1.5px solid var(--line);
+  border: 1.5px solid rgba(42,29,20,0.16);
   border-radius: 16px;
   padding: 34px;
   position: relative;
   overflow: hidden;
-  background: var(--paper);
+  background: #FBF8F1;
 }
 .wcblr-cell--scale { grid-column: span 7; }
 .wcblr-cell--speak { grid-column: span 5; }
@@ -274,10 +274,10 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   gap: 36px;
   align-items: center;
   padding: 34px 0;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid rgba(42,29,20,0.16);
   transition: padding-left 0.25s;
 }
-.wcblr-index__item:last-child { border-bottom: 1px solid var(--line); }
+.wcblr-index__item:last-child { border-bottom: 1px solid rgba(42,29,20,0.16); }
 .wcblr-index__item:hover      { padding-left: 18px; }
 .wcblr-index__num {
   font-family: "Fraunces", Georgia, serif;
@@ -292,7 +292,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 }
 .wcblr-index__item:hover .wcblr-index__go {
   transform: translateX(8px);
-  color: var(--kumkum);
+  color: #C8344B;
 }
 @media (max-width: 760px) {
   .wcblr-index__item { grid-template-columns: auto 1fr; gap: 20px; }
@@ -302,10 +302,10 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 /* ---- Sponsor tiers ----------------------------------------------------- */
 .wcblr-tier {
   align-items: center;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid rgba(42,29,20,0.16);
   padding: 26px 0;
 }
-.wcblr-tier:last-of-type { border-bottom: 1px solid var(--line); }
+.wcblr-tier:last-of-type { border-bottom: 1px solid rgba(42,29,20,0.16); }
 .wcblr-tier__label {
   display: flex;
   flex-direction: column;
@@ -339,14 +339,14 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 }
 .wcblr-tier__label .wcblr-dots i.on { background: currentColor; }
 
-.wcblr-tier--plat   .wcblr-tier__label { color: var(--ink); }
-.wcblr-tier--gold   .wcblr-tier__label { color: var(--turmeric-deep); }
-.wcblr-tier--silver .wcblr-tier__label { color: var(--silver); }
-.wcblr-tier--comm   .wcblr-tier__label { color: var(--teal-deep); }
+.wcblr-tier--plat   .wcblr-tier__label { color: #2A1D14; }
+.wcblr-tier--gold   .wcblr-tier__label { color: #A8760F; }
+.wcblr-tier--silver .wcblr-tier__label { color: #8C7E6F; }
+.wcblr-tier--comm   .wcblr-tier__label { color: #136451; }
 
 .wcblr-logo {
-  background: var(--paper);
-  border: 1.5px solid var(--line);
+  background: #FBF8F1;
+  border: 1.5px solid rgba(42,29,20,0.16);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -357,7 +357,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   transition: border-color 0.15s, transform 0.15s;
 }
 .wcblr-logo:hover {
-  border-color: var(--ink);
+  border-color: #2A1D14;
   transform: translateY(-3px);
 }
 @media (max-width: 760px) {
@@ -370,40 +370,40 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 /* ---- News cards (Query Loop post template class: wcblr-ncard) ---------- */
 .wcblr-ncard {
   background: #ffffff;
-  border: 1.5px solid var(--line);
+  border: 1.5px solid rgba(42,29,20,0.16);
   border-radius: 14px;
   overflow: hidden;
   transition: transform 0.18s, border-color 0.18s;
 }
 .wcblr-ncard:hover {
   transform: translateY(-4px);
-  border-color: var(--ink);
+  border-color: #2A1D14;
 }
 .wcblr-ncard .wcblr-meta {
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 12px;
-  color: var(--ink-muted);
+  color: #7A6757;
 }
 /* Post card internals */
 .wcblr-ncard .wp-block-post-featured-image { margin: 0; line-height: 0; }
 .wcblr-ncard .wp-block-post-featured-image img { width: 100%; display: block; border-radius: 0; }
 .wcblr-ncard .wp-block-post-title a { text-decoration: none; color: inherit; }
-.wcblr-ncard .wp-block-post-title a:hover { color: var(--kumkum); }
-.wcblr-ncard .wp-block-read-more { color: var(--kumkum); font-weight: 600; text-decoration: none; }
+.wcblr-ncard .wp-block-post-title a:hover { color: #C8344B; }
+.wcblr-ncard .wp-block-read-more { color: #C8344B; font-weight: 600; text-decoration: none; }
 
 /* ---- Newsletter ------------------------------------------------------- */
-.wcblr-newsletter { border-top: 1px solid var(--line); }
+.wcblr-newsletter { border-top: 1px solid rgba(42,29,20,0.16); }
 .wcblr-newsletter .wcblr-micro {
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 12.5px;
-  color: var(--turmeric-deep);
+  color: #A8760F;
 }
 
 /* ---- Footer (template part class: wcblr-footer) ----------------------- */
 .wcblr-footer {
   position: relative;
   overflow: hidden;
-  border-top: 2px solid var(--ink);
+  border-top: 2px solid #2A1D14;
 }
 /* Ghost "2026" — Heading block, class wcblr-ghost, aria-hidden="true" */
 .wcblr-footer .wcblr-ghost {
@@ -429,20 +429,20 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11.5px;
   letter-spacing: 0.18em;
-  color: var(--turmeric-deep);
+  color: #A8760F;
 }
 
 /* ---- Speakers (Query Loop on speaker CPT, post template: wcblr-spk) --- */
 .wcblr-spk {
   background: #ffffff;
-  border: 1.5px solid var(--line);
+  border: 1.5px solid rgba(42,29,20,0.16);
   border-radius: 14px;
   padding: 24px;
   transition: transform 0.18s, border-color 0.18s;
 }
 .wcblr-spk:hover {
   transform: translateY(-4px);
-  border-color: var(--ink);
+  border-color: #2A1D14;
 }
 .wcblr-spk .wcblr-ava {
   width: 64px;
@@ -460,12 +460,12 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 /* ---- Venue ------------------------------------------------------------ */
 .wcblr-venue .wcblr-vmeta li {
   padding: 14px 0;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid rgba(42,29,20,0.16);
 }
-.wcblr-venue .wcblr-vmeta li:last-child { border-bottom: 1px solid var(--line); }
+.wcblr-venue .wcblr-vmeta li:last-child { border-bottom: 1px solid rgba(42,29,20,0.16); }
 .wcblr-venue .wcblr-map {
   aspect-ratio: 4/3;
-  border: 2px solid var(--ink);
+  border: 2px solid #2A1D14;
   border-radius: 14px;
   overflow: hidden;
 }
@@ -489,12 +489,12 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 /* ---- Section wrappers (background + spacing) -------------------------- */
 .wcblr-about      { padding: clamp(64px,8vw,96px) 0; }
 .wcblr-bento      { padding: 0 0 clamp(64px,8vw,96px); }
-.wcblr-speakers   { padding: clamp(64px,8vw,96px) 0; border-top: 2px solid var(--ink); }
-.wcblr-involved   { background: var(--paper); padding: clamp(64px,8vw,96px) 0; border-top: 2px solid var(--ink); }
+.wcblr-speakers   { padding: clamp(64px,8vw,96px) 0; border-top: 2px solid #2A1D14; }
+.wcblr-involved   { background: #FBF8F1; padding: clamp(64px,8vw,96px) 0; border-top: 2px solid #2A1D14; }
 .wcblr-sponsors   { padding: clamp(64px,8vw,96px) 0; }
-.wcblr-venue      { background: var(--paper); padding: clamp(64px,8vw,96px) 0; border-top: 2px solid var(--ink); }
-.wcblr-news       { background: var(--paper); padding: clamp(64px,8vw,96px) 0; border-top: 2px solid var(--ink); }
-.wcblr-newsletter { padding: clamp(56px,7vw,84px) 0; border-top: 1px solid var(--line); }
+.wcblr-venue      { background: #FBF8F1; padding: clamp(64px,8vw,96px) 0; border-top: 2px solid #2A1D14; }
+.wcblr-news       { background: #FBF8F1; padding: clamp(64px,8vw,96px) 0; border-top: 2px solid #2A1D14; }
+.wcblr-newsletter { padding: clamp(56px,7vw,84px) 0; border-top: 1px solid rgba(42,29,20,0.16); }
 
 /* Section head rows (eyebrow + heading + optional link/sub-copy) */
 .wcblr-sponsors__head,
@@ -529,7 +529,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 }
 .wcblr-hero h1 em {
   font-style: italic;
-  color: var(--kumkum);
+  color: #C8344B;
 }
 
 /* Lead: Hanken Grotesk, never italic */
@@ -537,7 +537,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   font-family: "Hanken Grotesk", -apple-system, sans-serif !important;
   font-style: normal !important;
   font-weight: 400 !important;
-  color: var(--ink-muted);
+  color: #7A6757;
   font-size: 18px;
   max-width: 44ch;
   margin-top: 26px;
@@ -554,8 +554,8 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11.5px;
   letter-spacing: 0.18em;
-  color: var(--ink-muted);
-  border-left: 1px solid var(--line);
+  color: #7A6757;
+  border-left: 1px solid rgba(42,29,20,0.16);
   padding-left: 14px;
   margin: 0;
   white-space: nowrap;
@@ -574,7 +574,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 .wcblr-stub .wp-block-buttons { margin-top: 18px; }
 .wcblr-lead {
   font-size: 18px;
-  color: var(--ink-muted);
+  color: #7A6757;
   max-width: 44ch;
   margin-top: 26px;
 }
@@ -606,7 +606,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 .wcblr-stub__seat {
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11px;
-  color: var(--turmeric);
+  color: #E0A526;
 }
 
 /* ---- Bento sub-elements ----------------------------------------------- */
@@ -614,13 +614,13 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11.5px;
   letter-spacing: 0.14em;
-  color: var(--ink-muted);
+  color: #7A6757;
 }
 .wcblr-chip {
   width: 48px;
   height: 48px;
   border-radius: 13px;
-  background: var(--teal);
+  background: #1D8B6E;
   color: #fff;
   display: flex;
   align-items: center;
@@ -635,30 +635,30 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 .wcblr-spk__role {
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 12px;
-  color: var(--ink-muted);
+  color: #7A6757;
   margin-top: 3px;
 }
 .wcblr-spk__talk {
   font-size: 14.5px;
-  color: var(--ink-muted);
+  color: #7A6757;
   margin-top: 12px;
   line-height: 1.45;
 }
 .wcblr-spk-note {
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 12.5px;
-  color: var(--ink-muted);
+  color: #7A6757;
   margin-top: 28px;
 }
 .wcblr-spk-note a {
-  color: var(--kumkum);
-  border-bottom: 1px solid var(--kumkum);
+  color: #C8344B;
+  border-bottom: 1px solid #C8344B;
 }
 
 /* ---- News sub-elements ------------------------------------------------ */
 .wcblr-ncard__accent {
   height: 8px;
-  background: var(--kumkum);
+  background: #C8344B;
 }
 .wcblr-ncard--feature .wp-block-post-title {
   font-family: "Fraunces", Georgia, serif;
@@ -673,7 +673,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   justify-content: space-between;
   align-items: center;
   gap: 24px;
-  border: 1.5px dashed var(--line);
+  border: 1.5px dashed rgba(42,29,20,0.16);
   border-radius: 12px;
   padding: 24px 30px;
   margin-top: 30px;
@@ -684,8 +684,8 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   display: inline-flex;
   gap: 8px;
   font-weight: 600;
-  color: var(--kumkum);
-  border-bottom: 2px solid var(--kumkum);
+  color: #C8344B;
+  border-bottom: 2px solid #C8344B;
   padding-bottom: 3px;
 }
 
