@@ -284,3 +284,16 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
 
 /* ---- Skyline ------------------------------------------------------------- */
 .wcblr-skyline { border-bottom: 2px solid #2A1D14; }
+
+/* ---- Bento equal-height rows ------------------------------------------- */
+.wcblr-bento-row {
+  align-items: stretch !important;
+}
+.wcblr-bento-row .wp-block-column {
+  display: flex;
+  flex-direction: column;
+}
+.wcblr-bento-row .wp-block-column > .wp-block-group.wcblr-cell {
+  flex: 1;
+  height: 100%;
+}
