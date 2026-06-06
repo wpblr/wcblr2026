@@ -6,29 +6,6 @@
    No child theme / no theme.json required — all tokens defined here.
    ========================================================================= */
 
-/* ---- Design tokens (direct hex — no theme.json dependency) ------------- */
-:root {
-  /* Colours */
-  --ink:           #2A1D14;
-  --ink-muted:     #7A6757;
-  --cream:         #F2ECE0;
-  --paper:         #FBF8F1;
-  --kumkum:        #C8344B;
-  --kumkum-deep:   #A12339;
-  --turmeric:      #E0A526;
-  --turmeric-deep: #A8760F;
-  --teal:          #1D8B6E;
-  --teal-deep:     #136451;
-  --silver:        #8C7E6F;
-  --line:          rgba(42,29,20,0.16);
-
-  /* Font names — direct strings, no WP preset variable dependency.
-     These match the names the Font Library loads via @font-face.  */
-  --display: "Fraunces", Georgia, serif;
-  --body:    "Hanken Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
-  --mono:    "JetBrains Mono", ui-monospace, Menlo, monospace;
-  --kannada: "Noto Sans Kannada", sans-serif;
-}
 
 /* ---- Base overrides ---------------------------------------------------- */
 /* Body + heading font-family is set via Site Editor → Styles → Typography.
