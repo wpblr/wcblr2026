@@ -148,7 +148,11 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
   overflow: hidden;
   white-space: nowrap;
   padding: 13px 0;
-  margin: 0;
+  margin-top: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
   width: 100%;
 }
 
@@ -301,7 +305,16 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
 /* Marquee wrapper — kill default block gap and constrained padding */
 .wcblr-marquee {
   margin: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
   width: 100% !important;
   max-width: 100% !important;
   display: block !important;
+}
+
+/* Also kill any padding TT25 adds to the alignfull wrapper */
+.wp-block-group.alignfull:has(.wcblr-marquee) {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-top: 0 !important;
 }
