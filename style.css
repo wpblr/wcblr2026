@@ -31,26 +31,20 @@
 }
 
 /* ---- Base overrides ---------------------------------------------------- */
+/* Body + heading font-family is set via Site Editor → Styles → Typography.
+   We only override colour, smoothing, and optical sizing here.           */
 body {
-  font-family: "Hanken Grotesk", -apple-system, sans-serif !important;
   background-color: var(--cream);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-/* All paragraphs: Hanken Grotesk, never italic by default */
-p,
-.wp-block-paragraph,
-.wp-block-list li {
-  font-family: "Hanken Grotesk", -apple-system, sans-serif !important;
-  font-style: normal;
-}
+p, .wp-block-paragraph { font-style: normal; }
 
-/* Headings: Fraunces with automatic optical sizing */
+/* Headings: optical sizing + weight (font-family comes from Site Editor) */
 h1, h2, h3, h4, h5, h6,
 .wp-block-heading {
-  font-family: "Fraunces", Georgia, serif !important;
   font-optical-sizing: auto;
   font-weight: 500;
   line-height: 1.05;
