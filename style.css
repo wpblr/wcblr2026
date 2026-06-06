@@ -87,7 +87,7 @@ a:hover { color: #C8344B; }
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 12.5px;
   letter-spacing: 0.04em;
-  color: #C8344B;
+  color: #C8344B !important;
 }
 .wcblr-mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
 .wcblr-arrow { transition: transform 0.2s; }
@@ -133,8 +133,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   user-select: none;
   margin: 0;
 }
-.wcblr-hero > .wp-block-group__inner-container,
-.wcblr-hero > * { position: relative; z-index: 2; }
+.wcblr-hero > *:not(.wcblr-ghost) { position: relative; z-index: 2; }
 
 /* Hero h1 */
 .wcblr-hero h1 {
@@ -144,9 +143,10 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   letter-spacing: -0.03em;
 }
 /* Wrap "Bengaluru" in <em> in the rich-text editor to get italic + kumkum */
-.wcblr-hero h1 em {
-  font-style: italic;
-  color: #C8344B;
+.wcblr-hero h1 em,
+.wcblr-hero .wp-block-heading em {
+  font-style: italic !important;
+  color: #C8344B !important;
 }
 
 /* Kannada kicker */
@@ -293,7 +293,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 }
 .wcblr-index__item:hover .wcblr-index__go {
   transform: translateX(8px);
-  color: #C8344B;
+  color: #C8344B !important;
 }
 @media (max-width: 760px) {
   .wcblr-index__item { grid-template-columns: auto 1fr; gap: 20px; }
@@ -528,9 +528,10 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   line-height: 0.86;
   letter-spacing: -0.03em;
 }
-.wcblr-hero h1 em {
-  font-style: italic;
-  color: #C8344B;
+.wcblr-hero h1 em,
+.wcblr-hero .wp-block-heading em {
+  font-style: italic !important;
+  color: #C8344B !important;
 }
 
 /* Lead: Hanken Grotesk, never italic */
@@ -652,7 +653,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   margin-top: 28px;
 }
 .wcblr-spk-note a {
-  color: #C8344B;
+  color: #C8344B !important;
   border-bottom: 1px solid #C8344B;
 }
 
@@ -685,7 +686,7 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
   display: inline-flex;
   gap: 8px;
   font-weight: 600;
-  color: #C8344B;
+  color: #C8344B !important;
   border-bottom: 2px solid #C8344B;
   padding-bottom: 3px;
 }
