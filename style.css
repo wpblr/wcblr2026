@@ -25,10 +25,19 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
 /* ---- Hero ---------------------------------------------------------------- */
 .wcblr-hero { position: relative; overflow: hidden; }
 
-.wcblr-hero .wcblr-ghost {
+/* Ghost "26" — pseudo-element on the constrained grid (1200px)
+   so right:-40px is relative to content width, not full viewport */
+.wcblr-hero__grid {
+  position: relative;
+}
+
+.wcblr-hero__grid::before {
+  content: "26";
   position: absolute;
   right: -40px;
-  top: 30px;
+  top: -42px;
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
   font-size: clamp(220px, 34vw, 460px);
   line-height: 0.8;
   color: transparent;
@@ -36,10 +45,11 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
   z-index: 0;
   pointer-events: none;
   user-select: none;
-  margin: 0;
+  white-space: nowrap;
 }
 
-.wcblr-hero > *:not(.wcblr-ghost) { position: relative; z-index: 2; }
+/* Keep hero columns content above the pseudo ghost */
+.wcblr-hero__grid > * { position: relative; z-index: 2; }
 
 .wcblr-hero h1 {
   font-optical-sizing: auto;
