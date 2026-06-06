@@ -9,7 +9,7 @@
    ========================================================================= */
 
 /* ---- Base ---------------------------------------------------------------- */
-body { -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+body { -webkit-font-smoothing: antialiased; overflow-x: clip; }
 
 h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
 
@@ -23,7 +23,7 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
 }
 
 /* ---- Hero ---------------------------------------------------------------- */
-.wcblr-hero { position: relative; overflow: hidden; }
+.wcblr-hero { position: relative; overflow: visible; }
 
 .wcblr-hero .wcblr-ghost {
   position: absolute;
@@ -224,7 +224,7 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
 .wcblr-readmore { display: inline-flex; gap: 8px; border-bottom: 2px solid currentColor; padding-bottom: 3px; }
 
 /* ---- Footer -------------------------------------------------------------- */
-.wcblr-footer { position: relative; overflow: hidden; }
+.wcblr-footer { position: relative; overflow: visible; }
 
 .wcblr-footer .wcblr-ghost {
   position: absolute;
