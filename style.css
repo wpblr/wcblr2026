@@ -453,5 +453,154 @@ a:hover .wcblr-arrow { transform: translateX(3px); }
 .wcblr-icon--sponsor { background-color: rgba(176,125,16,0.12); }
 .wcblr-icon--attend  { background-color: rgba(45,106,79,0.12); }
 
+/* ---- Section wrappers (background + spacing) -------------------------- */
+.wcblr-about      { padding: clamp(64px,8vw,96px) 0; }
+.wcblr-bento      { padding: 0 0 clamp(64px,8vw,96px); }
+.wcblr-speakers   { padding: clamp(64px,8vw,96px) 0; border-top: 2px solid var(--ink); }
+.wcblr-involved   { background: var(--paper); padding: clamp(64px,8vw,96px) 0; border-top: 2px solid var(--ink); }
+.wcblr-sponsors   { padding: clamp(64px,8vw,96px) 0; }
+.wcblr-venue      { background: var(--paper); padding: clamp(64px,8vw,96px) 0; border-top: 2px solid var(--ink); }
+.wcblr-news       { background: var(--paper); padding: clamp(64px,8vw,96px) 0; border-top: 2px solid var(--ink); }
+.wcblr-newsletter { padding: clamp(56px,7vw,84px) 0; border-top: 1px solid var(--line); }
+
+/* Section head rows (eyebrow + heading + optional link/sub-copy) */
+.wcblr-sponsors__head,
+.wcblr-speakers__head,
+.wcblr-news__head,
+.wcblr-involved__head { margin-bottom: clamp(32px,4vw,46px); }
+
+/* ---- Hero sub-elements ------------------------------------------------ */
+.wcblr-kicker {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.wcblr-kicker__tag {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.18em;
+  color: var(--ink-muted);
+  border-left: 1px solid var(--line);
+  padding-left: 14px;
+  margin: 0;
+}
+.wcblr-lead {
+  font-size: 18px;
+  color: var(--ink-muted);
+  max-width: 44ch;
+  margin-top: 26px;
+}
+/* Stub rows */
+.wcblr-stub__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 14px;
+}
+.wcblr-stub__lbl {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  color: rgba(244,239,230,0.5);
+  margin: 0;
+}
+.wcblr-stub__val {
+  font-family: var(--display);
+  font-size: 19px;
+  font-weight: 500;
+  text-align: right;
+  margin: 0;
+}
+.wcblr-stub__val--big {
+  font-size: 34px;
+  line-height: 1;
+}
+.wcblr-stub__seat {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--turmeric);
+}
+
+/* ---- Bento sub-elements ----------------------------------------------- */
+.wcblr-cell__label {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  color: var(--ink-muted);
+}
+.wcblr-chip {
+  width: 48px;
+  height: 48px;
+  border-radius: 13px;
+  background: var(--teal);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--kannada);
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+/* ---- Speaker sub-elements --------------------------------------------- */
+.wcblr-spk__role {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-top: 3px;
+}
+.wcblr-spk__talk {
+  font-size: 14.5px;
+  color: var(--ink-muted);
+  margin-top: 12px;
+  line-height: 1.45;
+}
+.wcblr-spk-note {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--ink-muted);
+  margin-top: 28px;
+}
+.wcblr-spk-note a {
+  color: var(--kumkum);
+  border-bottom: 1px solid var(--kumkum);
+}
+
+/* ---- News sub-elements ------------------------------------------------ */
+.wcblr-ncard__accent {
+  height: 8px;
+  background: var(--kumkum);
+}
+.wcblr-ncard--feature .wp-block-post-title {
+  font-family: var(--display);
+  font-size: clamp(28px, 3.4vw, 42px);
+  font-weight: 500;
+  line-height: 1.05;
+}
+
+/* ---- Sponsor CTA row -------------------------------------------------- */
+.wcblr-sponsor-cta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  border: 1.5px dashed var(--line);
+  border-radius: 12px;
+  padding: 24px 30px;
+  margin-top: 30px;
+}
+
+/* ---- Read-more links -------------------------------------------------- */
+.wcblr-readmore {
+  display: inline-flex;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--kumkum);
+  border-bottom: 2px solid var(--kumkum);
+  padding-bottom: 3px;
+}
+
 /* ---- Accessibility ---------------------------------------------------- */
 /* Ghost numerals and marquee track: add aria-hidden="true" in the editor */
