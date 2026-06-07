@@ -394,3 +394,30 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
   align-items: center;
   gap: 24px;
 }
+
+/* ---- Sponsor logos grid — fixed columns matching concept ---------------- */
+.wcblr-logos { display: grid; gap: 14px; }
+.wcblr-logos-g4 { grid-template-columns: repeat(4, 1fr); }
+.wcblr-logos-g5 { grid-template-columns: repeat(5, 1fr); }
+.wcblr-logos-g6 { grid-template-columns: repeat(6, 1fr); }
+
+.wcblr-logo img {
+  max-height: 46px;
+  max-width: 72%;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.6;
+  transition: opacity 0.18s;
+}
+.wcblr-logo:hover img { opacity: 1; }
+
+/* Logo heights per tier */
+.wcblr-logos-g4 .wcblr-logo { min-height: 100px; }
+.wcblr-logos-g5 .wcblr-logo { min-height: 88px; }
+.wcblr-logos-g6 .wcblr-logo { min-height: 76px; }
+
+@media (max-width:760px) {
+  .wcblr-logos-g4,
+  .wcblr-logos-g5,
+  .wcblr-logos-g6 { grid-template-columns: 1fr 1fr; }
+}
