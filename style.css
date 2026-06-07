@@ -318,3 +318,13 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
   padding-right: 0 !important;
   margin-top: 0 !important;
 }
+
+/* Bento feature cell — button min width */
+.wcblr-cell .wp-block-buttons {
+  flex-shrink: 0;
+}
+.wcblr-cell .wp-block-button__link {
+  white-space: nowrap;
+  min-width: 180px;
+  text-align: center;
+}
