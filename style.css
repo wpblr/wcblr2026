@@ -360,39 +360,3 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
 .wcblr-cell--contrib::after {
   background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%232A1D14%22%20stroke-width%3D%221.2%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M19%2014c1.49-1.46%203-3.21%203-5.5A5.5%205.5%200%200%200%2016.5%203c-1.76%200-3%20.5-4.5%202-1.5-1.5-2.74-2-4.5-2A5.5%205.5%200%200%200%202%208.5c0%202.3%201.5%204.05%203%205.5l7%207Z%22%2F%3E%3C%2Fsvg%3E");
 }
-
-/* ---- Bento cell fixes --------------------------------------------------- */
-
-/* Numbers: consistent display size */
-.wcblr-bento-row .wcblr-num {
-  font-size: clamp(44px, 5.5vw, 72px) !important;
-  line-height: 0.85;
-  letter-spacing: -0.02em;
-  font-optical-sizing: auto;
-}
-
-/* Labels: JetBrains Mono, targeted via text-transform uppercase attribute */
-.wcblr-cell [style*="text-transform:uppercase"],
-.wcblr-cell [style*="text-transform: uppercase"] {
-  font-family: "JetBrains Mono", ui-monospace, monospace !important;
-  font-size: 11px !important;
-  letter-spacing: 0.14em !important;
-}
-
-/* Descriptions: Hanken Grotesk body font */
-.wcblr-cell .wp-block-paragraph {
-  font-family: "Hanken Grotesk", -apple-system, sans-serif !important;
-}
-
-/* Button in feat cell: match site button style */
-.wcblr-cell .wp-block-button__link {
-  font-family: "Hanken Grotesk", -apple-system, sans-serif !important;
-  font-weight: 600 !important;
-  font-size: 15px !important;
-  letter-spacing: 0 !important;
-}
-
-/* Uniform cell padding */
-.wcblr-bento-row .wp-block-group.wcblr-cell {
-  padding: 28px !important;
-}
