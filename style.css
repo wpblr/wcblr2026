@@ -360,3 +360,37 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
 .wcblr-cell--contrib::after {
   background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%232A1D14%22%20stroke-width%3D%221.2%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M19%2014c1.49-1.46%203-3.21%203-5.5A5.5%205.5%200%200%200%2016.5%203c-1.76%200-3%20.5-4.5%202-1.5-1.5-2.74-2-4.5-2A5.5%205.5%200%200%200%202%208.5c0%202.3%201.5%204.05%203%205.5l7%207Z%22%2F%3E%3C%2Fsvg%3E");
 }
+
+/* ---- Sponsor logo boxes ------------------------------------------------- */
+.wcblr-logo {
+  background: #FBF8F1;
+  border: 1.5px solid rgba(42,29,20,0.10);
+  border-radius: 10px;
+  padding: 24px;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.wcblr-logo:hover {
+  border-color: rgba(42,29,20,0.4);
+  transform: translateY(-2px);
+}
+.wcblr-logo img {
+  max-height: 52px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* ---- Sponsor CTA strip -------------------------------------------------- */
+.wcblr-sponsor-cta {
+  border: 1.5px dashed rgba(42,29,20,0.16);
+  border-radius: 12px;
+  padding: 24px 30px;
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
