@@ -244,6 +244,12 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
 .wcblr-sponsor-cta { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
 
 /* ---- News cards ---------------------------------------------------------- */
+.wcblr-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
 .wcblr-ncard { overflow: hidden; transition: transform 0.18s, border-color 0.18s; }
 .wcblr-ncard:hover { transform: translateY(-4px); }
 .wcblr-ncard .wp-block-post-featured-image { margin: 0; line-height: 0; }
@@ -267,7 +273,8 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
 }
 
 /* ---- Footer -------------------------------------------------------------- */
-.wcblr-footer { position: relative; overflow: visible; }
+footer { overflow: hidden; }
+.wcblr-footer { position: relative; overflow: hidden; }
 
 .wcblr-footer .wcblr-ghost {
   position: absolute;
@@ -287,7 +294,7 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
 .wcblr-footer > * { position: relative; z-index: 1; }
 
 /* ---- Skyline ------------------------------------------------------------- */
-.wcblr-skyline { border-bottom: 2px solid #2A1D14; }
+.wcblr-skyline { /* border-bottom: 2px solid #2A1D14; */ }
 
 /* ---- Bento equal-height rows ------------------------------------------- */
 .wcblr-bento-row {
@@ -338,10 +345,10 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
 .wcblr-cell::after {
   content: "";
   position: absolute;
-  bottom: 16px;
+  top: 16px;
   right: 16px;
-  width: 72px;
-  height: 72px;
+  width: 50px;
+  height: 50px;
   opacity: 0.07;
   background-size: contain;
   background-repeat: no-repeat;
@@ -382,6 +389,94 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
   width: auto;
   object-fit: contain;
 }
+
+/* ---- Become-a-sponsor inline CTA box ------------------------------------ */
+/* Usage: add "wcblr-become-sponsor" to the CTA box.                         */
+/* Add the tier class (t-plat / t-gold / t-silver / t-comm) to the SECTION   */
+/* wrapper — colour cascades down via currentColor automatically.             */
+.wcblr-become-sponsor {
+  border: 2px dashed currentColor !important;
+  border-radius: 10px;
+  background: #FBF8F1;
+  min-height: 86px !important;
+  min-width: 150px !important;
+  padding: 0 30px;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.wcblr-become-sponsor a {
+  font-size: 17px;
+  font-weight: 500;
+  text-decoration: none !important;
+  color: currentColor !important;
+}
+.wcblr-become-sponsor a:hover { opacity: 0.75; }
+
+/* Tier colour set on the section cascades to both tier-label and CTA box */
+.t-plat .wcblr-become-sponsor,
+.t-plat .tier-label { color: #2A1D14; }
+.t-gold .wcblr-become-sponsor,
+.t-gold .tier-label { color: #A8760F; }
+.t-silver .wcblr-become-sponsor,
+.t-silver .tier-label { color: #8C7E6F; }
+.t-comm .wcblr-become-sponsor,
+.t-comm .tier-label { color: #136451; }
+
+/* ---- Speakers grid ------------------------------------------------------- */
+.speakers-grid .wp-block-wordcamp-speaker-sessions {
+  font-size: 13.5px;
+  color: var(--wp--preset--color--ink-muted);
+  margin-top: 9px;
+  line-height: 1.4;
+  list-style: none;
+  padding: 0;
+}
+.speakers-grid .wp-block-wordcamp-speaker-sessions li p { margin-top: 0; margin-bottom: 0; font-weight: 700; }
+
+.wp-block-wordcamp-avatar { margin: 0 !important; }
+
+/* "Session:" / "Track:" label — light weight */
+.has-jetbrains-mono-font-family.wp-block-paragraph strong { font-weight: 300; }
+
+/* Session title text */
+.wp-block-wordcamp-speaker-sessions li > p:not(.wordcamp-speaker-sessions__session-info) {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: #2A1D14;
+  line-height: 1.35;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Date / time line */
+p.wordcamp-speaker-sessions__session-info {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #7A6757;
+  margin-top: 7px !important;
+  display: block;
+  font-weight: 400 !important;
+}
+.speakers-grid .wp-block-post-title a { text-decoration: none; color: inherit; }
+.speakers-grid .taxonomy-wcb_speaker_group a { text-decoration: none; font-weight: 500; }
+.speakers-grid .wp-block-post-title a:hover { color: #C8344B; }
+
+/* Equal-height cards */
+.speakers-grid .wp-block-post-template > li {
+  display: flex;
+  flex-direction: column;
+}
+.speakers-grid .wp-block-post-template > li > .wp-block-group {
+  flex: 1;
+}
+
+/* ---- Sponsor callout box ------------------------------------------------ */
+.sponsor-callout { border-style: dashed !important; }
 
 /* ---- Sponsor CTA strip -------------------------------------------------- */
 .wcblr-sponsor-cta {
