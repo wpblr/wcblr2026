@@ -13,6 +13,49 @@ body { -webkit-font-smoothing: antialiased; overflow-x: clip; }
 
 h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
 
+/* ---- Nav submenu --------------------------------------------------------- */
+.wcblr-header .wp-block-navigation-item { position: relative; }
+.wcblr-header .wp-block-navigation__submenu-container {
+  position: absolute !important;
+  left: 0 !important;
+  top: calc(100% + 12px) !important;
+  border-radius: 10px !important;
+  border: 1.5px solid rgba(42,29,20,0.10) !important;
+  box-shadow: 0 8px 24px rgba(42,29,20,0.10) !important;
+  overflow: visible !important;
+  background: #FBF8F1 !important;
+  padding: 8px 14px !important;
+  min-width: 140px !important;
+}
+/* Bridge the 12px gap so hover isn't lost crossing it */
+.wcblr-header .wp-block-navigation__submenu-container::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 0;
+  right: 0;
+  height: 12px;
+}
+.wcblr-header .wp-block-navigation__submenu-container .wp-block-navigation-item__content {
+  font-family: 'Hanken Grotesk', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  color: #2A1D14 !important;
+  text-decoration: none !important;
+  padding: 10px 0 !important;
+  border-radius: 6px;
+  display: block;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.wcblr-header .wp-block-navigation__submenu-container .wp-block-navigation-item:not(:last-child) {
+  border-bottom: 2px dashed rgba(42,29,20,0.08);
+}
+.wcblr-header .wp-block-navigation__submenu-container .wp-block-navigation-item:hover .wp-block-navigation-item__content {
+  background: rgba(42,29,20,0.06) !important;
+  color: #C8344B !important;
+}
+
 /* ---- Header -------------------------------------------------------------- */
 .wcblr-header {
   position: sticky;
@@ -556,3 +599,107 @@ p.wordcamp-speaker-sessions__session-info {
 .t-gold  { color: #A8760F; }
 .t-silver{ color: #8C7E6F; }
 .t-comm  { color: #136451; }
+
+/* =========================================================================
+   Coming Soon page — #wccsp-container
+   ========================================================================= */
+#wccsp-container {
+  background: #F2ECE0;
+  min-height: 100vh;
+  font-family: 'Hanken Grotesk', sans-serif;
+  color: #2A1D14;
+}
+
+/* Header bar */
+.wccsp-header {
+  background: #2A1D14;
+  padding: 28px 0;
+}
+.wccsp-header h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(26px, 4vw, 48px);
+  font-weight: 600;
+  color: #F2ECE0;
+  line-height: 1;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+/* Inner container width */
+.wccsp-container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding-left: 24px;
+  padding-right: 24px;
+  box-sizing: border-box;
+}
+
+/* Introduction */
+.wccsp-introduction { padding: 48px 0 40px; }
+#wccsp-introduction {
+  font-size: 17px;
+  line-height: 1.65;
+  color: #2A1D14;
+  margin: 0;
+}
+
+/* Contact heading */
+.wccsp-contact h2 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 600;
+  color: #2A1D14;
+  letter-spacing: -0.01em;
+  margin-top: 0;
+  margin-bottom: 28px;
+}
+
+/* Form labels */
+.grunion-field-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #7A6757;
+  display: block;
+  margin-bottom: 8px;
+}
+.grunion-label-required { display: none; }
+
+/* Inputs & textarea */
+.grunion-field {
+  width: 100%;
+  background: #FBF8F1;
+  border: 1.5px solid rgba(42,29,20,0.15) !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 15px !important;
+  color: #2A1D14;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+  height: auto !important;
+}
+.grunion-field:focus {
+  outline: none;
+  border-color: #2A1D14 !important;
+}
+textarea.grunion-field { min-height: 140px; resize: vertical; rows: 6; }
+.grunion-field-wrap { margin-bottom: 20px; }
+
+/* Submit button */
+.pushbutton-wide {
+  background: #2A1D14 !important;
+  color: #F2ECE0 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 14px 32px !important;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 15px !important;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  width: 100%;
+}
+.pushbutton-wide:hover { opacity: 0.85; }
