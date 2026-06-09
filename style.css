@@ -670,7 +670,8 @@ textarea.grunion-field:focus {
   box-shadow: 0 0 0 3px rgba(42,29,20,0.08) !important;
 }
 textarea.grunion-field {
-  field-sizing: content !important;
+  field-sizing: content !important; /* auto-grow in Chrome 123+/FF 128+/Safari 18+ */
+  height: 120px !important;         /* fallback: overrides rows="20" in older browsers */
   min-height: 100px !important;
   resize: vertical;
   line-height: 1.6;
@@ -751,6 +752,7 @@ textarea.grunion-field {
   align-items: center;
   margin: 0 !important;
   padding: 0 !important;
+  border: none !important;
 }
 .contact-form-field.wp-block-jetpack-option {
   display: inline-flex !important;
