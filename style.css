@@ -865,6 +865,13 @@ input[type=checkbox] {
   text-decoration: underline !important;
 }
 
+/* ---- Jetpack forms — per-form field-width overrides --------------------- */
+/* Speaker form (contact-form-107): standalone text fields → full width.
+   Name + Email keep their natural 2-col placement (different wrap classes). */
+#contact-form-107 .grunion-field-text-wrap {
+  grid-column: 1 / -1;
+}
+
 /* ---- Jetpack forms — 2-column grid layout -------------------------------- */
 .wp-block-jetpack-contact-form {
   display: grid !important;
