@@ -626,6 +626,165 @@ p:has(.sft-feedback-link) {
   color: inherit;
 }
 
+/* ---- Jetpack forms — base field styles (all forms) ----------------------- */
+/* Labels */
+.grunion-field-label {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10.5px !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: #7A6757 !important;
+  font-weight: 400 !important;
+  display: block;
+  margin-bottom: 8px;
+}
+.grunion-label-required { display: none; }
+/* Field wrapper */
+.grunion-field-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+/* Inputs & textarea */
+input.grunion-field,
+textarea.grunion-field {
+  font-family: 'Hanken Grotesk', sans-serif !important;
+  font-size: 15.5px !important;
+  color: #2A1D14 !important;
+  background: #fff !important;
+  border: 1.5px solid rgba(42,29,20,0.16) !important;
+  border-radius: 10px !important;
+  padding: 12px 14px !important;
+  width: 100% !important;
+  box-shadow: none !important;
+  transition: border-color .15s, box-shadow .15s;
+  height: auto !important;
+}
+input.grunion-field::placeholder,
+textarea.grunion-field::placeholder { color: #b3a392; }
+input.grunion-field:focus,
+textarea.grunion-field:focus {
+  outline: none !important;
+  border-color: #2A1D14 !important;
+  box-shadow: 0 0 0 3px rgba(42,29,20,0.08) !important;
+}
+textarea.grunion-field {
+  min-height: 130px !important;
+  resize: vertical;
+  line-height: 1.6;
+}
+/* Select */
+.contact-form__select-wrapper {
+  border: 1.5px solid rgba(42,29,20,0.16) !important;
+  border-radius: 10px !important;
+  background: #fff !important;
+  padding: 0 !important;
+}
+.contact-form__select-element-wrapper select {
+  font-family: 'Hanken Grotesk', sans-serif !important;
+  font-size: 15.5px !important;
+  color: #2A1D14 !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 12px 40px 12px 14px !important;
+  width: 100% !important;
+  appearance: none;
+  -webkit-appearance: none;
+  height: auto !important;
+}
+/* Phone input */
+.jetpack-field__input-phone-wrapper {
+  border: 1.5px solid rgba(42,29,20,0.16) !important;
+  border-radius: 10px !important;
+  background: #fff !important;
+  padding: 0 4px 0 0 !important;
+  height: auto !important;
+}
+.jetpack-field__input-element {
+  font-family: 'Hanken Grotesk', sans-serif !important;
+  font-size: 15.5px !important;
+  color: #2A1D14 !important;
+  border: none !important;
+  background: transparent !important;
+  padding: 12px 14px 12px 8px !important;
+  height: auto !important;
+}
+/* Radio */
+.grunion-radio-options {
+  display: flex !important;
+  gap: 26px !important;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.contact-form-field.wp-block-jetpack-option {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 9px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 0 !important;
+}
+input[type=radio].grunion-field {
+  width: 18px !important;
+  height: 18px !important;
+  accent-color: #C8344B;
+  cursor: pointer;
+  flex-shrink: 0;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+/* Radio / checkbox legend */
+.jetpack-field-multiple__fieldset legend {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10.5px !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: #7A6757 !important;
+  margin-bottom: 12px;
+  font-weight: 400;
+}
+/* Submit button */
+.wp-block-jetpack-button .wp-block-button__link {
+  font-family: 'Hanken Grotesk', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  background: #2A1D14 !important;
+  color: #F2ECE0 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 14px 34px !important;
+  cursor: pointer;
+  transition: opacity .15s;
+  width: auto !important;
+}
+.wp-block-jetpack-button .wp-block-button__link:hover { opacity: 0.85; }
+/* Inline error messages */
+.contact-form__input-error {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #C8344B;
+}
+
+/* ---- Jetpack forms — layout overrides (per form container) --------------- */
+/* 2-column grid — add class "jf-2col" to the outer wrapping Group block */
+.jf-2col .wp-block-jetpack-contact-form {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px 26px;
+}
+.jf-2col .grunion-field-wrap { margin-bottom: 0; }
+/* Full-width fields inside a 2-col grid */
+.jf-2col .grunion-field-textarea-wrap,
+.jf-2col .grunion-field-radio-wrap,
+.jf-2col .wp-block-jetpack-button,
+.jf-2col .contact-form__error { grid-column: 1 / -1; }
+@media (max-width: 620px) {
+  .jf-2col .wp-block-jetpack-contact-form { grid-template-columns: 1fr !important; }
+}
+
 /* ---- Sponsor callout box ------------------------------------------------ */
 .sponsor-callout { border-style: dashed !important; }
 
@@ -761,40 +920,6 @@ p:has(.sft-feedback-link) {
   margin-top: 0;
   margin-bottom: 28px;
 }
-
-/* Form labels */
-.grunion-field-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: #7A6757;
-  display: block;
-  margin-bottom: 8px;
-}
-.grunion-label-required { display: none; }
-
-/* Inputs & textarea */
-.grunion-field {
-  width: 100%;
-  background: #FBF8F1;
-  border: 1.5px solid rgba(42,29,20,0.15) !important;
-  border-radius: 8px !important;
-  padding: 12px 16px !important;
-  font-family: 'Hanken Grotesk', sans-serif;
-  font-size: 15px !important;
-  color: #2A1D14;
-  box-sizing: border-box;
-  transition: border-color 0.15s;
-  height: auto !important;
-}
-.grunion-field:focus {
-  outline: none;
-  border-color: #2A1D14 !important;
-}
-textarea.grunion-field { min-height: 140px; resize: vertical; rows: 6; }
-.grunion-field-wrap { margin-bottom: 20px; }
 
 /* Submit button */
 .pushbutton-wide {
