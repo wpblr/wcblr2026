@@ -630,13 +630,13 @@ p:has(.sft-feedback-link) {
 /* Labels */
 .grunion-field-label {
   font-family: 'JetBrains Mono', monospace !important;
-  font-size: 10.5px !important;
+  font-size: 12px !important;
   letter-spacing: 0.14em !important;
   text-transform: uppercase !important;
   color: #7A6757 !important;
-  font-weight: 400 !important;
+  font-weight: 500 !important;
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 0;
 }
 .grunion-label-required { display: none; }
 /* Field wrapper */
@@ -646,8 +646,8 @@ p:has(.sft-feedback-link) {
   gap: 8px;
   margin-bottom: 20px;
 }
-/* Inputs & textarea */
-input.grunion-field,
+/* Inputs & textarea (exclude radio/checkbox) */
+input.grunion-field:not([type=radio]):not([type=checkbox]),
 textarea.grunion-field {
   font-family: 'Hanken Grotesk', sans-serif !important;
   font-size: 15.5px !important;
@@ -661,16 +661,17 @@ textarea.grunion-field {
   transition: border-color .15s, box-shadow .15s;
   height: auto !important;
 }
-input.grunion-field::placeholder,
+input.grunion-field:not([type=radio]):not([type=checkbox])::placeholder,
 textarea.grunion-field::placeholder { color: #b3a392; }
-input.grunion-field:focus,
+input.grunion-field:not([type=radio]):not([type=checkbox]):focus,
 textarea.grunion-field:focus {
   outline: none !important;
   border-color: #2A1D14 !important;
   box-shadow: 0 0 0 3px rgba(42,29,20,0.08) !important;
 }
 textarea.grunion-field {
-  min-height: 130px !important;
+  field-sizing: content !important;
+  min-height: 100px !important;
   resize: vertical;
   line-height: 1.6;
 }
@@ -694,47 +695,93 @@ textarea.grunion-field {
   -webkit-appearance: none;
   height: auto !important;
 }
-/* Phone input */
+/* Phone field — Jetpack custom combobox */
 .jetpack-field__input-phone-wrapper {
+  display: flex !important;
+  align-items: stretch !important;
   border: 1.5px solid rgba(42,29,20,0.16) !important;
   border-radius: 10px !important;
   background: #fff !important;
-  padding: 0 4px 0 0 !important;
-  height: auto !important;
+  padding: 0 !important;
+  overflow: hidden;
+  /* override inline border-style:solid from Jetpack */
+  border-style: solid !important;
+}
+.jetpack-field__input-prefix {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  border-right: 1px solid rgba(42,29,20,0.10);
+}
+.jetpack-combobox-trigger {
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 12px !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  cursor: pointer;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 15.5px;
+  line-height: 1.5;
+  color: #2A1D14;
+  white-space: nowrap;
 }
 .jetpack-field__input-element {
+  flex: 1;
   font-family: 'Hanken Grotesk', sans-serif !important;
   font-size: 15.5px !important;
   color: #2A1D14 !important;
   border: none !important;
   background: transparent !important;
-  padding: 12px 14px 12px 8px !important;
+  padding: 12px 14px !important;
+  min-width: 0;
   height: auto !important;
 }
-/* Radio */
-.grunion-radio-options {
+/* Radio / checkbox options */
+.grunion-radio-options,
+.grunion-checkbox-options {
   display: flex !important;
-  gap: 26px !important;
+  flex-direction: row !important;
   flex-wrap: wrap;
+  gap: 16px 26px !important;
   align-items: center;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 .contact-form-field.wp-block-jetpack-option {
   display: inline-flex !important;
+  flex-direction: row !important;
   align-items: center;
   gap: 9px;
-  font-size: 16px;
+  font-size: 15.5px;
   cursor: pointer;
   margin: 0 !important;
+  padding: 0 !important;
 }
-input[type=radio].grunion-field {
-  width: 18px !important;
-  height: 18px !important;
+input[type=radio],
+input[type=checkbox] {
+  width: 16px !important;
+  height: 16px !important;
   accent-color: #C8344B;
   cursor: pointer;
   flex-shrink: 0;
   border: none !important;
-  box-shadow: none !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
   background: transparent !important;
+  box-shadow: none !important;
+  appearance: auto !important;
+  -webkit-appearance: auto !important;
+  position: static !important;
+}
+/* Kill Jetpack's fake pseudo-element radio overlay */
+.contact-form .grunion-field-wrap:not(.is-style-plain) input.radio:before {
+  content: none !important;
+  display: none !important;
 }
 /* Radio / checkbox legend */
 .jetpack-field-multiple__fieldset legend {
@@ -746,8 +793,14 @@ input[type=radio].grunion-field {
   margin-bottom: 12px;
   font-weight: 400;
 }
-/* Submit button */
-.wp-block-jetpack-button .wp-block-button__link {
+/* Submit button wrapper reset */
+.wp-block-jetpack-contact-form .wp-block-button,
+.wp-block-jetpack-contact-form .wp-block-jetpack-button {
+  min-height: initial !important;
+}
+/* Submit button — match Jetpack's 3-class specificity */
+.wp-block-jetpack-contact-form .wp-block-button .wp-block-button__link,
+.wp-block-jetpack-contact-form .wp-block-jetpack-button .wp-block-button__link {
   font-family: 'Hanken Grotesk', sans-serif !important;
   font-size: 15px !important;
   font-weight: 600 !important;
@@ -756,33 +809,77 @@ input[type=radio].grunion-field {
   border: none !important;
   border-radius: 8px !important;
   padding: 14px 34px !important;
+  min-height: initial !important;
   cursor: pointer;
   transition: opacity .15s;
   width: auto !important;
 }
-.wp-block-jetpack-button .wp-block-button__link:hover { opacity: 0.85; }
-/* Inline error messages */
+.wp-block-jetpack-contact-form .wp-block-button .wp-block-button__link:hover,
+.wp-block-jetpack-contact-form .wp-block-jetpack-button .wp-block-button__link:hover { opacity: 0.85; }
+/* Inline field error */
 .contact-form__input-error {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   color: #C8344B;
 }
+/* Form-level error block — only when Jetpack adds .show-errors */
+.contact-form__error.show-errors {
+  background: rgba(200,52,75,0.05) !important;
+  border: 1.5px solid rgba(200,52,75,0.25) !important;
+  border-radius: 10px !important;
+  padding: 16px 18px !important;
+  display: flex !important;
+  flex-direction: column;
+  gap: 10px;
+}
+.contact-form__warning-icon {
+  display: none; /* hide default Jetpack icon — we use border colour as signal */
+}
+.contact-form__error-message {
+  font-family: 'Hanken Grotesk', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: #C8344B !important;
+}
+.contact-form__error ul {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.contact-form__error ul li {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.contact-form__error ul li::before { content: none !important; }
+.contact-form__error ul li a {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 13px !important;
+  color: #C8344B !important;
+  text-decoration: none !important;
+  opacity: 1;
+}
+.contact-form__error ul li a:hover {
+  text-decoration: underline !important;
+}
 
-/* ---- Jetpack forms — layout overrides (per form container) --------------- */
-/* 2-column grid — add class "jf-2col" to the outer wrapping Group block */
-.jf-2col .wp-block-jetpack-contact-form {
+/* ---- Jetpack forms — 2-column grid layout -------------------------------- */
+.wp-block-jetpack-contact-form {
   display: grid !important;
   grid-template-columns: 1fr 1fr;
   gap: 22px 26px;
 }
-.jf-2col .grunion-field-wrap { margin-bottom: 0; }
-/* Full-width fields inside a 2-col grid */
-.jf-2col .grunion-field-textarea-wrap,
-.jf-2col .grunion-field-radio-wrap,
-.jf-2col .wp-block-jetpack-button,
-.jf-2col .contact-form__error { grid-column: 1 / -1; }
+.grunion-field-wrap { margin-bottom: 0; }
+/* Full-width: textarea, radio/checkbox groups, button, errors */
+.grunion-field-textarea-wrap,
+.grunion-field-radio-wrap,
+.grunion-field-checkbox-wrap,
+.wp-block-jetpack-button,
+.contact-form__error { grid-column: 1 / -1; }
 @media (max-width: 620px) {
-  .jf-2col .wp-block-jetpack-contact-form { grid-template-columns: 1fr !important; }
+  .wp-block-jetpack-contact-form { grid-template-columns: 1fr !important; }
 }
 
 /* ---- Sponsor callout box ------------------------------------------------ */
