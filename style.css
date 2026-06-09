@@ -561,6 +561,25 @@ p.wordcamp-speaker-sessions__session-info {
   font-weight: 500;
 }
 
+/* ---- Organizer grid equal-height cards ---------------------------------- */
+.wp-block-post-template li.type-wcb_organizer {
+  display: flex;
+  flex-direction: column;
+}
+.wp-block-post-template li.type-wcb_organizer > .wp-block-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.wp-block-post-template li.type-wcb_organizer > .wp-block-group > .wp-block-group:last-child {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.wp-block-post-template li.type-wcb_organizer .wp-block-post-excerpt {
+  flex: 1;
+}
+
 /* ---- Single session details card ---------------------------------------- */
 .wp-block-wordcamp-session-date time,
 .taxonomy-wcb_track a,
