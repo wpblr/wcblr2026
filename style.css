@@ -518,6 +518,37 @@ p.wordcamp-speaker-sessions__session-info {
   flex: 1;
 }
 
+/* ---- Single speaker page ------------------------------------------------- */
+.single-wcb_speaker .wp-block-wordcamp-speaker-sessions li > p:first-child {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.35;
+  margin-bottom: 12px;
+}
+.single-wcb_speaker .taxonomy-wcb_speaker_group a {
+  text-decoration: none;
+  font-weight: 300;
+}
+.sp-badge {
+  position: absolute;
+  top: 10px;
+  left: -14px;
+  z-index: 2;
+  transform: rotate(-5deg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #2A1D14;
+  background: #E0A526;
+  border: 2px solid #2A1D14;
+  border-radius: 30px;
+  padding: 6px 14px;
+  margin: 0;
+  font-weight: 500;
+}
+
 /* ---- Sponsor callout box ------------------------------------------------ */
 .sponsor-callout { border-style: dashed !important; }
 
