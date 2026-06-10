@@ -989,13 +989,15 @@ input[type=checkbox] {
 .t-comm  { color: #136451; }
 
 /* ---- Single post / default-template page title -------------------------- */
-.single-post:not(.post-template) h2 {
+.single-post:not(.post-template) h2,
+.page:not(.page-template) h2 {
   font-weight: 500 !important;
   font-size: 25px !important;
   letter-spacing: -0.01em !important;
   margin: 46px 0 14px !important;
 }
-.single-post:not(.post-template) .wp-block-post-content h2:first-of-type {
+.single-post:not(.post-template) .wp-block-post-content h2:first-of-type,
+.page:not(.page-template) .wp-block-post-content h2:first-of-type {
   margin-top: 14px !important;
 }
 
