@@ -989,15 +989,13 @@ input[type=checkbox] {
 .t-comm  { color: #136451; }
 
 /* ---- Single post / default-template page title -------------------------- */
-.single-post h2,
-.page-template-default h2 {
+.single-post h2 {
   font-weight: 500 !important;
   font-size: 25px !important;
   letter-spacing: -0.01em !important;
   margin: 46px 0 14px !important;
 }
-.single-post .wp-block-post-content h2:first-of-type,
-.page-template-default .wp-block-post-content h2:first-of-type {
+.single-post .wp-block-post-content h2:first-of-type {
   margin-top: 14px !important;
 }
 
