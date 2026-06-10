@@ -1010,6 +1010,11 @@ input[type=checkbox] {
 }
 
 /* ---- 404 page ------------------------------------------------------------ */
+.error404 main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .error404 .ghost {
   position: absolute;
   top: 50%;
