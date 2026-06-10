@@ -12,6 +12,8 @@
 body { -webkit-font-smoothing: antialiased; overflow-x: clip; }
 
 h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
+h1 em, h2 em, h3 em, h4 em, h5 em, h6 em,
+.wp-block-heading em { color: #C8344B; }
 
 /* ---- Nav submenu --------------------------------------------------------- */
 .wcblr-header .wp-block-navigation-item { position: relative; }
