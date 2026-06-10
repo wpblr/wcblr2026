@@ -972,8 +972,8 @@ input[type=checkbox] {
 /* Horizontal variant — add class "tl-h" to the tier-label div */
 .tier-label.tl-h { flex-direction: row; }
 .tier-label.tl-h .vt {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
+  writing-mode: horizontal-tb;
+  transform: none;
   font-family: "Fraunces", Georgia, serif;
   font-weight: 600;
   font-size: 32px;
