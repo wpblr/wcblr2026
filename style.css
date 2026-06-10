@@ -316,6 +316,14 @@ h1, h2, h3, h4, h5, h6, .wp-block-heading { font-optical-sizing: auto; }
 }
 
 /* ---- Footer -------------------------------------------------------------- */
+/* Sticky footer — body fills at least the full viewport height */
+.wp-site-blocks {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+.wp-site-blocks > main { flex: 1; }
+
 footer { overflow: hidden; margin-top: 0 !important; }
 .wcblr-footer { position: relative; overflow: hidden; }
 
