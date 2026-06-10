@@ -1003,6 +1003,7 @@ input[type=checkbox] {
   font-size: 64px !important;
   margin-top: 16px !important;
 }
+.wp-block-post-terms a { text-decoration: none !important; }
 .single-post:not(.post-template) h2,
 .page:not(.page-template) h2 {
   font-weight: 500 !important;
