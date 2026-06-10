@@ -1001,6 +1001,7 @@ input[type=checkbox] {
 /* ---- Single post / default-template page title -------------------------- */
 .single-post:not(.post-template) .wp-block-post-title {
   font-size: 64px !important;
+  margin-top: 16px !important;
 }
 .single-post:not(.post-template) h2,
 .page:not(.page-template) h2 {
