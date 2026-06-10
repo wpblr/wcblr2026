@@ -938,27 +938,27 @@ input[type=checkbox] {
 /* ---- Sponsor tier label — exact concept styles -------------------------- */
 .tier-label {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   gap: 12px;
 }
 .tier-label .vt {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
+  writing-mode: horizontal-tb;
+  transform: none;
   font-family: "Fraunces", Georgia, serif;
   font-weight: 600;
   font-size: 18px;
   letter-spacing: 0.02em;
 }
 .tier-label .accent {
-  width: 4px;
-  height: 26px;
+  width: 26px;
+  height: 4px;
   border-radius: 2px;
   background: currentColor;
 }
 .tier-label .dots {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 4px;
 }
 .tier-label .dots i {
