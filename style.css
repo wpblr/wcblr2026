@@ -989,8 +989,8 @@ input[type=checkbox] {
 .t-comm  { color: #136451; }
 
 /* ---- Single post / default-template page title -------------------------- */
-.single-post .wp-block-post-title,
-.page-template-default .wp-block-post-title {
+.single-post h2,
+.page-template-default h2 {
   font-weight: 500 !important;
   font-size: 25px !important;
   letter-spacing: -0.01em !important;
