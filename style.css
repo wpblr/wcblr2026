@@ -1016,6 +1016,16 @@ input[type=checkbox] {
   margin-top: 14px !important;
 }
 
+/* ---- Utility: image with absolute label overlay ------------------------- */
+.wcblr-img-caption { position: relative; }
+.wcblr-img-label {
+  position: absolute !important;
+  bottom: 10px;
+  left: 10px;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 /* ---- Contact info card (accent-5 bordered box) -------------------------- */
 .has-accent-5-background-color.has-border-color a {
   text-decoration: none !important;
