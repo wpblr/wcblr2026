@@ -74,6 +74,18 @@
 			}
 		}
 	}
+
+	@media (max-width: 480px) {
+		.wp-block-columns,
+		.wcblr-hero__grid {
+			max-width: 1200px !important;
+			width: 100% !important;
+			margin-left: auto !important;
+			margin-right: auto !important;
+			padding-left: 0 !important;
+			padding-right: 0 !important;
+		}
+	}
 }
 
 .wcblr-kn {
