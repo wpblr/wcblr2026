@@ -1,0 +1,70 @@
+/* =========================================================================
+   WordCamp Bengaluru 2026 — Remote CSS
+   https://raw.githubusercontent.com/wpblr/wcblr2026/main/main.min.css
+
+   RULE: Only what WordPress blocks cannot do natively.
+   Colours, fonts, sizes, padding, borders → block style attributes.
+   This file: position, pseudo-elements, animation, overflow,
+   transform, writing-mode, white-space, hover, optical sizing.
+
+   Import order matches the original stylesheet cascade — do not reorder.
+   ========================================================================= */
+
+// ── Base ────────────────────────────────────────────────────────────────────
+@import "base/root";
+
+// ── Layout — header ─────────────────────────────────────────────────────────
+@import "layout/header";
+
+// ── Homepage sections (hero → read more) ────────────────────────────────────
+@import "sections/hero";
+@import "sections/ticket-stub";
+@import "sections/marquee";
+@import "sections/about";
+@import "sections/bento";
+@import "sections/get-involved";
+@import "sections/sponsors-teaser";
+@import "sections/news-cards";
+@import "sections/read-more";
+
+// ── Layout — footer & skyline ───────────────────────────────────────────────
+@import "layout/footer";
+@import "layout/skyline";
+
+// ── Homepage sections (bento continued) ─────────────────────────────────────
+@import "sections/bento-layout";
+@import "sections/bento-icons";
+
+// ── Sponsors ────────────────────────────────────────────────────────────────
+@import "sponsors/logo-boxes";
+@import "sponsors/become-sponsor";
+
+// ── Speakers & organizers ───────────────────────────────────────────────────
+@import "speakers/grid";
+@import "speakers/single";
+@import "speakers/organizers";
+
+// ── Sessions ────────────────────────────────────────────────────────────────
+@import "sessions/details";
+@import "sessions/feedback";
+@import "sessions/speakers-block";
+
+// ── Forms (Jetpack) ─────────────────────────────────────────────────────────
+@import "forms/jetpack-fields";
+@import "forms/jetpack-widths";
+@import "forms/jetpack-grid";
+
+// ── Sponsors (continued) ────────────────────────────────────────────────────
+@import "sponsors/callout";
+@import "sponsors/cta-strip";
+@import "sponsors/logos-grid";
+@import "sponsors/tier-label";
+
+// ── Content & utilities ─────────────────────────────────────────────────────
+@import "content/post-page";
+@import "content/img-caption";
+@import "content/contact-card";
+
+// ── Pages ───────────────────────────────────────────────────────────────────
+@import "pages/404";
+@import "pages/coming-soon";

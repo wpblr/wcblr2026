@@ -1,0 +1,30 @@
+/* ---- About --------------------------------------------------------------- */
+.wcblr-about__image {
+	position: relative;
+}
+
+.wcblr-tagpill {
+	position: absolute;
+	top: 5px;
+	left: -16px;
+	transform: rotate(-4deg);
+	white-space: nowrap;
+	z-index: 2;
+	margin: 0;
+	/* Visual styles — border/border-radius stripped by wp_kses on <p> */
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 12px;
+	font-weight: 500;
+	color: #2a1d14;
+	background: #e0a526;
+	border: 2px solid #2a1d14;
+	border-radius: 30px;
+	padding: 8px 16px;
+}
+
+.wcblr-frame img {
+	aspect-ratio: 4 / 5;
+	object-fit: cover;
+	width: 100%;
+}
+

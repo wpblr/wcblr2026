@@ -1,0 +1,13 @@
+/* ---- Session feedback paragraph ----------------------------------------- */
+p:has(.sft-feedback-link) {
+	margin-top: 34px;
+	padding-top: 24px;
+	border-top: 1px solid #d5cfc3;
+	font-size: 15px;
+	color: #7a6757;
+}
+.sft-feedback-link,
+.sft-feedback-link:visited {
+	color: #c8344b !important;
+}
+

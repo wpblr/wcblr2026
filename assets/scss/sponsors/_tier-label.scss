@@ -1,0 +1,70 @@
+/* ---- Sponsor tier label — exact concept styles -------------------------- */
+.tier-label {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
+}
+.tier-label .vt {
+	writing-mode: vertical-rl;
+	transform: rotate(180deg);
+	font-family: "Fraunces", Georgia, serif;
+	font-weight: 600;
+	font-size: 18px;
+	letter-spacing: 0.02em;
+}
+.tier-label .accent {
+	width: 4px;
+	height: 26px;
+	border-radius: 2px;
+	background: currentColor;
+}
+.tier-label .dots {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+.tier-label .dots i {
+	display: block;
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	border: 1.5px solid currentColor;
+}
+.tier-label .dots i.on {
+	background: currentColor;
+}
+/* Horizontal variant — add class "tl-h" to the tier-label div */
+.tier-label.tl-h {
+	flex-direction: row;
+}
+.tier-label.tl-h .vt {
+	writing-mode: horizontal-tb;
+	transform: none;
+	font-family: "Fraunces", Georgia, serif;
+	font-weight: 600;
+	font-size: 32px;
+	letter-spacing: 0;
+	line-height: 1.25;
+}
+.tier-label.tl-h .accent {
+	width: 26px;
+	height: 4px;
+}
+.tier-label.tl-h .dots {
+	flex-direction: row;
+}
+
+.t-plat {
+	color: #2a1d14;
+}
+.t-gold {
+	color: #a8760f;
+}
+.t-silver {
+	color: #8c7e6f;
+}
+.t-comm {
+	color: #136451;
+}
+

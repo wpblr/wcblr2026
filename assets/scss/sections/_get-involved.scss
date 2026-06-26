@@ -1,0 +1,19 @@
+/* ---- Get Involved index -------------------------------------------------- */
+.wcblr-index {
+	&__item {
+		transition: padding-left 0.25s;
+
+		&:hover {
+			padding-left: 18px;
+
+			.wcblr-index__go {
+				transform: translateX(8px);
+				color: #c8344b;
+			}
+		}
+	}
+
+	&__go {
+		transition: transform 0.25s;
+	}
+}

@@ -1,0 +1,22 @@
+/* ---- Session speakers block --------------------------------------------- */
+.wp-block-wordcamp-session-speakers {
+	display: flex;
+	align-items: baseline;
+	flex-wrap: wrap;
+	gap: 18px;
+}
+.wp-block-wordcamp-session-speakers__byline {
+	font-family: "JetBrains Mono", monospace;
+	font-size: 11px;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: #7a6757;
+}
+.wp-block-wordcamp-session-speakers__name a {
+	font-family: "Fraunces", Georgia, serif;
+	font-size: 18px;
+	font-weight: 500;
+	text-decoration: none;
+	color: inherit;
+}
+

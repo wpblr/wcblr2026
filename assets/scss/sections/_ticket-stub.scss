@@ -1,0 +1,60 @@
+/* ---- Ticket stub --------------------------------------------------------- */
+.wcblr-stub {
+	position: relative;
+	overflow: visible !important;
+	max-width: 394px;
+	margin-left: auto;
+
+	&::before {
+		content: "";
+		position: absolute;
+		width: 22px;
+		height: 22px;
+		background: #f2ece0;
+		border-radius: 50%;
+		left: -11px;
+		top: 45%;
+	}
+
+	.wcblr-stamp {
+		position: absolute;
+		top: -44px;
+		right: -42px;
+		transform: rotate(5deg);
+		white-space: nowrap;
+		z-index: 4;
+		margin: 0;
+		/* Visual styles here — border/border-radius stripped by wp_kses on <p> */
+		font-family: "JetBrains Mono", ui-monospace, monospace;
+		font-size: 11px;
+		color: #a8760f;
+		background: #f2ece0;
+		border: 1.5px dashed #e0a526;
+		border-radius: 50px;
+		padding: 7px 14px;
+	}
+
+	.wcblr-perf,
+	.wp-block-separator {
+		border-top: 1.5px dashed rgba(244, 239, 230, 0.3) !important;
+		border-bottom: 0 !important;
+		border-left: 0 !important;
+		border-right: 0 !important;
+		border-color: rgba(244, 239, 230, 0.3) !important;
+		color: rgba(244, 239, 230, 0.3) !important;
+		background: transparent !important;
+		opacity: 1 !important;
+	}
+
+	&__row {
+		display: flex !important;
+		flex-direction: row !important;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 16px;
+	}
+
+	&__val {
+		text-align: right;
+	}
+}

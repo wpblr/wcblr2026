@@ -1,0 +1,24 @@
+/* ---- 404 page ------------------------------------------------------------ */
+.error404 {
+	main {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.ghost {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -54%);
+		font-family: var(--display);
+		font-weight: 600;
+		font-size: clamp(280px, 42vw, 560px);
+		line-height: 0.8;
+		color: transparent;
+		-webkit-text-stroke: 1.5px rgba(42, 29, 20, 0.08);
+		z-index: 0;
+		pointer-events: none;
+		user-select: none;
+	}
+}

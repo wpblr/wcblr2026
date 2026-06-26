@@ -1,0 +1,9 @@
+/* ---- Jetpack forms — per-form field-width overrides --------------------- */
+/* Forms where standalone text fields should span the full row.
+   Name + Email keep their natural 2-col placement via name/email wrap classes. */
+/* Specific standalone text fields that should always span the full row */
+#contact-form-6 .grunion-field-text-wrap,
+.grunion-field-text-wrap:has(#speaker-username) {
+	grid-column: 1 / -1;
+}
+

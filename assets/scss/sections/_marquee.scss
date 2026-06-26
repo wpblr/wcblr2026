@@ -1,0 +1,51 @@
+/* ---- Marquee ------------------------------------------------------------- */
+.wcblr-marquee {
+	background-color: #e0a526;
+	border-top: 2px solid #2a1d14;
+	border-bottom: 2px solid #2a1d14;
+	overflow: hidden;
+	white-space: nowrap;
+	padding: 13px 0;
+	margin-top: 0 !important;
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+	width: 100%;
+
+	.wcblr-marquee__track {
+		display: inline-block;
+		white-space: nowrap;
+		animation: wcblr-scroll 26s linear infinite;
+		font-family: "JetBrains Mono", ui-monospace, monospace;
+		font-size: 14px;
+		font-weight: 500;
+		color: #2a1d14;
+		margin: 0;
+		padding: 0;
+	}
+}
+
+.wcblr-marquee__item {
+	letter-spacing: 0.04em;
+}
+
+.wcblr-marquee__dot {
+	color: #c8344b;
+	margin: 0 20px;
+}
+
+@keyframes wcblr-scroll {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(-50%);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wcblr-marquee .wcblr-marquee__track {
+		animation: none;
+	}
+}

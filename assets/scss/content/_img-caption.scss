@@ -1,0 +1,12 @@
+/* ---- Utility: image with absolute label overlay ------------------------- */
+.wcblr-img-caption {
+	position: relative;
+}
+.wcblr-img-label {
+	position: absolute !important;
+	bottom: 10px;
+	left: 10px;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+

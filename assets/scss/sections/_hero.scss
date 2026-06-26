@@ -1,0 +1,67 @@
+/* ---- Hero ---------------------------------------------------------------- */
+.wcblr-hero {
+	position: relative;
+	overflow: hidden;
+
+	/* Ghost "26" — heading block with class wcblr-ghost */
+	.wcblr-ghost {
+		position: absolute;
+		right: -40px;
+		top: 30px;
+		font-size: clamp(220px, 34vw, 460px);
+		line-height: 0.8;
+		color: transparent;
+		-webkit-text-stroke: 1.5px rgba(42, 29, 20, 0.07);
+		z-index: 0;
+		pointer-events: none;
+		user-select: none;
+		margin: 0;
+	}
+
+	/* Keep all other hero content above the ghost */
+	> *:not(.wcblr-ghost) {
+		position: relative;
+		z-index: 2;
+	}
+
+	h1 {
+		font-optical-sizing: auto;
+		font-variation-settings: "opsz" 108;
+		line-height: 0.86;
+		letter-spacing: -0.03em;
+	}
+
+	h1 em,
+	.wp-block-heading em {
+		font-style: italic !important;
+		color: #c8344b !important;
+	}
+
+	/* Hero columns — force wide width over TT25's 650px contentSize */
+	.wp-block-columns,
+	.wcblr-hero__grid {
+		max-width: 1200px !important;
+		width: 100% !important;
+		margin-left: auto !important;
+		margin-right: auto !important;
+		padding-left: 32px !important;
+		padding-right: 32px !important;
+	}
+}
+
+.wcblr-kn {
+	font-family: "Noto Sans Kannada", sans-serif;
+}
+
+.wcblr-kicker {
+	display: flex !important;
+	flex-direction: row !important;
+	align-items: center;
+	gap: 14px;
+
+	&__tag {
+		border-left: 1px solid rgba(42, 29, 20, 0.16);
+		padding-left: 14px;
+		white-space: nowrap;
+	}
+}

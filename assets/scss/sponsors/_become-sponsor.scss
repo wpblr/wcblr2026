@@ -1,0 +1,46 @@
+/* ---- Become-a-sponsor inline CTA box ------------------------------------ */
+/* Usage: add "wcblr-become-sponsor" to the CTA box.                         */
+/* Add the tier class (t-plat / t-gold / t-silver / t-comm) to the SECTION   */
+/* wrapper — colour cascades down via currentColor automatically.             */
+.wcblr-become-sponsor {
+	border: 2px dashed currentColor !important;
+	border-radius: 10px;
+	background: #fbf8f1;
+	min-height: 86px !important;
+	min-width: 150px !important;
+	padding: 0 30px;
+	display: flex !important;
+	flex-direction: column !important;
+	align-items: center !important;
+	justify-content: center !important;
+	line-height: 1;
+	flex-shrink: 0;
+}
+.wcblr-become-sponsor a {
+	font-size: 17px;
+	font-weight: 500;
+	text-decoration: none !important;
+	color: currentColor !important;
+}
+.wcblr-become-sponsor a:hover {
+	opacity: 0.75;
+}
+
+/* Tier colour set on the section cascades to both tier-label and CTA box */
+.t-plat .wcblr-become-sponsor,
+.t-plat .tier-label {
+	color: #2a1d14;
+}
+.t-gold .wcblr-become-sponsor,
+.t-gold .tier-label {
+	color: #a8760f;
+}
+.t-silver .wcblr-become-sponsor,
+.t-silver .tier-label {
+	color: #8c7e6f;
+}
+.t-comm .wcblr-become-sponsor,
+.t-comm .tier-label {
+	color: #136451;
+}
+

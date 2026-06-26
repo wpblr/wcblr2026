@@ -1,0 +1,71 @@
+/* =========================================================================
+   Coming Soon page — #wccsp-container
+   ========================================================================= */
+#wccsp-container {
+	background: #f2ece0;
+	min-height: 100vh;
+	font-family: "Hanken Grotesk", sans-serif;
+	color: #2a1d14;
+}
+
+.wccsp-header {
+	background: #2a1d14;
+	padding: 28px 0;
+
+	h1 {
+		font-family: "Fraunces", Georgia, serif;
+		font-size: clamp(26px, 4vw, 48px);
+		font-weight: 600;
+		color: #f2ece0;
+		line-height: 1;
+		margin: 0;
+		letter-spacing: -0.02em;
+	}
+}
+
+.wccsp-container {
+	max-width: 680px;
+	margin: 0 auto;
+	padding-left: 24px;
+	padding-right: 24px;
+	box-sizing: border-box;
+}
+
+.wccsp-introduction {
+	padding: 48px 0 40px;
+}
+
+#wccsp-introduction {
+	font-size: 17px;
+	line-height: 1.65;
+	color: #2a1d14;
+	margin: 0;
+}
+
+.wccsp-contact h2 {
+	font-family: "Fraunces", Georgia, serif;
+	font-size: clamp(20px, 3vw, 28px);
+	font-weight: 600;
+	color: #2a1d14;
+	letter-spacing: -0.01em;
+	margin-top: 0;
+	margin-bottom: 28px;
+}
+
+.pushbutton-wide {
+	background: #2a1d14 !important;
+	color: #f2ece0 !important;
+	border: none !important;
+	border-radius: 8px !important;
+	padding: 14px 32px !important;
+	font-family: "Hanken Grotesk", sans-serif;
+	font-size: 15px !important;
+	font-weight: 500;
+	cursor: pointer;
+	transition: opacity 0.15s;
+	width: 100%;
+
+	&:hover {
+		opacity: 0.85;
+	}
+}

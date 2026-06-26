@@ -1,0 +1,28 @@
+/* ---- Bento --------------------------------------------------------------- */
+.wcblr-cell {
+	position: relative;
+	overflow: hidden;
+}
+
+.wcblr-chip {
+	width: 48px;
+	height: 48px;
+	border-radius: 13px;
+	background: #1d8b6e;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: "Noto Sans Kannada", sans-serif;
+	font-size: 24px;
+	font-weight: 600;
+	margin-bottom: 18px;
+	flex-shrink: 0;
+}
+
+.wcblr-num {
+	font-optical-sizing: auto;
+	line-height: 0.85;
+	letter-spacing: -0.02em;
+}
+

@@ -1,0 +1,23 @@
+/* ---- Jetpack forms — 2-column grid layout -------------------------------- */
+.wp-block-jetpack-contact-form {
+	display: grid !important;
+	grid-template-columns: 1fr 1fr;
+	gap: 22px 26px;
+}
+.grunion-field-wrap {
+	margin-bottom: 0;
+}
+/* Full-width: textarea, radio/checkbox groups, button, errors */
+.grunion-field-textarea-wrap,
+.grunion-field-radio-wrap,
+.grunion-field-checkbox-wrap,
+.wp-block-jetpack-button,
+.contact-form__error {
+	grid-column: 1 / -1;
+}
+@media (max-width: 620px) {
+	.wp-block-jetpack-contact-form {
+		grid-template-columns: 1fr !important;
+	}
+}
+
