@@ -1,5 +1,9 @@
 /* ---- Sponsor callout box ------------------------------------------------ */
 .sponsor-callout {
 	border-style: dashed !important;
+
+	@media (max-width: 599px) {
+		flex-direction: column !important;
+	}
 }
 

@@ -1,0 +1,7 @@
+/* ---- Section header (shared) --------------------------------------------- */
+@media (max-width: 599px) {
+	.wcblr-section-header {
+		flex-direction: column !important;
+		align-items: baseline !important;
+	}
+}

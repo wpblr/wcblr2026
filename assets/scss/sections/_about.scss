@@ -9,6 +9,13 @@
 
 .wcblr-about__image {
 	position: relative;
+
+	@media (max-width: 480px) {
+		img,
+		.wp-block-cover {
+			min-height: 275px !important;
+		}
+	}
 }
 
 .wcblr-tagpill {
