@@ -76,6 +76,10 @@
 			width: 100% !important;
 		}
 
+		.wp-block-navigation__container {
+			gap: 0 !important;
+		}
+
 		.wp-block-navigation__container > .wp-block-navigation-item {
 			align-items: flex-start !important;
 			justify-content: flex-start !important;
