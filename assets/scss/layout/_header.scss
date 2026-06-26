@@ -73,4 +73,10 @@
 			flex-direction: initial !important;
 		}
 	}
+
+	@media (max-width: 480px) {
+		> .wp-block-group {
+			flex-direction: column !important;
+		}
+	}
 }
