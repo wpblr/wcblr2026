@@ -87,7 +87,7 @@
 			border-bottom: 1px solid rgba(42, 29, 20, 0.1) !important;
 			padding: 6px 0 !important;
 
-			> .wp-block-navigation-item__content {
+			&:not(.has-child) > .wp-block-navigation-item__content {
 				justify-content: flex-start !important;
 				text-align: left !important;
 				padding: 10px 0 !important;
@@ -98,30 +98,55 @@
 		.wp-block-navigation-item.has-child {
 			flex-wrap: wrap !important;
 			align-items: center !important;
-			justify-content: space-between !important;
+			justify-content: flex-start !important;
 
 			> .wp-block-navigation-item__content {
 				flex: 1 1 auto !important;
+				width: auto !important;
+				max-width: calc(100% - 44px) !important;
 				text-align: left !important;
+				padding: 10px 0 !important;
+				order: 1 !important;
+				z-index: 1 !important;
+			}
+
+			> .wp-block-navigation-submenu__toggle {
+				display: inline-flex !important;
+				align-items: center !important;
+				justify-content: center !important;
+				flex-shrink: 0 !important;
+				width: 36px !important;
+				height: 36px !important;
+				min-width: 36px !important;
+				min-height: 36px !important;
+				margin-left: auto !important;
+				padding: 0 !important;
+				order: 2 !important;
+				position: relative !important;
+				z-index: 2 !important;
+				visibility: visible !important;
+				opacity: 1 !important;
+				box-sizing: border-box !important;
+
+				svg {
+					width: 12px !important;
+					height: 12px !important;
+				}
 			}
 		}
 
 		/* Core overlay hides chevrons and forces all submenus open — undo that */
 		.wp-block-navigation__responsive-container.is-menu-open
 			.wp-block-navigation__responsive-container-content {
-			.wp-block-navigation-submenu__toggle {
-				display: inline-flex !important;
-				align-items: center !important;
-				flex-shrink: 0 !important;
-				margin-left: auto !important;
-			}
-
 			.has-child > .wp-block-navigation__submenu-container {
 				height: 0 !important;
 				overflow: hidden !important;
 				visibility: hidden !important;
 				width: 0 !important;
 				min-width: 0 !important;
+				flex-basis: 0 !important;
+				flex-grow: 0 !important;
+				order: 3 !important;
 				opacity: 0 !important;
 				padding: 0 !important;
 				margin: 0 !important;
@@ -163,6 +188,8 @@
 			margin: 0 !important;
 			background: transparent !important;
 			flex-basis: 100% !important;
+			flex-grow: 1 !important;
+			order: 3 !important;
 
 			.wp-block-navigation-item {
 				align-items: flex-start !important;
