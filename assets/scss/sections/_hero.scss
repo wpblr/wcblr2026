@@ -29,6 +29,11 @@
 		font-variation-settings: "opsz" 108;
 		line-height: 0.86;
 		letter-spacing: -0.03em;
+
+		@media (max-width: 1199px) {
+			font-size: 90px;
+			line-height: 1;
+		}
 	}
 
 	h1 em,
