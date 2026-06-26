@@ -85,6 +85,11 @@
 			padding-left: 0 !important;
 			padding-right: 0 !important;
 		}
+
+		.wcblr-hero__grid {
+			gap: 60px !important;
+			padding-top: 30px !important;
+		}
 	}
 }
 
@@ -102,5 +107,16 @@
 		border-left: 1px solid rgba(42, 29, 20, 0.16);
 		padding-left: 14px;
 		white-space: nowrap;
+	}
+
+	@media (max-width: 480px) {
+		flex-direction: column !important;
+		align-items: baseline !important;
+		gap: 8px !important;
+
+		&__tag {
+			border-left: none !important;
+			padding-left: 0 !important;
+		}
 	}
 }
