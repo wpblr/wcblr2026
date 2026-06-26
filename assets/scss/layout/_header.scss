@@ -105,24 +105,34 @@
 			}
 		}
 
+		/* Reset desktop flyout only — do not override core collapse (width/height/visibility) */
 		.wp-block-navigation__submenu-container {
 			position: static !important;
 			top: auto !important;
 			left: auto !important;
 			right: auto !important;
 			box-shadow: none !important;
-			border: none !important;
-			min-width: 0 !important;
-			width: 100% !important;
-			padding: 4px 0 8px 16px !important;
-			margin: 0 !important;
-			background: transparent !important;
-			border-left: 1.5px solid rgba(42, 29, 20, 0.12) !important;
-			flex-basis: 100% !important;
 
 			&::before {
 				display: none !important;
 			}
+		}
+
+		/* Style submenus only when expanded via core chevron toggle */
+		.wp-block-navigation-submenu__toggle[aria-expanded="true"]
+			~ .wp-block-navigation__submenu-container {
+			width: 100% !important;
+			min-width: 0 !important;
+			height: auto !important;
+			overflow: visible !important;
+			visibility: visible !important;
+			opacity: 1 !important;
+			border: none !important;
+			border-left: 1.5px solid rgba(42, 29, 20, 0.12) !important;
+			padding: 4px 0 8px 16px !important;
+			margin: 0 !important;
+			background: transparent !important;
+			flex-basis: 100% !important;
 
 			.wp-block-navigation-item {
 				align-items: flex-start !important;
