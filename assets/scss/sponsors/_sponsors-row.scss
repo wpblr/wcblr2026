@@ -1,0 +1,6 @@
+/* ---- Sponsors row — query grid ------------------------------------------- */
+@media (max-width: 1023px) {
+	.wcblr-sponsors-row .wp-block-query ul {
+		grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+	}
+}
