@@ -1,4 +1,12 @@
 /* ---- About --------------------------------------------------------------- */
+.wcblr-about {
+	@media (max-width: 799px) {
+		.wp-block-columns {
+			gap: 50px !important;
+		}
+	}
+}
+
 .wcblr-about__image {
 	position: relative;
 }
@@ -26,5 +34,11 @@
 	aspect-ratio: 4 / 5;
 	object-fit: cover;
 	width: 100%;
+}
+
+@media (max-width: 799px) {
+	.wcblr-about-cta {
+		display: grid !important;
+	}
 }
 

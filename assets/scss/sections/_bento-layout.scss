@@ -1,6 +1,11 @@
 /* ---- Bento equal-height rows ------------------------------------------- */
 .wcblr-bento-row {
 	align-items: stretch !important;
+
+	@media (max-width: 799px) {
+		display: grid !important;
+		grid-template-columns: repeat(2, 50%) !important;
+	}
 }
 .wcblr-bento-row .wp-block-column {
 	display: flex;

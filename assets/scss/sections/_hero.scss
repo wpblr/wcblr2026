@@ -34,6 +34,14 @@
 			font-size: 90px !important;
 			line-height: 1 !important;
 		}
+
+		@media (max-width: 991px) {
+			font-size: 70px !important;
+		}
+
+		@media (max-width: 499px) {
+			font-size: 56px !important;
+		}
 	}
 
 	h1 em,
@@ -51,6 +59,16 @@
 		margin-right: auto !important;
 		padding-left: 32px !important;
 		padding-right: 32px !important;
+	}
+
+	@media (max-width: 767px) {
+		.wcblr-hero__grid {
+			gap: 60px !important;
+
+			.wcblr-hero__right .wcblr-stub {
+				margin: 0 auto !important;
+			}
+		}
 	}
 }
 
