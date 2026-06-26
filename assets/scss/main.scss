@@ -16,7 +16,8 @@
 // ── Layout — header ─────────────────────────────────────────────────────────
 @import "layout/header";
 
-// ── Homepage sections (hero → read more) ────────────────────────────────────
+// ── Homepage sections (strip → read more) ───────────────────────────────────
+@import "sections/strip";
 @import "sections/hero";
 @import "sections/ticket-stub";
 @import "sections/marquee";
