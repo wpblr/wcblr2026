@@ -98,10 +98,35 @@
 		.wp-block-navigation-item.has-child {
 			flex-wrap: wrap !important;
 			align-items: center !important;
+			justify-content: space-between !important;
 
 			> .wp-block-navigation-item__content {
 				flex: 1 1 auto !important;
 				text-align: left !important;
+			}
+		}
+
+		/* Core overlay hides chevrons and forces all submenus open — undo that */
+		.wp-block-navigation__responsive-container.is-menu-open
+			.wp-block-navigation__responsive-container-content {
+			.wp-block-navigation-submenu__toggle {
+				display: inline-flex !important;
+				align-items: center !important;
+				flex-shrink: 0 !important;
+				margin-left: auto !important;
+			}
+
+			.has-child > .wp-block-navigation__submenu-container {
+				height: 0 !important;
+				overflow: hidden !important;
+				visibility: hidden !important;
+				width: 0 !important;
+				min-width: 0 !important;
+				opacity: 0 !important;
+				padding: 0 !important;
+				margin: 0 !important;
+				border: none !important;
+				pointer-events: none !important;
 			}
 		}
 
@@ -120,6 +145,10 @@
 
 		/* Style submenus only when expanded via core chevron toggle */
 		.wp-block-navigation-submenu__toggle[aria-expanded="true"]
+			~ .wp-block-navigation__submenu-container,
+		.wp-block-navigation__responsive-container.is-menu-open
+			.wp-block-navigation__responsive-container-content
+			.wp-block-navigation-submenu__toggle[aria-expanded="true"]
 			~ .wp-block-navigation__submenu-container {
 			width: 100% !important;
 			min-width: 0 !important;
@@ -127,6 +156,7 @@
 			overflow: visible !important;
 			visibility: visible !important;
 			opacity: 1 !important;
+			pointer-events: auto !important;
 			border: none !important;
 			border-left: 1.5px solid rgba(42, 29, 20, 0.12) !important;
 			padding: 4px 0 8px 16px !important;
