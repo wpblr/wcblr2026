@@ -57,4 +57,10 @@
 			color: #c8344b !important;
 		}
 	}
+
+	@media (max-width: 1039px) {
+		> .wp-block-group {
+			flex-direction: column !important;
+		}
+	}
 }
