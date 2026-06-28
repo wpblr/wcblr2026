@@ -25,6 +25,7 @@
 		display: grid !important;
 		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
 		gap: 1px !important;
+		background-color: var(--wp--preset--color--custom-border-dark) !important;
 		overflow: hidden !important;
 		border: 1px solid var(--wp--preset--color--custom-border-dark) !important;
 		border-radius: 16px !important;
