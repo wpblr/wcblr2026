@@ -13,29 +13,21 @@
 	}
 
 	/*
-	 * Stats 2×2 — one grid. Row wrappers use display:contents so all four
-	 * columns share the same grid. Corner radii live on inner wp-block-group.
+	 * Stats 2×2 — border lives on wp-block-columns so it's visible.
+	 * Both structural variants (group wrapper or direct columns) handled.
 	 */
 	.wcblr-about-stats:not(.wp-block-columns) {
-		display: grid !important;
-		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-		gap: 1px !important;
 		padding: 30px 0 !important;
-		overflow: hidden !important;
-		border: 1px solid var(--wp--preset--color--custom-border-dark) !important;
-		border-radius: 16px !important;
 	}
 
-	.wcblr-about-stats:not(.wp-block-columns) .wp-block-columns {
-		display: contents !important;
-	}
-
+	.wcblr-about-stats:not(.wp-block-columns) .wp-block-columns,
 	.wcblr-about-stats.wp-block-columns {
 		display: grid !important;
 		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
 		gap: 1px !important;
-		padding: 30px 0 !important;
 		overflow: hidden !important;
+		border: 1px solid var(--wp--preset--color--custom-border-dark) !important;
+		border-radius: 16px !important;
 		margin-top: 0 !important;
 		margin-bottom: 0 !important;
 	}
