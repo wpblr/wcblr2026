@@ -118,9 +118,9 @@
 		display: grid !important;
 	}
 
-	.wcblr-meetups {
-		display: grid;
-		gap: 40px;
+	.wcblr-meetups .wp-block-columns {
+		display: grid !important;
+		gap: 40px !important;
 	}
 }
 
