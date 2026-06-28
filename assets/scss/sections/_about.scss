@@ -45,6 +45,13 @@
 		}
 	}
 
+	@media (max-width: 479px) {
+		.wcblr-about-stats:not(.wp-block-columns) .wp-block-columns,
+		.wcblr-about-stats.wp-block-columns {
+			grid-template-columns: 1fr !important;
+		}
+	}
+
 	.wcblr-about-stats .wp-block-column:nth-child(1) > .wp-block-group {
 		border-top-left-radius: 6px !important;
 	}
