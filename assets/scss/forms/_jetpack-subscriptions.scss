@@ -1,12 +1,12 @@
 /* ---- Jetpack subscriptions block ----------------------------------------- */
-.wp-block-jetpack-subscriptions {
-	input[type="email"] {
+.wp-block-jetpack-subscriptions.wp-block-jetpack-subscriptions__supports-newline {
+	form input[type="email"] {
 		background: #fff !important;
 		border-top-left-radius: 8px;
 		border-bottom-left-radius: 8px;
 	}
 
-	button {
+	form button {
 		margin-left: 0 !important;
 		border-top-right-radius: 8px !important;
 		border-bottom-right-radius: 8px !important;
