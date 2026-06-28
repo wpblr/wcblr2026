@@ -905,7 +905,7 @@ input[type=checkbox] {
 
 /* ---- About stats block — mobile 2×2 grid -------------------------------- */
 @media (max-width: 991px) {
-  .wcblr-about-stats .wp-block-columns {
+  .wcblr-about-stats .wp-block-columns.wp-block-columns {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
     flex-direction: unset !important;
