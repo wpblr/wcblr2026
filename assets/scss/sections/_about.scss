@@ -25,13 +25,16 @@
 	.wcblr-about-stats:not(.wp-block-columns) {
 		border-radius: 8px !important;
 		overflow: hidden !important;
-		padding: 2px !important;
+		padding: 30px !important;
 		gap: 2px !important;
+	}
+
+	.wcblr-about-stats.wp-block-columns {
+		padding: 30px !important;
 	}
 
 	.wcblr-about-stats .wp-block-column {
 		border-radius: 0 !important;
-		padding: 30px !important;
 	}
 
 	/* Outer corners for 2×2 stats grid */
