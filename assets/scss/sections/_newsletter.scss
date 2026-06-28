@@ -1,0 +1,14 @@
+/* ---- Newsletter ---------------------------------------------------------- */
+@media (max-width: 1023px) {
+	.wcblr-newsletter {
+		.wp-block-columns {
+			display: grid !important;
+			gap: 20px !important;
+		}
+
+		.wp-block-heading br,
+		.wp-block-paragraph br {
+			display: none;
+		}
+	}
+}
