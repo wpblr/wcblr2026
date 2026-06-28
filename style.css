@@ -903,35 +903,6 @@ input[type=checkbox] {
   .wp-block-jetpack-contact-form { grid-template-columns: 1fr !important; }
 }
 
-/* ---- About stats block — mobile 2×2 grid -------------------------------- */
-@media (max-width: 991px) {
-  .wcblr-about-stats .wp-block-columns.wp-block-columns {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    flex-direction: unset !important;
-    border: 1px solid var(--wp--preset--color--custom-border-dark) !important;
-    border-radius: 16px !important;
-    overflow: hidden !important;
-  }
-  .wcblr-about-stats .wp-block-column {
-    width: auto !important;
-    min-width: 0 !important;
-  }
-  /* Reset inline border-radius on inner cells — outer overflow:hidden clips them */
-  .wcblr-about-stats .wp-block-column > .wp-block-group {
-    border-radius: 0 !important;
-    height: 100%;
-  }
-  /* Right divider on columns 1 & 3 */
-  .wcblr-about-stats .wp-block-column:nth-child(odd) > .wp-block-group {
-    border-right: 1px solid var(--wp--preset--color--custom-border-dark) !important;
-  }
-  /* Bottom divider between rows 1 & 2 */
-  .wcblr-about-stats .wp-block-column:nth-child(-n+2) > .wp-block-group {
-    border-bottom: 1px solid var(--wp--preset--color--custom-border-dark) !important;
-  }
-}
-
 /* ---- Sponsor callout box ------------------------------------------------ */
 .sponsor-callout { border-style: dashed !important; }
 
@@ -1031,6 +1002,11 @@ input[type=checkbox] {
 .single-post:not(.post-template) .wp-block-post-title {
   font-size: 64px !important;
   margin-top: 16px !important;
+}
+@media (max-width: 991px) {
+  .single-post:not(.post-template) .wp-block-post-title {
+    font-size: 50px !important;
+  }
 }
 .wp-block-post-terms a { text-decoration: none !important; }
 .single-post:not(.post-template) h2,
