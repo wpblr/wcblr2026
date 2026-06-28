@@ -12,60 +12,66 @@
 		gap: 40px !important;
 	}
 
-	/* Stats grid — 2×2 on tablet/mobile */
-	.wcblr-about-stats.wp-block-columns,
-	.wcblr-about-stats .wp-block-columns {
+	/*
+	 * Stats 2×2 — one grid, 1px gutter dividers (avoids double borders).
+	 * Row wrappers use display:contents so all four columns participate
+	 * in the same grid. Corner radii live on the inner wp-block-group.
+	 */
+	.wcblr-about-stats:not(.wp-block-columns) {
 		display: grid !important;
 		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-		gap: 2px !important;
+		gap: 1px !important;
+		padding: 30px 0 !important;
+		background-color: #d8d5ce !important;
+		border: 1px solid #d8d5ce !important;
+		border-radius: 8px !important;
+		overflow: hidden !important;
+	}
+
+	.wcblr-about-stats:not(.wp-block-columns) .wp-block-columns {
+		display: contents !important;
+	}
+
+	.wcblr-about-stats.wp-block-columns {
+		display: grid !important;
+		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+		gap: 1px !important;
+		padding: 30px 0 !important;
+		background-color: #d8d5ce !important;
+		border: 1px solid #d8d5ce !important;
+		border-radius: 8px !important;
+		overflow: hidden !important;
 		margin-top: 0 !important;
 		margin-bottom: 0 !important;
 	}
 
-	.wcblr-about-stats:not(.wp-block-columns) {
-		border-radius: 8px !important;
-		overflow: hidden !important;
-		padding: 30px !important;
-		gap: 2px !important;
-	}
-
-	.wcblr-about-stats.wp-block-columns {
-		padding: 30px !important;
-	}
-
 	.wcblr-about-stats .wp-block-column {
-		border-radius: 0 !important;
 		border: none !important;
+		border-radius: 0 !important;
+		min-width: 0 !important;
 
 		> .wp-block-group {
-			border-radius: 0 !important;
+			height: 100% !important;
 			border: none !important;
+			border-radius: 0 !important;
+			background-color: #fff !important;
 		}
 	}
 
-	/* Col 1 — top-left outer corner */
-	.wcblr-about-stats.wp-block-columns > .wp-block-column:nth-child(1) > .wp-block-group,
-	.wcblr-about-stats .wp-block-columns:first-of-type > .wp-block-column:nth-child(1) > .wp-block-group {
+	.wcblr-about-stats .wp-block-column:nth-child(1) > .wp-block-group {
 		border-top-left-radius: 6px !important;
 	}
 
-	/* Col 2 — top-right outer corner + right divider */
-	.wcblr-about-stats.wp-block-columns > .wp-block-column:nth-child(2) > .wp-block-group,
-	.wcblr-about-stats .wp-block-columns:first-of-type > .wp-block-column:nth-child(2) > .wp-block-group {
+	.wcblr-about-stats .wp-block-column:nth-child(2) > .wp-block-group {
 		border-top-right-radius: 6px !important;
-		border-right: 1px solid #d8d5ce !important;
 	}
 
-	/* Col 3 — bottom-left outer corner */
-	.wcblr-about-stats.wp-block-columns > .wp-block-column:nth-child(3) > .wp-block-group,
-	.wcblr-about-stats .wp-block-columns:last-of-type > .wp-block-column:nth-child(1) > .wp-block-group {
+	.wcblr-about-stats .wp-block-column:nth-child(3) > .wp-block-group {
 		border-bottom-left-radius: 6px !important;
 	}
 
-	/* Col 4 — top-right radius */
-	.wcblr-about-stats.wp-block-columns > .wp-block-column:nth-child(4) > .wp-block-group,
-	.wcblr-about-stats .wp-block-columns:last-of-type > .wp-block-column:nth-child(2) > .wp-block-group {
-		border-top-right-radius: 6px !important;
+	.wcblr-about-stats .wp-block-column:nth-child(4) > .wp-block-group {
+		border-bottom-right-radius: 6px !important;
 	}
 }
 
