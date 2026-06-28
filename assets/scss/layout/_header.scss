@@ -254,6 +254,11 @@
 		}
 	}
 
+	.wcblr-site-logo h1 a,
+	.wcblr-site-logo h1 a:hover {
+		text-decoration: none !important;
+	}
+
 	.wp-block-buttons .wp-block-button .wp-block-button__link {
 		word-break: keep-all !important;
 	}
