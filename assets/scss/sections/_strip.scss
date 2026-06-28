@@ -1,6 +1,6 @@
 /* ---- Top / bottom ink strip --------------------------------------------- */
 @media (max-width: 640px) {
-	footer ~ .wcblr-strip > .wp-block-group {
+	.wcblr-footer ~ .wcblr-strip > .wp-block-group {
 		padding-top: 10px !important;
 		padding-bottom: 10px !important;
 		display: flex !important;
@@ -9,8 +9,8 @@
 		flex-direction: column !important;
 	}
 
-	footer ~ .wcblr-strip .wcblr-strip__cmd,
-	footer ~ .wcblr-strip .wcblr-strip__note {
+	.wcblr-footer ~ .wcblr-strip .wcblr-strip__cmd,
+	.wcblr-footer ~ .wcblr-strip .wcblr-strip__note {
 		text-align: center !important;
 	}
 }
@@ -20,7 +20,7 @@
 		text-align: right !important;
 	}
 
-	footer ~ .wcblr-strip .wcblr-strip__cmd {
+	.wcblr-footer ~ .wcblr-strip .wcblr-strip__cmd {
 		text-align: center !important;
 	}
 }
