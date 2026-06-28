@@ -3,6 +3,11 @@
 	font-size: 64px !important;
 	margin-top: 16px !important;
 }
+@media (max-width: 991px) {
+	.single-post:not(.post-template) .wp-block-post-title {
+		font-size: 50px !important;
+	}
+}
 .wp-block-post-terms a {
 	text-decoration: none !important;
 }
