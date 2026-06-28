@@ -1058,6 +1058,18 @@ input[type="checkbox"] {
 	}
 }
 
+/* ---- About stats block — mobile border ---------------------------------- */
+@media (max-width: 991px) {
+  .wcblr-about-stats .wp-block-columns {
+    border: 1px solid var(--wp--preset--color--custom-border-dark) !important;
+    border-radius: 16px !important;
+  }
+  /* Inside dividers between columns */
+  .wcblr-about-stats .wp-block-column > .wp-block-group {
+    border-right-color: var(--wp--preset--color--custom-border-dark) !important;
+  }
+}
+
 /* ---- Sponsor callout box ------------------------------------------------ */
 .sponsor-callout {
 	border-style: dashed !important;
