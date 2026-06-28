@@ -7,6 +7,54 @@
 	}
 }
 
+@media (max-width: 799px) {
+	.wcblr-about-info .wp-block-columns {
+		gap: 40px !important;
+	}
+
+	/* Stats grid — 2×2 on tablet/mobile */
+	.wcblr-about-stats.wp-block-columns,
+	.wcblr-about-stats .wp-block-columns {
+		display: grid !important;
+		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+		gap: 2px !important;
+		margin-top: 0 !important;
+		margin-bottom: 0 !important;
+	}
+
+	.wcblr-about-stats:not(.wp-block-columns) {
+		border-radius: 8px !important;
+		overflow: hidden !important;
+		padding: 2px !important;
+		gap: 2px !important;
+	}
+
+	.wcblr-about-stats .wp-block-column {
+		border-radius: 0 !important;
+	}
+
+	/* Outer corners for 2×2 stats grid */
+	.wcblr-about-stats.wp-block-columns > .wp-block-column:nth-child(1),
+	.wcblr-about-stats .wp-block-columns:first-of-type > .wp-block-column:nth-child(1) {
+		border-top-left-radius: 6px !important;
+	}
+
+	.wcblr-about-stats.wp-block-columns > .wp-block-column:nth-child(2),
+	.wcblr-about-stats .wp-block-columns:first-of-type > .wp-block-column:nth-child(2) {
+		border-top-right-radius: 6px !important;
+	}
+
+	.wcblr-about-stats.wp-block-columns > .wp-block-column:nth-child(3),
+	.wcblr-about-stats .wp-block-columns:last-of-type > .wp-block-column:nth-child(1) {
+		border-bottom-left-radius: 6px !important;
+	}
+
+	.wcblr-about-stats.wp-block-columns > .wp-block-column:nth-child(4),
+	.wcblr-about-stats .wp-block-columns:last-of-type > .wp-block-column:nth-child(2) {
+		border-bottom-right-radius: 6px !important;
+	}
+}
+
 .wcblr-about__image {
 	position: relative;
 
