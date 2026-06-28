@@ -2,9 +2,13 @@
 .wp-block-jetpack-subscriptions {
 	input[type="email"] {
 		background: #fff !important;
+		border-top-left-radius: 8px;
+		border-bottom-left-radius: 8px;
 	}
 
 	button {
 		margin-left: 0 !important;
+		border-top-right-radius: 8px !important;
+		border-bottom-right-radius: 8px !important;
 	}
 }
