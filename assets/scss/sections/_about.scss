@@ -13,18 +13,14 @@
 	}
 
 	/*
-	 * Stats 2×2 — one grid, 1px gutter dividers (avoids double borders).
-	 * Row wrappers use display:contents so all four columns participate
-	 * in the same grid. Corner radii live on the inner wp-block-group.
+	 * Stats 2×2 — one grid. Row wrappers use display:contents so all four
+	 * columns share the same grid. Corner radii live on inner wp-block-group.
 	 */
 	.wcblr-about-stats:not(.wp-block-columns) {
 		display: grid !important;
 		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
 		gap: 1px !important;
 		padding: 30px 0 !important;
-		background-color: #d8d5ce !important;
-		border: 1px solid #d8d5ce !important;
-		border-radius: 8px !important;
 		overflow: hidden !important;
 	}
 
@@ -37,9 +33,6 @@
 		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
 		gap: 1px !important;
 		padding: 30px 0 !important;
-		background-color: #d8d5ce !important;
-		border: 1px solid #d8d5ce !important;
-		border-radius: 8px !important;
 		overflow: hidden !important;
 		margin-top: 0 !important;
 		margin-bottom: 0 !important;
@@ -54,7 +47,6 @@
 			height: 100% !important;
 			border: none !important;
 			border-radius: 0 !important;
-			background-color: #fff !important;
 		}
 	}
 
