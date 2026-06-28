@@ -1,6 +1,26 @@
 /* ---- Top / bottom ink strip --------------------------------------------- */
+@media (max-width: 640px) {
+	footer ~ .wcblr-strip > .wp-block-group {
+		padding-top: 10px !important;
+		padding-bottom: 10px !important;
+		display: flex !important;
+		gap: 8px !important;
+		text-align: center !important;
+		flex-direction: column !important;
+	}
+
+	footer ~ .wcblr-strip .wcblr-strip__cmd,
+	footer ~ .wcblr-strip .wcblr-strip__note {
+		text-align: center !important;
+	}
+}
+
 @media (max-width: 575px) {
 	.wcblr-strip .wcblr-strip__cmd {
 		text-align: right !important;
+	}
+
+	footer ~ .wcblr-strip .wcblr-strip__cmd {
+		text-align: center !important;
 	}
 }
