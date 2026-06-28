@@ -51,12 +51,12 @@
 			grid-template-columns: 1fr !important;
 		}
 
-		.wcblr-about-stats .wp-block-column:nth-child(3) > .wp-block-group {
-			border-bottom-left-radius: 0 !important;
+		.wcblr-about-stats .wp-block-column:nth-child(2) > .wp-block-group {
+			border-top-right-radius: 0 !important;
 		}
 
-		.wcblr-about-stats .wp-block-column:nth-child(2) > .wp-block-group {
-			border-top-right-radius: 6px !important;
+		.wcblr-about-stats .wp-block-column:nth-child(3) > .wp-block-group {
+			border-bottom-left-radius: 0 !important;
 		}
 	}
 
