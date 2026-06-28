@@ -62,6 +62,24 @@
 
 	/* ---- Nav submenu (mobile overlay reset) ---------------------------- */
 	@media (max-width: 600px) {
+		/* Keep logo lockup visible above the full-screen nav overlay */
+		&:has(.wp-block-navigation__responsive-container.is-menu-open)
+			> .wp-block-group
+			> .wp-block-group:first-child {
+			position: fixed !important;
+			top: 18px !important;
+			left: var(--wp--style--root--padding-left, 24px) !important;
+			z-index: 100001 !important;
+			display: flex !important;
+			max-width: calc(100% - 72px) !important;
+			pointer-events: auto !important;
+		}
+
+		&:has(.wp-block-navigation__responsive-container.is-menu-open)
+			.wp-block-navigation__responsive-container-content {
+			padding-top: 96px !important;
+		}
+
 		.wp-block-navigation {
 			--navigation-layout-justification-setting: flex-start !important;
 			--navigation-layout-justify: flex-start !important;
