@@ -36,30 +36,35 @@
 	.wcblr-about-stats .wp-block-column {
 		border-radius: 0 !important;
 		border: none !important;
+
+		> .wp-block-group {
+			border-radius: 0 !important;
+			border: none !important;
+		}
 	}
 
 	/* Col 1 — top-left outer corner */
-	.wcblr-about-stats.wp-block-columns > .wp-block-column:nth-child(1),
-	.wcblr-about-stats .wp-block-columns:first-of-type > .wp-block-column:nth-child(1) {
+	.wcblr-about-stats.wp-block-columns > .wp-block-column:nth-child(1) > .wp-block-group,
+	.wcblr-about-stats .wp-block-columns:first-of-type > .wp-block-column:nth-child(1) > .wp-block-group {
 		border-top-left-radius: 6px !important;
 	}
 
 	/* Col 2 — top-right outer corner + right divider */
-	.wcblr-about-stats.wp-block-columns > .wp-block-column:nth-child(2),
-	.wcblr-about-stats .wp-block-columns:first-of-type > .wp-block-column:nth-child(2) {
+	.wcblr-about-stats.wp-block-columns > .wp-block-column:nth-child(2) > .wp-block-group,
+	.wcblr-about-stats .wp-block-columns:first-of-type > .wp-block-column:nth-child(2) > .wp-block-group {
 		border-top-right-radius: 6px !important;
 		border-right: 1px solid #d8d5ce !important;
 	}
 
 	/* Col 3 — bottom-left outer corner */
-	.wcblr-about-stats.wp-block-columns > .wp-block-column:nth-child(3),
-	.wcblr-about-stats .wp-block-columns:last-of-type > .wp-block-column:nth-child(1) {
+	.wcblr-about-stats.wp-block-columns > .wp-block-column:nth-child(3) > .wp-block-group,
+	.wcblr-about-stats .wp-block-columns:last-of-type > .wp-block-column:nth-child(1) > .wp-block-group {
 		border-bottom-left-radius: 6px !important;
 	}
 
 	/* Col 4 — top-right radius */
-	.wcblr-about-stats.wp-block-columns > .wp-block-column:nth-child(4),
-	.wcblr-about-stats .wp-block-columns:last-of-type > .wp-block-column:nth-child(2) {
+	.wcblr-about-stats.wp-block-columns > .wp-block-column:nth-child(4) > .wp-block-group,
+	.wcblr-about-stats .wp-block-columns:last-of-type > .wp-block-column:nth-child(2) > .wp-block-group {
 		border-top-right-radius: 6px !important;
 	}
 }
