@@ -1,4 +1,10 @@
 /* ---- Hero ---------------------------------------------------------------- */
+@media (min-width: 1920px) {
+	.wcblr-hero-banner {
+		min-width: 1600px;
+	}
+}
+
 .wcblr-hero {
 	position: relative;
 	overflow: hidden;
