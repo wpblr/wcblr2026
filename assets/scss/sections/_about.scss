@@ -113,6 +113,13 @@
 	width: 100%;
 }
 
+.wcblr-whatsapp-section .wcblr-whatsapp-btn a {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	text-decoration: none;
+}
+
 @media (max-width: 799px) {
 	.wcblr-about-cta {
 		display: grid !important;
