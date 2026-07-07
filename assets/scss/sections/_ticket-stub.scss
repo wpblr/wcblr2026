@@ -24,14 +24,14 @@
 		white-space: nowrap;
 		z-index: 4;
 		margin: 0;
-		/* Visual styles here — border/border-radius stripped by wp_kses on <p> */
 		font-family: "JetBrains Mono", ui-monospace, monospace;
-		font-size: 11px;
-		color: #a8760f;
-		background: #f2ece0;
-		border: 1.5px dashed #e0a526;
-		border-radius: 50px;
-		padding: 7px 14px;
+		font-size: 12px;
+		font-weight: 500;
+		color: #2a1d14;
+		background: #e0a526;
+		border: 2px solid #2a1d14;
+		border-radius: 30px;
+		padding: 8px 16px;
 	}
 
 	.wcblr-perf,
