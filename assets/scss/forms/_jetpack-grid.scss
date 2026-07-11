@@ -6,7 +6,9 @@
 }
 .grunion-field-wrap {
 	margin-bottom: 0;
-	width: 100% !important; /* override Jetpack's flex-based percentage widths */
+	width: 100% !important;
+	max-width: 100% !important;
+	flex-basis: auto !important;
 }
 /* Full-width: textarea, radio/checkbox groups, button, errors */
 .grunion-field-textarea-wrap,
