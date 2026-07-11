@@ -18,7 +18,7 @@
 .contact-form__error {
 	grid-column: 1 / -1;
 }
-@media (max-width: 620px) {
+@media (max-width: 991px) {
 	.wp-block-jetpack-contact-form {
 		grid-template-columns: 1fr !important;
 	}
