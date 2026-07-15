@@ -5,7 +5,8 @@
    ============================================================= */
 
 /* base badge shapes */
-.wcblr-badge-round{width:44px;height:44px;border-radius:50%;background-repeat:no-repeat;background-position:center;background-size:22px 22px;}
+.wcblr-badge-round{width:44px;height:44px;border-radius:50%;background-repeat:no-repeat;background-position:center;background-size:22px 22px;display:flex;justify-content:center;align-items:center;}
+.wcblr-badge-round figure{line-height:1;}
 .wcblr-badge-round.i-spark{background-color:rgb(205 38 83 / 12%);}
 .wcblr-badge-round.i-mic{background-color:rgb(29 139 109 / 12%);}
 .wcblr-badge-round.i-users{background-color:rgb(168 118 15 / 12%);}
