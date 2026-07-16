@@ -34,12 +34,13 @@
 }
 
 /* ticket row cells */
-#tix .tix_tickets_table td,
-#tix .tix_tickets_table tbody th.tix-column-description{
+#tix .tix_tickets_table tbody th.tix-column-description,
+#tix .tix_tickets_table td{
   padding:22px;
   vertical-align:middle;
   border:0;
-  background:transparent;
+  background:0 0;
+  text-align:left;
 }
 
 /* ticket title + excerpt */
