@@ -21,14 +21,14 @@
 
 /* header row = mono labels + a dashed "perforation" line */
 #tix .tix_tickets_table thead th{
-  background:transparent;
+  background:0 0;
   text-align:left;
   font-family:"JetBrains Mono",monospace;
   font-size:11px;
-  font-weight:500;
-  letter-spacing:0.08em;
+  font-weight:700;
+  letter-spacing:.08em;
   text-transform:uppercase;
-  color:#7a6757;
+  color:#cd2653;
   padding:18px 22px 12px;
   border-bottom:2px dashed #dad5cd;
 }
