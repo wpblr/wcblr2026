@@ -1,0 +1,112 @@
+/* =============================================================
+   WCBLR — CampTix ticket form styled to filter-coffee.
+   The form markup is fixed (CampTix output); this ONLY styles it.
+   Scoped to #tix so nothing else is affected.
+   ============================================================= */
+
+#tix{max-width:760px;margin:28px auto 0;}
+#tix form{margin:0;}
+
+/* --- the ticket table becomes a paper "stub" card --- */
+#tix .tix_tickets_table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  background:#FBF8F1;
+  border:1.5px solid #dad5cd;
+  border-radius:16px;
+  overflow:hidden;
+  font-family:"Hanken Grotesk",sans-serif;
+}
+
+/* header row = mono labels + a dashed "perforation" line */
+#tix .tix_tickets_table thead th{
+  background:transparent;
+  text-align:left;
+  font-family:"JetBrains Mono",monospace;
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:#7a6757;
+  padding:18px 22px 12px;
+  border-bottom:2px dashed #dad5cd;
+}
+
+/* ticket row cells */
+#tix .tix_tickets_table td,
+#tix .tix_tickets_table tbody th.tix-column-description{
+  padding:22px;
+  vertical-align:middle;
+  border:0;
+  background:transparent;
+}
+
+/* ticket title + excerpt */
+#tix .tix-ticket-title{
+  display:block;
+  font-family:"Hanken Grotesk",sans-serif;
+  font-size:17px;
+  font-weight:600;
+  color:#2a1d14;
+}
+#tix .tix-ticket-excerpt{
+  display:block;
+  margin-top:4px;
+  font-size:14px;
+  color:#7a6757;
+}
+
+/* price = mono, ink */
+#tix .tix-column-price{
+  font-family:"JetBrains Mono",monospace;
+  font-size:18px;
+  color:#2a1d14;
+  white-space:nowrap;
+}
+
+/* remaining = small muted */
+#tix .tix-column-remaining{
+  font-size:13px;
+  color:#7a6757;
+}
+
+/* quantity select styled to match our forms */
+#tix .tix-column-quantity select{
+  font-family:"Hanken Grotesk",sans-serif;
+  font-size:15px;
+  color:#2a1d14;
+  background:#fff;
+  border:1.5px solid #dad5cd;
+  border-radius:8px;
+  padding:8px 12px;
+  cursor:pointer;
+}
+#tix .tix-column-quantity select:focus{
+  outline:none;
+  border-color:#e0a526;
+}
+
+/* --- Register button -> filter-coffee red button --- */
+#tix input[type="submit"]{
+  background:#cd2653;
+  color:#fff;
+  font-family:"Hanken Grotesk",sans-serif;
+  font-weight:600;
+  font-size:15px;
+  border:0;
+  border-radius:8px;
+  padding:12px 26px;
+  cursor:pointer;
+  margin-top:18px;
+  transition:background .15s ease;
+}
+#tix input[type="submit"]:hover{background:#a12339;}
+#tix p{margin-top:0;}
+
+/* mobile: let the table breathe */
+@media(max-width:600px){
+  #tix .tix_tickets_table thead th,
+  #tix .tix_tickets_table td,
+  #tix .tix_tickets_table tbody th.tix-column-description{padding:14px;}
+}
