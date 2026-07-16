@@ -103,6 +103,7 @@
 }
 #tix input[type="submit"]:hover{background:#a12339;}
 #tix p{margin-top:0;}
+#tix .tix-column-description br{display:none;}
 
 /* mobile: let the table breathe */
 @media(max-width:600px){
