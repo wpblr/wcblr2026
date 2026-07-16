@@ -1,115 +1,156 @@
 /* =============================================================
-   WCBLR — CampTix ticket form styled to filter-coffee.
-   The form markup is fixed (CampTix output); this ONLY styles it.
-   Scoped to #tix so nothing else is affected.
+   WCBLR — CampTix form styled as the homepage espresso "ticket stub".
+   Form markup is fixed (CampTix output); this ONLY styles it, scoped to #tix.
+   Enqueue on the FRONT END (the form is not shown in the editor).
+
+   Matches the homepage .wcblr-stub: espresso card, mono labels,
+   Fraunces values, dashed perforation, left notch, turmeric corner
+   stamp, full-width red CTA. Rows are the ticket's real columns.
    ============================================================= */
 
-#tix{max-width:760px;margin:28px auto 0;}
-#tix form{margin:0;}
+#tix{max-width:640px;margin:28px auto 0;}
 
-/* --- the ticket table becomes a paper "stub" card --- */
+/* the FORM becomes the espresso stub card (holds table + button) */
+#tix form{
+  position:relative;
+  margin:0;
+  background:#2a1d14;
+  color:#F2ECE0;
+  border-radius:14px;
+  padding:30px 30px 26px;
+  font-family:"Hanken Grotesk",sans-serif;
+}
+
+/* turmeric dashed corner stamp (like .wcblr-stamp) */
+#tix form::before{
+  content:"add_filter( 'ticket' );";
+  position:absolute;
+  top:-16px;
+  right:22px;
+  background:#e0a526;
+  color:#2a1d14;
+  font-family:"JetBrains Mono",monospace;
+  font-size:12px;
+  letter-spacing:.02em;
+  padding:8px 16px;
+  border:1.5px dashed #2a1d14;
+  border-radius:22px;
+  white-space:nowrap;
+}
+
+/* left notch — a page-cream circle on the card edge.
+   Nudge `top` if it doesn't sit on the perforation line on your build. */
+#tix form::after{
+  content:"";
+  position:absolute;
+  left:-11px;
+  top:70px;
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:#f2ece0;
+}
+
+/* table is transparent inside the card */
 #tix .tix_tickets_table{
   width:100%;
   border-collapse:separate;
   border-spacing:0;
-  background:#FBF8F1;
-  border:1.5px solid #dad5cd;
-  border-radius:16px;
-  overflow:hidden;
-  font-family:"Hanken Grotesk",sans-serif;
+  background:transparent;
+  border:0;
+  margin:0;
 }
 
-/* header row = mono labels + a dashed "perforation" line */
+/* header row = mono labels + dashed perforation */
 #tix .tix_tickets_table thead th{
-  background:0 0;
+  background:transparent;
   text-align:left;
   font-family:"JetBrains Mono",monospace;
   font-size:11px;
-  font-weight:700;
-  letter-spacing:.08em;
+  font-weight:500;
+  letter-spacing:1.4px;
   text-transform:uppercase;
-  color:#cd2653;
-  padding:18px 22px 12px;
-  border-bottom:2px dashed #dad5cd;
+  color:#978f87;
+  padding:0 0 14px;
+  border-bottom:2px dashed rgba(242,236,224,.22);
 }
 
 /* ticket row cells */
-#tix .tix_tickets_table tbody th.tix-column-description,
-#tix .tix_tickets_table td{
-  padding:22px;
-  vertical-align:middle;
+#tix .tix_tickets_table td,
+#tix .tix_tickets_table tbody th.tix-column-description{
+  padding:22px 0 0;
+  vertical-align:top;
   border:0;
-  background:0 0;
-  text-align:left;
+  background:transparent;
+  color:#F2ECE0;
 }
 
-/* ticket title + excerpt */
+/* ticket title = Fraunces cream; excerpt = muted */
 #tix .tix-ticket-title{
   display:block;
-  font-family:"Hanken Grotesk",sans-serif;
-  font-size:17px;
-  font-weight:600;
-  color:#2a1d14;
+  font-family:"Fraunces",Georgia,serif;
+  font-size:20px;
+  font-weight:500;
+  color:#F2ECE0;
+  line-height:1.2;
 }
 #tix .tix-ticket-excerpt{
   display:block;
-  margin-top:4px;
-  font-size:14px;
-  color:#7a6757;
+  margin-top:6px;
+  font-size:13px;
+  color:#978f87;
 }
 
-/* price = mono, ink */
+/* price = mono turmeric (like the ADMIT seat line) */
 #tix .tix-column-price{
   font-family:"JetBrains Mono",monospace;
   font-size:18px;
-  color:#2a1d14;
+  color:#e0a526;
   white-space:nowrap;
 }
 
-/* remaining = small muted */
+/* remaining = mono muted */
 #tix .tix-column-remaining{
-  font-size:18px;
-  color:#7a6757;
-  font-weight:400;
+  font-family:"JetBrains Mono",monospace;
+  font-size:14px;
+  color:#978f87;
 }
 
-/* quantity select styled to match our forms */
+/* quantity select = light chip on the dark card */
 #tix .tix-column-quantity select{
   font-family:"Hanken Grotesk",sans-serif;
   font-size:15px;
   color:#2a1d14;
-  background:#fff;
-  border:1.5px solid #dad5cd;
+  background:#F2ECE0;
+  border:0;
   border-radius:8px;
-  padding:8px 12px;
+  padding:9px 12px;
   cursor:pointer;
 }
-#tix .tix-column-quantity select:focus{
-  outline:none;
-  border-color:#e0a526;
-}
+#tix .tix-column-quantity select:focus{outline:2px solid #e0a526;outline-offset:1px;}
 
-/* --- Register button -> filter-coffee red button --- */
+/* --- Register button -> full-width red CTA at the card bottom --- */
+#tix p{margin:20px 0 0;}
 #tix input[type="submit"]{
-  background:#cd2653;
+  float:none !important;
+  display:block;
+  width:100%;
+  background:#C8344B;
   color:#fff;
   font-family:"Hanken Grotesk",sans-serif;
   font-weight:600;
   font-size:15px;
   border:0;
   border-radius:8px;
-  padding:12px 26px;
+  padding:14px 28px;
   cursor:pointer;
-  margin-top:18px;
   transition:background .15s ease;
 }
 #tix input[type="submit"]:hover{background:#a12339;}
-#tix p{margin-top:0;}
-#tix .tix-column-description br{display:none;}
 
-/* mobile: let the table breathe */
+/* mobile */
 @media(max-width:600px){
-  #tix .tix_tickets_table thead th,
-  #tix .tix_tickets_table td,
-  #tix .tix_tickets_table tbody th.tix-column-description{padding:14px;}
+  #tix form{padding:24px 22px 22px;}
+  #tix .tix-ticket-title{font-size:18px;}
+  #tix form::after{display:none;}
 }
