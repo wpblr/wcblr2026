@@ -59,16 +59,19 @@
 #tix .tix_tickets_table tbody tr{display:block;width:100%;}
 
 /* every cell becomes a label(left) / value(right) row */
-#tix .tix_tickets_table td,
-#tix .tix_tickets_table tbody th.tix-column-description{
+#tix .tix_tickets_table tbody th.tix-column-description,
+#tix .tix_tickets_table td{
   display:block;
   position:relative;
   padding:15px 0 15px 105px;
   text-align:right;
   border:0;
-  background:transparent;
-  color:#F2ECE0;
+  background:0 0;
+  color:#f2ece0;
+  font-size:22px;
 }
+#tix .tix_tickets_table tbody tr td{padding:0;margin-top:1.2rem;}
+#tix .tix-column-description br{display:none;}
 
 /* hardcoded mono labels (thead is hidden, so inject them here) */
 #tix .tix_tickets_table tbody th.tix-column-description::before{content:"TICKET";}
