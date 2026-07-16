@@ -27,16 +27,20 @@
 #tix form::before{
   content:"add_filter( 'ticket' );";
   position:absolute;
-  top:-16px;
-  right:22px;
-  background:#e0a526;
-  color:#2a1d14;
-  font-family:"JetBrains Mono",monospace;
-  font-size:12px;
-  padding:8px 16px;
-  border:1.5px dashed #2a1d14;
-  border-radius:22px;
+  top:-10px;
+  right:-12px;
+  transform:rotate(5deg);
   white-space:nowrap;
+  z-index:4;
+  margin:0;
+  font-family:"JetBrains Mono",ui-monospace,monospace;
+  font-size:12px;
+  font-weight:500;
+  color:#2a1d14;
+  background:#e0a526;
+  border:2px dashed #2a1d14;
+  border-radius:30px;
+  padding:8px 16px;
 }
 
 /* left notch — page-cream circle on the perforation line.
