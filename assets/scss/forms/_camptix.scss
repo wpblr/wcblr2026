@@ -71,7 +71,8 @@
   font-size:22px;
 }
 #tix .tix_tickets_table tbody tr td{padding:0;margin-top:1.2rem;}
-#tix .tix-column-description br{display:none;}
+#tix .tix-column-description br,
+#tix .tix_tickets_table p br{display:none;}
 
 /* hardcoded mono labels (thead is hidden, so inject them here) */
 #tix .tix_tickets_table tbody th.tix-column-description::before{content:"TICKET";}
