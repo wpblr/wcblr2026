@@ -293,39 +293,48 @@
 	}
 
 	/* ---- Highlighted nav item (open calls) ----------------------------- */
-	/* Gold pill, so it reads as the live thing in the menu without competing
-	   with the red WhatsApp button beside it. The pill sits on the <li>, not
-	   on its children: a submenu item holds the label and the chevron as two
-	   separate elements, so styling the children gives two pills.
-	   Desktop only, the mobile overlay rows are full width. */
-	@media (min-width: 601px) {
-		.wcblr-nav-cta {
-			padding: 6px 14px !important;
-			border-radius: 999px;
-			background: rgba(224, 165, 38, 0.18);
-			border: 1px solid rgba(168, 118, 15, 0.3);
-			transition: background 0.15s;
-		}
+	/* A small gold dot that breathes a few times on load, in place of the
+	   filled pill. The dot sits on the <li> via ::before rather than on the
+	   link: a submenu item holds its label and its chevron as two separate
+	   elements, so anything applied to the children lands twice.
+	   The <li> is already display:flex from core, so ::before is a flex item
+	   and lines up with the label without any positioning. */
+	.wcblr-nav-cta > .wp-block-navigation-item__content,
+	.wcblr-nav-cta > .wp-block-navigation-submenu__toggle {
+		color: #a8760f !important;
+		font-weight: 600;
+	}
 
-		.wcblr-nav-cta:hover {
-			background: rgba(224, 165, 38, 0.3);
-		}
+	.wcblr-nav-cta::before {
+		content: "";
+		flex: 0 0 auto;
+		width: 6px;
+		height: 6px;
+		margin-right: 8px;
+		border-radius: 50%;
+		background: #a8760f;
+	}
 
-		.wcblr-nav-cta > .wp-block-navigation-item__content,
-		.wcblr-nav-cta > .wp-block-navigation-submenu__toggle {
-			padding: 0 !important;
-			background: none !important;
-			color: #a8760f !important;
-			font-weight: 600;
+	/* Three breaths, then it rests. Deliberately finite: an indefinite pulse
+	   in the site header is both a distraction and a WCAG 2.2.2 problem, which
+	   applies to motion that runs past five seconds. 1.5s x 3 = 4.5s, and the
+	   resting state is a fully visible dot, so nothing is lost when it stops
+	   or when reduced motion is preferred. */
+	@media (prefers-reduced-motion: no-preference) {
+		.wcblr-nav-cta::before {
+			animation: wcblr-nav-pulse 1.5s 1.2s ease-in-out 3;
 		}
+	}
+}
 
-		.wcblr-nav-cta > .wp-block-navigation-submenu__toggle {
-			margin-left: 2px;
-		}
-
-		/* Clear the pill, not the old text baseline */
-		.wcblr-nav-cta > .wp-block-navigation__submenu-container {
-			top: calc(100% + 10px) !important;
-		}
+@keyframes wcblr-nav-pulse {
+	0%,
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	50% {
+		transform: scale(1.45);
+		opacity: 0.45;
 	}
 }
