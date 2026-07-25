@@ -21,8 +21,8 @@
 			box-shadow: 0 8px 24px rgba(42, 29, 20, 0.1) !important;
 			overflow: visible !important;
 			background: #fbf8f1 !important;
-			padding: 8px 14px !important;
-			min-width: 140px !important;
+			padding: 8px !important;
+			min-width: 150px !important;
 
 			/* Bridge the 12px gap so hover isn't lost crossing it */
 			&::before {
@@ -34,15 +34,26 @@
 				height: 12px;
 			}
 
+			/* Core makes every nav item a flex container, so the link becomes a
+			   flex item and shrinks to its own text. The panel is as wide as
+			   its longest entry, so short links highlighted at part width.
+			   Take the item out of flex and let the link fill it. */
+			.wp-block-navigation-item {
+				display: block !important;
+				width: 100% !important;
+			}
+
 			.wp-block-navigation-item__content {
 				font-family: "Hanken Grotesk", sans-serif !important;
 				font-size: 15px !important;
 				font-weight: 400 !important;
 				color: #2a1d14 !important;
 				text-decoration: none !important;
-				padding: 10px 0 !important;
-				border-radius: 6px;
-				display: block;
+				padding: 10px 12px !important;
+				border-radius: 8px;
+				display: block !important;
+				width: 100% !important;
+				box-sizing: border-box;
 				transition:
 					background 0.15s,
 					color 0.15s;
