@@ -11,7 +11,11 @@
 .wcblr-badge-round.i-spark{background-color:rgb(205 38 83 / 12%);}
 .wcblr-badge-round.i-mic{background-color:rgb(29 139 109 / 12%);}
 .wcblr-badge-round.i-users{background-color:rgb(168 118 15 / 12%);}
-.wcblr-chip{width:44px;height:44px;border-radius:13px;background-position:center;background:rgb(168 118 15 / 12%) !important;display:flex;align-items:center;justify-content:center;}
+/* margin-bottom is load-bearing: the card title below sets margin-top:0, so
+   without it the icon sat flush against the heading. Lives here rather than on
+   each block so every chip on the speakers AND sponsors pages matches, and it
+   mirrors the 15px the badge-round cards set inline. */
+.wcblr-chip{width:44px;height:44px;border-radius:13px;background-position:center;background:rgb(168 118 15 / 12%) !important;display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
 .wcblr-chip figure{line-height:0;}
 .wcblr-chip img{width:20px;height:auto;}
 .wcblr-fic{width:30px;height:30px;background-repeat:no-repeat;background-position:left center;background-size:30px 30px;}
