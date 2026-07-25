@@ -25,8 +25,8 @@
    The margin overrides the global margin:0 in speakers/grid, which would
    otherwise stop aligncenter from centring the avatar in the card. */
 .type-wcb_organizer .wp-block-wordcamp-avatar {
-	width: 96px !important;
-	height: 96px !important;
+	width: 150px !important;
+	height: 150px !important;
 	margin: 0 auto !important;
 	overflow: hidden;
 	border-radius: 50%;
@@ -61,7 +61,7 @@
 
 @media (max-width: 600px) {
 	.type-wcb_organizer .wp-block-wordcamp-avatar {
-		width: 88px !important;
-		height: 88px !important;
+		width: 128px !important;
+		height: 128px !important;
 	}
 }
