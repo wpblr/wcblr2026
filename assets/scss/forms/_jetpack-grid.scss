@@ -27,8 +27,12 @@
 	.wp-block-jetpack-contact-form {
 		gap: 16px !important;
 	}
+	/* Radio and checkbox inputs must keep their 16px box. Without the :not()
+	   this stretched each radio to the full row width, so the circles ran over
+	   their own labels. It ties on specificity with the 16px rule in
+	   forms/jetpack-fields and, being imported later, used to win. */
 	.grunion-field-wrap,
-	.grunion-field-wrap input,
+	.grunion-field-wrap input:not([type="radio"]):not([type="checkbox"]),
 	.grunion-field-wrap textarea,
 	.jetpack-field__input-phone-wrapper {
 		width: 100% !important;
