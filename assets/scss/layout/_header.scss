@@ -325,12 +325,12 @@
 	   escape hatch for WCAG 2.2.2 since this now runs indefinitely. */
 	@media (prefers-reduced-motion: no-preference) {
 		li.wcblr-nav-cta::before {
-			animation: wcblr-nav-pulse 6s 1.2s ease-in-out infinite;
+			animation: wcblr-pulse 6s 1.2s ease-in-out infinite;
 		}
 	}
 }
 
-@keyframes wcblr-nav-pulse {
+@keyframes wcblr-pulse {
 	0% {
 		transform: scale(1);
 		opacity: 1;

@@ -17,3 +17,37 @@
 		transition: transform 0.25s;
 	}
 }
+
+/* ---- Live card ----------------------------------------------------------- */
+/* Generic: add className "wcblr-live" to any card column (Get Involved on the
+   home and about pages today) to mark that call as open. Gold, matching the
+   highlighted nav item, so "open" reads the same way everywhere on the site.
+   Drop the class again when a call closes; nothing else needs changing.
+   The !important flags override the preset background and border colours the
+   column carries in its own block attributes. */
+.wcblr-live {
+	position: relative;
+	background-color: #fbf3e3 !important;
+	border-color: #a8760f !important;
+	border-width: 2px !important;
+}
+
+/* Decorative "live" dot in the free top-right corner. Purely a CSS
+   pseudo-element, so it adds nothing for a screen reader to announce and
+   nothing for a crawler to read. The card's own copy carries the meaning. */
+.wcblr-live::after {
+	content: "";
+	position: absolute;
+	top: 14px;
+	right: 14px;
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: #a8760f;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-live::after {
+		animation: wcblr-pulse 6s 1.2s ease-in-out infinite;
+	}
+}
