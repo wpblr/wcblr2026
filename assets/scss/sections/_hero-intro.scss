@@ -64,14 +64,16 @@
 	   (sections/hero styles it unnested for the same reason.)
 
 	   The skyline is the biggest thing on the page and almost certainly the
-	   LCP element, so it moves without ever fading or clipping. It settles back
-	   from a slight push-in, anchored to the ground line so the buildings grow
-	   out of the bottom edge rather than the middle. The 4% overscan spreads
-	   ~38px each side; body carries overflow-x: clip in base/root, so it cannot
-	   raise a horizontal scrollbar. */
+	   LCP element, so it moves without ever fading or clipping.
+
+	   A rise only, no scale. Because fill-mode holds the from-state through the
+	   delay, a scaled start meant the skyline sat visibly zoomed while the text
+	   animated and then zoomed out on its own, which read as a separate late
+	   beat rather than part of the intro. It also starts early, at 0.2s
+	   alongside the h1, so the backdrop moves WITH the copy instead of after
+	   it, and it runs long so the largest element settles the most slowly. */
 	.wcblr-hero-banner {
-		transform-origin: center bottom;
-		animation: wcblr-hero-skyline 1.15s 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+		animation: wcblr-hero-skyline 0.85s 0.2s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 	}
 }
 
@@ -97,7 +99,7 @@
 
 @keyframes wcblr-hero-skyline {
 	from {
-		transform: translateY(34px) scale(1.04);
+		transform: translateY(28px);
 	}
 	to {
 		transform: none;
