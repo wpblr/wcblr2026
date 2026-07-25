@@ -49,22 +49,35 @@ footer {
 	}
 
 	/* ---- Highlighted footer link (open calls) -------------------------- */
-	/* Same gold pill as the header. Gold rather than red because the column
-	   heading right above it is already red, and a leading dot read as a
-	   list bullet rather than a highlight. */
-	.wcblr-nav-cta > .wp-block-navigation-item__content {
-		display: inline-block;
-		padding: 4px 12px !important;
-		border-radius: 999px;
-		background: rgba(224, 165, 38, 0.18);
-		border: 1px solid rgba(168, 118, 15, 0.3);
+	/* The header's pulsing gold dot rather than a filled pill, so an open
+	   call looks the same wherever it appears: header nav, footer nav, and
+	   the live Get Involved cards.
+	   ::after, not ::before as in the header. These links are a vertical
+	   list, and a leading dot would push this one label 14px right of the
+	   ones above and below it, breaking the column's left edge. Trailing
+	   keeps the labels aligned and reads as a status marker, which is also
+	   how the wcblr-live cards carry it.
+	   li. guards against core stamping the same className on a submenu <ul>.
+	   Reduced motion falls through to the plain static dot. */
+	li.wcblr-nav-cta > .wp-block-navigation-item__content {
 		color: #a8760f !important;
 		font-weight: 600;
-		transition: background 0.15s;
 	}
 
-	.wcblr-nav-cta > .wp-block-navigation-item__content:hover {
-		background: rgba(224, 165, 38, 0.3);
+	li.wcblr-nav-cta::after {
+		content: "";
+		flex: 0 0 auto;
+		width: 6px;
+		height: 6px;
+		margin-left: 8px;
+		border-radius: 50%;
+		background: #a8760f;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		li.wcblr-nav-cta::after {
+			animation: wcblr-pulse 6s 1.2s ease-in-out infinite;
+		}
 	}
 
 	/* ---- Social icons -------------------------------------------------- */
