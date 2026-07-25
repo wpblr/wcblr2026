@@ -56,9 +56,14 @@
 			animation: wcblr-hero-ghost 1.4s 0.45s ease-out both;
 		}
 
-		/* No opacity: also an LCP candidate, and it reads better rising anyway */
+		/* The skyline is the biggest thing on the page and almost certainly the
+		   LCP element, so it moves without ever fading or clipping. It settles
+		   back from a slight push-in, anchored to the ground line so the
+		   buildings grow out of the bottom edge rather than the middle.
+		   .wcblr-hero already clips overflow, so the 4% overscan cannot spill. */
 		.wcblr-hero-banner {
-			animation: wcblr-hero-lift 0.9s 0.42s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+			transform-origin: center bottom;
+			animation: wcblr-hero-skyline 1.15s 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 		}
 	}
 }
@@ -77,6 +82,15 @@
 @keyframes wcblr-hero-lift {
 	from {
 		transform: translateY(20px);
+	}
+	to {
+		transform: none;
+	}
+}
+
+@keyframes wcblr-hero-skyline {
+	from {
+		transform: translateY(34px) scale(1.04);
 	}
 	to {
 		transform: none;
