@@ -21,8 +21,14 @@
 			box-shadow: 0 8px 24px rgba(42, 29, 20, 0.1) !important;
 			overflow: visible !important;
 			background: #fbf8f1 !important;
-			padding: 8px !important;
-			min-width: 150px !important;
+			/* No padding: the hover highlight has to reach the panel's inner
+			   edge or it reads as a small pill floating in a bigger box rather
+			   than a menu row. The items carry their own padding instead, and
+			   the first/last ones round their outer corners to sit inside the
+			   panel's radius (overflow stays visible for the ::before hover
+			   bridge above, so the panel cannot clip them for us). */
+			padding: 0 !important;
+			min-width: 170px !important;
 
 			/* Bridge the 12px gap so hover isn't lost crossing it */
 			&::before {
@@ -49,8 +55,8 @@
 				font-weight: 400 !important;
 				color: #2a1d14 !important;
 				text-decoration: none !important;
-				padding: 10px 12px !important;
-				border-radius: 8px;
+				padding: 11px 16px !important;
+				border-radius: 0;
 				display: block !important;
 				width: 100% !important;
 				box-sizing: border-box;
@@ -60,8 +66,22 @@
 				white-space: nowrap;
 			}
 
+			/* 8.5px, not 10px: the panel's radius minus its own 1.5px border,
+			   so the highlight's corner sits concentric with the panel's. */
+			.wp-block-navigation-item:first-child
+				.wp-block-navigation-item__content {
+				border-top-left-radius: 8.5px;
+				border-top-right-radius: 8.5px;
+			}
+
+			.wp-block-navigation-item:last-child
+				.wp-block-navigation-item__content {
+				border-bottom-left-radius: 8.5px;
+				border-bottom-right-radius: 8.5px;
+			}
+
 			.wp-block-navigation-item:not(:last-child) {
-				border-bottom: 2px dashed rgba(42, 29, 20, 0.08);
+				border-bottom: 1px solid rgba(42, 29, 20, 0.08);
 			}
 
 			.wp-block-navigation-item:hover .wp-block-navigation-item__content {
