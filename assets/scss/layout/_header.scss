@@ -305,7 +305,10 @@
 		font-weight: 600;
 	}
 
-	.wcblr-nav-cta::before {
+	/* li. is load-bearing. Core stamps the block's className onto BOTH the <li>
+	   and the submenu <ul> inside it, so a bare .wcblr-nav-cta::before also
+	   drew a dot on the flyout panel, which showed up on hover. */
+	li.wcblr-nav-cta::before {
 		content: "";
 		flex: 0 0 auto;
 		width: 6px;
@@ -315,26 +318,38 @@
 		background: #a8760f;
 	}
 
-	/* Three breaths, then it rests. Deliberately finite: an indefinite pulse
-	   in the site header is both a distraction and a WCAG 2.2.2 problem, which
-	   applies to motion that runs past five seconds. 1.5s x 3 = 4.5s, and the
-	   resting state is a fully visible dot, so nothing is lost when it stops
-	   or when reduced motion is preferred. */
+	/* Two breaths every six seconds rather than a constant pulse. The idle
+	   stretch is most of the cycle, so it reads as a heartbeat you notice in
+	   passing instead of motion nagging beside the text you are reading.
+	   Reduced motion gets the plain static dot, which is the accessible
+	   escape hatch for WCAG 2.2.2 since this now runs indefinitely. */
 	@media (prefers-reduced-motion: no-preference) {
-		.wcblr-nav-cta::before {
-			animation: wcblr-nav-pulse 1.5s 1.2s ease-in-out 3;
+		li.wcblr-nav-cta::before {
+			animation: wcblr-nav-pulse 6s 1.2s ease-in-out infinite;
 		}
 	}
 }
 
 @keyframes wcblr-nav-pulse {
-	0%,
-	100% {
+	0% {
 		transform: scale(1);
 		opacity: 1;
 	}
-	50% {
+	6.5% {
 		transform: scale(1.45);
 		opacity: 0.45;
+	}
+	13% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	19.5% {
+		transform: scale(1.45);
+		opacity: 0.45;
+	}
+	26%,
+	100% {
+		transform: scale(1);
+		opacity: 1;
 	}
 }
