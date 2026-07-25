@@ -1,0 +1,106 @@
+/* ---- Hero intro animation ------------------------------------------------ */
+/* Staggered rise as the front page paints.
+ *
+ * Accessibility and safety notes, all deliberate:
+ *
+ * 1. Gated behind `prefers-reduced-motion: no-preference`, not the usual
+ *    animate-by-default plus a `reduce` override. Anyone who has asked for
+ *    less motion, AND any browser that does not understand the query at all,
+ *    falls through to the plain static hero. The failure direction is
+ *    "no animation", never "hidden content".
+ * 2. No rule outside a keyframe ever sets opacity to 0. If @keyframes were
+ *    stripped (WordCamp sanitises remote CSS) the hero still renders in full.
+ * 3. Only opacity and transform animate. Both are compositor-only, so nothing
+ *    reflows and the hero contributes no CLS.
+ * 4. The h1 and the skyline move WITHOUT fading. They are the likely LCP
+ *    candidates and an element sitting at opacity 0 does not count as painted,
+ *    so fading them in would push the Largest Contentful Paint back by the
+ *    length of the animation. Sliding them keeps LCP where it is.
+ * 5. Content order is untouched, so this is invisible to crawlers. There is no
+ *    display:none, no visibility:hidden, and no markup added for the effect.
+ *
+ * This plays on every load of the front page. Telling a first visit from a
+ * return one needs sessionStorage, and WordCamp.org allows no custom JS.
+ */
+
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-hero {
+		/* Kannada kicker + #WCBLR */
+		.wcblr-kicker {
+			animation: wcblr-hero-rise 0.6s 0.05s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+		}
+
+		/* No opacity: LCP candidate */
+		h1 {
+			animation: wcblr-hero-lift 0.7s 0.12s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+		}
+
+		.wcblr-lead {
+			animation: wcblr-hero-rise 0.6s 0.28s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+		}
+
+		/* The dark ticket stub arrives as one piece */
+		.wcblr-hero__right {
+			animation: wcblr-hero-rise 0.7s 0.36s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+		}
+
+		/* Stamped on last, after the stub has settled. Ends on rotate(5deg)
+		   because that is the stamp's resting transform in sections/ticket-stub;
+		   finishing on `none` would flatten it. */
+		.wcblr-stamp {
+			animation: wcblr-hero-stamp 0.45s 0.95s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+		}
+
+		/* Outlined ghost "26" drifts up quietly behind everything */
+		.wcblr-ghost {
+			animation: wcblr-hero-ghost 1.4s 0.45s ease-out both;
+		}
+
+		/* No opacity: also an LCP candidate, and it reads better rising anyway */
+		.wcblr-hero-banner {
+			animation: wcblr-hero-lift 0.9s 0.42s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+		}
+	}
+}
+
+@keyframes wcblr-hero-rise {
+	from {
+		opacity: 0;
+		transform: translateY(16px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@keyframes wcblr-hero-lift {
+	from {
+		transform: translateY(20px);
+	}
+	to {
+		transform: none;
+	}
+}
+
+@keyframes wcblr-hero-ghost {
+	from {
+		opacity: 0;
+		transform: translateY(26px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@keyframes wcblr-hero-stamp {
+	from {
+		opacity: 0;
+		transform: rotate(-7deg) scale(0.82);
+	}
+	to {
+		opacity: 1;
+		transform: rotate(5deg) scale(1);
+	}
+}
