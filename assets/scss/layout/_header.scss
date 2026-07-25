@@ -342,36 +342,40 @@
 		background: #a8760f;
 	}
 
-	/* Two breaths every six seconds rather than a constant pulse. The idle
-	   stretch is most of the cycle, so it reads as a heartbeat you notice in
-	   passing instead of motion nagging beside the text you are reading.
-	   Reduced motion gets the plain static dot, which is the accessible
-	   escape hatch for WCAG 2.2.2 since this now runs indefinitely. */
+	/* Two breaths, then a rest. Reduced motion gets the plain static dot,
+	   which is the accessible escape hatch for WCAG 2.2.2 since this runs
+	   indefinitely. Duration is shared with the footer dot and the live
+	   cards; change all three together or they drift out of sync. */
 	@media (prefers-reduced-motion: no-preference) {
 		li.wcblr-nav-cta::before {
-			animation: wcblr-pulse 6s 1.2s ease-in-out infinite;
+			animation: wcblr-pulse 3.5s 1.2s ease-in-out infinite;
 		}
 	}
 }
 
+/* The two beats still take about 1.5s, the same speed they always did. What
+   shrank is the rest between them, from roughly 4.4s to 2s, so the dot comes
+   back around nearly twice as often without the beat itself looking twitchy.
+   That is why the percentages moved with the duration: keeping the old ones
+   at 3.5s would have sped the beats up instead of shortening the pause. */
 @keyframes wcblr-pulse {
 	0% {
 		transform: scale(1);
 		opacity: 1;
 	}
-	6.5% {
+	11% {
 		transform: scale(1.45);
 		opacity: 0.45;
 	}
-	13% {
+	22% {
 		transform: scale(1);
 		opacity: 1;
 	}
-	19.5% {
+	33% {
 		transform: scale(1.45);
 		opacity: 0.45;
 	}
-	26%,
+	44%,
 	100% {
 		transform: scale(1);
 		opacity: 1;
