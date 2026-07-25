@@ -1,4 +1,7 @@
 /* ---- Organizer grid equal-height cards ---------------------------------- */
+/* The card fills its grid cell so every card in a row matches, and the bio
+   absorbs the slack so the read-more link lands on the same baseline in all of
+   them. Bios run from ~120 to ~450 characters, so without this they go ragged. */
 .wp-block-post-template li.type-wcb_organizer {
 	display: flex;
 	flex-direction: column;
@@ -8,12 +11,57 @@
 	display: flex;
 	flex-direction: column;
 }
-.wp-block-post-template li.type-wcb_organizer > .wp-block-group > .wp-block-group:last-child {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-}
 .wp-block-post-template li.type-wcb_organizer .wp-block-post-excerpt {
 	flex: 1;
 }
+.type-wcb_organizer .wcblr-org-card__more {
+	margin-top: auto !important;
+	padding-top: 18px;
+}
 
+/* ---- Avatar -------------------------------------------------------------- */
+/* The block sizes the figure but leaves the image at its own aspect ratio, so a
+   portrait photo spills out of the circle and over the name. Crop it instead.
+   The margin overrides the global margin:0 in speakers/grid, which would
+   otherwise stop aligncenter from centring the avatar in the card. */
+.type-wcb_organizer .wp-block-wordcamp-avatar {
+	width: 96px !important;
+	height: 96px !important;
+	margin: 0 auto !important;
+	overflow: hidden;
+	border-radius: 50%;
+	border: 1.5px solid #dad5cd;
+}
+.type-wcb_organizer .wp-block-wordcamp-avatar img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center top;
+	border-radius: 50%;
+}
+
+/* ---- Name and read-more -------------------------------------------------- */
+.type-wcb_organizer .wp-block-post-title a {
+	text-decoration: none;
+}
+.type-wcb_organizer .wp-block-post-title a:hover {
+	color: #c8344b;
+}
+.type-wcb_organizer .wp-block-read-more {
+	text-decoration: none;
+	transition: opacity 0.15s;
+}
+.type-wcb_organizer .wp-block-read-more::after {
+	content: " \2192";
+}
+.type-wcb_organizer .wp-block-read-more:hover {
+	opacity: 0.65;
+}
+
+@media (max-width: 600px) {
+	.type-wcb_organizer .wp-block-wordcamp-avatar {
+		width: 88px !important;
+		height: 88px !important;
+	}
+}
