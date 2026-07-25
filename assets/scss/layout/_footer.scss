@@ -47,4 +47,23 @@ footer {
 		position: relative;
 		z-index: 1;
 	}
+
+	/* ---- Highlighted footer link (open calls) -------------------------- */
+	/* The footer columns are quiet grey text, so a dot plus red weight is
+	   enough to pull the eye without turning the column into a button. */
+	.wcblr-nav-cta > .wp-block-navigation-item__content {
+		color: #c8344b !important;
+		font-weight: 600;
+	}
+
+	.wcblr-nav-cta > .wp-block-navigation-item__content::before {
+		content: "";
+		display: inline-block;
+		width: 6px;
+		height: 6px;
+		margin-right: 8px;
+		vertical-align: 1px;
+		border-radius: 50%;
+		background: #c8344b;
+	}
 }
