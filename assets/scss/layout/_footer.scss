@@ -66,4 +66,21 @@ footer {
 	.wcblr-nav-cta > .wp-block-navigation-item__content:hover {
 		background: rgba(224, 165, 38, 0.3);
 	}
+
+	/* ---- Social icons -------------------------------------------------- */
+	/* The is-style-logos-only variant draws each glyph in currentColor, which
+	   would otherwise inherit the near-black body colour and sit heavier than
+	   every link around it. Tone them to the muted footer text and let them
+	   take the site red on hover, same as the nav links do.
+	   Core already animates a scale on hover, so only colour is touched here. */
+	.wcblr-social .wp-block-social-link,
+	.wcblr-social .wp-block-social-link-anchor {
+		color: #7a6757 !important;
+		transition: color 0.15s;
+	}
+
+	.wcblr-social .wp-block-social-link:hover,
+	.wcblr-social .wp-block-social-link:hover .wp-block-social-link-anchor {
+		color: #c8344b !important;
+	}
 }
