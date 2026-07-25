@@ -1,3 +1,25 @@
+/* ---- News list (the five most recent, image beside copy) ----------------- */
+/* Query loops render every item from the same markup, so the only way to tell
+   row 1 from row 5 is the gap between them. Without a rule the rows run into
+   each other and read as one long column of images. */
+.wcblr-news-list .wp-block-post + .wp-block-post {
+	margin-top: 40px;
+	padding-top: 40px;
+	border-top: 1px solid rgba(42, 29, 20, 0.1);
+}
+
+/* Stack image over copy well before the columns get too narrow to read. Core
+   only stacks at 781px, by which point the 42% image column is under 300px. */
+@media (max-width: 860px) {
+	.wcblr-news-list .wp-block-columns {
+		flex-wrap: wrap !important;
+	}
+
+	.wcblr-news-list .wp-block-column {
+		flex-basis: 100% !important;
+	}
+}
+
 /* ---- Blog archive grid --------------------------------------------------- */
 @media (max-width: 991px) {
 	.wcblr-blog-grid ul {
