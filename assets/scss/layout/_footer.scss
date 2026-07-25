@@ -49,21 +49,21 @@ footer {
 	}
 
 	/* ---- Highlighted footer link (open calls) -------------------------- */
-	/* The footer columns are quiet grey text, so a dot plus red weight is
-	   enough to pull the eye without turning the column into a button. */
+	/* Same gold pill as the header. Gold rather than red because the column
+	   heading right above it is already red, and a leading dot read as a
+	   list bullet rather than a highlight. */
 	.wcblr-nav-cta > .wp-block-navigation-item__content {
-		color: #c8344b !important;
+		display: inline-block;
+		padding: 4px 12px !important;
+		border-radius: 999px;
+		background: rgba(224, 165, 38, 0.18);
+		border: 1px solid rgba(168, 118, 15, 0.3);
+		color: #a8760f !important;
 		font-weight: 600;
+		transition: background 0.15s;
 	}
 
-	.wcblr-nav-cta > .wp-block-navigation-item__content::before {
-		content: "";
-		display: inline-block;
-		width: 6px;
-		height: 6px;
-		margin-right: 8px;
-		vertical-align: 1px;
-		border-radius: 50%;
-		background: #c8344b;
+	.wcblr-nav-cta > .wp-block-navigation-item__content:hover {
+		background: rgba(224, 165, 38, 0.3);
 	}
 }
