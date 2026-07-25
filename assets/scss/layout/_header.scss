@@ -265,8 +265,12 @@
 		}
 	}
 
-	.wcblr-site-logo h1 a,
-	.wcblr-site-logo h1 a:hover {
+	/* Tag-agnostic on purpose: the site title renders as a <p> here (level 0)
+	   so the page's own <h1> stays the only h1 on the document. Keying this
+	   off h1 meant the home link picked up an underline the moment the tag
+	   changed. */
+	.wcblr-site-logo .wp-block-site-title a,
+	.wcblr-site-logo .wp-block-site-title a:hover {
 		text-decoration: none !important;
 	}
 
