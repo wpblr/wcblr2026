@@ -19,10 +19,13 @@
 	}
 
 	/* The deadline callout that sits just above the card. It has no hook
-	   class of its own, but inside #speaker-form the accent-3 border belongs
-	   to that box alone: the card and the note both draw theirs from inline
-	   hex, so neither carries the preset class. */
-	#speaker-form .has-accent-3-border-color {
+	   class of its own, but inside the apply section the accent-3 border
+	   belongs to that box alone: the card and the note both draw theirs from
+	   inline hex, so neither carries the preset class. Two ids because the
+	   calls anchor their form section differently, #speaker-form on the
+	   speakers post and #apply on media partners. */
+	#speaker-form .has-accent-3-border-color,
+	#apply .has-accent-3-border-color {
 		padding: 24px 20px !important;
 	}
 
