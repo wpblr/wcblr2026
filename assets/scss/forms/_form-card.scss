@@ -1,0 +1,47 @@
+/* ---- The WCBLR card that wraps a Jetpack form --------------------------- */
+/* Colour, radius and padding are block attributes on the card itself. This
+   file carries only what a block cannot express: what any of it should do
+   once the screen gets narrow.
+
+   The maths on a 390px phone before this file existed: 60px to the theme's
+   root padding (spacing--50 clamps to 30px a side), then the card's own 38px
+   a side, then the note's 24px on top of that. About 206px was left for the
+   note's copy, roughly 25 characters a line. */
+@media (max-width: 600px) {
+	.wcblr-form {
+		padding: 22px 16px !important;
+		border-radius: 14px !important;
+	}
+
+	/* The "Before you start" note, the card's only group child. */
+	.wcblr-form > .wp-block-group {
+		padding: 18px 16px !important;
+	}
+
+	/* The deadline callout that sits just above the card. It has no hook
+	   class of its own, but inside #speaker-form the accent-3 border belongs
+	   to that box alone: the card and the note both draw theirs from inline
+	   hex, so neither carries the preset class. */
+	#speaker-form .has-accent-3-border-color {
+		padding: 24px 20px !important;
+	}
+
+	/* Let the submit button span the row instead of keeping 34px of side
+	   padding in a column that is now a third narrower. */
+	.wcblr-form .wp-block-jetpack-contact-form .wp-block-button .wp-block-button__link,
+	.wcblr-form .wp-block-jetpack-contact-form .wp-block-jetpack-button .wp-block-button__link {
+		width: 100% !important;
+		padding: 15px 20px !important;
+	}
+
+	/* Every form on the site, not just the card above: iOS Safari zooms the
+	   whole page in when you focus a field whose text is under 16px, and the
+	   base rules set 15.5px. The zoom does not undo itself on blur, so one
+	   tap leaves the reader stranded mid-page at 1.2x. */
+	input.grunion-field:not([type="radio"]):not([type="checkbox"]),
+	textarea.grunion-field,
+	.contact-form__select-element-wrapper select,
+	.jetpack-field__input-element {
+		font-size: 16px !important;
+	}
+}
