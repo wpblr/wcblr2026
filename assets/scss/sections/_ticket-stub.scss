@@ -57,4 +57,27 @@
 	&__val {
 		text-align: right;
 	}
+
+	/* Secondary CTA. It carries the stub's own dark fill with a light border,
+	   so it reads as an outline button, and with no hover state it looked
+	   inert next to the filled red one above it. Fill it with the stub's cream
+	   and flip the label dark, the same move the speakers hero makes.
+	   !important because the block writes both colours inline.
+
+	   Deliberately not applied to the ticket button above: that one is still
+	   href="#" while tickets are not live, and a hover state on a link that
+	   goes nowhere is a promise the page cannot keep. */
+	&__cta .wp-block-button__link {
+		transition:
+			background-color 0.18s ease,
+			border-color 0.18s ease,
+			color 0.18s ease;
+	}
+
+	&__cta .wp-block-button__link:hover,
+	&__cta .wp-block-button__link:focus-visible {
+		background-color: #f2ece0 !important;
+		border-color: #f2ece0 !important;
+		color: #2a1d14 !important;
+	}
 }
