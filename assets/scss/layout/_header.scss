@@ -388,32 +388,18 @@
 	}
 
 	/* ---- Join WhatsApp Community button --------------------------------- */
-	/* Same approach as the chips and badges on the speakers page: the glyph is
-	   CSS, inlined from assets/icons/whatsapp.svg. It has to be CSS here
-	   rather than an image block, because core/button holds rich text and
-	   will not keep an <img> through validation.
+	/* The glyph itself is an <img> in the header markup, pointing at
+	   assets/icons/whatsapp.svg in this repo, because that is the only thing
+	   that works here: WordCamp's Remote CSS sanitiser strips url() out of
+	   every declaration it passes, data URIs included. That is also why the
+	   background-image rules in content/cfs-icons never paint anything, and
+	   why those blocks carry their own <img> too.
 
-	   Masked rather than drawn as a background-image, which is what the
-	   speakers-page icons do. Those sit on a known cream card so their colour
-	   can be baked into the SVG; this one sits on a themed button whose text
-	   colour comes from theme.json, so it takes currentColor instead and
-	   stays correct through :hover and any future palette change. */
-	$wa-icon: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%2024%2024%27%20fill=%27currentColor%27%20role=%27img%27%20aria-hidden=%27true%27%3E%3Cpath%20d=%27M17.472%2014.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94%201.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198%200-.52.074-.792.372-.272.297-1.04%201.016-1.04%202.479%200%201.462%201.065%202.875%201.213%203.074.149.198%202.096%203.2%205.077%204.487.709.306%201.262.489%201.694.625.712.227%201.36.195%201.871.118.571-.085%201.758-.719%202.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421%207.403h-.004a9.87%209.87%200%2001-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86%209.86%200%2001-1.51-5.26c.001-5.45%204.436-9.884%209.888-9.884%202.64%200%205.122%201.03%206.988%202.898a9.825%209.825%200%20012.893%206.994c-.003%205.45-4.437%209.884-9.885%209.884m8.413-18.297A11.815%2011.815%200%200012.05%200C5.495%200%20.16%205.335.157%2011.892c0%202.096.547%204.142%201.588%205.945L.057%2024l6.305-1.654a11.882%2011.882%200%20005.683%201.448h.005c6.554%200%2011.89-5.335%2011.893-11.893a11.821%2011.821%200%2000-3.48-8.413Z%27/%3E%3C/svg%3E");
-
+	   All this rule does is line the glyph up with the label. */
 	.wcblr-wa-btn .wp-block-button__link {
 		display: inline-flex;
 		align-items: center;
 		gap: 8px;
-	}
-
-	.wcblr-wa-btn .wp-block-button__link::before {
-		content: "";
-		flex: 0 0 auto;
-		width: 16px;
-		height: 16px;
-		background-color: currentColor;
-		-webkit-mask: $wa-icon no-repeat center / contain;
-		mask: $wa-icon no-repeat center / contain;
 	}
 }
 
