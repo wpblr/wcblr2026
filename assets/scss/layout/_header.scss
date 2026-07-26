@@ -351,6 +351,41 @@
 			animation: wcblr-pulse 3.5s 1.2s ease-in-out infinite;
 		}
 	}
+
+	/* ---- The same dot, inside the mobile overlay ------------------------ */
+	/* Up there a top-level item with a submenu is a two-column GRID, not a
+	   flex row, and every real child is explicitly placed: label 1/1,
+	   chevron 2/1, submenu 1/-1 on row 2. The li::before is the only child
+	   with no placement, so auto-placement pushed it into the first free
+	   cell, a row of its own under "Calls", then under the whole submenu
+	   once that opened. Hang it off the label instead. Trailing rather than
+	   leading, so every item in the stacked menu keeps the same left edge.
+	   Must come after the base rules above: same specificity, so source
+	   order is what wins. */
+	@media (max-width: 600px) {
+		li.wcblr-nav-cta::before {
+			content: none;
+		}
+
+		li.wcblr-nav-cta
+			> .wp-block-navigation-item__content:not(.wp-block-navigation-submenu__toggle)::after {
+			content: "";
+			display: inline-block;
+			width: 6px;
+			height: 6px;
+			margin-left: 9px;
+			vertical-align: middle;
+			border-radius: 50%;
+			background: #a8760f;
+		}
+
+		@media (prefers-reduced-motion: no-preference) {
+			li.wcblr-nav-cta
+				> .wp-block-navigation-item__content:not(.wp-block-navigation-submenu__toggle)::after {
+				animation: wcblr-pulse 3.5s 1.2s ease-in-out infinite;
+			}
+		}
+	}
 }
 
 /* The two beats still take about 1.5s, the same speed they always did. What
