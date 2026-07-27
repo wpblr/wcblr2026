@@ -1,0 +1,66 @@
+/* ---- Contents card (travel guide) ---------------------------------------- */
+/* Blocks cannot remove a list marker, strip a link underline, or number rows,
+   so the contents card is styled here. Everything below degrades safely: if the
+   sanitiser drops counters, ::before renders nothing and you are left with clean
+   unbulleted rows rather than a gap where a number should be. */
+
+.wcblr-toc-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	counter-reset: wcblr-toc;
+
+	li {
+		counter-increment: wcblr-toc;
+		margin: 0;
+		padding: 12px 0;
+		border-bottom: 1px solid #e3ded5;
+
+		/* Inline, not absolute: a stripped counter then costs no layout. */
+		&::before {
+			content: counter(wcblr-toc, decimal-leading-zero);
+			display: inline-block;
+			min-width: 30px;
+			font-family: "JetBrains Mono", monospace;
+			font-size: 12px;
+			font-weight: 700;
+			letter-spacing: 0.04em;
+			color: #c8344b;
+		}
+
+		&:last-child {
+			border-bottom: 0;
+			padding-bottom: 0;
+		}
+
+		a {
+			text-decoration: none;
+			font-weight: 600;
+			transition: color 0.15s;
+
+			&:hover,
+			&:focus {
+				color: #c8344b;
+				text-decoration: none;
+			}
+		}
+	}
+}
+
+/* The right-hand column carries on from the left one instead of restarting. */
+.wcblr-toc-b {
+	counter-reset: wcblr-toc 4;
+}
+
+/* Stacked on mobile, so the second column needs its rule back. */
+@media (max-width: 781px) {
+	.wcblr-toc-list li:last-child {
+		border-bottom: 1px solid #e3ded5;
+		padding-bottom: 12px;
+	}
+
+	.wcblr-toc-b li:last-child {
+		border-bottom: 0;
+		padding-bottom: 0;
+	}
+}
