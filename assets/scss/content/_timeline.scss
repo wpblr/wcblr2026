@@ -1,0 +1,59 @@
+/* ---- Day plan timeline (travel guide) ------------------------------------ */
+/* A rail with a marker per stop. Blocks cannot draw either, so the structure
+   lives here while the vertical rhythm stays in the block attributes. With this
+   file missing the section degrades to a plain stack of entries rather than
+   collapsing, which is the failure direction we want. */
+
+.wcblr-timeline-item {
+	position: relative;
+	padding-left: 42px;
+
+	/* The rail is drawn per item, not once on the container, so it stops at
+	   the last marker instead of trailing past the final entry. */
+	&::before {
+		content: "";
+		position: absolute;
+		left: 7px;
+		top: 22px;
+		bottom: -32px;
+		width: 2px;
+		background: #ddd9d2;
+	}
+
+	&:last-child::before {
+		display: none;
+	}
+
+	/* The marker. A cream border rather than a ring shadow, so the rail is
+	   still masked if box-shadow is ever dropped by the sanitiser. The next
+	   item paints later in the DOM, so its marker covers the rail overlap. */
+	&::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		top: 4px;
+		width: 16px;
+		height: 16px;
+		box-sizing: border-box;
+		border: 3px solid #f2ece0;
+		border-radius: 50%;
+		background: #a8760f;
+	}
+}
+
+@media (max-width: 600px) {
+	.wcblr-timeline-item {
+		padding-left: 32px;
+
+		&::before {
+			left: 6px;
+			bottom: -28px;
+		}
+
+		&::after {
+			width: 14px;
+			height: 14px;
+			top: 5px;
+		}
+	}
+}
