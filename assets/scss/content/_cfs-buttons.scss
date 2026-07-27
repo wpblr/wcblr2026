@@ -1,9 +1,12 @@
 /* =============================================================
-   WCBLR — Call for Speakers: hero CTA buttons
+   WCBLR — button hover and focus states
    Colour, size and spacing live in the block attributes. This
    file exists only for what blocks cannot express: :hover and
-   :focus-visible. Hook class "wcblr-hero-cta" sits on the
-   wp:buttons wrapper inside the dark hero.
+   :focus-visible.
+
+   Both hooks go on the wp:buttons wrapper:
+     wcblr-hero-cta     buttons on a dark band (hero, closing CTA)
+     wcblr-btn-onlight  outline buttons on the cream page
    ============================================================= */
 
 .wcblr-hero-cta .wp-block-button__link {
@@ -25,4 +28,19 @@
 .wcblr-hero-cta .wp-block-button:not(.is-style-outline) .wp-block-button__link:hover,
 .wcblr-hero-cta .wp-block-button:not(.is-style-outline) .wp-block-button__link:focus-visible {
 	box-shadow: 0 0 0 2px rgba(242, 236, 224, 0.4);
+}
+
+/* ---- Outline buttons on the cream page ---------------------------------- */
+/* The dark-band rules above would fill these cream on cream, so they get their
+   own inversion: espresso fill, cream text. */
+.wcblr-btn-onlight .wp-block-button__link {
+	transition: background-color 0.18s ease, border-color 0.18s ease,
+		color 0.18s ease;
+}
+
+.wcblr-btn-onlight .is-style-outline .wp-block-button__link:hover,
+.wcblr-btn-onlight .is-style-outline .wp-block-button__link:focus-visible {
+	background-color: #2a1d14 !important;
+	border-color: #2a1d14 !important;
+	color: #f2ece0 !important;
 }
