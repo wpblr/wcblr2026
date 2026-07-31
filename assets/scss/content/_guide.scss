@@ -193,9 +193,10 @@
    generic ornament.
 
    The gap grows with it. 56px was not enough to read as a break at all, which
-   is why the divider had to work so hard in the first place. */
+   is why the divider had to work so hard in the first place; 104px was too much
+   and left the sections looking unrelated. 78px is the settled value. */
 .wcblr-guide .wcblr-sec + .wcblr-sec {
-	margin-top: 104px !important;
+	margin-top: 78px !important;
 }
 
 .wcblr-guide .wcblr-sec > .wcblr-eyebrow {
