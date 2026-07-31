@@ -1,0 +1,266 @@
+/* ---- Motion -------------------------------------------------------------- */
+
+/* A reusable reveal layer. Opt a page in by adding `wcblr-motion` to the outer
+   wrapper alongside `wcblr-post`; every rule below is scoped under it, so no
+   page that has not opted in changes by one frame.
+
+   WHY SCROLL AND NOT LOAD, which is the whole reason this file exists.
+   An animation that starts at page load has already finished by the time the
+   reader reaches anything below the fold. We shipped exactly that mistake with
+   the open-hint chevron: a 4.4 second run, on a section seventeen hundred
+   pixels down, seen by nobody. Load is the wrong trigger for a long page. So
+   every reveal here is driven by `animation-timeline: view()`, which ties an
+   element's progress to its own passage through the viewport. An element is
+   revealed when the reader arrives at it, whether that is at second one or
+   minute three, and an element that is already on screen at load is already
+   past its range and simply renders. No flash, and nothing for the largest
+   contentful paint to wait on.
+
+   HOW IT FAILS, which matters more than how it works.
+   Every reveal is written as `animation: <name> linear both` with NO DURATION,
+   and the duration is supplied only by the scroll timeline. That is deliberate.
+   If `animation-timeline` is unsupported, or stripped by WordCamp's stylesheet
+   sanitiser the way `background-image` is, the shorthand resolves to a
+   zero-second animation, `both` fills it to the last keyframe, and the element
+   renders at its final state: fully visible, in position. The failure direction
+   is a static page, never a blank one.
+
+   That is not a small point. Reveal animations are the classic way to ship an
+   invisible page: one unsupported property and the content is stuck at
+   `opacity: 0` with no way for the reader to recover it. Nothing in this file
+   sets opacity outside a keyframe, and nothing depends on a property surviving
+   for the text to be readable.
+
+   The whole layer also sits behind `prefers-reduced-motion: no-preference`, so
+   asking for less motion gets a completely static page rather than a
+   differently-animated one. */
+
+/* ---- The vocabulary ------------------------------------------------------ */
+
+/* Five keyframes, no more. A page with one motion idea reads as designed; a
+   page where every block arrives differently reads as a demo. Only opacity and
+   transform are animated, plus clip-path on the wipe, so nothing here can
+   reflow the page or contribute a pixel of layout shift. */
+
+@keyframes wcblr-rise {
+	from { opacity: 0; transform: translateY(14px); }
+	to { opacity: 1; transform: none; }
+}
+
+/* for dense, repeated items: rows, list entries, chips. A 14px lift repeated
+   twenty times down a card reads as jitter. */
+@keyframes wcblr-rise-sm {
+	from { opacity: 0; transform: translateY(7px); }
+	to { opacity: 1; transform: none; }
+}
+
+/* for anything that must not move: things already anchored to a rule or an
+   edge, where a shift would look like a mistake rather than an entrance */
+@keyframes wcblr-fade {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+/* photographs. The scale is 1.5 per cent and it starts LARGER, so the image
+   settles into place rather than growing into it, which is the difference
+   between a photograph arriving and a photograph being presented. */
+@keyframes wcblr-zoom {
+	from { opacity: 0; transform: scale(1.015); }
+	to { opacity: 1; transform: none; }
+}
+
+/* a wipe, for the full-width photographs. clip-path is on the sanitiser's
+   confirmed-kept list, and unlike a mask it needs no image. */
+@keyframes wcblr-wipe {
+	from { opacity: 0; clip-path: inset(0 0 22% 0); }
+	to { opacity: 1; clip-path: inset(0 0 0 0); }
+}
+
+/* for rules and rails: draws from its top edge downward */
+@keyframes wcblr-draw {
+	from { transform: scaleY(0); }
+	to { transform: scaleY(1); }
+}
+
+/* ---- The engine ---------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+	@supports (animation-timeline: view()) {
+
+		/* The shared setup. `linear` because a scroll-driven animation is already
+		   eased by the reader's own scrolling; adding a second ease on top makes
+		   it feel like the page is lagging behind the wheel. */
+		.wcblr-motion .wcblr-m-rise,
+		.wcblr-motion .wcblr-m-rise-sm,
+		.wcblr-motion .wcblr-m-fade,
+		.wcblr-motion .wcblr-m-zoom,
+		.wcblr-motion .wcblr-m-wipe,
+		.wcblr-motion .wcblr-m-draw {
+			animation-timeline: view();
+			animation-range: entry 0% entry 38%;
+			animation-fill-mode: both;
+			animation-timing-function: linear;
+		}
+
+		.wcblr-motion .wcblr-m-rise { animation-name: wcblr-rise; }
+		.wcblr-motion .wcblr-m-rise-sm { animation-name: wcblr-rise-sm; }
+		.wcblr-motion .wcblr-m-fade { animation-name: wcblr-fade; }
+		.wcblr-motion .wcblr-m-zoom { animation-name: wcblr-zoom; }
+		.wcblr-motion .wcblr-m-wipe { animation-name: wcblr-wipe; }
+		.wcblr-motion .wcblr-m-draw {
+			animation-name: wcblr-draw;
+			transform-origin: top center;
+		}
+
+		/* EVERY rule that sets the `animation` shorthand also sets a range on the
+		   next line, without exception. The shorthand resets `animation-range` to
+		   `normal`, which is the entire cover range, so an element that relies on a
+		   later `:nth-of-type` rule for its range gets `normal` if no such rule
+		   matches it. The first question in the FAQ shipped exactly that way and
+		   rendered half faded at the point the reader was reading it.
+
+		   Stagger. A scroll timeline has no `animation-delay` worth the name, so a
+		   stagger is expressed as a later slice of the same entry range. Six per
+		   cent of an element's entry is roughly a tenth of a second at an ordinary
+		   scroll speed: enough to read as a sequence, not enough to wait for. */
+		.wcblr-motion .wcblr-m-2 { animation-range: entry 6% entry 44%; }
+		.wcblr-motion .wcblr-m-3 { animation-range: entry 12% entry 50%; }
+		.wcblr-motion .wcblr-m-4 { animation-range: entry 18% entry 56%; }
+		.wcblr-motion .wcblr-m-5 { animation-range: entry 24% entry 62%; }
+
+		/* opt out, for anything that should never move */
+		.wcblr-motion .wcblr-m-still { animation: none !important; }
+
+		/* ---- Applied to the long-form article --------------------------- */
+
+		/* Everything a section holds rises. One idea, used consistently, which is
+		   what separates a designed page from a decorated one. */
+		.wcblr-motion .wcblr-sec > * {
+			animation: wcblr-rise linear both;
+			animation-timeline: view();
+			animation-range: entry 0% entry 38%;
+		}
+
+		/* The heading follows its own eyebrow rather than arriving with it. */
+		.wcblr-motion .wcblr-sec > h2 { animation-range: entry 5% entry 43%; }
+
+		/* Columns arrive left to right. The columns block itself does not animate,
+		   or the children would be revealing inside a parent that is still moving. */
+		.wcblr-motion .wcblr-sec > .wp-block-columns { animation: none; }
+		.wcblr-motion .wp-block-columns > .wp-block-column {
+			animation: wcblr-rise linear both;
+			animation-timeline: view();
+			animation-range: entry 0% entry 40%;
+		}
+		.wcblr-motion .wp-block-columns > .wp-block-column:nth-child(2) { animation-range: entry 7% entry 47%; }
+		.wcblr-motion .wp-block-columns > .wp-block-column:nth-child(3) { animation-range: entry 14% entry 54%; }
+		.wcblr-motion .wp-block-columns > .wp-block-column:nth-child(4) { animation-range: entry 21% entry 61%; }
+
+		/* Photographs get the one richer treatment on the page, because they are
+		   the only elements whose job is to be looked at rather than read. */
+		.wcblr-motion .wcblr-photo,
+		.wcblr-motion .wcblr-sec > .wp-block-image {
+			animation: wcblr-zoom linear both;
+			animation-timeline: view();
+			animation-range: entry 0% entry 45%;
+		}
+		.wcblr-motion .wcblr-photo-wide {
+			animation-name: wcblr-wipe;
+			animation-range: entry 0% entry 52%;
+		}
+		.wcblr-motion .wcblr-photo-pair > .wp-block-column:nth-child(2) { animation-range: entry 9% entry 54%; }
+
+		/* The statistics card: the card arrives, then its rows count in. */
+		.wcblr-motion .wcblr-statrow {
+			animation: wcblr-rise-sm linear both;
+			animation-timeline: view();
+			animation-range: entry 8% entry 44%;
+		}
+		.wcblr-motion .wcblr-statrow:nth-of-type(1) { animation-range: entry 8% entry 44%; }
+		.wcblr-motion .wcblr-statrow:nth-of-type(2) { animation-range: entry 13% entry 49%; }
+		.wcblr-motion .wcblr-statrow:nth-of-type(3) { animation-range: entry 18% entry 54%; }
+		.wcblr-motion .wcblr-statrow:nth-of-type(4) { animation-range: entry 23% entry 59%; }
+
+		/* THE SIGNATURE. The day's rail draws itself as the reader scrolls the
+		   day, so the line is literally the distance travelled through it. This is
+		   the one place the page spends real motion, and it is spent on the one
+		   element whose meaning IS progression. Everything else stays quiet.
+
+		   `contain` rather than `entry`: the rail should draw across the whole
+		   time the section is passing through the viewport, not in the first
+		   third of its arrival. */
+		.wcblr-motion .wcblr-day::before {
+			animation: wcblr-draw linear both;
+			animation-timeline: view();
+			animation-range: contain 0% contain 62%;
+			transform-origin: top center;
+		}
+
+		/* Slots come in one after another, in the order the day happens. */
+		.wcblr-motion .wcblr-slot {
+			animation: wcblr-rise-sm linear both;
+			animation-timeline: view();
+			animation-range: entry 4% entry 40%;
+		}
+		.wcblr-motion .wcblr-slot:nth-child(1) { animation-range: entry 4% entry 40%; }
+		.wcblr-motion .wcblr-slot:nth-child(2) { animation-range: entry 9% entry 45%; }
+		.wcblr-motion .wcblr-slot:nth-child(3) { animation-range: entry 14% entry 50%; }
+		.wcblr-motion .wcblr-slot:nth-child(4) { animation-range: entry 19% entry 55%; }
+		.wcblr-motion .wcblr-slot:nth-child(5) { animation-range: entry 24% entry 60%; }
+
+		/* Questions, one after the next. */
+		.wcblr-motion .wcblr-sec > .wp-block-details {
+			animation: wcblr-rise-sm linear both;
+			animation-timeline: view();
+			animation-range: entry 0% entry 36%;
+		}
+		.wcblr-motion .wcblr-sec > .wp-block-details:nth-of-type(2) { animation-range: entry 5% entry 41%; }
+		.wcblr-motion .wcblr-sec > .wp-block-details:nth-of-type(3) { animation-range: entry 10% entry 46%; }
+		.wcblr-motion .wcblr-sec > .wp-block-details:nth-of-type(4) { animation-range: entry 15% entry 51%; }
+		.wcblr-motion .wcblr-sec > .wp-block-details:nth-of-type(5) { animation-range: entry 20% entry 56%; }
+
+		/* The pull quote is the article's thesis, so it gets a longer arrival than
+		   anything around it. Slower is the only emphasis motion has. */
+		.wcblr-motion .wcblr-pull { animation-range: entry 0% entry 60%; }
+
+		/* The closing band, and the line after it. */
+		.wcblr-motion .wcblr-cta,
+		.wcblr-motion .wcblr-signoff {
+			animation: wcblr-rise linear both;
+			animation-timeline: view();
+			animation-range: entry 0% entry 45%;
+		}
+
+		/* Never the wrapper: animating the element that holds everything means
+		   animating everything twice. */
+		.wcblr-motion.wcblr-post,
+		.wcblr-motion .wcblr-sec { animation: none; }
+	}
+}
+
+/* ---- Hover ---------------------------------------------------------------- */
+
+/* Deliberately almost nothing.
+
+   A hover zoom on the photographs was tried twice and dropped twice. To scale
+   an image inside its figure you have to clip the figure, and both ways of
+   clipping cost something: `overflow: hidden` establishes a block formatting
+   context, which stopped the figure's margins collapsing with its caption's and
+   moved every photograph on the page down twelve pixels, and `clip-path`
+   re-rounds the figure's box rather than the image's, so the photograph lost
+   its own bottom corners. A motion layer that changes what a static page looks
+   like is not a motion layer. It also does nothing at all on a touch screen,
+   which is where most of this page will be read.
+
+   What is left costs no layout and no pixels: surfaces lift very slightly under
+   the pointer, which is a hint that something is a block rather than a
+   decoration. Still gated, because someone who asked for less motion asked for
+   less of this too. */
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-motion .wcblr-panel,
+	.wcblr-motion .wcblr-statcard {
+		transition: transform 0.35s cubic-bezier(0.2, 0.6, 0.2, 1);
+	}
+	.wcblr-motion .wcblr-panel:hover,
+	.wcblr-motion .wcblr-statcard:hover { transform: translateY(-2px); }
+}
