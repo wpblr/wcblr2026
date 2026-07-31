@@ -48,16 +48,44 @@ $display: var(--wp--preset--font-family--fraunces), Georgia, serif;
 $rail: 200px;
 $gutter: 52px;
 
-/* Full-bleed without 100vw. A `width:100vw` element includes the scrollbar and
-   pushes a horizontal scrollbar onto the page; box-shadow paints outside the
-   border box, affects no layout, and cannot overflow. Six copies reach roughly
-   7200px of viewport, which is past any real screen. */
+/* Full bleed, and the three ways it goes wrong here.
+
+   The post template caps content at 1200px in a `max-width` ancestor three
+   levels above the band, so a band has to escape a box it does not own.
+
+   1. box-shadow copies at +/-50vw. This SHIPPED and it is broken. A copy offset
+      by 50vw spans [-E/2, +E/2] in page coordinates while the element sits at
+      [(V-E)/2, (V+E)/2], so the copies only meet the element when E >= V/2. At
+      E=1100 in a V=2552 window they land 176px clear of it and the "band"
+      renders as three detached rectangles with cream gaps. It looks perfect at
+      V=1440, which is exactly why the local render passed it.
+   2. `width: 100vw` or `calc(50% - 50vw)`. vw includes the scrollbar, so this
+      overshoots by half a scrollbar, which adds a horizontal scrollbar, which
+      changes vw. It oscillates.
+   3. A pseudo-element inset by a large negative `right`. Overflow past the
+      inline end DOES extend the scrollable area; overflow past the inline start
+      does not. So it scrolls sideways on one side only.
+
+   What works: overshoot with margin and pay it back with padding, which leaves
+   the content box exactly where it was and is viewport-independent, then let
+   `main` clip the overhang. Gated behind @supports because without the clip the
+   overshoot is a 3000px horizontal scrollbar, and scoped with :has() so no
+   other page on the site gets a clipping `main`. */
 @mixin bleed($c) {
 	background: $c;
-	box-shadow:
-		-50vw 0 0 $c, 50vw 0 0 $c,
-		-100vw 0 0 $c, 100vw 0 0 $c,
-		-150vw 0 0 $c, 150vw 0 0 $c;
+}
+
+@supports (overflow-x: clip) {
+	main:has(.wcblr-guide) { overflow-x: clip; }
+
+	.wcblr-guide .wcblr-band-raised,
+	.wcblr-guide .wcblr-band-ink,
+	.wcblr-guide .wcblr-cta {
+		margin-left: -1500px;
+		margin-right: -1500px;
+		padding-left: 1500px;
+		padding-right: 1500px;
+	}
 }
 
 /* ---- 1. Bands ---------------------------------------------------------- */
