@@ -195,22 +195,29 @@
 
 /* Only between sections, never above the first one: it sits directly under the
    post title and needs no rule. `+` gives that for free. */
+/* Both halves are the SAME height and sit at the SAME top, so they read as one
+   continuous rule whose first 56px happens to be crimson. The first version had
+   a 3px cap on a 1px hairline: the weights did not match, so the cap read as a
+   stray dash floating above a faint line rather than as part of it. Equal weight
+   is the whole difference between a mark and an artefact.
+   Two elements rather than one gradient, deliberately: the WordCamp Remote CSS
+   sanitiser has an allowlist and gradients are not on the confirmed-kept list,
+   so a gradient risks the divider vanishing entirely on the live site. */
 .wcblr-guide .wcblr-sec + .wcblr-sec::before {
 	content: "";
 	position: absolute;
-	top: -34px;
+	top: -30px;
 	left: 0;
 	right: 0;
-	height: 1px;
-	background: #ddd9d2;
+	height: 2px;
+	background: #e3ded5;
 }
 .wcblr-guide .wcblr-sec + .wcblr-sec::after {
 	content: "";
 	position: absolute;
-	top: -35px;
+	top: -30px;
 	left: 0;
-	width: 44px;
-	height: 3px;
-	border-radius: 999px;
+	width: 56px;
+	height: 2px;
 	background: #C8344B;
 }
