@@ -342,7 +342,7 @@
 	cursor: pointer;
 	display: flex;
 	align-items: center;
-	gap: 20px;
+	gap: 14px;
 	font-size: 18px;
 	font-weight: 600;
 	line-height: 1.35;
@@ -361,7 +361,6 @@
 .wcblr-guide .wcblr-slot summary::after {
 	content: "";
 	flex: 0 0 auto;
-	margin-left: auto;
 	width: 7px;
 	height: 7px;
 	border-right: 2px solid #b3a693;
@@ -417,4 +416,26 @@
 		margin-bottom: 6px !important;
 	}
 	.wcblr-guide .wcblr-slot::after { left: 0; top: 18px; }
+}
+
+/* The instruction, because an affordance that needs explaining is only half an
+   affordance. Set in the mono register the page already uses for labels, and
+   carrying the same chevron the rows do, so the sentence and the control are
+   visibly the same thing. */
+.wcblr-guide .wcblr-openhint {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 12px !important;
+	letter-spacing: 0.04em !important;
+	color: #8a7a68 !important;
+}
+.wcblr-guide .wcblr-openhint::before {
+	content: "";
+	flex: 0 0 auto;
+	width: 6px;
+	height: 6px;
+	border-right: 2px solid #b3a693;
+	border-bottom: 2px solid #b3a693;
+	transform: rotate(-45deg);
 }
