@@ -208,7 +208,12 @@
 	   applies to it too and would stop the rule two thirds of the way across */
 	max-width: none;
 }
-.wcblr-guide .wcblr-sec > .wcblr-eyebrow::after {
+/* Only on sections that follow another one. The first section's eyebrow sits
+   directly under the post title, which already marks the start of the article;
+   a rule there separates the h1 from its own opening paragraph and reads as a
+   stray line. The base eyebrow styling above stays on every section so the
+   spacing does not go inconsistent. */
+.wcblr-guide .wcblr-sec + .wcblr-sec > .wcblr-eyebrow::after {
 	content: "";
 	flex: 1 1 auto;
 	height: 1px;
