@@ -274,67 +274,67 @@
 
 .wcblr-guide .wcblr-day { position: relative; }
 
-/* one continuous rail behind every beat, inset at top and bottom so it starts
-   and stops at the first and last dot rather than running into the headings */
-.wcblr-guide .wcblr-day::before {
-	content: "";
-	position: absolute;
-	left: 150px;
-	top: 24px;
-	bottom: 26px;
-	width: 1px;
-	background: #ddd5c6;
-}
-
+/* The beat: a time in a fixed left column, the headline and its note beside it. */
 .wcblr-guide .wcblr-slot {
 	position: relative;
 	display: grid;
-	grid-template-columns: 128px minmax(0, 1fr);
-	column-gap: 44px;
+	grid-template-columns: 120px minmax(0, 1fr);
+	column-gap: 40px;
 	align-items: start;
 	padding: 16px 0;
 	border-radius: 8px;
 	transition: background-color 0.2s ease;
 }
+.wcblr-guide .wcblr-slot > * { grid-column: 2; }
 .wcblr-guide .wcblr-slot > .wcblr-slot-time {
 	grid-column: 1;
+	grid-row: 1;
 	text-align: right;
 	padding-top: 4px;
 	color: #8a7a68 !important;
 	text-transform: uppercase;
 }
-.wcblr-guide .wcblr-slot > .wp-block-details { grid-column: 2; }
 
-/* the marker. Hollow while the beat is closed, filled once it is open, so the
-   rail doubles as a record of what you have already read. */
-.wcblr-guide .wcblr-slot::after {
+/* THE RAIL IS THE MARKER. There are no dots.
+
+   A dot on a line is an ornament: it says "something happens here", which the
+   headline three centimetres to its right already said. The hollow and filled
+   states it used to carry were tracking whether a beat had been opened, and
+   every beat ships open now, so they were encoding nothing at all.
+
+   Each beat owns a SEGMENT of the rail instead, and consecutive segments meet
+   to form one continuous line down the day. A segment's colour says whether
+   anybody scheduled that stretch: gold for the two nobody did. The rail stops
+   being decoration and becomes a reading of the day, which is the job gold does
+   everywhere else on this page. */
+.wcblr-guide .wcblr-slot::before {
 	content: "";
 	position: absolute;
-	left: 146px;
-	top: 22px;
-	width: 9px;
-	height: 9px;
-	border-radius: 50%;
-	background: #F2ECE0;
-	border: 2px solid #c4bbaa;
-	transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+	left: 138px;
+	top: 0;
+	bottom: 0;
+	width: 3px;
+	background: #cfc5b1;
 }
-.wcblr-guide .wcblr-slot:has(details[open])::after {
-	background: #C8344B;
-	border-color: #C8344B;
-	transform: scale(1.2);
+/* rounded and inset at the ends, so the line starts and stops at the first and
+   last beat rather than running into the headings above and below */
+.wcblr-guide .wcblr-slot:first-child::before {
+	top: 14px;
+	border-radius: 2px 2px 0 0;
 }
-.wcblr-guide .wcblr-slot:has(details[open]) { background: rgba(42, 29, 20, 0.035); }
+.wcblr-guide .wcblr-slot:last-child::before {
+	bottom: 14px;
+	border-radius: 0 0 2px 2px;
+}
 
-/* Gold still means one thing: time nobody put on a schedule. It reads before
-   the beat is opened, which is the point of marking it at all. */
+/* Gold still means one thing: time nobody put on a schedule. */
 .wcblr-guide .wcblr-unsched > .wcblr-slot-time { color: #a8760f !important; }
-.wcblr-guide .wcblr-unsched::after { border-color: #a8760f; }
-.wcblr-guide .wcblr-unsched:has(details[open])::after {
-	background: #a8760f;
-	border-color: #a8760f;
-}
-.wcblr-guide .wcblr-unsched:has(details[open]) { background: rgba(224, 165, 38, 0.11); }
+.wcblr-guide .wcblr-unsched::before { background: #a8760f; }
+/* Marked whether or not the beat is open: "nobody scheduled this" is a fact
+   about the day, not a piece of interface state. The neutral tint that used to
+   mark an OPEN row is gone for the same reason the dots are, since every beat
+   ships open and it distinguished nothing. */
+.wcblr-guide .wcblr-unsched { background: rgba(224, 165, 38, 0.1); }
 
 /* the headline, which is the control */
 .wcblr-guide .wcblr-slot summary {
@@ -378,46 +378,15 @@
 	from { opacity: 0; transform: translateY(-6px); }
 	to { opacity: 1; transform: none; }
 }
-/* The affordance. A closed beat looks like a heading, so its chevron pulses
-   crimson twice, rests for five and a half seconds, and does it again.
-
-   It repeats, and the first version did not, which was a straightforward
-   mistake: one 4.4 second run starting at page load is finished long before
-   anyone has scrolled seventeen hundred pixels down to this section, so the
-   hint was only ever seen by someone who happened to load the page already
-   scrolled to it. A hint nobody is present for is not a hint.
-
-   WCAG 2.2.2 wants a way to stop motion that runs past five seconds. There are
-   two here. The whole thing sits behind prefers-reduced-motion, which is the
-   escape hatch this codebase uses everywhere. And the reader's own first move
-   ends it: open any beat other than the one that starts open and every chevron
-   in the day goes still, permanently. The hint exists to teach the interaction,
-   so the moment the interaction happens it has no reason left to run.
-
-   The cycle is deliberately mostly idle. Two pulses inside 1.5 seconds and then
-   5.5 seconds of nothing, so it reads as an occasional nudge rather than a
-   blinking cursor sitting next to text somebody is trying to read. */
-@keyframes wcblr-hint {
-	0%, 22%, 100% { transform: rotate(-45deg) scale(1); border-color: #b3a693; }
-	6% { transform: rotate(-45deg) scale(1.3); border-color: #C8344B; }
-	12% { transform: rotate(-45deg) scale(1); border-color: #b3a693; }
-	18% { transform: rotate(-45deg) scale(1.3); border-color: #C8344B; }
-}
+/* No open-hint pulse any more. It flashed the chevron of a CLOSED beat to say
+   the row would open, and every beat now ships open, so it had nothing left to
+   advertise. Left in place it would have been actively wrong: collapsing a row
+   you had finished with would have started it blinking at you. */
 @media (prefers-reduced-motion: no-preference) {
 	.wcblr-guide .wcblr-slot details[open] > p { animation: wcblr-slot-in 0.26s ease both; }
-	.wcblr-guide .wcblr-slot details:not([open]) summary::after {
-		animation: wcblr-hint 7s ease-in-out infinite;
-	}
-	/* The stop. `:not(:first-child)` because the first beat ships open, so its
-	   state says nothing about whether the reader has worked out that the rows
-	   open. Any OTHER beat being open does, and that silences all of them. */
-	.wcblr-guide .wcblr-day:has(.wcblr-slot:not(:first-child) details[open]) summary::after {
-		animation: none;
-	}
 }
 
 @media (max-width: 781px) {
-	.wcblr-guide .wcblr-day::before { left: 4px; }
 	.wcblr-guide .wcblr-slot {
 		grid-template-columns: minmax(0, 1fr);
 		padding-left: 28px;
