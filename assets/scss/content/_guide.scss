@@ -180,44 +180,36 @@
 }
 
 /* 10. Section dividers.
-   With only a 56px gap between them the sections ran together and it was hard
-   to see where one ended. This is a hairline across the wide column with a
-   short crimson cap at the left, sitting in the middle of that existing gap so
-   the rhythm does not change.
+   Two earlier attempts were wrong in the same way: a separate rule floating in
+   the gap between sections, first with a mismatched 3px cap on a 1px hairline,
+   then with matched weights. Even corrected it read as a stray line, because a
+   detached rule in a 56px gap has nothing to belong to.
 
-   The cap is the point. Every section already opens with a crimson `// name`
-   eyebrow, which is a code comment; the cap sits directly above it in the same
-   colour and the same left alignment, so the divider reads as part of that
-   structural language rather than as an ornament dropped between blocks. It is
-   also the only place the accent is used purely structurally, which is why it
-   stays this small. */
-.wcblr-guide .wcblr-sec { position: relative; }
+   So the eyebrow becomes the divider. Every section already opens with a
+   crimson `// section_name` in mono, which is a code comment; the rule now runs
+   out of it and across the remaining width, the way a section header rule works
+   in a printed listing. It is attached to something, it cannot drift, and it
+   says "a new section starts here" in the page's own idiom rather than in
+   generic ornament.
 
-/* Only between sections, never above the first one: it sits directly under the
-   post title and needs no rule. `+` gives that for free. */
-/* Both halves are the SAME height and sit at the SAME top, so they read as one
-   continuous rule whose first 56px happens to be crimson. The first version had
-   a 3px cap on a 1px hairline: the weights did not match, so the cap read as a
-   stray dash floating above a faint line rather than as part of it. Equal weight
-   is the whole difference between a mark and an artefact.
-   Two elements rather than one gradient, deliberately: the WordCamp Remote CSS
-   sanitiser has an allowlist and gradients are not on the confirmed-kept list,
-   so a gradient risks the divider vanishing entirely on the live site. */
-.wcblr-guide .wcblr-sec + .wcblr-sec::before {
-	content: "";
-	position: absolute;
-	top: -30px;
-	left: 0;
-	right: 0;
-	height: 2px;
-	background: #e3ded5;
+   The gap grows with it. 56px was not enough to read as a break at all, which
+   is why the divider had to work so hard in the first place. */
+.wcblr-guide .wcblr-sec + .wcblr-sec {
+	margin-top: 104px !important;
 }
-.wcblr-guide .wcblr-sec + .wcblr-sec::after {
+
+.wcblr-guide .wcblr-sec > .wcblr-eyebrow {
+	display: flex;
+	align-items: center;
+	gap: 18px;
+	margin-bottom: 24px !important;
+	/* the eyebrow is a direct child of the section, so the 68ch prose measure
+	   applies to it too and would stop the rule two thirds of the way across */
+	max-width: none;
+}
+.wcblr-guide .wcblr-sec > .wcblr-eyebrow::after {
 	content: "";
-	position: absolute;
-	top: -30px;
-	left: 0;
-	width: 56px;
-	height: 2px;
-	background: #C8344B;
+	flex: 1 1 auto;
+	height: 1px;
+	background: #d9d3c9;
 }
