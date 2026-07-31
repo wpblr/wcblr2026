@@ -341,7 +341,7 @@
 	list-style: none;
 	cursor: pointer;
 	display: flex;
-	align-items: baseline;
+	align-items: center;
 	gap: 20px;
 	font-size: 18px;
 	font-weight: 600;
@@ -362,8 +362,6 @@
 	content: "";
 	flex: 0 0 auto;
 	margin-left: auto;
-	position: relative;
-	top: -2px;
 	width: 7px;
 	height: 7px;
 	border-right: 2px solid #b3a693;
@@ -381,8 +379,28 @@
 	from { opacity: 0; transform: translateY(-6px); }
 	to { opacity: 1; transform: none; }
 }
+/* The affordance. A closed beat looks like a heading, so the chevron flashes
+   crimson and grows twice on load and then stops, which is enough to read as
+   "this opens" without becoming something you have to sit next to.
+
+   It runs ONCE for 4.4 seconds. That is deliberate: WCAG 2.2.2 requires a pause
+   mechanism for any motion that runs past five seconds, and an infinite pulse
+   here would need a control that a post body has nowhere to put. A single run
+   under the threshold needs none, and it cannot annoy on a second reading.
+
+   The resting keyframe is the element's own natural state, not a dimmed one, so
+   there is no jump when the animation ends. */
+@keyframes wcblr-hint {
+	0%, 48%, 100% { transform: rotate(-45deg) scale(1); border-color: #b3a693; }
+	12% { transform: rotate(-45deg) scale(1.4); border-color: #C8344B; }
+	24% { transform: rotate(-45deg) scale(1); border-color: #b3a693; }
+	36% { transform: rotate(-45deg) scale(1.4); border-color: #C8344B; }
+}
 @media (prefers-reduced-motion: no-preference) {
 	.wcblr-guide .wcblr-slot details[open] > p { animation: wcblr-slot-in 0.26s ease both; }
+	.wcblr-guide .wcblr-slot details:not([open]) summary::after {
+		animation: wcblr-hint 4.4s ease-in-out 1;
+	}
 }
 
 @media (max-width: 781px) {
