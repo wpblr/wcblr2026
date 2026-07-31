@@ -41,37 +41,6 @@
    breaking out of the text column rather than sitting in it. */
 .wcblr-guide .wcblr-sec > p { max-width: 68ch; }
 
-/* 3. The gold mark.
-   On this page gold means exactly one thing: time nobody put on a schedule.
-   It appears on the two unscheduled rows of the day, on the right-hand column
-   of the contrast section, and on the pull quote. Nowhere else. It is the same
-   device the banner uses for the same meaning, which is what makes the poster
-   and the page read as one campaign instead of two designs. */
-.wcblr-guide .wcblr-unsched {
-	position: relative;
-	background: rgba(224, 165, 38, 0.08);
-	border-radius: 10px;
-	/* clips the rule below to the rounded corner, so it can run edge to edge
-	   without square ends poking past the tint */
-	overflow: hidden;
-	padding-left: 20px !important;
-	padding-right: 20px !important;
-	margin-left: -20px !important;
-	margin-right: -20px !important;
-}
-/* Full height, deliberately. Inset top and bottom it reads as a floating tick
-   next to the row; edge to edge it reads as the row being marked, which is what
-   it means. */
-.wcblr-guide .wcblr-unsched::before {
-	content: "";
-	position: absolute;
-	left: 0;
-	top: 0;
-	bottom: 0;
-	width: 3px;
-	background: #a8760f;
-}
-
 /* 4. The contrast pair. Deliberately lopsided: the booked half is a short plain
    list on bare paper, the unbooked half is a longer tinted card. The asymmetry
    is the argument, so do not "tidy" these to equal widths. */
@@ -285,3 +254,149 @@
 
 .wcblr-guide .wcblr-statrow:nth-of-type(4) .wcblr-statchip { background-color: rgba(42, 29, 20, 0.08); }
 .wcblr-guide .wcblr-statrow:nth-of-type(4) > p:first-of-type { color: #2a1d14 !important; }
+
+/* 12. The day, as something you open.
+   Five timed beats set as a table of hairline rows is a timetable, and a
+   timetable is for checking, not for exploring. Each beat is now a
+   `core/details`: the time and the headline are always visible, the note opens
+   under them. The first is open on load so the pattern is legible without
+   anyone having to guess that the rows are interactive.
+
+   `core/details` rather than anything hand rolled, because it is keyboard
+   operable and screen-reader announced for free, needs no JavaScript, and post
+   content would have any `<script>` stripped anyway. It looks nothing like the
+   FAQ further down the page: no boxes, no plus sign, a rail with a dot per beat
+   and a chevron that turns.
+
+   The chevron is drawn from two borders and the dot from border-radius, on
+   purpose. `background-image` is stripped by the sanitiser, so anything that
+   would normally be an icon file has to be a shape or an `<img>`. */
+
+.wcblr-guide .wcblr-day { position: relative; }
+
+/* one continuous rail behind every beat, inset at top and bottom so it starts
+   and stops at the first and last dot rather than running into the headings */
+.wcblr-guide .wcblr-day::before {
+	content: "";
+	position: absolute;
+	left: 150px;
+	top: 24px;
+	bottom: 26px;
+	width: 1px;
+	background: #ddd5c6;
+}
+
+.wcblr-guide .wcblr-slot {
+	position: relative;
+	display: grid;
+	grid-template-columns: 128px minmax(0, 1fr);
+	column-gap: 44px;
+	align-items: start;
+	padding: 16px 0;
+	border-radius: 8px;
+	transition: background-color 0.2s ease;
+}
+.wcblr-guide .wcblr-slot > .wcblr-slot-time {
+	grid-column: 1;
+	text-align: right;
+	padding-top: 4px;
+	color: #8a7a68 !important;
+	text-transform: uppercase;
+}
+.wcblr-guide .wcblr-slot > .wp-block-details { grid-column: 2; }
+
+/* the marker. Hollow while the beat is closed, filled once it is open, so the
+   rail doubles as a record of what you have already read. */
+.wcblr-guide .wcblr-slot::after {
+	content: "";
+	position: absolute;
+	left: 146px;
+	top: 22px;
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+	background: #F2ECE0;
+	border: 2px solid #c4bbaa;
+	transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.wcblr-guide .wcblr-slot:has(details[open])::after {
+	background: #C8344B;
+	border-color: #C8344B;
+	transform: scale(1.2);
+}
+.wcblr-guide .wcblr-slot:has(details[open]) { background: rgba(42, 29, 20, 0.035); }
+
+/* Gold still means one thing: time nobody put on a schedule. It reads before
+   the beat is opened, which is the point of marking it at all. */
+.wcblr-guide .wcblr-unsched > .wcblr-slot-time { color: #a8760f !important; }
+.wcblr-guide .wcblr-unsched::after { border-color: #a8760f; }
+.wcblr-guide .wcblr-unsched:has(details[open])::after {
+	background: #a8760f;
+	border-color: #a8760f;
+}
+.wcblr-guide .wcblr-unsched:has(details[open]) { background: rgba(224, 165, 38, 0.11); }
+
+/* the headline, which is the control */
+.wcblr-guide .wcblr-slot summary {
+	list-style: none;
+	cursor: pointer;
+	display: flex;
+	align-items: baseline;
+	gap: 20px;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1.35;
+	color: #2a1d14;
+	transition: color 0.16s ease;
+}
+.wcblr-guide .wcblr-slot summary::-webkit-details-marker { display: none; }
+.wcblr-guide .wcblr-slot summary:hover { color: #C8344B; }
+.wcblr-guide .wcblr-slot summary:focus-visible {
+	outline: 2px solid #C8344B;
+	outline-offset: 4px;
+	border-radius: 3px;
+}
+
+/* a chevron built from two borders, since an image would not survive */
+.wcblr-guide .wcblr-slot summary::after {
+	content: "";
+	flex: 0 0 auto;
+	margin-left: auto;
+	position: relative;
+	top: -2px;
+	width: 7px;
+	height: 7px;
+	border-right: 2px solid #b3a693;
+	border-bottom: 2px solid #b3a693;
+	transform: rotate(-45deg);
+	transition: transform 0.24s ease, border-color 0.16s ease;
+}
+.wcblr-guide .wcblr-slot details[open] summary::after { transform: rotate(45deg); }
+.wcblr-guide .wcblr-slot summary:hover::after { border-color: #C8344B; }
+
+/* The reveal. Gated on no-preference so the failure direction is "it just
+   appears", never "it is invisible", and it animates opacity and transform
+   only, so opening a beat cannot reflow the page or cost any layout shift. */
+@keyframes wcblr-slot-in {
+	from { opacity: 0; transform: translateY(-6px); }
+	to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-guide .wcblr-slot details[open] > p { animation: wcblr-slot-in 0.26s ease both; }
+}
+
+@media (max-width: 781px) {
+	.wcblr-guide .wcblr-day::before { left: 4px; }
+	.wcblr-guide .wcblr-slot {
+		grid-template-columns: minmax(0, 1fr);
+		padding-left: 28px;
+	}
+	.wcblr-guide .wcblr-slot > .wcblr-slot-time,
+	.wcblr-guide .wcblr-slot > .wp-block-details { grid-column: 1; }
+	.wcblr-guide .wcblr-slot > .wcblr-slot-time {
+		text-align: left;
+		padding-top: 0;
+		margin-bottom: 6px !important;
+	}
+	.wcblr-guide .wcblr-slot::after { left: 0; top: 18px; }
+}
