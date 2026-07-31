@@ -139,8 +139,27 @@ $gutter: 52px;
 }
 .wcblr-guide .wcblr-sec > * { grid-column: 3; }
 .wcblr-guide .wcblr-sec > .wcblr-eyebrow { grid-column: 1; grid-row: 1; }
-/* Structural blocks start at the container edge, in line with the rail, so
-   they read as breaking out of the text rather than sitting beside it. */
+
+/* THE BREAKOUT RULE, and it is narrow on purpose.
+   `wcblr-wide` starts a block at the container edge, in line with the rail.
+   Only two kinds of block may use it:
+
+     1. a photograph, which is self-evidently a different object, and whose
+        caption occupies the rail;
+     2. the timeline, whose time labels occupy the rail.
+
+   Every text block stays in the content column: cards, asides, panels, the
+   code stamp, the statistics, the questions. The first draft broke card rows
+   out too, on the theory that a structured block should read as escaping the
+   prose. It does not. A two-card row between two paragraphs just puts a second
+   left edge 252px to the left of the first, in the middle of a run of text, and
+   reads as one block being badly indented rather than as hierarchy. It was
+   rejected on sight.
+
+   So the page has exactly two left edges and they never alternate: the rail
+   edge carries the eyebrow, the photo captions and the timeline's times; the
+   content edge carries everything you read. If a block wants to break out and
+   has nothing to put in the rail, it does not break out. */
 .wcblr-guide .wcblr-sec > .wcblr-wide { grid-column: 1 / -1; }
 
 @media (max-width: 960px) {
@@ -228,19 +247,46 @@ $gutter: 52px;
 
 /* ---- 4. Cards are rules, not boxes ------------------------------------- */
 
-/* One device replaces every bordered card on the page. A 2px rule across the
-   top of a column, an accent colour that says which set it belongs to, and
-   nothing else: no fill, no radius, no side or bottom border. Four of them in
-   a row read as a grid; four low-contrast rounded boxes read as a dashboard.
-   The column carries no `width` attribute, which is what makes the cards in a
-   row stretch to a common height. */
+/* A card is a solid step off its band, a 3px accent rule across the top, and
+   nothing else: no border, no shadow, no rounded low-contrast frame.
+
+   Both extremes have now been tried and rejected, and the difference between
+   them is worth stating precisely, because it is not "boxes or no boxes".
+
+   The first version was #FBF8F1 on #F2ECE0 with a 1.5px #dad5cd border: four
+   points of luminance apart, so the border was doing all the work and the page
+   read as an admin panel. The correction was to delete the surface entirely and
+   keep a hairline rule on top. That was an overcorrection, and it produced the
+   worse failure: a "card" that is a paragraph with a line above it is still a
+   paragraph, so a section of three of them is a wall of text with three lines
+   drawn on it. That was rejected on sight too.
+
+   What separates a card from prose is TONAL STEP, not chrome. #E5DAC3 on
+   #F2ECE0 is about fifteen points and reads as an object at a glance, with no
+   border needed. So: real fill, real padding, no frame. The column carries no
+   `width` attribute, which is what makes cards in a row stretch to a common
+   height now that they have a background to show it with. */
 .wcblr-guide .wcblr-card {
-	border-top: 2px solid $rule-card;
-	padding-top: 20px !important;
+	border-top: 3px solid $rule-card;
+	background: #E5DAC3;
+	border-radius: 2px;
+	padding: 22px 26px 26px !important;
 }
 .wcblr-guide .wcblr-card-crimson { border-top-color: $crimson; }
 .wcblr-guide .wcblr-card-green { border-top-color: $green; }
 .wcblr-guide .wcblr-card-gold { border-top-color: $gold; }
+/* One clear step off whichever band the card is standing on. */
+.wcblr-guide .wcblr-band-raised .wcblr-card { background: #DED2B7; }
+.wcblr-guide .wcblr-band-ink .wcblr-card { background: #3a2a1b; }
+
+/* Equal heights, which only started mattering once the cards had a fill to
+   show the ragged bottom with. `is-vertically-aligned-top` sets
+   `align-self: flex-start` and stops the column stretching, so a filled card
+   ends where its own copy ends and a row of them steps down like a bar chart.
+   Restore the stretch rather than stripping the alignment out of the markup:
+   the attribute is what the block editor writes when you set it, and it will
+   come back the next time anyone touches the block. */
+.wcblr-guide .wcblr-card.is-vertically-aligned-top { align-self: stretch; }
 
 .wcblr-guide .wcblr-card-title {
 	font-size: 20px !important;
@@ -260,7 +306,7 @@ $gutter: 52px;
    layout class at render time, so it is missing from the raw markup and missing
    from every local render. Four card columns rendered 8px apart and the copy in
    one ran into the next. Owned here, the preview tells the truth. */
-.wcblr-guide .wcblr-sec .wp-block-columns { column-gap: 48px; row-gap: 40px; }
+.wcblr-guide .wcblr-sec .wp-block-columns { column-gap: 40px; row-gap: 40px; }
 .wcblr-guide .wcblr-sec .wcblr-stats { column-gap: 32px; }
 .wcblr-guide .wcblr-sec .wcblr-figure-pair { column-gap: 24px; row-gap: 24px; }
 .wcblr-guide .wcblr-sec .wcblr-aside .wp-block-columns { column-gap: 40px; }
@@ -268,6 +314,63 @@ $gutter: 52px;
 /* A one-slot timeline needs no spine; a rule under a single dot reads as a
    dangling line rather than as a sequence. */
 .wcblr-guide .wcblr-timeline:has(> .wcblr-slot:only-child)::before { display: none; }
+
+/* The icon. The site's set is Lucide at a 2px stroke, nearly all of it in the
+   same #a8760f, which is why it works as a set: one weight, one colour, and the
+   card's own rule carries the accent instead. The circle behind it does not
+   come back. A 20px glyph centred in a 44px pastel disc is the single most
+   dated element the old layout had, and the disc was doing no work that the
+   rule above the card is not already doing.
+
+   Where an icon goes is decided, not felt: a card carries a mono label OR an
+   icon, never both and never neither. A label is right when the set is a
+   sequence or a pair the reader must keep straight (before / on the day /
+   after; on the schedule / not on the schedule). An icon is right when each
+   card names a thing you could point at (a booth, a queue, a corridor). */
+.wcblr-guide .wcblr-icon {
+	width: 26px;
+	height: 26px;
+	margin: 0 0 14px !important;
+	padding: 0 !important;
+	background: none !important;
+	border-radius: 0 !important;
+	display: block;
+}
+.wcblr-guide .wcblr-icon figure { margin: 0 !important; line-height: 0; }
+.wcblr-guide .wcblr-icon img {
+	width: 26px;
+	height: 26px;
+	display: block;
+	max-width: none;
+}
+
+/* A card laid on its side: the label and title in a fixed left column, the copy
+   beside them. Three of these stacked give the copy 560px instead of the 200px
+   it gets in a three-across row inside an 848px column, and they read as a
+   different beat from a grid of square cards, which matters when the section
+   before this one is already a grid. Use it when the set is a sequence and the
+   copy is long; use the grid when the copy is short. */
+.wcblr-guide .wcblr-cardrow {
+	display: grid;
+	grid-template-columns: 230px minmax(0, 1fr);
+	column-gap: 36px;
+	align-content: start;
+}
+.wcblr-guide .wcblr-cardrow > .wcblr-label { grid-column: 1; grid-row: 1; }
+.wcblr-guide .wcblr-cardrow > .wcblr-card-title { grid-column: 1; grid-row: 2; }
+.wcblr-guide .wcblr-cardrow > p:not(.wcblr-label):not(.wcblr-card-title) {
+	grid-column: 2;
+	grid-row: 1 / span 2;
+}
+@media (max-width: 960px) {
+	.wcblr-guide .wcblr-cardrow { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-guide .wcblr-cardrow > .wcblr-label,
+	.wcblr-guide .wcblr-cardrow > .wcblr-card-title,
+	.wcblr-guide .wcblr-cardrow > p:not(.wcblr-label):not(.wcblr-card-title) {
+		grid-column: 1;
+		grid-row: auto;
+	}
+}
 
 /* ---- 5. The aside ------------------------------------------------------ */
 
