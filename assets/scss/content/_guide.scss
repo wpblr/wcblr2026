@@ -1,0 +1,125 @@
+/* ---- Long-form guide article ------------------------------------------- */
+
+/* Opt-in. The post's outer wrapper carries `wcblr-guide` alongside the usual
+   `wcblr-post`, and every rule below is scoped to it, so no page that is
+   already published changes by one pixel.
+   That scoping is the point. Commit 94ca02a ("Article: prose measure, photo
+   fill, quieter icons") did the same job globally, retro-fitted a measure onto
+   the travel guide, did not look right in practice, and was reverted the same
+   week. A layout rule that suits a page written for it will not automatically
+   suit a page written before it. */
+
+/* 1. Section headings.
+   `_post-page.scss` sets `.single-post:not(.post-template) h2 { font-size:25px
+   !important }`. The call-for-speakers and call-for-sponsors posts escape it
+   because each runs its own `post-template-<slug>`; a post on the DEFAULT
+   template does not, and an `!important` in the stylesheet beats a plain inline
+   style. So every 46px section head in this layout silently renders at 25px on
+   the front end while looking correct in the editor, which loads no Remote CSS.
+   This opts back in. Margin is reset too: that rule also forces
+   `margin:46px 0 14px`, which would push the head off its eyebrow. */
+/* The selector is deliberately three classes deep. `!important` does not settle
+   this on its own: both rules carry it, so the cascade falls through to
+   specificity, and `.single-post:not(.post-template) h2` is (0,2,1). A plain
+   `.wcblr-guide h2` is (0,1,1) and loses, which is exactly what the first
+   render of this page showed: 46px in the markup, 25px on screen. This is
+   (0,3,1) and wins outright rather than relying on import order. */
+.wcblr-post.wcblr-guide .wcblr-sec h2 {
+	font-size: 46px !important;
+	font-weight: 400 !important;
+	letter-spacing: -0.01em !important;
+	line-height: 1.25 !important;
+	margin: 0 !important;
+}
+@media (max-width: 781px) {
+	.wcblr-post.wcblr-guide .wcblr-sec h2 { font-size: 34px !important; }
+}
+
+/* 2. Measure. Prose ran the full wide container at roughly 145 characters a
+   line against a comfortable 60 to 75. Only running text is capped; cards,
+   photos, rows and the FAQ keep the full width, so a structured block reads as
+   breaking out of the text column rather than sitting in it. */
+.wcblr-sec > p { max-width: 68ch; }
+
+/* 3. The gold mark.
+   On this page gold means exactly one thing: time nobody put on a schedule.
+   It appears on the two unscheduled rows of the day, on the right-hand column
+   of the contrast section, and on the pull quote. Nowhere else. It is the same
+   device the banner uses for the same meaning, which is what makes the poster
+   and the page read as one campaign instead of two designs. */
+.wcblr-guide .wcblr-unsched {
+	position: relative;
+	background: rgba(224, 165, 38, 0.08);
+	border-radius: 10px;
+	padding-left: 20px !important;
+	padding-right: 20px !important;
+	margin-left: -20px !important;
+	margin-right: -20px !important;
+}
+.wcblr-guide .wcblr-unsched::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 12px;
+	bottom: 12px;
+	width: 3px;
+	border-radius: 999px;
+	background: #a8760f;
+}
+
+/* 4. The contrast pair. Deliberately lopsided: the booked half is a short plain
+   list on bare paper, the unbooked half is a longer tinted card. The asymmetry
+   is the argument, so do not "tidy" these to equal widths. */
+.wcblr-guide .wcblr-side-gold {
+	background: rgba(224, 165, 38, 0.10);
+	border: 1.5px solid rgba(168, 118, 15, 0.32);
+	border-radius: 18px;
+	padding: 28px 30px 32px !important;
+}
+.wcblr-guide .wcblr-side-plain { padding-top: 28px !important; }
+
+/* 5. The pull quote. The one typographic risk on the page, used once. */
+.wcblr-guide .wcblr-pull {
+	border-left: 3px solid #a8760f;
+	padding-left: 30px;
+	max-width: 26ch;
+}
+@media (max-width: 781px) {
+	.wcblr-guide .wcblr-pull { padding-left: 20px; }
+}
+
+/* 6. Photographs. Core does not upscale, so a 1024px file inside a wider
+   container leaves a strip of background down its right side. */
+.wcblr-guide .wcblr-photo { margin-left: 0; margin-right: 0; }
+.wcblr-guide .wcblr-photo img {
+	width: 100%;
+	height: auto;
+	display: block;
+}
+.wcblr-guide .wcblr-photo figcaption {
+	font-family: var(--wp--preset--font-family--jetbrains-mono), ui-monospace, monospace;
+	font-size: 12px !important;
+	letter-spacing: 0.04em;
+	color: #7a6757 !important;
+	margin-top: 12px !important;
+	text-align: left;
+}
+
+/* A photograph in a full-width slot. The archive is a mix of 16:9 and 4:3, and
+   a 4:3 file across the wide container renders about 900px tall, which pushes
+   the next heading off the screen entirely. Crop rather than shrink, biased
+   slightly above centre because in every one of these frames the people are in
+   the upper half. */
+.wcblr-guide .wcblr-photo-wide img {
+	aspect-ratio: 16 / 9;
+	object-fit: cover;
+	object-position: center 42%;
+}
+
+/* A pair of photographs side by side, cropped to a common height so the row
+   does not go ragged when the two files have different aspect ratios. */
+.wcblr-guide .wcblr-photo-pair .wcblr-photo img {
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+	border-radius: 14px;
+}
