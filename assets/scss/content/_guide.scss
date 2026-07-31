@@ -223,56 +223,65 @@
 /* 11. The statistics card.
    Four numbers stacked behind hairlines, all set in the same brown, is a table
    rather than a panel: nothing tells you which fact you are looking at until
-   you read the label. Each row now takes an accent colour, carried by a solid
-   bar at its left edge and by the number itself, so the card reads at a glance
-   and is colour-coded the way the tier cards on the sponsors page are.
+   you read the label. Each row now carries a tinted chip with a glyph in its
+   own colour, and the number takes that colour too, so the card reads at a
+   glance and is colour-coded the way the tier cards on the sponsors page are.
 
-   IT WAS GOING TO BE ICONS, AND IT CANNOT BE, FROM CSS.
+   THE GLYPH IS AN <img>, NOT A background-image, AND THAT IS NOT A PREFERENCE.
    WordCamp's stylesheet sanitiser strips `background-image` outright. Not the
    value, the property: a data URI and an https URL are both removed, and the
-   rule arrives with the rest of its declarations intact, which is why the chips
-   rendered as empty tinted squares. Measured on the live site, zero
+   rest of the rule arrives intact, which is why a first attempt at this shipped
+   as four empty tinted squares. Measured on the live site, zero
    `background-image` declarations survive anywhere in the served stylesheet.
 
-   That is worth knowing beyond this card, because `content/_cfs-icons.scss`
+   That is worth knowing well beyond this card, because `content/_cfs-icons.scss`
    is built on the technique: every `.i-*` and `.t-*` rule in it is a hand
-   encoded SVG data URI, and every one of them arrives empty. `.i-spark { }`
-   is what the browser actually gets. The icons you can see on the speakers and
-   sponsors pages come from the `<img>` inside each badge, not from the CSS, so
-   the badge classes have only ever contributed the tinted circle behind them.
+   encoded SVG data URI, and every one of them arrives empty. `.i-spark { }` is
+   what the browser actually gets. The icons on the speakers and sponsors pages
+   come from the `<img>` inside each badge; those classes have only ever
+   contributed the tinted circle behind the image. Any new icon on this site has
+   to be an element in the markup.
 
-   So an icon here needs an `<img>` in the block markup. A bar does not, and a
-   bar that is unmistakably deliberate beats a chip waiting for a glyph that the
-   sanitiser will never deliver.
+   The four SVGs bake their own stroke colour, because the shared set is all
+   #a8760f and a gold glyph beside a crimson number reads as a mistake.
 
-   Contrast, since these are colours on #FBF8F1: crimson 4.9:1, green 3.9:1,
-   gold 4.4:1. All are past the 3:1 that large text needs at the 27px these
-   numbers are set in, and none is used on the 11px label, which stays #7a6757
-   and would fail at those ratios. */
+   Contrast on #FBF8F1: crimson 4.9:1, green 3.9:1, gold 4.4:1, all past the
+   3:1 large text needs at the 34px these numbers are set in. None is used on
+   the 11px label, which stays #7a6757 and would fail at those ratios. */
 .wcblr-guide .wcblr-statrow {
 	position: relative;
-	padding-left: 22px;
+	padding-left: 58px;
+	min-height: 42px;
 }
-.wcblr-guide .wcblr-statrow::before {
-	content: "";
+.wcblr-guide .wcblr-statchip {
 	position: absolute;
 	left: 0;
-	top: 4px;
-	width: 4px;
-	height: 34px;
-	border-radius: 2px;
+	top: 0;
+	width: 42px;
+	height: 42px;
+	border-radius: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
-/* rows two to four carry the hairline's 18px of padding, so the bar drops with it */
-.wcblr-guide .wcblr-statrow + .wcblr-statrow::before { top: 22px; }
+/* rows two to four sit inside the hairline's 18px of padding, so the chip drops with it */
+.wcblr-guide .wcblr-statrow + .wcblr-statrow .wcblr-statchip { top: 18px; }
+.wcblr-guide .wcblr-statchip figure { margin: 0 !important; line-height: 0; }
+.wcblr-guide .wcblr-statchip img {
+	width: 21px;
+	height: 21px;
+	display: block;
+	max-width: none;
+}
 
-.wcblr-guide .wcblr-statrow:nth-of-type(1)::before { background-color: #C8344B; }
-.wcblr-guide .wcblr-statrow:nth-of-type(1) > p:first-child { color: #C8344B !important; }
+.wcblr-guide .wcblr-statrow:nth-of-type(1) .wcblr-statchip { background-color: rgba(200, 52, 75, 0.10); }
+.wcblr-guide .wcblr-statrow:nth-of-type(1) > p:first-of-type { color: #C8344B !important; }
 
-.wcblr-guide .wcblr-statrow:nth-of-type(2)::before { background-color: #1d8b6e; }
-.wcblr-guide .wcblr-statrow:nth-of-type(2) > p:first-child { color: #1d8b6e !important; }
+.wcblr-guide .wcblr-statrow:nth-of-type(2) .wcblr-statchip { background-color: rgba(29, 139, 110, 0.12); }
+.wcblr-guide .wcblr-statrow:nth-of-type(2) > p:first-of-type { color: #1d8b6e !important; }
 
-.wcblr-guide .wcblr-statrow:nth-of-type(3)::before { background-color: #a8760f; }
-.wcblr-guide .wcblr-statrow:nth-of-type(3) > p:first-child { color: #a8760f !important; }
+.wcblr-guide .wcblr-statrow:nth-of-type(3) .wcblr-statchip { background-color: rgba(168, 118, 15, 0.12); }
+.wcblr-guide .wcblr-statrow:nth-of-type(3) > p:first-of-type { color: #a8760f !important; }
 
-.wcblr-guide .wcblr-statrow:nth-of-type(4)::before { background-color: #2a1d14; }
-.wcblr-guide .wcblr-statrow:nth-of-type(4) > p:first-child { color: #2a1d14 !important; }
+.wcblr-guide .wcblr-statrow:nth-of-type(4) .wcblr-statchip { background-color: rgba(42, 29, 20, 0.08); }
+.wcblr-guide .wcblr-statrow:nth-of-type(4) > p:first-of-type { color: #2a1d14 !important; }
