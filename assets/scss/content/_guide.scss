@@ -48,45 +48,19 @@ $display: var(--wp--preset--font-family--fraunces), Georgia, serif;
 $rail: 200px;
 $gutter: 52px;
 
-/* Full bleed, and the three ways it goes wrong here.
+/* No full bleed. Bands are panels at the same width as every other page on the
+   site, and that is a deliberate retreat from an earlier version of this file.
 
-   The post template caps content at 1200px in a `max-width` ancestor three
-   levels above the band, so a band has to escape a box it does not own.
+   The bleed was done by overshooting 1500px with margin, paying it back with
+   padding, and clipping the overhang with `overflow-x: clip` on `main`. It
+   worked, but it staked the whole page on one property: where `clip` is not
+   supported the overshoot is a 3000px horizontal scroll, and it is a phone that
+   pays for that, not the desktop it was designed on. A layout that is correct
+   only while a modern property holds is not a layout, it is a bet.
 
-   1. box-shadow copies at +/-50vw. This SHIPPED and it is broken. A copy offset
-      by 50vw spans [-E/2, +E/2] in page coordinates while the element sits at
-      [(V-E)/2, (V+E)/2], so the copies only meet the element when E >= V/2. At
-      E=1100 in a V=2552 window they land 176px clear of it and the "band"
-      renders as three detached rectangles with cream gaps. It looks perfect at
-      V=1440, which is exactly why the local render passed it.
-   2. `width: 100vw` or `calc(50% - 50vw)`. vw includes the scrollbar, so this
-      overshoots by half a scrollbar, which adds a horizontal scrollbar, which
-      changes vw. It oscillates.
-   3. A pseudo-element inset by a large negative `right`. Overflow past the
-      inline end DOES extend the scrollable area; overflow past the inline start
-      does not. So it scrolls sideways on one side only.
-
-   What works: overshoot with margin and pay it back with padding, which leaves
-   the content box exactly where it was and is viewport-independent, then let
-   `main` clip the overhang. Gated behind @supports because without the clip the
-   overshoot is a 3000px horizontal scrollbar, and scoped with :has() so no
-   other page on the site gets a clipping `main`. */
-@mixin bleed($c) {
-	background: $c;
-}
-
-@supports (overflow-x: clip) {
-	main:has(.wcblr-guide) { overflow-x: clip; }
-
-	.wcblr-guide .wcblr-band-raised,
-	.wcblr-guide .wcblr-band-ink,
-	.wcblr-guide .wcblr-cta {
-		margin-left: -1500px;
-		margin-right: -1500px;
-		padding-left: 1500px;
-		padding-right: 1500px;
-	}
-}
+   Contained also matches the rest of the site, which has never bled anything to
+   the viewport, and the light-dark rhythm survives the change intact: a tinted
+   panel on cream separates sections just as well as an edge-to-edge band. */
 
 /* ---- 1. Bands ---------------------------------------------------------- */
 
@@ -96,15 +70,28 @@ $gutter: 52px;
    because a detached hairline in a gap belongs to nothing. A ground change
    cannot drift, cannot mismatch a weight, and needs no first-section
    exception. */
+/* Every section carries the same padding whether or not it is tinted. If only
+   the tinted ones were padded, the text inside a panel would sit 44px right of
+   the text in the section above it, which is the ragged left edge this layout
+   has already been corrected for once. */
 .wcblr-guide .wcblr-sec {
-	padding-top: 84px;
-	padding-bottom: 84px;
+	padding: 72px 44px;
 }
 /* The post title is directly above and already marks the start. */
-.wcblr-guide .wcblr-sec:first-child { padding-top: 44px; }
+.wcblr-guide .wcblr-sec:first-child { padding-top: 36px; }
 
-.wcblr-guide .wcblr-band-raised { @include bleed($raised); }
-.wcblr-guide .wcblr-band-ink { @include bleed($ink); }
+/* Tinted panels get a margin so that two in a row read as two panels rather
+   than as one shape that changes colour halfway down. */
+.wcblr-guide .wcblr-band-raised,
+.wcblr-guide .wcblr-band-ink,
+.wcblr-guide .wcblr-cta {
+	margin-top: 16px;
+	margin-bottom: 16px;
+	border-radius: 6px;
+}
+
+.wcblr-guide .wcblr-band-raised { background: $raised; }
+.wcblr-guide .wcblr-band-ink { background: $ink; }
 
 /* The dark band is the one place the page inverts, and it is spent on the
    article's thesis. Crimson at #C8344B on #2a1d14 is about 2.8:1 and fails at
@@ -165,8 +152,7 @@ $gutter: 52px;
 @media (max-width: 960px) {
 	.wcblr-guide .wcblr-sec {
 		grid-template-columns: minmax(0, 1fr);
-		padding-top: 56px;
-		padding-bottom: 56px;
+		padding: 48px 22px;
 	}
 	.wcblr-guide .wcblr-sec > *,
 	.wcblr-guide .wcblr-sec > .wcblr-eyebrow,
@@ -660,9 +646,11 @@ $gutter: 52px;
    It breaks the rail deliberately: the article has ended, so the closing
    statement runs the full width instead of sitting in the text column. */
 .wcblr-guide .wcblr-cta {
-	@include bleed($ink);
-	padding-top: 76px !important;
-	padding-bottom: 76px !important;
+	background: $ink;
+	padding: 64px 44px !important;
+}
+@media (max-width: 960px) {
+	.wcblr-guide .wcblr-cta { padding: 44px 22px !important; }
 }
 .wcblr-guide .wcblr-cta h2,
 .wcblr-guide .wcblr-cta h3 {
