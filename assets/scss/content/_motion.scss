@@ -75,6 +75,21 @@
 	to { opacity: 1; }
 }
 
+/* The punctuation. A small accent element arriving LAST, on a spring, after
+   everything around it has settled. This is the home page's `wcblr-hero-stamp`
+   idea in a second place: that one takes the `add_filter( 'coffee' );` stamp
+   from rotate(-7deg) scale(0.82) to its real resting rotate(5deg) at 0.95s on
+   cubic-bezier(0.34, 1.56, 0.64, 1), and it is the beat everybody notices.
+
+   What makes it work is not the bounce. It is that the bounce lands on
+   something small, once the page is otherwise still, so it reads as the last
+   word rather than as a page that wobbles. Used here on the four statistic
+   chips and nowhere else. */
+@keyframes wcblr-pop {
+	from { opacity: 0; transform: scale(0.72); }
+	to { opacity: 1; transform: none; }
+}
+
 /* ---- Reusable, for any page that opts in -------------------------------- */
 
 /* The easing is the home page's, written out rather than held in a custom
@@ -100,37 +115,65 @@
 /* ---- 1. The opening screen, on load ------------------------------------- */
 
 /* The FIRST section only. Everything after it is below the fold on every screen
-   this site sees, and animating it on load is work nobody watches. The ladder
-   matches the home page's timing so arriving at an article feels like the same
-   site rather than a different one. */
+   this site sees, and animating it on load is work nobody watches.
+
+   Orchestrated rather than uniform, which is the difference between the home
+   page's intro and a list of things fading in. Three ideas borrowed from it:
+
+     The biggest element settles slowest and starts EARLY. The skyline runs
+     0.85s from 0.2s so the backdrop moves with the copy rather than after it;
+     here the heading and the photograph do the same.
+
+     The photograph never fades, only lifts, because it is the likeliest largest
+     contentful paint and an element at opacity 0 has not been painted.
+
+     One spring, at the end, on something small. The stat chips pop in after
+     their rows have arrived and after everything else is still. That is the
+     `add_filter( 'coffee' );` beat, and it only works because it is last and it
+     is little.
+
+   Whole sequence is done at about 1.3s, roughly the home page's 1.4s. */
 @media (prefers-reduced-motion: no-preference) {
 	.wcblr-motion .wcblr-sec:first-child > .wcblr-eyebrow {
-		animation: wcblr-rise 0.6s 0.05s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-	}
-	.wcblr-motion .wcblr-sec:first-child > h2 {
-		animation: wcblr-rise 0.6s 0.12s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-	}
-	.wcblr-motion .wcblr-sec:first-child > p {
-		animation: wcblr-rise 0.6s 0.22s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-	}
-	.wcblr-motion .wcblr-sec:first-child > .wp-block-columns {
-		animation: wcblr-rise 0.65s 0.28s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+		animation: wcblr-rise 0.55s 0.05s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 	}
 
-	/* the statistics count in once the card they sit on has arrived */
+	/* the largest type on the screen, so it settles the most slowly */
+	.wcblr-motion .wcblr-sec:first-child > h2 {
+		animation: wcblr-rise 0.75s 0.12s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	}
+
+	/* Early and long, like the skyline, so the photograph moves WITH the copy
+	   instead of arriving after it. Lift only: see `wcblr-lift`. */
+	.wcblr-motion .wcblr-sec:first-child > .wp-block-image {
+		animation: wcblr-lift 0.9s 0.2s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	}
+
+	/* the prose and the card arrive as two pieces, left then right */
+	.wcblr-motion .wcblr-sec:first-child > .wp-block-columns > .wp-block-column:nth-child(1) {
+		animation: wcblr-rise 0.6s 0.26s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	}
+	.wcblr-motion .wcblr-sec:first-child > .wp-block-columns > .wp-block-column:nth-child(2) {
+		animation: wcblr-rise 0.6s 0.36s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	}
+
+	/* then the statistics count in inside it */
 	.wcblr-motion .wcblr-sec:first-child .wcblr-statrow {
 		animation: wcblr-rise-sm 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 	}
-	.wcblr-motion .wcblr-sec:first-child .wcblr-statrow:nth-of-type(1) { animation-delay: 0.42s; }
-	.wcblr-motion .wcblr-sec:first-child .wcblr-statrow:nth-of-type(2) { animation-delay: 0.5s; }
-	.wcblr-motion .wcblr-sec:first-child .wcblr-statrow:nth-of-type(3) { animation-delay: 0.58s; }
-	.wcblr-motion .wcblr-sec:first-child .wcblr-statrow:nth-of-type(4) { animation-delay: 0.66s; }
+	.wcblr-motion .wcblr-sec:first-child .wcblr-statrow:nth-of-type(1) { animation-delay: 0.52s; }
+	.wcblr-motion .wcblr-sec:first-child .wcblr-statrow:nth-of-type(2) { animation-delay: 0.59s; }
+	.wcblr-motion .wcblr-sec:first-child .wcblr-statrow:nth-of-type(3) { animation-delay: 0.66s; }
+	.wcblr-motion .wcblr-sec:first-child .wcblr-statrow:nth-of-type(4) { animation-delay: 0.73s; }
 
-	/* The opening photograph is the likeliest largest contentful paint on this
-	   page, so it lifts without fading. See `wcblr-lift`. */
-	.wcblr-motion .wcblr-sec:first-child > .wp-block-image {
-		animation: wcblr-lift 0.7s 0.36s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	/* and the chips pop last, on the spring, once the page is otherwise still */
+	.wcblr-motion .wcblr-sec:first-child .wcblr-statchip {
+		animation: wcblr-pop 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 	}
+	.wcblr-motion .wcblr-sec:first-child .wcblr-statrow:nth-of-type(1) .wcblr-statchip { animation-delay: 0.66s; }
+	.wcblr-motion .wcblr-sec:first-child .wcblr-statrow:nth-of-type(2) .wcblr-statchip { animation-delay: 0.73s; }
+	.wcblr-motion .wcblr-sec:first-child .wcblr-statrow:nth-of-type(3) .wcblr-statchip { animation-delay: 0.8s; }
+	.wcblr-motion .wcblr-sec:first-child .wcblr-statrow:nth-of-type(4) .wcblr-statchip { animation-delay: 0.87s; }
 }
 
 /* ---- 2. Everything below, on interaction -------------------------------- */
