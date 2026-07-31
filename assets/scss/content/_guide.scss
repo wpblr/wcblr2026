@@ -144,3 +144,37 @@
 .wcblr-guide .wcblr-dayhead {
 	border-bottom: 2px solid #2a1d14;
 }
+
+/* 9. Surfaces for body copy.
+   A run of prose over roughly 150 characters must not sit on bare cream, and
+   neither must a stat strip. On this palette an unsupported paragraph reads as
+   unstyled text rather than as a designed block, and the 68ch measure makes it
+   worse rather than better: the copy sits in a narrow left column with 40 per
+   cent of the row dead beside it. Give it a surface, or give it a partner in
+   the next column. */
+.wcblr-guide .wcblr-panel {
+	background: #FBF8F1;
+	border: 1.5px solid #dad5cd;
+	border-radius: 16px;
+}
+/* Inside a panel the padding already narrows the line, so this is a light
+   trim rather than the 68ch used on bare cream. */
+.wcblr-guide .wcblr-panel > p { max-width: 74ch; }
+
+/* The stat strip, on a surface and stacked, so it reads as one object instead
+   of four numbers floating in a row. */
+.wcblr-guide .wcblr-statcard {
+	background: #FBF8F1;
+	border: 1.5px solid #dad5cd;
+	border-radius: 16px;
+}
+.wcblr-guide .wcblr-statrow + .wcblr-statrow {
+	border-top: 1px solid #ddd9d2;
+	margin-top: 18px !important;
+	padding-top: 18px !important;
+}
+
+/* A small label above panel copy. Same mono as the card labels elsewhere. */
+.wcblr-guide .wcblr-panel-label {
+	color: #a8760f;
+}
