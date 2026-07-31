@@ -51,19 +51,24 @@
 	position: relative;
 	background: rgba(224, 165, 38, 0.08);
 	border-radius: 10px;
+	/* clips the rule below to the rounded corner, so it can run edge to edge
+	   without square ends poking past the tint */
+	overflow: hidden;
 	padding-left: 20px !important;
 	padding-right: 20px !important;
 	margin-left: -20px !important;
 	margin-right: -20px !important;
 }
+/* Full height, deliberately. Inset top and bottom it reads as a floating tick
+   next to the row; edge to edge it reads as the row being marked, which is what
+   it means. */
 .wcblr-guide .wcblr-unsched::before {
 	content: "";
 	position: absolute;
 	left: 0;
-	top: 12px;
-	bottom: 12px;
+	top: 0;
+	bottom: 0;
 	width: 3px;
-	border-radius: 999px;
 	background: #a8760f;
 }
 
@@ -122,4 +127,20 @@
 	aspect-ratio: 4 / 3;
 	object-fit: cover;
 	border-radius: 14px;
+}
+
+/* 7. A block that is deliberately empty. Contributor Day has no published shape
+   yet, and an honest blank reads better than either omitting the day or filling
+   it with invented rows. Dashed and unfilled so it is legible as "not written
+   yet" rather than "forgotten". */
+.wcblr-guide .wcblr-tba {
+	border: 1.5px dashed rgba(42, 29, 20, 0.28) !important;
+	border-radius: 16px !important;
+	background: transparent !important;
+}
+
+/* 8. A sub-head inside a section, for the two days. Smaller than an h2 so the
+   section still reads as one thing. */
+.wcblr-guide .wcblr-dayhead {
+	border-bottom: 2px solid #2a1d14;
 }
