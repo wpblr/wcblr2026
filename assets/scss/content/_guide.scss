@@ -378,27 +378,41 @@
 	from { opacity: 0; transform: translateY(-6px); }
 	to { opacity: 1; transform: none; }
 }
-/* The affordance. A closed beat looks like a heading, so the chevron flashes
-   crimson and grows twice on load and then stops, which is enough to read as
-   "this opens" without becoming something you have to sit next to.
+/* The affordance. A closed beat looks like a heading, so its chevron pulses
+   crimson twice, rests for five and a half seconds, and does it again.
 
-   It runs ONCE for 4.4 seconds. That is deliberate: WCAG 2.2.2 requires a pause
-   mechanism for any motion that runs past five seconds, and an infinite pulse
-   here would need a control that a post body has nowhere to put. A single run
-   under the threshold needs none, and it cannot annoy on a second reading.
+   It repeats, and the first version did not, which was a straightforward
+   mistake: one 4.4 second run starting at page load is finished long before
+   anyone has scrolled seventeen hundred pixels down to this section, so the
+   hint was only ever seen by someone who happened to load the page already
+   scrolled to it. A hint nobody is present for is not a hint.
 
-   The resting keyframe is the element's own natural state, not a dimmed one, so
-   there is no jump when the animation ends. */
+   WCAG 2.2.2 wants a way to stop motion that runs past five seconds. There are
+   two here. The whole thing sits behind prefers-reduced-motion, which is the
+   escape hatch this codebase uses everywhere. And the reader's own first move
+   ends it: open any beat other than the one that starts open and every chevron
+   in the day goes still, permanently. The hint exists to teach the interaction,
+   so the moment the interaction happens it has no reason left to run.
+
+   The cycle is deliberately mostly idle. Two pulses inside 1.5 seconds and then
+   5.5 seconds of nothing, so it reads as an occasional nudge rather than a
+   blinking cursor sitting next to text somebody is trying to read. */
 @keyframes wcblr-hint {
-	0%, 48%, 100% { transform: rotate(-45deg) scale(1); border-color: #b3a693; }
-	12% { transform: rotate(-45deg) scale(1.4); border-color: #C8344B; }
-	24% { transform: rotate(-45deg) scale(1); border-color: #b3a693; }
-	36% { transform: rotate(-45deg) scale(1.4); border-color: #C8344B; }
+	0%, 22%, 100% { transform: rotate(-45deg) scale(1); border-color: #b3a693; }
+	6% { transform: rotate(-45deg) scale(1.3); border-color: #C8344B; }
+	12% { transform: rotate(-45deg) scale(1); border-color: #b3a693; }
+	18% { transform: rotate(-45deg) scale(1.3); border-color: #C8344B; }
 }
 @media (prefers-reduced-motion: no-preference) {
 	.wcblr-guide .wcblr-slot details[open] > p { animation: wcblr-slot-in 0.26s ease both; }
 	.wcblr-guide .wcblr-slot details:not([open]) summary::after {
-		animation: wcblr-hint 4.4s ease-in-out 1;
+		animation: wcblr-hint 7s ease-in-out infinite;
+	}
+	/* The stop. `:not(:first-child)` because the first beat ships open, so its
+	   state says nothing about whether the reader has worked out that the rows
+	   open. Any OTHER beat being open does, and that silences all of them. */
+	.wcblr-guide .wcblr-day:has(.wcblr-slot:not(:first-child) details[open]) summary::after {
+		animation: none;
 	}
 }
 
