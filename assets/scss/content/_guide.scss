@@ -178,3 +178,39 @@
 .wcblr-guide .wcblr-panel-label {
 	color: #a8760f;
 }
+
+/* 10. Section dividers.
+   With only a 56px gap between them the sections ran together and it was hard
+   to see where one ended. This is a hairline across the wide column with a
+   short crimson cap at the left, sitting in the middle of that existing gap so
+   the rhythm does not change.
+
+   The cap is the point. Every section already opens with a crimson `// name`
+   eyebrow, which is a code comment; the cap sits directly above it in the same
+   colour and the same left alignment, so the divider reads as part of that
+   structural language rather than as an ornament dropped between blocks. It is
+   also the only place the accent is used purely structurally, which is why it
+   stays this small. */
+.wcblr-guide .wcblr-sec { position: relative; }
+
+/* Only between sections, never above the first one: it sits directly under the
+   post title and needs no rule. `+` gives that for free. */
+.wcblr-guide .wcblr-sec + .wcblr-sec::before {
+	content: "";
+	position: absolute;
+	top: -34px;
+	left: 0;
+	right: 0;
+	height: 1px;
+	background: #ddd9d2;
+}
+.wcblr-guide .wcblr-sec + .wcblr-sec::after {
+	content: "";
+	position: absolute;
+	top: -35px;
+	left: 0;
+	width: 44px;
+	height: 3px;
+	border-radius: 999px;
+	background: #C8344B;
+}
