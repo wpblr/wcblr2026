@@ -66,8 +66,60 @@ $display: var(--wp--preset--font-family--fraunces), Georgia, serif;
    the tinted ones were padded, the text inside a panel would sit 44px right of
    the text in the section above it, which is the ragged left edge this layout
    has already been corrected for once. */
+/* WIDTH. The article must sit on exactly the same column as every other page
+   on the site, and it did not: body copy measured 530px against 1200px on
+   call-for-sponsors, and started 94px further right. Three insets were stacking.
+
+     1. The outer `alignfull` wrapper is a block inside a constrained parent, so
+        WordPress gives it `has-global-padding`, 50px a side. Other pages have no
+        such wrapper. 1200 becomes 1100.
+     2. This layer then padded every section another 44px. 1100 becomes 1012.
+     3. And capped running text at 68ch, which on Hanken Grotesk at 17px is
+        530px, not the ~700px `ch` suggests. `ch` is the advance of the zero
+        glyph, and in a proportional face that is a good deal narrower than the
+        average character. Never size a measure in `ch` without measuring it.
+
+   None of the three was wrong on its own. Stacked, they made the page look like
+   a different site. So: the wrapper's global padding goes, sections carry no
+   horizontal padding, and running text is not capped at all. Body copy now
+   starts and ends exactly where the rest of the site's does. */
+.wcblr-post.wcblr-guide {
+	padding-left: 0;
+	padding-right: 0;
+}
 .wcblr-guide .wcblr-sec {
-	padding: 72px 44px;
+	padding: 72px 0;
+}
+
+/* A tinted panel still needs room around its copy, and it takes that room by
+   growing outwards rather than by pushing its text inwards. Otherwise text in a
+   panel sits 40px right of text in the plain section above it, which is the
+   ragged left edge this layout has been corrected for once already. The bleed
+   is 40px and bounded: no viewport units, nothing that depends on `clip`. */
+.wcblr-guide .wcblr-band-raised,
+.wcblr-guide .wcblr-band-ink,
+.wcblr-guide .wcblr-cta {
+	padding-left: 40px;
+	padding-right: 40px;
+	margin-left: -40px;
+	margin-right: -40px;
+}
+
+@media (max-width: 960px) {
+	/* the wrapper puts the global padding back, and panels stop growing outwards */
+	.wcblr-post.wcblr-guide {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+	.wcblr-guide .wcblr-sec { padding: 48px 0; }
+	.wcblr-guide .wcblr-band-raised,
+	.wcblr-guide .wcblr-band-ink,
+	.wcblr-guide .wcblr-cta {
+		padding-left: 18px;
+		padding-right: 18px;
+		margin-left: -18px;
+		margin-right: -18px;
+	}
 }
 /* The post title is directly above and already marks the start. */
 .wcblr-guide .wcblr-sec:first-child { padding-top: 36px; }
@@ -118,7 +170,6 @@ $display: var(--wp--preset--font-family--fraunces), Georgia, serif;
    what keeps the right-hand side from reading as dead space, which is the trap
    a bare measure falls into on its own. */
 
-.wcblr-guide .wcblr-sec > p { max-width: 68ch; }
 
 /* ---- 3. Type ----------------------------------------------------------- */
 
@@ -158,7 +209,7 @@ $display: var(--wp--preset--font-family--fraunces), Georgia, serif;
 	font-size: 23px !important;
 	line-height: 1.45 !important;
 	color: #4f4032 !important;
-	max-width: 44ch !important;
+	max-width: 62ch !important;
 	letter-spacing: -0.005em;
 }
 @media (max-width: 960px) {
@@ -365,7 +416,7 @@ $display: var(--wp--preset--font-family--fraunces), Georgia, serif;
 	position: relative;
 	padding: 0 0 34px !important;
 }
-.wcblr-guide .wcblr-slot > * { grid-column: 2; max-width: 62ch; }
+.wcblr-guide .wcblr-slot > * { grid-column: 2; }
 .wcblr-guide .wcblr-slot > .wcblr-slot-time {
 	grid-column: 1;
 	grid-row: 1;
@@ -550,7 +601,6 @@ $display: var(--wp--preset--font-family--fraunces), Georgia, serif;
 	outline-offset: 3px;
 }
 .wcblr-guide .wcblr-faq details > p {
-	max-width: 68ch;
 	margin: 0 !important;
 	padding: 0 0 28px !important;
 }
@@ -562,10 +612,10 @@ $display: var(--wp--preset--font-family--fraunces), Georgia, serif;
    so it closes the article without competing with it. */
 .wcblr-guide .wcblr-cta {
 	background: $ink;
-	padding: 64px 44px !important;
+	padding: 64px 40px !important;
 }
 @media (max-width: 960px) {
-	.wcblr-guide .wcblr-cta { padding: 44px 22px !important; }
+	.wcblr-guide .wcblr-cta { padding: 44px 18px !important; }
 }
 .wcblr-guide .wcblr-cta h2,
 .wcblr-guide .wcblr-cta h3 {
