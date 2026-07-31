@@ -9,10 +9,10 @@
    week. A layout rule that suits a page written for it will not automatically
    suit a page written before it. */
 
-/* THE IDEA, in one line: the article is a sequence of full-bleed BANDS, read
-   down a narrow measure beside a labelled rail, and its structural blocks break
-   out wide. Surfaces come from the ground changing and from single rules. They
-   never come from a four-sided low-contrast border.
+/* THE IDEA, in one line: the article is a sequence of tinted BANDS, read down a
+   measure, with every structural block taking the full width of its section.
+   Surfaces come from the ground changing and from a real tonal step. They never
+   come from a four-sided low-contrast border.
 
    The first version of this layer did the opposite: nine rounded rectangles in
    #FBF8F1 on a #F2ECE0 ground, about four points of luminance apart, every
@@ -39,14 +39,6 @@ $green:      #1d8b6e;
 $body-text:  #5f4e3f;
 $mono: var(--wp--preset--font-family--jetbrains-mono), ui-monospace, monospace;
 $display: var(--wp--preset--font-family--fraunces), Georgia, serif;
-
-/* The rail. 200px is set by the longest eyebrow on the page,
-   `// what_happens_at_a_wordcamp` at 28 characters. JetBrains Mono advances
-   0.6em, so 28 characters at 11px is 185px and it does not wrap. Lengthen an
-   eyebrow past that and it wraps into two lines, which looks broken rather
-   than deliberate; shorten the slug instead of widening the rail. */
-$rail: 200px;
-$gutter: 52px;
 
 /* No full bleed. Bands are panels at the same width as every other page on the
    site, and that is a deliberate retreat from an earlier version of this file.
@@ -110,55 +102,23 @@ $gutter: 52px;
 .wcblr-guide .wcblr-band-ink .wcblr-card-title { color: $ink-head !important; }
 .wcblr-guide .wcblr-band-ink a { color: $gold-lit !important; }
 
-/* ---- 2. The rail grid -------------------------------------------------- */
+/* ---- 2. The section box ------------------------------------------------ */
 
-/* The measure problem, solved structurally. Capping prose at 68ch inside a
-   1200px column left roughly 400px of dead cream beside every paragraph, which
-   is what made the page read as an unfinished template. Here the dead space
-   becomes a real margin column that carries the section label, photo captions
-   and the timeline's own time column, and running text sits in a column it
-   actually fills. */
-.wcblr-guide .wcblr-sec {
-	display: grid;
-	grid-template-columns: $rail $gutter minmax(0, 1fr);
-	align-items: start;
-	row-gap: 0;
-}
-.wcblr-guide .wcblr-sec > * { grid-column: 3; }
-.wcblr-guide .wcblr-sec > .wcblr-eyebrow { grid-column: 1; grid-row: 1; }
+/* No rail. An earlier version put the eyebrow in a 200px margin column beside
+   the heading, with photo captions and the timeline's times sharing it. It
+   worked, but it is not how any other page on this site opens a section, and a
+   long-form post is not the place to invent a second convention. Sections open
+   the house way: the `// slug` eyebrow on its own line, the heading under it,
+   both flush left.
 
-/* THE BREAKOUT RULE, and it is narrow on purpose.
-   `wcblr-wide` starts a block at the container edge, in line with the rail.
-   Only two kinds of block may use it:
+   What the rail was solving still has to be solved. Running text is capped at a
+   measure so it does not run to 140 characters a line, and every structural
+   block, cards, photographs, the timeline, takes the full width of the section.
+   The alternation between a measured column of prose and a full-width block is
+   what keeps the right-hand side from reading as dead space, which is the trap
+   a bare measure falls into on its own. */
 
-     1. a photograph, which is self-evidently a different object, and whose
-        caption occupies the rail;
-     2. the timeline, whose time labels occupy the rail.
-
-   Every text block stays in the content column: cards, asides, panels, the
-   code stamp, the statistics, the questions. The first draft broke card rows
-   out too, on the theory that a structured block should read as escaping the
-   prose. It does not. A two-card row between two paragraphs just puts a second
-   left edge 252px to the left of the first, in the middle of a run of text, and
-   reads as one block being badly indented rather than as hierarchy. It was
-   rejected on sight.
-
-   So the page has exactly two left edges and they never alternate: the rail
-   edge carries the eyebrow, the photo captions and the timeline's times; the
-   content edge carries everything you read. If a block wants to break out and
-   has nothing to put in the rail, it does not break out. */
-.wcblr-guide .wcblr-sec > .wcblr-wide { grid-column: 1 / -1; }
-
-@media (max-width: 960px) {
-	.wcblr-guide .wcblr-sec {
-		grid-template-columns: minmax(0, 1fr);
-		padding: 48px 22px;
-	}
-	.wcblr-guide .wcblr-sec > *,
-	.wcblr-guide .wcblr-sec > .wcblr-eyebrow,
-	.wcblr-guide .wcblr-sec > .wcblr-wide { grid-column: 1; }
-	.wcblr-guide .wcblr-sec > .wcblr-eyebrow { grid-row: auto; }
-}
+.wcblr-guide .wcblr-sec > p { max-width: 68ch; }
 
 /* ---- 3. Type ----------------------------------------------------------- */
 
@@ -184,31 +144,16 @@ $gutter: 52px;
 	}
 }
 
-/* The eyebrow sits in the rail with a short rule above it, so it reads as a
-   margin note attached to the heading rather than as a floating label. The
-   padding-top drops it onto the heading's first baseline. */
+/* The house eyebrow, unchanged from every other WCBLR page: crimson mono, a
+   lowercase snake_case slug behind a `//`, sitting on its own line above the
+   heading. No rule, no tick, no margin column. */
 .wcblr-guide .wcblr-eyebrow {
-	margin: 0 !important;
-	padding-top: 15px;
-	font-size: 11px !important;
-	letter-spacing: 0 !important;
+	margin: 0 0 18px !important;
+	font-size: 13px !important;
+	letter-spacing: 0.5px !important;
 	line-height: 1.5 !important;
 }
-.wcblr-guide .wcblr-eyebrow::before {
-	content: "";
-	display: block;
-	width: 26px;
-	height: 2px;
-	background: currentColor;
-	margin-bottom: 15px;
-}
-@media (max-width: 960px) {
-	.wcblr-guide .wcblr-eyebrow { padding-top: 0; margin-bottom: 20px !important; }
-}
 
-/* Running text. 68ch inside the content column, which is roughly 700px and
-   nearly fills it, rather than 68ch inside 972px with the remainder dead. */
-.wcblr-guide .wcblr-sec > p { max-width: 68ch; }
 .wcblr-guide .wcblr-lead {
 	font-size: 23px !important;
 	line-height: 1.45 !important;
@@ -396,16 +341,16 @@ $gutter: 52px;
    unscheduled rows as full-width tinted stripes. That is a definition list,
    and it looked like one.
 
-   Now it is an actual timeline. The spine sits at 226px, which is the midpoint
-   of the page's own rail gutter, so it lines up with the eyebrow column above
-   it rather than being an independent grid. Times sit in the rail; the marker
-   for a slot nobody scheduled is a larger gold dot, which is the whole
-   distinction, drawn once. */
+   Now it is an actual timeline: a time column, a continuous spine, and a marker
+   per slot. The marker for a slot nobody scheduled is a larger gold dot, which
+   is the whole distinction, drawn once. The time column is 120px because the
+   longest label, AFTERNOON, is nine characters and JetBrains Mono advances
+   0.6em, so it sets at about 60px and sits comfortably right-aligned. */
 .wcblr-guide .wcblr-timeline { position: relative; }
 .wcblr-guide .wcblr-timeline::before {
 	content: "";
 	position: absolute;
-	left: 226px;                 /* the midpoint of the page's own rail gutter */
+	left: 140px;
 	top: 10px;
 	bottom: 34px;
 	width: 1px;
@@ -415,11 +360,12 @@ $gutter: 52px;
 
 .wcblr-guide .wcblr-slot {
 	display: grid;
-	grid-template-columns: $rail $gutter minmax(0, 1fr);
+	grid-template-columns: 120px minmax(0, 1fr);
+	column-gap: 40px;
 	position: relative;
 	padding: 0 0 34px !important;
 }
-.wcblr-guide .wcblr-slot > * { grid-column: 3; max-width: 60ch; }
+.wcblr-guide .wcblr-slot > * { grid-column: 2; max-width: 62ch; }
 .wcblr-guide .wcblr-slot > .wcblr-slot-time {
 	grid-column: 1;
 	grid-row: 1;
@@ -431,7 +377,7 @@ $gutter: 52px;
 .wcblr-guide .wcblr-slot::before {
 	content: "";
 	position: absolute;
-	left: 222px;
+	left: 136px;
 	top: 6px;
 	width: 9px;
 	height: 9px;
@@ -448,7 +394,7 @@ $gutter: 52px;
 	background: $gold;
 	width: 15px;
 	height: 15px;
-	left: 219px;
+	left: 133px;
 	top: 3px;
 }
 .wcblr-guide .wcblr-slot-open .wcblr-slot-time { color: $gold !important; }
@@ -461,7 +407,7 @@ $gutter: 52px;
 	border: 2px solid #b6ab98;
 	width: 11px;
 	height: 11px;
-	left: 221px;
+	left: 135px;
 	top: 5px;
 }
 
@@ -516,36 +462,26 @@ $gutter: 52px;
 
 /* ---- 9. Photographs ---------------------------------------------------- */
 
-/* The caption moves into the rail and bottom-aligns with the image, which is
-   what the rail is for and what stops a full-width photograph reading as a
-   stock blog card. No radius: a 14px corner on a 970px photograph is the exact
-   signal this redesign is removing. */
-.wcblr-guide .wcblr-figure {
-	display: grid;
-	grid-template-columns: $rail $gutter minmax(0, 1fr);
-	align-items: end;
-	margin-left: 0 !important;
-	margin-right: 0 !important;
-}
+/* A photograph takes the full width of its section and the caption sits under
+   it, which is what a figure does everywhere else on the site. An earlier
+   version hung the caption in the page's margin column; that column no longer
+   exists. */
+.wcblr-guide .wcblr-figure { margin-left: 0 !important; margin-right: 0 !important; }
 .wcblr-guide .wcblr-figure img {
-	grid-column: 3;
 	width: 100%;
 	height: auto;
 	display: block;
 	border-radius: 0;
 }
-.wcblr-guide .wcblr-figure figcaption {
-	grid-column: 1;
-	grid-row: 1;
-	align-self: end;
-	text-align: left;
-	margin: 0 0 2px !important;
-	padding-right: 4px;
+.wcblr-guide .wcblr-figure figcaption,
+.wcblr-guide .wcblr-figure-pair figcaption {
 	font-family: $mono !important;
-	font-size: 11px !important;
+	font-size: 11.5px !important;
 	line-height: 1.65 !important;
 	letter-spacing: 0 !important;
 	color: #8b7b6a !important;
+	margin: 12px 0 0 !important;
+	text-align: left;
 }
 
 /* The archive mixes 16:9 and 4:3, and a 4:3 file across the content column
@@ -562,8 +498,7 @@ $gutter: 52px;
 	object-position: center bottom;
 }
 
-/* A pair, cropped to a common ratio so the row cannot go ragged. Captions sit
-   under these rather than in the rail; there is no rail inside a half column. */
+/* A pair, cropped to a common ratio so the row cannot go ragged. */
 .wcblr-guide .wcblr-figure-pair figure { margin: 0 !important; }
 .wcblr-guide .wcblr-figure-pair img {
 	width: 100%;
@@ -572,26 +507,6 @@ $gutter: 52px;
 	object-fit: cover;
 	border-radius: 0;
 }
-.wcblr-guide .wcblr-figure-pair figcaption {
-	font-family: $mono !important;
-	font-size: 11px !important;
-	line-height: 1.65 !important;
-	letter-spacing: 0 !important;
-	color: #8b7b6a !important;
-	margin-top: 12px !important;
-	text-align: left;
-}
-
-@media (max-width: 960px) {
-	.wcblr-guide .wcblr-figure { grid-template-columns: minmax(0, 1fr); }
-	.wcblr-guide .wcblr-figure img { grid-column: 1; }
-	.wcblr-guide .wcblr-figure figcaption {
-		grid-column: 1;
-		grid-row: auto;
-		margin: 12px 0 0 !important;
-	}
-}
-
 /* ---- 10. Questions ----------------------------------------------------- */
 
 /* Core `details` ships a black disclosure triangle and default type, which is
@@ -643,8 +558,8 @@ $gutter: 52px;
 /* ---- 11. The closing band ---------------------------------------------- */
 
 /* The second and last dark surface, and the only one after the thesis band.
-   It breaks the rail deliberately: the article has ended, so the closing
-   statement runs the full width instead of sitting in the text column. */
+   Its heading is set larger than a card title and smaller than a section head,
+   so it closes the article without competing with it. */
 .wcblr-guide .wcblr-cta {
 	background: $ink;
 	padding: 64px 44px !important;
