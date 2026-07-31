@@ -1,1 +1,6 @@
 node_modules/
+
+# preview.py's render cache, including a throwaway Chrome profile.
+# 3.1MB of it was committed once by a git add -A run whose cwd was this
+# repo rather than wordcamp/website. Never track it.
+tools/.preview-cache/

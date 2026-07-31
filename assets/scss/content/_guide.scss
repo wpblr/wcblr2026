@@ -9,647 +9,213 @@
    week. A layout rule that suits a page written for it will not automatically
    suit a page written before it. */
 
-/* THE IDEA, in one line: the article is a sequence of tinted BANDS, read down a
-   measure, with every structural block taking the full width of its section.
-   Surfaces come from the ground changing and from a real tonal step. They never
-   come from a four-sided low-contrast border.
-
-   The first version of this layer did the opposite: nine rounded rectangles in
-   #FBF8F1 on a #F2ECE0 ground, about four points of luminance apart, every
-   section built as eyebrow, heading, grey paragraph, box. That reads as an
-   admin panel from 2013, and it was rejected on sight. Everything below exists
-   to make that shape unreachable. */
-
-$paper:      #F2ECE0;
-$raised:     #EAE1CF;
-$ink:        #2a1d14;
-$ink-text:   #e6dccd;
-$ink-head:   #F5EFE4;
-$ink-muted:  #a9998a;
-$rule:       #ddd6c8;
-$rule-hard:  #2a1d14;
-$rule-card:  #9c8d78;
-$rule-card-ink: #63503d;
-$rule-ink:   #4c3b2c;
-$crimson:    #C8344B;
-$crimson-lit:#e2637a;
-$gold:       #a8760f;
-$gold-lit:   #e0a526;
-$green:      #1d8b6e;
-$body-text:  #5f4e3f;
-$mono: var(--wp--preset--font-family--jetbrains-mono), ui-monospace, monospace;
-$display: var(--wp--preset--font-family--fraunces), Georgia, serif;
-
-/* No full bleed. Bands are panels at the same width as every other page on the
-   site, and that is a deliberate retreat from an earlier version of this file.
-
-   The bleed was done by overshooting 1500px with margin, paying it back with
-   padding, and clipping the overhang with `overflow-x: clip` on `main`. It
-   worked, but it staked the whole page on one property: where `clip` is not
-   supported the overshoot is a 3000px horizontal scroll, and it is a phone that
-   pays for that, not the desktop it was designed on. A layout that is correct
-   only while a modern property holds is not a layout, it is a bet.
-
-   Contained also matches the rest of the site, which has never bled anything to
-   the viewport, and the light-dark rhythm survives the change intact: a tinted
-   panel on cream separates sections just as well as an edge-to-edge band. */
-
-/* ---- 1. Bands ---------------------------------------------------------- */
-
-/* Every section is a band. Adjacent bands never share a ground, so the change
-   of ground IS the section divider and the page carries no divider rule at all.
-   Three earlier attempts at a drawn divider were all rejected, the last one
-   because a detached hairline in a gap belongs to nothing. A ground change
-   cannot drift, cannot mismatch a weight, and needs no first-section
-   exception. */
-/* Every section carries the same padding whether or not it is tinted. If only
-   the tinted ones were padded, the text inside a panel would sit 44px right of
-   the text in the section above it, which is the ragged left edge this layout
-   has already been corrected for once. */
-/* WIDTH. The article must sit on exactly the same column as every other page
-   on the site, and it did not: body copy measured 530px against 1200px on
-   call-for-sponsors, and started 94px further right. Three insets were stacking.
-
-     1. The outer `alignfull` wrapper is a block inside a constrained parent, so
-        WordPress gives it `has-global-padding`, 50px a side. Other pages have no
-        such wrapper. 1200 becomes 1100.
-     2. This layer then padded every section another 44px. 1100 becomes 1012.
-     3. And capped running text at 68ch, which on Hanken Grotesk at 17px is
-        530px, not the ~700px `ch` suggests. `ch` is the advance of the zero
-        glyph, and in a proportional face that is a good deal narrower than the
-        average character. Never size a measure in `ch` without measuring it.
-
-   None of the three was wrong on its own. Stacked, they made the page look like
-   a different site. So: the wrapper's global padding goes, sections carry no
-   horizontal padding, and running text is not capped at all. Body copy now
-   starts and ends exactly where the rest of the site's does. */
-.wcblr-post.wcblr-guide {
-	padding-left: 0;
-	padding-right: 0;
-}
-.wcblr-guide .wcblr-sec {
-	padding: 72px 0;
-}
-
-/* A tinted panel still needs room around its copy, and it takes that room by
-   growing outwards rather than by pushing its text inwards. Otherwise text in a
-   panel sits 40px right of text in the plain section above it, which is the
-   ragged left edge this layout has been corrected for once already. The bleed
-   is 40px and bounded: no viewport units, nothing that depends on `clip`. */
-.wcblr-guide .wcblr-band-raised,
-.wcblr-guide .wcblr-band-ink,
-.wcblr-guide .wcblr-cta {
-	padding-left: 40px;
-	padding-right: 40px;
-	margin-left: -40px;
-	margin-right: -40px;
-}
-
-@media (max-width: 960px) {
-	/* the wrapper puts the global padding back, and panels stop growing outwards */
-	.wcblr-post.wcblr-guide {
-		padding-left: 20px;
-		padding-right: 20px;
-	}
-	.wcblr-guide .wcblr-sec { padding: 48px 0; }
-	.wcblr-guide .wcblr-band-raised,
-	.wcblr-guide .wcblr-band-ink,
-	.wcblr-guide .wcblr-cta {
-		padding-left: 18px;
-		padding-right: 18px;
-		margin-left: -18px;
-		margin-right: -18px;
-	}
-}
-/* The post title is directly above and already marks the start. */
-.wcblr-guide .wcblr-sec:first-child { padding-top: 36px; }
-
-/* Tinted panels get a margin so that two in a row read as two panels rather
-   than as one shape that changes colour halfway down. */
-.wcblr-guide .wcblr-band-raised,
-.wcblr-guide .wcblr-band-ink,
-.wcblr-guide .wcblr-cta {
-	margin-top: 16px;
-	margin-bottom: 16px;
-	border-radius: 6px;
-}
-
-.wcblr-guide .wcblr-band-raised { background: $raised; }
-.wcblr-guide .wcblr-band-ink { background: $ink; }
-
-/* The dark band is the one place the page inverts, and it is spent on the
-   article's thesis. Crimson at #C8344B on #2a1d14 is about 2.8:1 and fails at
-   11px, so the eyebrow lifts; the emphasis word goes gold because on this page
-   gold means the unscheduled, human half, which is what that section is. */
-.wcblr-guide .wcblr-band-ink,
-.wcblr-guide .wcblr-band-ink p,
-.wcblr-guide .wcblr-band-ink li { color: $ink-text !important; }
-.wcblr-guide .wcblr-band-ink h2 { color: $ink-head !important; }
-.wcblr-guide .wcblr-band-ink h2 em { color: $gold-lit !important; }
-.wcblr-guide .wcblr-band-ink .wcblr-eyebrow { color: $crimson-lit !important; }
-.wcblr-guide .wcblr-band-ink .wcblr-lead { color: #c9bbab !important; }
-.wcblr-guide .wcblr-band-ink .wcblr-label { color: $gold-lit !important; }
-.wcblr-guide .wcblr-band-ink .wcblr-card { border-top-color: $rule-card-ink; }
-.wcblr-guide .wcblr-band-ink .wcblr-card-gold { border-top-color: $gold-lit; }
-.wcblr-guide .wcblr-band-ink .wcblr-card-title { color: $ink-head !important; }
-.wcblr-guide .wcblr-band-ink a { color: $gold-lit !important; }
-
-/* ---- 2. The section box ------------------------------------------------ */
-
-/* No rail. An earlier version put the eyebrow in a 200px margin column beside
-   the heading, with photo captions and the timeline's times sharing it. It
-   worked, but it is not how any other page on this site opens a section, and a
-   long-form post is not the place to invent a second convention. Sections open
-   the house way: the `// slug` eyebrow on its own line, the heading under it,
-   both flush left.
-
-   What the rail was solving still has to be solved. Running text is capped at a
-   measure so it does not run to 140 characters a line, and every structural
-   block, cards, photographs, the timeline, takes the full width of the section.
-   The alternation between a measured column of prose and a full-width block is
-   what keeps the right-hand side from reading as dead space, which is the trap
-   a bare measure falls into on its own. */
-
-
-/* ---- 3. Type ----------------------------------------------------------- */
-
-/* The selector is deliberately three classes deep. `_post-page.scss` sets
-   `.single-post:not(.post-template) h2 { font-size:25px !important }`, and
-   `!important` does not settle this on its own: both rules carry it, so the
-   cascade falls through to specificity and that selector is (0,2,1). A plain
+/* 1. Section headings.
+   `_post-page.scss` sets `.single-post:not(.post-template) h2 { font-size:25px
+   !important }`. The call-for-speakers and call-for-sponsors posts escape it
+   because each runs its own `post-template-<slug>`; a post on the DEFAULT
+   template does not, and an `!important` in the stylesheet beats a plain inline
+   style. So every 46px section head in this layout silently renders at 25px on
+   the front end while looking correct in the editor, which loads no Remote CSS.
+   This opts back in. Margin is reset too: that rule also forces
+   `margin:46px 0 14px`, which would push the head off its eyebrow. */
+/* The selector is deliberately three classes deep. `!important` does not settle
+   this on its own: both rules carry it, so the cascade falls through to
+   specificity, and `.single-post:not(.post-template) h2` is (0,2,1). A plain
    `.wcblr-guide h2` is (0,1,1) and loses, which is exactly what the first
-   render showed: 46px in the markup, 25px on screen. This is (0,3,1) and wins
-   outright rather than relying on import order. */
+   render of this page showed: 46px in the markup, 25px on screen. This is
+   (0,3,1) and wins outright rather than relying on import order. */
 .wcblr-post.wcblr-guide .wcblr-sec h2 {
-	font-size: 54px !important;
+	font-size: 46px !important;
 	font-weight: 400 !important;
-	letter-spacing: -0.022em !important;
-	line-height: 1.06 !important;
-	margin: 0 0 30px !important;
-	text-wrap: balance;
-}
-@media (max-width: 960px) {
-	.wcblr-post.wcblr-guide .wcblr-sec h2 {
-		font-size: 38px !important;
-		margin-bottom: 22px !important;
-	}
-}
-
-/* The house eyebrow, unchanged from every other WCBLR page: crimson mono, a
-   lowercase snake_case slug behind a `//`, sitting on its own line above the
-   heading. No rule, no tick, no margin column. */
-.wcblr-guide .wcblr-eyebrow {
-	margin: 0 0 18px !important;
-	font-size: 13px !important;
-	letter-spacing: 0.5px !important;
-	line-height: 1.5 !important;
-}
-
-.wcblr-guide .wcblr-lead {
-	font-size: 23px !important;
-	line-height: 1.45 !important;
-	color: #4f4032 !important;
-	max-width: 62ch !important;
-	letter-spacing: -0.005em;
-}
-@media (max-width: 960px) {
-	.wcblr-guide .wcblr-lead { font-size: 20px !important; max-width: none !important; }
-}
-
-/* The one small-type register on the page: mono, uppercase, wide. Used for
-   stat labels, aside headers and timeline times, and nowhere else. */
-.wcblr-guide .wcblr-label {
-	font-family: $mono !important;
-	font-size: 11px !important;
-	letter-spacing: 0.16em !important;
-	text-transform: uppercase;
-	line-height: 1.4 !important;
-	color: #857463 !important;
-}
-
-/* ---- 4. Cards are rules, not boxes ------------------------------------- */
-
-/* A card is a solid step off its band, a 3px accent rule across the top, and
-   nothing else: no border, no shadow, no rounded low-contrast frame.
-
-   Both extremes have now been tried and rejected, and the difference between
-   them is worth stating precisely, because it is not "boxes or no boxes".
-
-   The first version was #FBF8F1 on #F2ECE0 with a 1.5px #dad5cd border: four
-   points of luminance apart, so the border was doing all the work and the page
-   read as an admin panel. The correction was to delete the surface entirely and
-   keep a hairline rule on top. That was an overcorrection, and it produced the
-   worse failure: a "card" that is a paragraph with a line above it is still a
-   paragraph, so a section of three of them is a wall of text with three lines
-   drawn on it. That was rejected on sight too.
-
-   What separates a card from prose is TONAL STEP, not chrome. #E5DAC3 on
-   #F2ECE0 is about fifteen points and reads as an object at a glance, with no
-   border needed. So: real fill, real padding, no frame. The column carries no
-   `width` attribute, which is what makes cards in a row stretch to a common
-   height now that they have a background to show it with. */
-.wcblr-guide .wcblr-card {
-	border-top: 3px solid $rule-card;
-	background: #E5DAC3;
-	border-radius: 2px;
-	padding: 22px 26px 26px !important;
-}
-.wcblr-guide .wcblr-card-crimson { border-top-color: $crimson; }
-.wcblr-guide .wcblr-card-green { border-top-color: $green; }
-.wcblr-guide .wcblr-card-gold { border-top-color: $gold; }
-/* One clear step off whichever band the card is standing on. */
-.wcblr-guide .wcblr-band-raised .wcblr-card { background: #DED2B7; }
-.wcblr-guide .wcblr-band-ink .wcblr-card { background: #3a2a1b; }
-
-/* Equal heights, which only started mattering once the cards had a fill to
-   show the ragged bottom with. `is-vertically-aligned-top` sets
-   `align-self: flex-start` and stops the column stretching, so a filled card
-   ends where its own copy ends and a row of them steps down like a bar chart.
-   Restore the stretch rather than stripping the alignment out of the markup:
-   the attribute is what the block editor writes when you set it, and it will
-   come back the next time anyone touches the block. */
-.wcblr-guide .wcblr-card.is-vertically-aligned-top { align-self: stretch; }
-
-.wcblr-guide .wcblr-card-title {
-	font-size: 20px !important;
-	font-weight: 600 !important;
+	letter-spacing: -0.01em !important;
 	line-height: 1.25 !important;
-	color: $ink !important;
-	margin: 0 0 10px !important;
-	letter-spacing: -0.005em;
-}
-.wcblr-guide .wcblr-card p:not(.wcblr-card-title):not(.wcblr-label) {
-	font-size: 15.5px !important;
-	line-height: 1.65 !important;
 	margin: 0 !important;
 }
-
-/* Gaps. Do not leave these to `blockGap`: WordPress emits that as a generated
-   layout class at render time, so it is missing from the raw markup and missing
-   from every local render. Four card columns rendered 8px apart and the copy in
-   one ran into the next. Owned here, the preview tells the truth. */
-.wcblr-guide .wcblr-sec .wp-block-columns { column-gap: 40px; row-gap: 40px; }
-.wcblr-guide .wcblr-sec .wcblr-stats { column-gap: 32px; }
-.wcblr-guide .wcblr-sec .wcblr-figure-pair { column-gap: 24px; row-gap: 24px; }
-.wcblr-guide .wcblr-sec .wcblr-aside .wp-block-columns { column-gap: 40px; }
-
-/* A one-slot timeline needs no spine; a rule under a single dot reads as a
-   dangling line rather than as a sequence. */
-.wcblr-guide .wcblr-timeline:has(> .wcblr-slot:only-child)::before { display: none; }
-
-/* The icon. The site's set is Lucide at a 2px stroke, nearly all of it in the
-   same #a8760f, which is why it works as a set: one weight, one colour, and the
-   card's own rule carries the accent instead. The circle behind it does not
-   come back. A 20px glyph centred in a 44px pastel disc is the single most
-   dated element the old layout had, and the disc was doing no work that the
-   rule above the card is not already doing.
-
-   Where an icon goes is decided, not felt: a card carries a mono label OR an
-   icon, never both and never neither. A label is right when the set is a
-   sequence or a pair the reader must keep straight (before / on the day /
-   after; on the schedule / not on the schedule). An icon is right when each
-   card names a thing you could point at (a booth, a queue, a corridor). */
-.wcblr-guide .wcblr-icon {
-	width: 26px;
-	height: 26px;
-	margin: 0 0 14px !important;
-	padding: 0 !important;
-	background: none !important;
-	border-radius: 0 !important;
-	display: block;
-}
-.wcblr-guide .wcblr-icon figure { margin: 0 !important; line-height: 0; }
-.wcblr-guide .wcblr-icon img {
-	width: 26px;
-	height: 26px;
-	display: block;
-	max-width: none;
+@media (max-width: 781px) {
+	.wcblr-post.wcblr-guide .wcblr-sec h2 { font-size: 34px !important; }
 }
 
-/* A card laid on its side: the label and title in a fixed left column, the copy
-   beside them. Three of these stacked give the copy 560px instead of the 200px
-   it gets in a three-across row inside an 848px column, and they read as a
-   different beat from a grid of square cards, which matters when the section
-   before this one is already a grid. Use it when the set is a sequence and the
-   copy is long; use the grid when the copy is short. */
-.wcblr-guide .wcblr-cardrow {
-	display: grid;
-	grid-template-columns: 230px minmax(0, 1fr);
-	column-gap: 36px;
-	align-content: start;
-}
-.wcblr-guide .wcblr-cardrow > .wcblr-label { grid-column: 1; grid-row: 1; }
-.wcblr-guide .wcblr-cardrow > .wcblr-card-title { grid-column: 1; grid-row: 2; }
-.wcblr-guide .wcblr-cardrow > p:not(.wcblr-label):not(.wcblr-card-title) {
-	grid-column: 2;
-	grid-row: 1 / span 2;
-}
-@media (max-width: 960px) {
-	.wcblr-guide .wcblr-cardrow { grid-template-columns: minmax(0, 1fr); }
-	.wcblr-guide .wcblr-cardrow > .wcblr-label,
-	.wcblr-guide .wcblr-cardrow > .wcblr-card-title,
-	.wcblr-guide .wcblr-cardrow > p:not(.wcblr-label):not(.wcblr-card-title) {
-		grid-column: 1;
-		grid-row: auto;
-	}
-}
+/* 2. Measure. Prose ran the full wide container at roughly 145 characters a
+   line against a comfortable 60 to 75. Only running text is capped; cards,
+   photos, rows and the FAQ keep the full width, so a structured block reads as
+   breaking out of the text column rather than sitting in it. */
+.wcblr-guide .wcblr-sec > p { max-width: 68ch; }
 
-/* ---- 5. The aside ------------------------------------------------------ */
-
-/* For a block that is a step to the side of the argument. A single gold rule
-   on the left edge and nothing else. It is the same device as the pull quote
-   at a smaller size, so an aside and a quote read as the same voice. */
-.wcblr-guide .wcblr-aside {
-	border-left: 2px solid $gold;
-	padding-left: 32px !important;
-}
-@media (max-width: 960px) {
-	.wcblr-guide .wcblr-aside { padding-left: 20px !important; }
-}
-
-/* ---- 6. Statistics ----------------------------------------------------- */
-
-.wcblr-guide .wcblr-stats {
-	border-top: 2px solid $rule-hard;
-	padding-top: 24px !important;
-}
-.wcblr-guide .wcblr-stat-n {
-	font-family: $display !important;
-	font-size: 44px !important;
-	font-weight: 400 !important;
-	line-height: 1 !important;
-	letter-spacing: -0.025em;
-	color: $ink !important;
-	margin: 0 0 10px !important;
-}
-@media (max-width: 960px) {
-	.wcblr-guide .wcblr-stat-n { font-size: 34px !important; }
-}
-
-/* ---- 7. The timeline --------------------------------------------------- */
-
-/* Was a hairline table: a label column, a rule under every row, and the two
-   unscheduled rows as full-width tinted stripes. That is a definition list,
-   and it looked like one.
-
-   Now it is an actual timeline: a time column, a continuous spine, and a marker
-   per slot. The marker for a slot nobody scheduled is a larger gold dot, which
-   is the whole distinction, drawn once. The time column is 120px because the
-   longest label, AFTERNOON, is nine characters and JetBrains Mono advances
-   0.6em, so it sets at about 60px and sits comfortably right-aligned. */
-.wcblr-guide .wcblr-timeline { position: relative; }
-.wcblr-guide .wcblr-timeline::before {
-	content: "";
-	position: absolute;
-	left: 140px;
-	top: 10px;
-	bottom: 34px;
-	width: 1px;
-	background: #e0d8c9;
-}
-.wcblr-guide .wcblr-band-raised .wcblr-timeline::before { background: #e6ded0; }
-
-.wcblr-guide .wcblr-slot {
-	display: grid;
-	grid-template-columns: 120px minmax(0, 1fr);
-	column-gap: 40px;
+/* 3. The gold mark.
+   On this page gold means exactly one thing: time nobody put on a schedule.
+   It appears on the two unscheduled rows of the day, on the right-hand column
+   of the contrast section, and on the pull quote. Nowhere else. It is the same
+   device the banner uses for the same meaning, which is what makes the poster
+   and the page read as one campaign instead of two designs. */
+.wcblr-guide .wcblr-unsched {
 	position: relative;
-	padding: 0 0 34px !important;
+	background: rgba(224, 165, 38, 0.08);
+	border-radius: 10px;
+	/* clips the rule below to the rounded corner, so it can run edge to edge
+	   without square ends poking past the tint */
+	overflow: hidden;
+	padding-left: 20px !important;
+	padding-right: 20px !important;
+	margin-left: -20px !important;
+	margin-right: -20px !important;
 }
-.wcblr-guide .wcblr-slot > * { grid-column: 2; }
-.wcblr-guide .wcblr-slot > .wcblr-slot-time {
-	grid-column: 1;
-	grid-row: 1;
-	text-align: right;
-	padding-right: 4px;
-	margin: 1px 0 0 !important;
-	max-width: none;
-}
-.wcblr-guide .wcblr-slot::before {
+/* Full height, deliberately. Inset top and bottom it reads as a floating tick
+   next to the row; edge to edge it reads as the row being marked, which is what
+   it means. */
+.wcblr-guide .wcblr-unsched::before {
 	content: "";
 	position: absolute;
-	left: 136px;
-	top: 6px;
-	width: 9px;
-	height: 9px;
-	border-radius: 50%;
-	background: #c7bfae;
-	box-shadow: 0 0 0 5px $paper;
-}
-.wcblr-guide .wcblr-band-raised .wcblr-slot::before { box-shadow: 0 0 0 5px $raised; }
-
-/* A slot nobody put on a schedule. Bigger, gold, and the time label goes with
-   it. This is the one place in the day where the page's gold means anything,
-   so it is drawn to be noticed from a scroll away. */
-.wcblr-guide .wcblr-slot-open::before {
-	background: $gold;
-	width: 15px;
-	height: 15px;
-	left: 133px;
-	top: 3px;
-}
-.wcblr-guide .wcblr-slot-open .wcblr-slot-time { color: $gold !important; }
-
-/* Not written yet, and honest about it: a hollow marker rather than a dashed
-   box. Contributor Day has no published shape, and inventing one is worse than
-   leaving it open. */
-.wcblr-guide .wcblr-slot-tba::before {
-	background: transparent;
-	border: 2px solid #b6ab98;
-	width: 11px;
-	height: 11px;
-	left: 135px;
-	top: 5px;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 3px;
+	background: #a8760f;
 }
 
-.wcblr-guide .wcblr-slot-title {
-	font-size: 20px !important;
-	font-weight: 600 !important;
-	line-height: 1.3 !important;
-	color: $ink !important;
-	margin: 0 0 8px !important;
+/* 4. The contrast pair. Deliberately lopsided: the booked half is a short plain
+   list on bare paper, the unbooked half is a longer tinted card. The asymmetry
+   is the argument, so do not "tidy" these to equal widths. */
+.wcblr-guide .wcblr-side-gold {
+	background: rgba(224, 165, 38, 0.10);
+	border: 1.5px solid rgba(168, 118, 15, 0.32);
+	border-radius: 18px;
+	padding: 28px 30px 32px !important;
 }
+.wcblr-guide .wcblr-side-plain { padding-top: 28px !important; }
 
-@media (max-width: 960px) {
-	.wcblr-guide .wcblr-timeline::before { left: 5px; }
-	.wcblr-guide .wcblr-slot {
-		grid-template-columns: minmax(0, 1fr);
-		padding-left: 32px !important;
-	}
-	.wcblr-guide .wcblr-slot > *,
-	.wcblr-guide .wcblr-slot > .wcblr-slot-time {
-		grid-column: 1;
-		text-align: left;
-		max-width: none;
-	}
-	.wcblr-guide .wcblr-slot > .wcblr-slot-time { grid-row: auto; margin-bottom: 6px !important; }
-	.wcblr-guide .wcblr-slot::before { left: 1px; }
-	.wcblr-guide .wcblr-slot-open::before { left: -1px; }
-	.wcblr-guide .wcblr-slot-tba::before { left: 0; }
-}
-
-/* ---- 8. The pull quote ------------------------------------------------- */
-
-/* The one typographic risk, used once, on the dark band. Set in the display
-   face at a size nothing else on the page reaches, hanging off a gold rule. */
+/* 5. The pull quote. The one typographic risk on the page, used once. */
 .wcblr-guide .wcblr-pull {
-	font-family: $display !important;
-	font-size: 40px !important;
-	font-weight: 400 !important;
-	line-height: 1.18 !important;
-	letter-spacing: -0.02em !important;
-	color: $ink-head !important;
-	border-left: 2px solid $gold-lit;
-	padding-left: 36px !important;
-	max-width: 24ch !important;
+	border-left: 3px solid #a8760f;
+	padding-left: 30px;
+	max-width: 26ch;
 }
-@media (max-width: 960px) {
-	.wcblr-guide .wcblr-pull {
-		font-size: 28px !important;
-		padding-left: 20px !important;
-		max-width: none !important;
-	}
+@media (max-width: 781px) {
+	.wcblr-guide .wcblr-pull { padding-left: 20px; }
 }
 
-/* ---- 9. Photographs ---------------------------------------------------- */
-
-/* A photograph takes the full width of its section and the caption sits under
-   it, which is what a figure does everywhere else on the site. An earlier
-   version hung the caption in the page's margin column; that column no longer
-   exists. */
-.wcblr-guide .wcblr-figure { margin-left: 0 !important; margin-right: 0 !important; }
-.wcblr-guide .wcblr-figure img {
+/* 6. Photographs. Core does not upscale, so a 1024px file inside a wider
+   container leaves a strip of background down its right side. */
+.wcblr-guide .wcblr-photo { margin-left: 0; margin-right: 0; }
+.wcblr-guide .wcblr-photo img {
 	width: 100%;
 	height: auto;
 	display: block;
-	border-radius: 0;
 }
-.wcblr-guide .wcblr-figure figcaption,
-.wcblr-guide .wcblr-figure-pair figcaption {
-	font-family: $mono !important;
-	font-size: 11.5px !important;
-	line-height: 1.65 !important;
-	letter-spacing: 0 !important;
-	color: #8b7b6a !important;
-	margin: 12px 0 0 !important;
+.wcblr-guide .wcblr-photo figcaption {
+	font-family: var(--wp--preset--font-family--jetbrains-mono), ui-monospace, monospace;
+	font-size: 12px !important;
+	letter-spacing: 0.04em;
+	color: #7a6757 !important;
+	margin-top: 12px !important;
 	text-align: left;
 }
 
-/* The archive mixes 16:9 and 4:3, and a 4:3 file across the content column
-   renders about 730px tall and pushes the next heading off the screen. Crop
-   rather than shrink, and crop by what is IN the frame rather than to a house
-   ratio: the group shot is a 4:3 room where the people occupy the bottom third
-   and everything above them is ceiling, so 16:9 at any object-position still
-   framed a lit ceiling. 21:9 anchored to the bottom is the crop that contains
-   the photograph's actual subject. A file whose subject is centred does not
-   want this class at all. */
-.wcblr-guide .wcblr-figure-crop img {
-	aspect-ratio: 21 / 9;
+/* A photograph in a full-width slot. The archive is a mix of 16:9 and 4:3, and
+   a 4:3 file across the wide container renders about 900px tall, which pushes
+   the next heading off the screen entirely. Crop rather than shrink, biased
+   slightly above centre because in every one of these frames the people are in
+   the upper half. */
+.wcblr-guide .wcblr-photo-wide img {
+	aspect-ratio: 16 / 9;
 	object-fit: cover;
-	object-position: center bottom;
+	object-position: center 42%;
 }
 
-/* A pair, cropped to a common ratio so the row cannot go ragged. */
-.wcblr-guide .wcblr-figure-pair figure { margin: 0 !important; }
-.wcblr-guide .wcblr-figure-pair img {
-	width: 100%;
-	display: block;
-	aspect-ratio: 3 / 2;
+/* A pair of photographs side by side, cropped to a common height so the row
+   does not go ragged when the two files have different aspect ratios. */
+.wcblr-guide .wcblr-photo-pair .wcblr-photo img {
+	aspect-ratio: 4 / 3;
 	object-fit: cover;
-	border-radius: 0;
+	border-radius: 14px;
 }
-/* ---- 10. Questions ----------------------------------------------------- */
 
-/* Core `details` ships a black disclosure triangle and default type, which is
-   the most obviously unstyled thing a page can carry. Hairlines between,
-   nothing around, and a mono marker that swaps rather than rotates. */
-.wcblr-guide .wcblr-faq details {
-	border-top: 1px solid $rule;
-	border-radius: 0 !important;
-	background: none !important;
-	padding: 0 !important;
-	margin: 0 !important;
+/* 7. A block that is deliberately empty. Contributor Day has no published shape
+   yet, and an honest blank reads better than either omitting the day or filling
+   it with invented rows. Dashed and unfilled so it is legible as "not written
+   yet" rather than "forgotten". */
+.wcblr-guide .wcblr-tba {
+	border: 1.5px dashed rgba(42, 29, 20, 0.28) !important;
+	border-radius: 16px !important;
+	background: transparent !important;
 }
-.wcblr-guide .wcblr-faq details:last-of-type { border-bottom: 1px solid $rule; }
-.wcblr-guide .wcblr-faq summary {
-	list-style: none;
-	cursor: pointer;
+
+/* 8. A sub-head inside a section, for the two days. Smaller than an h2 so the
+   section still reads as one thing. */
+.wcblr-guide .wcblr-dayhead {
+	border-bottom: 2px solid #2a1d14;
+}
+
+/* 9. Surfaces for body copy.
+   A run of prose over roughly 150 characters must not sit on bare cream, and
+   neither must a stat strip. On this palette an unsupported paragraph reads as
+   unstyled text rather than as a designed block, and the 68ch measure makes it
+   worse rather than better: the copy sits in a narrow left column with 40 per
+   cent of the row dead beside it. Give it a surface, or give it a partner in
+   the next column. */
+.wcblr-guide .wcblr-panel {
+	background: #FBF8F1;
+	border: 1.5px solid #dad5cd;
+	border-radius: 16px;
+}
+/* Inside a panel the padding already narrows the line, so this is a light
+   trim rather than the 68ch used on bare cream. */
+.wcblr-guide .wcblr-panel > p { max-width: 74ch; }
+
+/* The stat strip, on a surface and stacked, so it reads as one object instead
+   of four numbers floating in a row. */
+.wcblr-guide .wcblr-statcard {
+	background: #FBF8F1;
+	border: 1.5px solid #dad5cd;
+	border-radius: 16px;
+}
+.wcblr-guide .wcblr-statrow + .wcblr-statrow {
+	border-top: 1px solid #ddd9d2;
+	margin-top: 18px !important;
+	padding-top: 18px !important;
+}
+
+/* A small label above panel copy. Same mono as the card labels elsewhere. */
+.wcblr-guide .wcblr-panel-label {
+	color: #a8760f;
+}
+
+/* 10. Section dividers.
+   Two earlier attempts were wrong in the same way: a separate rule floating in
+   the gap between sections, first with a mismatched 3px cap on a 1px hairline,
+   then with matched weights. Even corrected it read as a stray line, because a
+   detached rule in a 56px gap has nothing to belong to.
+
+   So the eyebrow becomes the divider. Every section already opens with a
+   crimson `// section_name` in mono, which is a code comment; the rule now runs
+   out of it and across the remaining width, the way a section header rule works
+   in a printed listing. It is attached to something, it cannot drift, and it
+   says "a new section starts here" in the page's own idiom rather than in
+   generic ornament.
+
+   The gap grows with it. 56px was not enough to read as a break at all, which
+   is why the divider had to work so hard in the first place; 104px was too much
+   and left the sections looking unrelated. 78px is the settled value. */
+.wcblr-guide .wcblr-sec + .wcblr-sec {
+	margin-top: 78px !important;
+}
+
+.wcblr-guide .wcblr-sec > .wcblr-eyebrow {
 	display: flex;
-	align-items: baseline;
-	justify-content: space-between;
-	gap: 28px;
-	padding: 24px 0 !important;
-	font-size: 21px !important;
-	font-weight: 500 !important;
-	line-height: 1.3 !important;
-	color: $ink !important;
-	transition: color 0.15s ease;
+	align-items: center;
+	gap: 18px;
+	margin-bottom: 24px !important;
+	/* the eyebrow is a direct child of the section, so the 68ch prose measure
+	   applies to it too and would stop the rule two thirds of the way across */
+	max-width: none;
 }
-.wcblr-guide .wcblr-faq summary::-webkit-details-marker { display: none; }
-.wcblr-guide .wcblr-faq summary::after {
-	content: "+";
-	flex: 0 0 auto;
-	font-family: $mono;
-	font-size: 21px;
-	line-height: 1;
-	color: $crimson;
-}
-.wcblr-guide .wcblr-faq details[open] summary::after { content: "\2013"; }
-.wcblr-guide .wcblr-faq summary:hover { color: $crimson !important; }
-.wcblr-guide .wcblr-faq summary:focus-visible {
-	outline: 2px solid $crimson;
-	outline-offset: 3px;
-}
-.wcblr-guide .wcblr-faq details > p {
-	margin: 0 !important;
-	padding: 0 0 28px !important;
-}
-
-/* ---- 11. The closing band ---------------------------------------------- */
-
-/* The second and last dark surface, and the only one after the thesis band.
-   Its heading is set larger than a card title and smaller than a section head,
-   so it closes the article without competing with it. */
-.wcblr-guide .wcblr-cta {
-	background: $ink;
-	padding: 64px 40px !important;
-}
-@media (max-width: 960px) {
-	.wcblr-guide .wcblr-cta { padding: 44px 18px !important; }
-}
-.wcblr-guide .wcblr-cta h2,
-.wcblr-guide .wcblr-cta h3 {
-	color: $ink-head !important;
-	font-family: $display !important;
-	font-size: 44px !important;
-	font-weight: 400 !important;
-	line-height: 1.1 !important;
-	letter-spacing: -0.02em !important;
-	margin: 0 0 18px !important;
-	max-width: 22ch;
-}
-.wcblr-guide .wcblr-cta h3 em { color: $gold-lit !important; font-style: italic; }
-.wcblr-guide .wcblr-cta p { color: $ink-muted !important; max-width: 56ch; }
-@media (max-width: 960px) {
-	.wcblr-guide .wcblr-cta h2,
-	.wcblr-guide .wcblr-cta h3 { font-size: 30px !important; }
-}
-
-/* The sign-off, after everything. Mono, small, and the only centred line in
-   the article, because it is the one line that is not part of it. */
-.wcblr-guide .wcblr-signoff {
-	font-family: $mono !important;
-	font-size: 12px !important;
-	letter-spacing: 0.04em !important;
-	color: #8b7b6a !important;
-	text-align: center;
-	margin: 0 !important;
-	padding: 44px 0 8px !important;
-}
-
-/* ---- 12. Code ---------------------------------------------------------- */
-
-.wcblr-guide .wcblr-stamp {
-	background: $ink;
-	border-radius: 4px;
+/* Only on sections that follow another one. The first section's eyebrow sits
+   directly under the post title, which already marks the start of the article;
+   a rule there separates the h1 from its own opening paragraph and reads as a
+   stray line. The base eyebrow styling above stays on every section so the
+   spacing does not go inconsistent. */
+.wcblr-guide .wcblr-sec + .wcblr-sec > .wcblr-eyebrow::after {
+	content: "";
+	flex: 1 1 auto;
+	height: 1px;
+	background: #d9d3c9;
 }
