@@ -221,65 +221,58 @@
 }
 
 /* 11. The statistics card.
-   Four numbers stacked behind hairlines, all in the same brown, is a table
-   rather than a panel: nothing in it tells you which fact you are looking at
-   until you read the label. Each row now carries a tinted chip with its own
-   glyph, and the number takes the chip's colour, so the card is scannable at a
-   glance and colour-coded the way the tier cards on the sponsors page are.
+   Four numbers stacked behind hairlines, all set in the same brown, is a table
+   rather than a panel: nothing tells you which fact you are looking at until
+   you read the label. Each row now takes an accent colour, carried by a solid
+   bar at its left edge and by the number itself, so the card reads at a glance
+   and is colour-coded the way the tier cards on the sponsors page are.
 
-   All of it is done from the stylesheet with :nth-of-type and background-image
-   data URIs, the same technique _cfs-icons.scss already uses, so the post
-   markup does not change by one character.
+   IT WAS GOING TO BE ICONS, AND IT CANNOT BE, FROM CSS.
+   WordCamp's stylesheet sanitiser strips `background-image` outright. Not the
+   value, the property: a data URI and an https URL are both removed, and the
+   rule arrives with the rest of its declarations intact, which is why the chips
+   rendered as empty tinted squares. Measured on the live site, zero
+   `background-image` declarations survive anywhere in the served stylesheet.
+
+   That is worth knowing beyond this card, because `content/_cfs-icons.scss`
+   is built on the technique: every `.i-*` and `.t-*` rule in it is a hand
+   encoded SVG data URI, and every one of them arrives empty. `.i-spark { }`
+   is what the browser actually gets. The icons you can see on the speakers and
+   sponsors pages come from the `<img>` inside each badge, not from the CSS, so
+   the badge classes have only ever contributed the tinted circle behind them.
+
+   So an icon here needs an `<img>` in the block markup. A bar does not, and a
+   bar that is unmistakably deliberate beats a chip waiting for a glyph that the
+   sanitiser will never deliver.
 
    Contrast, since these are colours on #FBF8F1: crimson 4.9:1, green 3.9:1,
-   gold 4.4:1. All are comfortably past the 3:1 that large text needs at the
-   27px these numbers are set in, and none of them is used on the 11px label,
-   which stays #7a6757 and would fail. */
+   gold 4.4:1. All are past the 3:1 that large text needs at the 27px these
+   numbers are set in, and none is used on the 11px label, which stays #7a6757
+   and would fail at those ratios. */
 .wcblr-guide .wcblr-statrow {
 	position: relative;
-	padding-left: 58px;
-	min-height: 44px;
+	padding-left: 22px;
 }
 .wcblr-guide .wcblr-statrow::before {
 	content: "";
 	position: absolute;
 	left: 0;
-	top: 1px;
-	width: 42px;
-	height: 42px;
-	border-radius: 12px;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: 21px 21px;
+	top: 4px;
+	width: 4px;
+	height: 34px;
+	border-radius: 2px;
 }
-/* rows two to four carry the hairline's 18px of padding, so the chip drops with it */
-.wcblr-guide .wcblr-statrow + .wcblr-statrow::before { top: 19px; }
+/* rows two to four carry the hairline's 18px of padding, so the bar drops with it */
+.wcblr-guide .wcblr-statrow + .wcblr-statrow::before { top: 22px; }
 
-
-/* 1: the two dates */
-.wcblr-guide .wcblr-statrow:nth-of-type(1)::before {
-	background-color: rgba(200, 52, 75, 0.10);
-	background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23C8344B%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%273%27%20y%3D%275%27%20width%3D%2718%27%20height%3D%2716%27%20rx%3D%272%27%2F%3E%3Cpath%20d%3D%27M8%203v4%27%2F%3E%3Cpath%20d%3D%27M16%203v4%27%2F%3E%3Cpath%20d%3D%27M3%2011h18%27%2F%3E%3C%2Fsvg%3E");
-}
+.wcblr-guide .wcblr-statrow:nth-of-type(1)::before { background-color: #C8344B; }
 .wcblr-guide .wcblr-statrow:nth-of-type(1) > p:first-child { color: #C8344B !important; }
 
-/* 2: the talks */
-.wcblr-guide .wcblr-statrow:nth-of-type(2)::before {
-	background-color: rgba(29, 139, 110, 0.12);
-	background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%231d8b6e%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%279%27%20y%3D%273%27%20width%3D%276%27%20height%3D%2711%27%20rx%3D%273%27%2F%3E%3Cpath%20d%3D%27M6%2011a6%206%200%200%200%2012%200%27%2F%3E%3Cline%20x1%3D%2712%27%20y1%3D%2717%27%20x2%3D%2712%27%20y2%3D%2721%27%2F%3E%3Cline%20x1%3D%278%27%20y1%3D%2721%27%20x2%3D%2716%27%20y2%3D%2721%27%2F%3E%3C%2Fsvg%3E");
-}
+.wcblr-guide .wcblr-statrow:nth-of-type(2)::before { background-color: #1d8b6e; }
 .wcblr-guide .wcblr-statrow:nth-of-type(2) > p:first-child { color: #1d8b6e !important; }
 
-/* 3: who turned up */
-.wcblr-guide .wcblr-statrow:nth-of-type(3)::before {
-	background-color: rgba(168, 118, 15, 0.12);
-	background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23a8760f%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%279%27%20cy%3D%278%27%20r%3D%273%27%2F%3E%3Cpath%20d%3D%27M3.5%2020a5.5%205.5%200%200%201%2011%200%27%2F%3E%3Cpath%20d%3D%27M16%205.5a3%203%200%200%201%200%205.5%27%2F%3E%3Cpath%20d%3D%27M17.5%2020a5.5%205.5%200%200%200-3-4.9%27%2F%3E%3C%2Fsvg%3E");
-}
+.wcblr-guide .wcblr-statrow:nth-of-type(3)::before { background-color: #a8760f; }
 .wcblr-guide .wcblr-statrow:nth-of-type(3) > p:first-child { color: #a8760f !important; }
 
-/* 4: the community */
-.wcblr-guide .wcblr-statrow:nth-of-type(4)::before {
-	background-color: rgba(42, 29, 20, 0.08);
-	background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%232a1d14%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M21%2011.5a8.4%208.4%200%200%201-9%208.4%209%209%200%200%201-3.9-.9L3%2021l1.9-4.6A8.4%208.4%200%200%201%204%2011.5a8.4%208.4%200%200%201%2017%200z%27%2F%3E%3C%2Fsvg%3E");
-}
+.wcblr-guide .wcblr-statrow:nth-of-type(4)::before { background-color: #2a1d14; }
 .wcblr-guide .wcblr-statrow:nth-of-type(4) > p:first-child { color: #2a1d14 !important; }
