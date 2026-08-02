@@ -422,3 +422,65 @@
 	border-bottom: 2px solid #b3a693;
 	transform: rotate(-45deg);
 }
+
+/* ---- The guide index ------------------------------------------------------
+
+   Three collapsible groups on the Attending page. Each group is a `core/details`
+   for the same reasons the day's beats are: keyboard operable and screen-reader
+   announced for free, and post content can carry no JavaScript.
+
+   Every group ships OPEN. A reader arriving at an index wants the index; what
+   they collapse is the group they are not travelling for, which is a decision
+   only they can make. Same rule as `wcblr-slot`.
+
+   The chevron is the one the beats use, so the three accordions on this site
+   open the same way rather than each inventing its own affordance. It sits hard
+   right via `margin-left:auto` because a group heading is wide and a chevron
+   tucked against the text would read as punctuation. */
+.wcblr-guide .wcblr-idx > summary {
+	list-style: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 1.2;
+	color: #2a1d14;
+	transition: color 0.16s ease;
+}
+.wcblr-guide .wcblr-idx > summary::-webkit-details-marker { display: none; }
+.wcblr-guide .wcblr-idx > summary:hover { color: #C8344B; }
+.wcblr-guide .wcblr-idx > summary:focus-visible {
+	outline: 2px solid #C8344B;
+	outline-offset: 4px;
+	border-radius: 3px;
+}
+.wcblr-guide .wcblr-idx > summary::after {
+	content: "";
+	flex: 0 0 auto;
+	margin-left: auto;
+	width: 8px;
+	height: 8px;
+	border-right: 2px solid #b3a693;
+	border-bottom: 2px solid #b3a693;
+	transform: rotate(-45deg);
+	transition: transform 0.24s ease, border-color 0.16s ease;
+}
+.wcblr-guide .wcblr-idx[open] > summary::after { transform: rotate(45deg); }
+.wcblr-guide .wcblr-idx > summary:hover::after { border-color: #C8344B; }
+
+/* A collapsed group is a title and a chevron, so the padding that frames an open
+   panel leaves a deep empty gutter under it. Pull it back in when closed. */
+.wcblr-guide .wcblr-idx:not([open]) { padding-bottom: 26px !important; }
+
+/* The reveal. Opacity and transform only, gated on no-preference so the failure
+   direction is "it just appears", never "it is invisible". `wcblr-rise-sm` is
+   the same keyframe the beats and the questions use. */
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-motion .wcblr-idx[open] > p,
+	.wcblr-motion .wcblr-idx[open] > .wp-block-columns,
+	.wcblr-motion .wcblr-idx[open] > .wp-block-group {
+		animation: wcblr-rise-sm 0.26s ease both;
+	}
+}
