@@ -90,6 +90,19 @@
 	to { opacity: 1; transform: none; }
 }
 
+/* The same beat, for a stamp rather than a chip. Lands on `rotate(5deg)`, not
+   on `none`, because that is the stamp's resting tilt in `content/_stamp.scss`
+   and finishing on `none` would flatten it at the end of its own entrance.
+
+   Deliberately a separate keyframe from the home page's `wcblr-hero-stamp`,
+   which is identical today. That one is owned by `sections/_hero-intro.scss`
+   and is free to be retuned for the home page alone; this one is the shared
+   vocabulary. Two names is the cheap way to keep that true. */
+@keyframes wcblr-stamp-in {
+	from { opacity: 0; transform: rotate(-7deg) scale(0.82); }
+	to { opacity: 1; transform: rotate(5deg) scale(1); }
+}
+
 /* ---- Reusable, for any page that opts in -------------------------------- */
 
 /* The easing is the home page's, written out rather than held in a custom
@@ -101,6 +114,17 @@
 	.wcblr-motion .wcblr-m-rise-sm { animation: wcblr-rise-sm 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
 	.wcblr-motion .wcblr-m-lift { animation: wcblr-lift 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
 	.wcblr-motion .wcblr-m-fade { animation: wcblr-fade 0.7s ease-out both; }
+
+	/* The punctuation, and the only class here that carries its own delay. A
+	   stamp is by definition the last thing to arrive: the spring works because
+	   it lands on something small once the page is otherwise still, not because
+	   it bounces. 0.95s is the home page's own timing for the same beat.
+
+	   Declared BEFORE the delay steps on purpose, so `wcblr-m-d1`..`d6` can
+	   still override it on a page that needs the stamp earlier. */
+	.wcblr-motion .wcblr-m-stamp {
+		animation: wcblr-stamp-in 0.45s 0.95s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+	}
 
 	.wcblr-motion .wcblr-m-d1 { animation-delay: 0.05s; }
 	.wcblr-motion .wcblr-m-d2 { animation-delay: 0.12s; }

@@ -1,0 +1,67 @@
+/* ---- Stamp --------------------------------------------------------------- */
+
+/* The `add_filter( 'coffee' );` beat from the home page, made available to any
+   page rather than only to the ticket stub it was born on.
+
+   It already existed, but only as `.wcblr-stub .wcblr-stamp` in
+   `sections/_ticket-stub.scss`, where the look and the absolute positioning
+   were written as one rule. A call page has no stub to hang it off, so the two
+   are separated here:
+
+     `.wcblr-stamp`        the object. Turmeric pill, dashed rule, resting tilt.
+                           Sits in normal flow, so it works anywhere with no
+                           positioned ancestor and nothing to overlap.
+     `.wcblr-stamp--pin`   pins it over the top-right corner of the nearest
+                           `.wcblr-stamp-host`, which is the home-page look.
+
+   The stub's own rule is untouched and still wins on specificity (0,2,0 against
+   0,1,0) with identical values, so the home page does not move by a pixel.
+
+   The tilt is `5deg` in three places now: here, in the stub, and as the landing
+   frame of `wcblr-stamp-in` in `content/_motion.scss`. They have to agree. An
+   entrance that finishes on `none` flattens the stamp at the end of its own
+   animation, which is the one obvious way to get this wrong. */
+
+.wcblr-stamp {
+	display: inline-block;
+	transform: rotate(5deg);
+	white-space: nowrap;
+	margin: 0;
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 12px;
+	font-weight: 500;
+	color: #2a1d14;
+	background: #e0a526;
+	border: 2px dashed #2a1d14;
+	border-radius: 30px;
+	padding: 8px 16px;
+}
+
+/* Any block that a stamp should be pinned to. Named rather than reusing
+   `position: relative` on the panel itself, so it is obvious in the block
+   markup why the class is there. */
+.wcblr-stamp-host {
+	position: relative;
+}
+
+/* Straddles the corner the way the home page's straddles the stub. `right` is
+   negative so it breaks the panel's edge rather than sitting politely inside
+   it, which is the whole character of the thing. */
+.wcblr-stamp-host .wcblr-stamp--pin {
+	position: absolute;
+	top: -18px;
+	right: -14px;
+	z-index: 4;
+}
+
+/* Below the panel's own padding the pin has nowhere safe to go: it would cover
+   the heading, and a negative `right` on a full-bleed panel can push the page
+   sideways. So it drops back into flow and un-pins, keeping the tilt and the
+   entrance. Matches the 782px the hero columns stack at. */
+@media (max-width: 782px) {
+	.wcblr-stamp-host .wcblr-stamp--pin {
+		position: static;
+		display: inline-block;
+		margin-bottom: 18px;
+	}
+}
