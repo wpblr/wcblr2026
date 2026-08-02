@@ -474,13 +474,39 @@
    panel leaves a deep empty gutter under it. Pull it back in when closed. */
 .wcblr-guide .wcblr-idx:not([open]) { padding-bottom: 26px !important; }
 
+/* Closing cannot be animated, and it is worth writing down why so nobody spends
+   another afternoon on it. A height transition on a <details> needs
+   `interpolate-size: allow-keywords`, or `transition-behavior: allow-discrete`
+   on `content-visibility`, or `::details-content`. WordCamp.org sanitises Remote
+   CSS against a property allowlist and drops anything it does not know: measured
+   against the served sheet, it currently strips `field-sizing`,
+   `font-variation-settings`, `backdrop-filter`, `user-select`, `justify-items`,
+   `grid-row`, `background-image` and every custom property. `field-sizing` is the
+   same 2024 vintage as the two properties an animated close would need, so they
+   would be dropped the same way, and a half-applied transition is worse than
+   none: that is exactly how the `@supports (animation-timeline)` block shipped
+   zero-second animations that overrode everything else.
+
+   So: the chevron transitions both ways, the padding eases back on close, and the
+   content is staggered in on open. That is the whole budget. */
+.wcblr-guide .wcblr-idx { transition: padding-bottom 0.24s ease; }
+
 /* The reveal. Opacity and transform only, gated on no-preference so the failure
-   direction is "it just appears", never "it is invisible". `wcblr-rise-sm` is
-   the same keyframe the beats and the questions use. */
+   direction is "it just appears", never "it is invisible". `wcblr-rise-sm` is the
+   same keyframe the beats and the questions use.
+
+   Staggered rather than simultaneous: the group's own label and sentence arrive
+   first and the fourteen entries follow, so opening a group reads as one movement
+   instead of the whole card twitching at once. Delays are written literally
+   because the sanitizer strips custom properties. */
 @media (prefers-reduced-motion: no-preference) {
 	.wcblr-motion .wcblr-idx[open] > p,
 	.wcblr-motion .wcblr-idx[open] > .wp-block-columns,
 	.wcblr-motion .wcblr-idx[open] > .wp-block-group {
 		animation: wcblr-rise-sm 0.26s ease both;
 	}
+	.wcblr-motion .wcblr-idx[open] > p:first-of-type { animation-delay: 0.02s; }
+	.wcblr-motion .wcblr-idx[open] > p:nth-of-type(2) { animation-delay: 0.06s; }
+	.wcblr-motion .wcblr-idx[open] > .wp-block-group { animation-delay: 0.10s; }
+	.wcblr-motion .wcblr-idx[open] > .wp-block-columns { animation-delay: 0.14s; }
 }
