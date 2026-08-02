@@ -1,0 +1,94 @@
+<!-- Banner · 1080×1080 · Community Poll
+     Where does your WordPress time go · ballot · parchment -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>WCBLR 2026 Community Poll</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="banner.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400..700&display=swap" />
+<style>
+  html, body { margin: 0; background: #d8cdb8; }
+  .banner { --font-kn: 'Noto Sans Kannada', sans-serif; }
+  .b-eyebrow .kn { font-family: var(--font-kn); font-size: 26px; }
+
+  .ballot { display: flex; flex-direction: column; gap: 11px; }
+  .opt { display: grid; grid-template-columns: 30px 178px 1fr; align-items: center; gap: 20px;
+    padding: 15px 26px; border: 1.5px solid var(--border-paper); border-radius: var(--radius-md);
+    background: rgba(248, 244, 236, 0.9); }
+  .opt .box { width: 28px; height: 28px; border: 2px solid var(--wc-crimson);
+    border-radius: var(--radius-xs); }
+  .opt .nm { font-family: var(--font-display); font-weight: 800; font-size: 32px; line-height: 1;
+    color: var(--wc-ink); white-space: nowrap; }
+  .opt .ds { font-family: var(--font-body); font-size: 20px; line-height: 1.25;
+    color: var(--text-muted); }
+
+  .b-urlbar { display: inline-flex; align-self: flex-start; align-items: baseline; gap: 14px;
+    padding: 14px 24px; border: 1.5px solid var(--border-paper); border-radius: var(--radius-pill);
+    background: rgba(248, 244, 236, 0.9); }
+  .b-urlbar .k { font-family: var(--font-mono); font-weight: 700; font-size: 14px;
+    letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-muted); }
+  .b-urlbar .u { font-family: var(--font-mono); font-weight: 700; font-size: 22px;
+    letter-spacing: var(--ls-mono); color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="banner wc-grain" data-download-name="WCBLR-2026-Community-Poll">
+  <span class="b-ghost" style="font-size: 760px; right: -40px; top: -170px;">?</span>
+
+  <img class="b-skyline" src="../assets/illustrations/hero-banner.png" alt="Bengaluru city banner" style="bottom: 0; opacity: 0.9;" />
+
+  <div class="b-pad">
+    <div style="display:flex; align-items:flex-start; justify-content:space-between;">
+      <span class="b-eyebrow">
+        <span class="kn">ವರ್ಡ್‌ಕ್ಯಾಂಪ್ ಬೆಂಗಳೂರು</span>
+        <span class="div"></span>
+        <span class="tag">#WCBLR</span>
+      </span>
+      <span class="b-chip">get_option( 'your_time' );</span>
+    </div>
+
+    <div style="margin-top: 26px; display:flex; gap: 14px; flex-wrap: wrap; align-items: center;">
+      <span class="b-tag b-tag--crimson">Community poll</span>
+      <span class="b-tag b-tag--gold">Pick one, or two</span>
+    </div>
+
+    <h1 class="b-headline b-h-md" style="margin: 12px 0 0;">
+      Where does your <span class="b-italic">time go?</span>
+    </h1>
+
+    <p class="b-lead" style="margin-top: 10px; max-width: 780px;">
+      A WordCamp brings together more kinds of work than a poll has room for.
+      Pick where most of yours goes.
+    </p>
+
+    <div style="margin-top: 22px;">
+      <div class="ballot">
+        <div class="opt"><span class="box"></span><span class="nm">Build it</span><span class="ds">development, no-code, hosting, support, QA</span></div>
+        <div class="opt"><span class="box"></span><span class="nm">Design it</span><span class="ds">design, UX, accessibility, brand</span></div>
+        <div class="opt"><span class="box"></span><span class="nm">Share it</span><span class="ds">content, docs, marketing, SEO, teaching</span></div>
+        <div class="opt"><span class="box"></span><span class="nm">Run it</span><span class="ds">freelancing, agencies, site owners, meetups</span></div>
+      </div>
+    </div>
+
+    <div class="b-urlbar" style="margin-top: 16px;">
+      <span class="k">Vote</span>
+      <span class="u">poll sticker on our story</span>
+    </div>
+  </div>
+
+  <div class="b-marquee">
+    <div class="seg">
+      <span class="dot"></span><span>Community poll</span>
+      <span class="dot"></span><span>#WCBLR</span>
+      <span class="dot"></span><span>21 &amp; 22 Nov 2026</span>
+      <span class="dot"></span><span>Bengaluru, India</span>
+      <span class="dot"></span><span>Namma WordPress</span>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<script src="download-png.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+/* ── WordCamp Bengaluru 2026 · Effects ───────────────────────────────
+   The brand is mostly flat & printed. Shadows are soft and warm-tinted
+   (never neutral grey). The dark card floats above paper with a low,
+   wide espresso shadow. Halftone grain + a paper texture are the only
+   "textures"; everything else is solid fills and hairlines.            */
+
+:root {
+  /* Warm, low shadows (tinted with espresso, never pure black) */
+  --shadow-card:  0 18px 48px -24px rgba(43, 28, 20, 0.45);
+  --shadow-lift:  0 8px 24px -12px rgba(43, 28, 20, 0.35);
+  --shadow-press: 0 2px 6px -2px rgba(43, 28, 20, 0.30);
+
+  /* Focus ring — crimson, offset on paper */
+  --focus-ring: 0 0 0 3px rgba(201, 52, 74, 0.35);
+
+  /* Motion — calm, editorial. Quick ease-out, no bounce. */
+  --ease-out:  cubic-bezier(0.22, 1, 0.36, 1); /* @kind other */
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1); /* @kind other */
+  --dur-fast:  140ms; /* @kind other */
+  --dur-base:  240ms; /* @kind other */
+  --dur-slow:  420ms; /* @kind other */
+
+  /* Dashed ticket divider used inside the dark event card */
+  --ticket-dash: repeating-linear-gradient(
+      to right, var(--wc-on-dark-mut) 0 6px, transparent 6px 12px);
+}
+
+/* Paper grain — a subtle multiply noise the brand uses behind big
+   parchment areas. Apply with .wc-grain on a positioned element. */
+.wc-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+}

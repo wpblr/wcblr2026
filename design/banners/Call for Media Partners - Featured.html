@@ -1,0 +1,277 @@
+<!-- Banner · 1200×630 · Call for Media Partners — Featured
+     WP featured image / OG · 1200×630 · press credential + the two-sided deal -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>WCBLR 2026 Call for Media Partners — Featured</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="banner.css" />
+<!-- Design-system type throughout (Playfair Display / Hanken Grotesk /
+     Space Mono), so this pair matches the speaker, sponsor and guide
+     banners. Only Noto Sans Kannada is added, because the tokens carry
+     no Kannada face. -->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400..700&display=swap" />
+<style>
+  html, body { margin: 0; background: #d8cdb8; }
+
+  /* Landscape featured-image / OG variant (WordPress recommends 1200×630).
+     The square laid on its side: masthead rule, headline left, the press
+     credential top right, and the two-sided deal along the foot. */
+  .banner--feat { width: 1200px; height: 630px; }
+  .banner { --font-kn: 'Noto Sans Kannada', sans-serif; }
+  .banner--feat .b-pad { padding: 40px 64px 0; }
+
+  .s-mast { display: flex; align-items: baseline; justify-content: space-between; gap: 24px;
+    padding-bottom: 13px; border-bottom: 2px solid var(--wc-espresso); }
+  .s-mast .kn { font-family: var(--font-kn); font-size: 21px; line-height: 1.4; color: var(--wc-gold-deep); }
+  .s-mast .tag, .s-mast .yr { font-family: var(--font-mono); font-weight: 700; font-size: 13px;
+    letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-muted); }
+  .s-mast .tag { border-left: 1px solid var(--border-paper); padding-left: 14px; margin-left: 14px; }
+
+  .s-eyebrow { font-family: var(--font-mono); font-weight: 700;
+    font-size: 15px; letter-spacing: 0.02em; color: var(--accent); }
+  .s-kickrow { display: flex; align-items: center; gap: 18px; margin-top: 15px; }
+  /* The weekend itself. It goes where the speaker banner puts "Submissions
+     are live", but it does not announce the call as open: applications open
+     on 10 Aug, so a live/open claim would date the asset. It also fills a
+     real gap, since the gold stamp carries the application deadline and
+     nothing else here says when the camp actually is, which is the first
+     thing an editor needs in order to decide whether to send anyone. */
+  .s-status { display: inline-flex; align-items: center; gap: 9px; background: var(--accent);
+    color: var(--wc-on-dark); font-family: var(--font-mono); font-weight: 700; font-size: 12px;
+    letter-spacing: var(--ls-label); text-transform: uppercase; line-height: 1;
+    padding: 9px 16px; border-radius: var(--radius-pill); }
+  .s-status .d { width: 7px; height: 7px; border-radius: 50%; background: var(--wc-gold); flex: none; }
+
+  .s-h { font-family: var(--font-display); color: var(--wc-ink); margin: 6px 0 0; }
+  .s-h .a { display: block; font-weight: 900; font-size: 56px; line-height: 1.02; letter-spacing: -0.025em; }
+  .s-h .b { display: block; font-weight: 500; font-style: italic; font-size: 64px; line-height: 0.98;
+    letter-spacing: -0.02em; color: var(--accent); }
+
+  .s-lead { font-family: var(--font-body); font-weight: 400; font-size: 20px; line-height: 1.45;
+    color: var(--text-body); max-width: 470px; margin: 16px 0 0; }
+
+  /* ── The press credential. The only dark object in the kit, because this
+        is the only banner whose offer IS a pass hung round your neck. A
+        card rather than a disc keeps it clearly apart from the speaker
+        badge and the arrival stamp, so the four posters read as a set
+        rather than one template with the words swapped. ─────────────── */
+  .s-cred { position: absolute; top: 100px; right: 66px; z-index: 2; transform: rotate(-6deg);
+    width: 180px; padding: 22px 18px 20px; border-radius: 16px;
+    background: var(--surface-dark); color: var(--text-on-dark);
+    display: flex; flex-direction: column; align-items: center; gap: 11px;
+    box-shadow: 0 24px 44px -22px rgba(42, 29, 20, 0.62); }
+  /* The punched lanyard slot, in the page colour so it reads as a hole. */
+  .s-cred .slot { position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+    width: 50px; height: 9px; border-radius: 999px; background: var(--bg-page); }
+  .s-cred svg { width: 32px; height: 32px; display: block; margin-top: 9px; }
+  .s-cred .t { font-family: var(--font-display); font-weight: 900; font-size: 35px; line-height: 0.9;
+    letter-spacing: 0.02em; color: var(--wc-on-dark); }
+  .s-cred .rule { width: 100%; height: 1px; background: rgba(242, 236, 224, 0.22); }
+  .s-cred .y { font-family: var(--font-mono); font-weight: 700; font-size: 11px;
+    letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--wc-gold); line-height: 1; }
+  .s-cred .m { font-family: var(--font-mono); font-weight: 700; font-size: 10px;
+    letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--wc-on-dark-mut);
+    line-height: 1.5; text-align: center; }
+
+  /* Bengaluru, held right so the copy column stays on clean paper. Drawn
+     bigger and higher than on the guide banner, because the ledger below is
+     a taller object than that banner's route strip and would otherwise
+     leave only a sliver of the engraving showing. */
+  .feat-sky {
+    position: absolute; right: -30px; bottom: 76px; width: 690px; z-index: 1;
+    -webkit-mask-image: linear-gradient(100deg, transparent 0%, rgba(0,0,0,0.5) 24%, #000 52%);
+            mask-image: linear-gradient(100deg, transparent 0%, rgba(0,0,0,0.5) 24%, #000 52%);
+    pointer-events: none; user-select: none;
+  }
+
+  /* ── The deal. Not a ticket and not a route strip: a two-sided ledger,
+        because the whole proposition is an exchange and no money is in it.
+        Left column and right column are lifted straight from the post's
+        "how we pick" and "what you get". Translucent parchment, so the
+        engraving reads through it instead of being covered. ──────────── */
+  .s-dealwrap { position: absolute; left: 64px; right: 64px; bottom: 96px; z-index: 2;
+    transform: rotate(-0.8deg); }
+  .s-deal { position: relative; display: flex; align-items: stretch; overflow: hidden;
+    background: rgba(248, 244, 236, 0.91); border: 1.5px solid rgba(42, 29, 20, 0.55);
+    border-radius: 16px; box-shadow: 0 22px 44px -24px rgba(42, 29, 20, 0.5); }
+  .s-deal .side { flex: 1; min-width: 0; padding: 19px 24px 21px;
+    display: flex; flex-direction: column; gap: 12px; }
+  /* Deep enough to clear the swap disc, which straddles the seam and eats
+     half its width into each column. */
+  .s-deal .side + .side { border-left: 2px dashed rgba(42, 29, 20, 0.4); padding-left: 54px; }
+  .s-deal .k { font-family: var(--font-mono); font-weight: 700; font-size: 11px;
+    letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-muted); line-height: 1; }
+  .s-deal .side + .side .k { color: var(--wc-gold-deep); }
+  .s-deal ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 11px; }
+  .s-deal li { display: flex; align-items: center; gap: 11px;
+    font-family: var(--font-body); font-size: 17px; line-height: 1.15; color: var(--wc-ink); }
+  .s-deal li svg { width: 21px; height: 21px; display: block; flex: none; }
+
+  /* The swap, straddling the seam. Same idea as the speaker pass's
+     perforation notch: a small piece of hardware that says what the
+     object is without a word of explanation. */
+  .s-swap { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 2;
+    width: 44px; height: 44px; border-radius: 50%; background: var(--wc-paper-hi);
+    border: 2px solid var(--wc-espresso); display: flex; align-items: center; justify-content: center; }
+  .s-swap svg { width: 21px; height: 21px; display: block; }
+
+  /* The theme's rubber stamp, carrying the deadline. Kept almost entirely
+     outside the card: the ledger fills from its own top edge, so anything
+     dropped further in lands on the "we bring" rows. */
+  .s-stamp { position: absolute; top: -20px; right: 30px; transform: rotate(4deg); z-index: 3;
+    font-family: var(--font-mono); font-weight: 700; font-size: 13px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--wc-espresso); background: var(--wc-gold);
+    border: 2px dashed var(--wc-espresso); border-radius: 30px; padding: 8px 16px; white-space: nowrap; }
+
+  /* The gold band carries the one action rather than a generic ticker. */
+  .banner .b-marquee { background: var(--wc-gold); color: var(--wc-espresso); padding: 15px 0;
+    border-top: 2px solid var(--wc-espresso); border-bottom: 2px solid var(--wc-espresso);
+    font-family: var(--font-mono); font-weight: 700; font-size: 16px; letter-spacing: 0.07em;
+    justify-content: center; }
+  .banner .b-marquee .dot { background: var(--accent); width: 6px; height: 6px; margin: 0 22px; }
+</style>
+</head>
+<body>
+<div class="banner wc-grain banner--feat" data-download-name="WCBLR-2026-Call-for-Media-Partners-Featured">
+  <img class="feat-sky" src="../assets/illustrations/hero-banner.png" alt="" />
+
+  <div class="s-cred">
+    <span class="slot"></span>
+    <!-- Lucide id-card-lanyard, the site's own file, recoloured for dark. -->
+    <svg viewBox="0 0 24 24" fill="none" stroke="#E1A527" stroke-width="1.8"
+         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M13.5 8h-3" />
+      <path d="m15 2-1 2h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h3" />
+      <path d="M16.899 22A5 5 0 0 0 7.1 22" />
+      <path d="m9 2 3 6" />
+      <circle cx="12" cy="15" r="3" />
+    </svg>
+    <span class="t">PRESS</span>
+    <span class="rule"></span>
+    <span class="y">WCBLR 2026</span>
+    <span class="m">One pass each<br />Both days</span>
+  </div>
+
+  <div class="b-pad">
+    <div class="s-mast">
+      <span>
+        <span class="kn">ವರ್ಡ್‌ಕ್ಯಾಂಪ್ ಬೆಂಗಳೂರು</span>
+        <span class="tag">#WCBLR</span>
+      </span>
+      <span class="yr">Bengaluru &middot; 2026</span>
+    </div>
+
+    <div class="s-kickrow">
+      <span class="s-eyebrow">// call_for_media_partners</span>
+      <span class="s-status"><span class="d"></span>21&ndash;22 November</span>
+    </div>
+
+    <h1 class="s-h">
+      <span class="a">Call for</span>
+      <span class="b">Media Partners.</span>
+    </h1>
+
+    <p class="s-lead">
+      For the writers, podcasters and communities who will tell the story.
+    </p>
+  </div>
+
+  <div class="s-dealwrap">
+    <span class="s-stamp">Apply by 31 Aug</span>
+
+    <div class="s-deal">
+      <div class="side">
+        <span class="k">You bring</span>
+        <ul>
+          <li>
+            <!-- square-pen -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C9344A" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+              <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
+            </svg>
+            <span>Your words, your angle</span>
+          </li>
+          <li>
+            <!-- mic -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C9344A" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 19v3" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+              <rect x="9" y="2" width="6" height="13" rx="3" />
+            </svg>
+            <span>An audience that lands</span>
+          </li>
+          <li>
+            <!-- hand-helping -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C9344A" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M11 12h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 14" />
+              <path d="m7 18 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9" />
+              <path d="m2 13 6 6" />
+            </svg>
+            <span>Reach we do not have</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="side">
+        <span class="k">We bring</span>
+        <ul>
+          <li>
+            <!-- ticket -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="#9B711E" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+              <path d="M13 5v2" /><path d="M13 17v2" /><path d="M13 11v2" />
+            </svg>
+            <span>A pass, both days</span>
+          </li>
+          <li>
+            <!-- users -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="#9B711E" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <path d="M16 3.128a4 4 0 0 1 0 7.744" />
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+              <circle cx="9" cy="7" r="4" />
+            </svg>
+            <span>Speakers and organisers</span>
+          </li>
+          <li>
+            <!-- archive -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="#9B711E" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="20" height="5" x="2" y="3" rx="1" />
+              <path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8" />
+              <path d="M10 12h4" />
+            </svg>
+            <span>News under embargo</span>
+          </li>
+        </ul>
+      </div>
+
+      <span class="s-swap">
+        <!-- arrow-left-right -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="#C9344A" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8 3 4 7l4 4" /><path d="M4 7h16" />
+          <path d="m16 21 4-4-4-4" /><path d="M20 17H4" />
+        </svg>
+      </span>
+    </div>
+  </div>
+
+  <div class="b-marquee">
+    <div class="seg">
+      <span>APPLY TO PARTNER</span>
+      <span class="dot"></span><span>BENGALURU.WORDCAMP.ORG/CALL-FOR-MEDIA-PARTNERS</span>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<script src="download-png.js"></script>
+</body>
+</html>

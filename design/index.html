@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>WCBLR 2026 · Banner kit</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg-page); color: var(--text-display);
+    font-family: var(--font-body); padding: 56px 40px 80px; }
+  .wrap { max-width: 1180px; margin: 0 auto; }
+
+  .kicker { font-family: var(--font-mono); font-weight: 700; font-size: 13px;
+    letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--accent); }
+  h1 { font-family: var(--font-display); font-weight: 900; font-size: 56px; line-height: 1;
+    letter-spacing: var(--ls-display); margin: 12px 0 0; }
+  h1 em { font-style: italic; font-weight: 600; color: var(--accent); }
+  .sub { font-size: 18px; line-height: 1.6; color: var(--text-body); max-width: 660px; margin: 16px 0 0; }
+  .sub code { font-family: var(--font-mono); font-size: 15px; background: var(--wc-paper-lo);
+    padding: 2px 7px; border-radius: var(--radius-xs); }
+
+  .rule { height: 2px; background: var(--wc-gold); margin: 40px 0 0;
+    border-top: 1px solid var(--surface-dark); border-bottom: 1px solid var(--surface-dark); }
+
+  /* ── Sets ──────────────────────────────────────────────────────────────
+     Banners are made and used as a campaign, not as a pile: the square and
+     the featured of one call always ship together and always change
+     together. So the gallery groups by campaign, and each set gets a ruled
+     masthead in the same voice the banners themselves use. */
+  .set { margin-top: 56px; }
+  .set-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px;
+    padding-bottom: 16px; margin-bottom: 28px; border-bottom: 1.5px solid var(--border-paper); }
+  .set-kick { display: block; font-family: var(--font-mono); font-weight: 700; font-size: 13px;
+    letter-spacing: 0.02em; color: var(--accent); }
+  .set-name { font-family: var(--font-display); font-weight: 900; font-size: 34px; line-height: 1.1;
+    letter-spacing: var(--ls-display); margin: 8px 0 0; }
+  .set-note { font-size: 15px; line-height: 1.55; color: var(--text-body); max-width: 460px;
+    text-align: right; margin: 0; }
+
+  /* Two up, so a pair sits side by side and the previews stay big enough to
+     judge. auto-fill would reflow a 2-card set into an odd 3-column row.
+     Stretch, not start: a square and a landscape preview are different heights,
+     so without it the row ends ragged. .shot keeps its aspect ratio either way,
+     so the slack goes to .meta and the two Open buttons line up. */
+  .grid { display: grid; align-items: stretch; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+  .card { border: 1.5px solid var(--border-paper); border-radius: var(--radius-lg);
+    background: var(--surface-card); overflow: hidden; display: flex; flex-direction: column; }
+  /* Each preview is the live banner in an iframe, scaled down to the card
+     width — edit a banner, refresh, and the change shows up here. The box
+     holds the banner's aspect ratio; fitPreviews() sets the scale factor
+     (CSS can't do it: scale() needs a unitless number, so no cqw math). */
+  .shot { position: relative; overflow: hidden; background: var(--wc-paper-lo);
+    border-bottom: 1.5px solid var(--border-paper); }
+  .shot.sq   { aspect-ratio: 1 / 1; }
+  .shot.wide { aspect-ratio: 1200 / 630; }
+  .shot iframe { position: absolute; top: 0; left: 0; border: 0;
+    transform-origin: top left; pointer-events: none; }
+
+  .meta { padding: 18px 22px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .nm { font-family: var(--font-display); font-weight: 800; font-size: 24px; line-height: 1.1; }
+  .dims { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono);
+    font-weight: 700; font-size: 12px; letter-spacing: var(--ls-label); text-transform: uppercase;
+    color: var(--text-muted); }
+  /* Which of the two jobs this file does, told at a glance. */
+  .fmt { border-radius: var(--radius-pill); padding: 5px 11px; line-height: 1; color: var(--wc-espresso); }
+  .fmt--sq { background: var(--wc-gold); }
+  .fmt--wide { background: var(--wc-paper-lo); border: 1px solid var(--border-paper); }
+  .note { font-size: 15px; line-height: 1.5; color: var(--text-body); flex: 1; }
+  .actions { display: flex; align-items: center; gap: 10px; }
+  .open { font-family: var(--font-body); font-weight: 700; font-size: 15px;
+    text-decoration: none; color: var(--wc-on-dark); background: var(--accent);
+    padding: 11px 20px; border-radius: var(--radius-pill); }
+  .open:hover { background: var(--accent-hover); }
+  /* Outline, not crimson: opening the banner is the primary action, and two
+     solid red pills side by side would make neither of them read as the one. */
+  .dl { font-family: var(--font-body); font-weight: 700; font-size: 15px; cursor: pointer;
+    color: var(--wc-espresso); background: transparent;
+    border: 1.5px solid var(--wc-espresso); border-radius: var(--radius-pill);
+    padding: 10px 20px; transition: background 0.15s ease, color 0.15s ease; }
+  .dl:hover:not(:disabled) { background: var(--wc-espresso); color: var(--wc-paper); }
+  .dl:disabled { cursor: default; opacity: 0.5; }
+
+  .foot { margin-top: 56px; font-family: var(--font-mono); font-size: 13px; line-height: 1.9;
+    color: var(--text-muted); border-top: 1px solid var(--border-paper); padding-top: 24px; }
+  .foot b { color: var(--text-body); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="kicker">// banner_kit</span>
+  <h1>WordCamp Bengaluru 2026 <em>banners.</em></h1>
+  <p class="sub">
+    Every banner in the kit, previewed live. Open one, hit <b>Download PNG</b>, and you get
+    a pixel-exact export at its native size. Serve this folder over HTTP
+    (<code>./serve.sh</code>) rather than opening it off the disk, or the export will trip
+    over canvas security.
+  </p>
+
+  <div class="rule"></div>
+
+  <section class="set">
+    <div class="set-head">
+      <div>
+        <span class="set-kick">// call_for_speakers</span>
+        <h2 class="set-name">Call for Speakers</h2>
+      </div>
+      <p class="set-note">The blank speaker pass laid over the city. Deadline 14 Sep 2026,
+        submissions at bengaluru.wordcamp.org/call-for-speakers.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="shot sq">
+          <iframe src="banners/Call for Speakers.html" width="1080" height="1080" scrolling="no" title="Call for Speakers"></iframe>
+        </div>
+        <div class="meta">
+          <span class="nm">Call for Speakers</span>
+          <span class="dims"><span class="fmt fmt--sq">Square</span>1080 × 1080</span>
+          <span class="note">Instagram / LinkedIn square. Submissions open, deadline, the three
+            session formats and the submit URL.</span>
+          <div class="actions">
+            <a class="open" href="banners/Call for Speakers.html">Open</a>
+            <button class="dl" type="button" data-dl>Download PNG</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="shot wide">
+          <iframe src="banners/Call for Speakers - Featured.html" width="1200" height="630" scrolling="no" title="Call for Speakers — Featured"></iframe>
+        </div>
+        <div class="meta">
+          <span class="nm">Call for Speakers — Featured</span>
+          <span class="dims"><span class="fmt fmt--wide">Featured</span>1200 × 630</span>
+          <span class="note">The WordPress featured image on the call-for-speakers page, and the
+            card that shows when the link is shared.</span>
+          <div class="actions">
+            <a class="open" href="banners/Call for Speakers - Featured.html">Open</a>
+            <button class="dl" type="button" data-dl>Download PNG</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="set">
+    <div class="set-head">
+      <div>
+        <span class="set-kick">// call_for_sponsors</span>
+        <h2 class="set-name">Call for Sponsors</h2>
+      </div>
+      <p class="set-note">The pair everything else was built to match.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="shot sq">
+          <iframe src="banners/Call for Sponsors.html" width="1080" height="1080" scrolling="no" title="Call for Sponsors"></iframe>
+        </div>
+        <div class="meta">
+          <span class="nm">Call for Sponsors</span>
+          <span class="dims"><span class="fmt fmt--sq">Square</span>1080 × 1080</span>
+          <span class="note">The reference for type, spacing and the gold marquee.</span>
+          <div class="actions">
+            <a class="open" href="banners/Call for Sponsors.html">Open</a>
+            <button class="dl" type="button" data-dl>Download PNG</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="shot wide">
+          <iframe src="banners/Call for Sponsors - Featured.html" width="1200" height="630" scrolling="no" title="Call for Sponsors — Featured"></iframe>
+        </div>
+        <div class="meta">
+          <span class="nm">Call for Sponsors — Featured</span>
+          <span class="dims"><span class="fmt fmt--wide">Featured</span>1200 × 630</span>
+          <span class="note">Landscape sponsor variant, mirrored by the speaker featured banner.</span>
+          <div class="actions">
+            <a class="open" href="banners/Call for Sponsors - Featured.html">Open</a>
+            <button class="dl" type="button" data-dl>Download PNG</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="set">
+    <div class="set-head">
+      <div>
+        <span class="set-kick">// call_for_media_partners</span>
+        <h2 class="set-name">Call for Media Partners</h2>
+      </div>
+      <p class="set-note">A press credential and a two-sided ledger, because the whole offer is a
+        trade with no money in it. Deadline 31 Aug 2026.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="shot sq">
+          <iframe src="banners/Call for Media Partners.html" width="1080" height="1080" scrolling="no" title="Call for Media Partners"></iframe>
+        </div>
+        <div class="meta">
+          <span class="nm">Call for Media Partners</span>
+          <span class="dims"><span class="fmt fmt--sq">Square</span>1080 × 1080</span>
+          <span class="note">Instagram / LinkedIn square, for the run-up to the 31 August
+            deadline.</span>
+          <div class="actions">
+            <a class="open" href="banners/Call for Media Partners.html">Open</a>
+            <button class="dl" type="button" data-dl>Download PNG</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="shot wide">
+          <iframe src="banners/Call for Media Partners - Featured.html" width="1200" height="630" scrolling="no" title="Call for Media Partners — Featured"></iframe>
+        </div>
+        <div class="meta">
+          <span class="nm">Call for Media Partners — Featured</span>
+          <span class="dims"><span class="fmt fmt--wide">Featured</span>1200 × 630</span>
+          <span class="note">The featured image on the call post, and the card that shows when the
+            link is sent to an editor or shared to socials.</span>
+          <div class="actions">
+            <a class="open" href="banners/Call for Media Partners - Featured.html">Open</a>
+            <button class="dl" type="button" data-dl>Download PNG</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="set">
+    <div class="set-head">
+      <div>
+        <span class="set-kick">// city_guide</span>
+        <h2 class="set-name">Travel and City Guide</h2>
+      </div>
+      <p class="set-note">An arrival stamp for the weekend, and the four ways of getting around
+        on translucent parchment. Same modes and icons as the guide post.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="shot sq">
+          <iframe src="banners/Travel and City Guide.html" width="1080" height="1080" scrolling="no" title="Travel and City Guide"></iframe>
+        </div>
+        <div class="meta">
+          <span class="nm">Travel and City Guide</span>
+          <span class="dims"><span class="fmt fmt--sq">Square</span>1080 × 1080</span>
+          <span class="note">Instagram / LinkedIn square, for pointing people at the guide ahead
+            of the weekend.</span>
+          <div class="actions">
+            <a class="open" href="banners/Travel and City Guide.html">Open</a>
+            <button class="dl" type="button" data-dl>Download PNG</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="shot wide">
+          <iframe src="banners/Travel and City Guide - Featured.html" width="1200" height="630" scrolling="no" title="Travel and City Guide — Featured"></iframe>
+        </div>
+        <div class="meta">
+          <span class="nm">Travel and City Guide — Featured</span>
+          <span class="dims"><span class="fmt fmt--wide">Featured</span>1200 × 630</span>
+          <span class="note">The featured image on the guide post, and the card that shows when
+            the link is shared to tickets, socials or the know-before-you-go email.</span>
+          <div class="actions">
+            <a class="open" href="banners/Travel and City Guide - Featured.html">Open</a>
+            <button class="dl" type="button" data-dl>Download PNG</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="set">
+    <div class="set-head">
+      <div>
+        <span class="set-kick">// what_happens_at_a_wordcamp</span>
+        <h2 class="set-name">What Happens at a WordCamp</h2>
+      </div>
+      <p class="set-note">A filter coffee tumbler standing in its davara, and a day drawn as
+        bars with the unscheduled stretches in gold. For first timers and anyone still deciding.
+        No deadline on this one, so there is no stamp.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="shot sq">
+          <iframe src="banners/What Happens at a WordCamp.html" width="1080" height="1080" scrolling="no" title="What Happens at a WordCamp"></iframe>
+        </div>
+        <div class="meta">
+          <span class="nm">What Happens at a WordCamp</span>
+          <span class="dims"><span class="fmt fmt--sq">Square</span>1080 × 1080</span>
+          <span class="note">Instagram / LinkedIn square, for the first timer guide. Evergreen,
+            so it can go out again whenever the question comes up.</span>
+          <div class="actions">
+            <a class="open" href="banners/What Happens at a WordCamp.html">Open</a>
+            <button class="dl" type="button" data-dl>Download PNG</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="shot wide">
+          <iframe src="banners/What Happens at a WordCamp - Featured.html" width="1200" height="630" scrolling="no" title="What Happens at a WordCamp — Featured"></iframe>
+        </div>
+        <div class="meta">
+          <span class="nm">What Happens at a WordCamp — Featured</span>
+          <span class="dims"><span class="fmt fmt--wide">Featured</span>1200 × 630</span>
+          <span class="note">The featured image on the guide post, and the card that shows when
+            the link is shared. Drops the object caption; there is no room for it at 630 tall.</span>
+          <div class="actions">
+            <a class="open" href="banners/What Happens at a WordCamp - Featured.html">Open</a>
+            <button class="dl" type="button" data-dl>Download PNG</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="set">
+    <div class="set-head">
+      <div>
+        <span class="set-kick">// community_poll</span>
+        <h2 class="set-name">Community Poll</h2>
+      </div>
+      <p class="set-note">A one-off rather than a pair. Pairs with the poll kit in
+        wordcamp/social/.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="shot sq">
+          <iframe src="banners/Community Poll.html" width="1080" height="1080" scrolling="no" title="Community Poll"></iframe>
+        </div>
+        <div class="meta">
+          <span class="nm">Community Poll</span>
+          <span class="dims"><span class="fmt fmt--sq">Square</span>1080 × 1080</span>
+          <span class="note">Instagram poll post. The four options as a ballot on translucent
+            parchment, so the skyline reads through the lower rows.</span>
+          <div class="actions">
+            <a class="open" href="banners/Community Poll.html">Open</a>
+            <button class="dl" type="button" data-dl>Download PNG</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">
+    <b>tools/check.sh</b> "banners/*.html" &nbsp;→&nbsp; layout smoke test (clipping, overflow, broken images, font fallback)<br />
+    <b>tools/render.sh</b> "banners/X.html" exports/x.png 1080 1080 &nbsp;→&nbsp; headless PNG, no browser needed<br />
+    <b>README.md</b> &nbsp;→&nbsp; how the pieces fit and the house rules for a new banner
+  </div>
+</div>
+
+<script>
+  // Fit each full-size banner iframe into its card.
+  function fitPreviews() {
+    document.querySelectorAll('.shot iframe').forEach(function (f) {
+      var box = f.parentElement.clientWidth;
+      f.style.transform = 'scale(' + (box / f.width) + ')';
+    });
+  }
+
+  // Each banner ships its own floating "Download PNG" pill. Useful when
+  // the banner is open on its own, noise inside a thumbnail — so hide it
+  // in the preview. Needs same origin, i.e. served over HTTP, not file://;
+  // it silently no-ops otherwise.
+  function hideExportPill(f) {
+    try {
+      var d = f.contentDocument;
+      if (!d || !d.head) return;
+      var s = d.createElement('style');
+      s.textContent = '#wc-download-btn { display: none !important; }';
+      d.head.appendChild(s);
+    } catch (e) { /* cross-origin (file://) — leave it be */ }
+  }
+
+  document.querySelectorAll('.shot iframe').forEach(function (f) {
+    f.addEventListener('load', function () { hideExportPill(f); fitPreviews(); });
+  });
+  fitPreviews();
+  window.addEventListener('resize', fitPreviews);
+  window.addEventListener('load', fitPreviews);
+
+  // ── Download a banner's PNG from its card ─────────────────────────────
+  // Each banner exposes window.wcExportBanner() (see banners/download-png.js),
+  // which resolves with { name, dataUrl } and deliberately does NOT download,
+  // so the gallery rasterises through the iframe and saves from here. No
+  // duplicated font-embedding or export-size logic lives in this file.
+  function saveDataUrl(name, dataUrl) {
+    var a = document.createElement('a');
+    a.download = name;
+    a.href = dataUrl;
+    a.click();
+  }
+
+  document.querySelectorAll('[data-dl]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (location.protocol === 'file:') {
+        alert('Downloading from the gallery needs the files served over HTTP.\nRun ./serve.sh and open localhost instead.');
+        return;
+      }
+      var frame = btn.closest('.card').querySelector('.shot iframe');
+      var win = frame && frame.contentWindow;
+      var label = btn.textContent;
+
+      btn.disabled = true;
+      btn.textContent = 'Rendering…';
+
+      Promise.resolve().then(function () {
+        if (!win || typeof win.wcExportBanner !== 'function') {
+          // Either the preview has not finished loading, or its scripts failed.
+          throw new Error('Cannot reach ' + frame.title + '. Is it still loading?');
+        }
+        return win.wcExportBanner();
+      }).then(function (out) {
+        saveDataUrl(out.name, out.dataUrl);
+        btn.textContent = 'Downloaded';
+      }).catch(function (e) {
+        console.error('Banner export failed:', e);
+        btn.textContent = 'Export failed';
+      }).then(function () {
+        // Leave the outcome up long enough to read, then go back to normal.
+        setTimeout(function () { btn.textContent = label; btn.disabled = false; }, 2200);
+      });
+    });
+  });
+</script>
+</body>
+</html>

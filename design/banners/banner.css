@@ -1,0 +1,101 @@
+/* ════════════════════════════════════════════════════════════════════
+   WordCamp Bengaluru 2026 — Social banner scaffolding
+   Shared primitives for the 1080×1080 social kit. Link styles.css first
+   (for tokens), then this file. Build new banners by composing these
+   classes — keep the colorways and type rules intact.
+   ════════════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+.banner {
+  position: relative;
+  width: 1080px;
+  height: 1080px;
+  overflow: hidden;
+  background: var(--bg-page);
+  color: var(--text-display);
+  font-family: var(--font-body);
+}
+.banner--dark { background: var(--surface-dark); color: var(--text-on-dark); }
+.banner--mono { background: var(--wc-mono-paper); color: var(--wc-mono-ink); }
+
+/* paper grain overlay */
+.banner.wc-grain::after { opacity: 0.4; z-index: 1; }
+
+.b-pad { position: relative; z-index: 2; padding: var(--canvas-pad); height: 100%; display: flex; flex-direction: column; }
+
+/* ── Eyebrow (Kannada + romanised tag) ─────────────────────────────── */
+.b-eyebrow { display: inline-flex; align-items: center; gap: 18px; }
+.b-eyebrow .kn { font-family: var(--font-display); font-size: 30px; color: var(--accent); line-height: 1; white-space: nowrap; }
+.b-eyebrow .div { width: 1px; height: 26px; background: var(--border-paper); }
+.banner--dark .b-eyebrow .div, .banner--mono .b-eyebrow .div { background: var(--wc-on-dark-mut); }
+.b-eyebrow .tag { font-family: var(--font-mono); font-weight: 700; font-size: 16px;
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-muted); line-height: 1; white-space: nowrap; }
+.banner--dark .b-eyebrow .tag, .banner--mono .b-eyebrow .tag { color: var(--wc-on-dark-mut); }
+.banner--mono .b-eyebrow .tag { color: var(--wc-mono-mid); }
+
+/* ── Headlines ─────────────────────────────────────────────────────── */
+.b-headline { font-family: var(--font-display); font-weight: 900; line-height: 0.95;
+  letter-spacing: var(--ls-display); color: var(--text-display); }
+.banner--dark .b-headline { color: var(--text-on-dark); }
+.banner--mono .b-headline { color: var(--wc-mono-ink); }
+.b-italic { font-style: italic; font-weight: 600; color: var(--accent); }
+.b-h-xl { font-size: 132px; }
+.b-h-lg { font-size: 104px; }
+.b-h-md { font-size: 76px; }
+
+.b-lead { font-family: var(--font-body); font-size: 30px; line-height: 1.45; color: var(--text-body); max-width: 720px; }
+.banner--dark .b-lead { color: var(--wc-on-dark-mut); }
+.banner--mono .b-lead { color: var(--wc-mono-mid); }
+
+/* ── Chips, tags, buttons ──────────────────────────────────────────── */
+.b-chip { display: inline-flex; align-items: center; font-family: var(--font-mono); font-size: 20px;
+  letter-spacing: var(--ls-mono); color: var(--wc-gold-deep); padding: 12px 22px;
+  border: 1.5px dashed var(--wc-gold-deep); border-radius: var(--radius-pill); line-height: 1; }
+.banner--dark .b-chip, .banner--mono .b-chip { color: var(--wc-gold); border-color: var(--wc-gold); }
+
+.b-tag { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-weight: 700;
+  font-size: 17px; letter-spacing: var(--ls-label); text-transform: uppercase; line-height: 1;
+  padding: 12px 22px; border-radius: var(--radius-pill); }
+.b-tag--crimson { background: var(--accent); color: var(--wc-on-dark); }
+.b-tag--gold { background: var(--wc-gold); color: var(--surface-dark); }
+.b-tag--outline { border: 1.5px solid var(--border-paper); color: var(--text-body); }
+.banner--dark .b-tag--outline, .banner--mono .b-tag--outline { border-color: var(--wc-on-dark-mut); color: var(--text-on-dark); }
+.banner--mono .b-tag--outline { border-color: var(--wc-mono-mid); color: var(--wc-mono-ink); }
+
+.b-btn { display: inline-flex; align-items: center; justify-content: center; gap: 12px; white-space: nowrap;
+  font-family: var(--font-body); font-weight: 700; font-size: 26px; line-height: 1;
+  padding: 24px 44px; border-radius: var(--radius-pill); border: 1.5px solid transparent; }
+.b-btn--primary { background: var(--accent); color: var(--wc-on-dark); }
+.b-btn--outline { background: transparent; border-color: currentColor; }
+
+/* ── Key/value rows ────────────────────────────────────────────────── */
+.b-rows { display: flex; flex-direction: column; gap: 18px; }
+.b-row { display: flex; align-items: baseline; gap: 18px; }
+.b-row .k { font-family: var(--font-mono); font-weight: 700; font-size: 16px; letter-spacing: var(--ls-label);
+  text-transform: uppercase; color: var(--text-muted); min-width: 130px; }
+.banner--dark .b-row .k, .banner--mono .b-row .k { color: var(--wc-on-dark-mut); }
+.banner--mono .b-row .k { color: var(--wc-mono-mid); }
+.b-row .v { font-family: var(--font-display); font-size: 34px; line-height: 1.1; white-space: nowrap; }
+
+/* ── Static marquee strip (anchored bottom) ────────────────────────── */
+.b-marquee { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; background: var(--marquee-bg);
+  color: var(--marquee-ink); padding: 22px 0; font-family: var(--font-mono); font-weight: 700; font-size: 20px;
+  letter-spacing: var(--ls-label); text-transform: uppercase; white-space: nowrap; overflow: hidden;
+  display: flex; align-items: center; }
+.b-marquee .seg { display: inline-flex; align-items: center; }
+.b-marquee .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--marquee-dot); margin: 0 28px; flex-shrink: 0; }
+
+/* ── Illustration helpers ──────────────────────────────────────────── */
+.b-skyline { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; z-index: 1; display: block; }
+.b-coffee { position: absolute; z-index: 2; }
+.b-medallion { position: absolute; z-index: 2; }
+
+/* ghost numeral */
+.b-ghost { position: absolute; font-family: var(--font-display); font-weight: 900; line-height: 0.8;
+  color: var(--wc-paper-lo); z-index: 0; pointer-events: none; user-select: none; }
+.banner--dark .b-ghost { color: rgba(255,255,255,0.05); }
+.banner--mono .b-ghost { color: rgba(28,26,23,0.06); }
+
+/* duotone speaker photo to match the halftone world */
+.b-portrait { filter: grayscale(1) contrast(1.05) sepia(0.28) brightness(0.98); }

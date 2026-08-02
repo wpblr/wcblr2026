@@ -4,3 +4,6 @@ node_modules/
 # 3.1MB of it was committed once by a git add -A run whose cwd was this
 # repo rather than wordcamp/website. Never track it.
 tools/.preview-cache/
+
+# Banner PNGs from design/tools/render.sh. Regenerate, don't commit.
+design/exports/

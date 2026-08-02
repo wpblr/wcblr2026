@@ -1,0 +1,66 @@
+/* ── WordCamp Bengaluru 2026 · Color ─────────────────────────────────
+   Two coexisting moods:
+   1. PARCHMENT — warm cream paper, espresso ink, crimson + gold accents.
+      The everyday brand voice (website, color banners).
+   2. MONOCHROME — sepia/charcoal halftone illustration on paper.
+      Used for the WordCamp social treatment (speaker cards, posters).
+   ─────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* ── Base palette — raw values ──────────────────────────────────── */
+
+  /* Parchment / paper family */
+  --wc-paper:        #F2ECE0;  /* primary page background */
+  --wc-paper-hi:     #F8F4EC;  /* lifted paper (cards on paper)        */
+  --wc-paper-lo:     #E7DECC;  /* sunk paper, hairline fills           */
+  --wc-paper-line:   #D9CFBb;  /* hairline borders on paper            */
+
+  /* Espresso / ink family */
+  --wc-espresso:     #2B1C14;  /* dark surface (the event card)        */
+  --wc-espresso-hi:  #3A2A20;  /* raised area inside dark surface      */
+  --wc-ink:          #111010;  /* near-black display ink on paper      */
+  --wc-ink-70:       #4A413A;  /* secondary ink / body on paper        */
+  --wc-ink-45:       #7C7269;  /* muted captions on paper              */
+
+  /* Crimson — "filter coffee" red, the primary accent */
+  --wc-crimson:      #C9344A;
+  --wc-crimson-hi:   #DA4257;  /* hover / lifted                       */
+  --wc-crimson-lo:   #A8293C;  /* press / deep                         */
+
+  /* Gold — the marquee + highlight amber */
+  --wc-gold:         #E1A527;
+  --wc-gold-deep:    #9B711E;  /* shadowed gold, gold text on paper    */
+
+  /* Text on dark surfaces */
+  --wc-on-dark:      #F2ECE0;  /* cream text on espresso               */
+  --wc-on-dark-mut:  #B6B3AA;  /* taupe muted text/labels on espresso  */
+
+  /* Monochrome (sepia halftone) family */
+  --wc-mono-ink:     #1C1A17;  /* charcoal — darkest illustration tone */
+  --wc-mono-mid:     #6E665B;  /* warm grey mid-tone                   */
+  --wc-mono-soft:    #B7AE9F;  /* faded sepia                          */
+  --wc-mono-paper:   #F4F1EA;  /* mono canvas paper                    */
+
+  /* ── Semantic aliases ───────────────────────────────────────────── */
+  --bg-page:           var(--wc-paper);
+  --surface-card:      var(--wc-paper-hi);
+  --surface-dark:      var(--wc-espresso);
+  --surface-dark-hi:   var(--wc-espresso-hi);
+
+  --text-display:      var(--wc-ink);
+  --text-body:         var(--wc-ink-70);
+  --text-muted:        var(--wc-ink-45);
+  --text-on-dark:      var(--wc-on-dark);
+  --text-on-dark-mut:  var(--wc-on-dark-mut);
+
+  --accent:            var(--wc-crimson);
+  --accent-hover:      var(--wc-crimson-hi);
+  --accent-press:      var(--wc-crimson-lo);
+  --highlight:         var(--wc-gold);
+
+  --border-paper:      var(--wc-paper-line);
+
+  --marquee-bg:        var(--wc-gold);
+  --marquee-ink:       var(--wc-espresso);
+  --marquee-dot:       var(--wc-crimson);
+}

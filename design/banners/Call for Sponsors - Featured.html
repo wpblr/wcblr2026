@@ -1,0 +1,95 @@
+<!-- Banner · 1200×630 · Call for Sponsors — Featured
+     WP featured image / OG · 1200×630 · parchment · skyline -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>WCBLR 2026 Call for Sponsors — Featured</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="banner.css" />
+<style>
+  html, body { margin: 0; background: #d8cdb8; }
+  /* Landscape featured-image / OG variant (WordPress recommended 1200×630). */
+  .banner--feat { width: 1200px; height: 630px; }
+  .banner--feat .b-pad { padding: 56px 64px; }
+  .feat-sky {
+    position: absolute; right: -30px; bottom: 0; width: 720px; z-index: 1;
+    -webkit-mask-image: linear-gradient(100deg, transparent 0%, rgba(0,0,0,0.55) 24%, #000 50%);
+            mask-image: linear-gradient(100deg, transparent 0%, rgba(0,0,0,0.55) 24%, #000 50%);
+    pointer-events: none; user-select: none;
+  }
+  .feat-h { font-size: 88px; line-height: 0.92; }
+  .tier-label { font-family: var(--font-mono); font-weight: 700; font-size: 13px; letter-spacing: var(--ls-label);
+    text-transform: uppercase; color: var(--text-muted); }
+  .tier-strip { display: flex; margin-top: 12px; border: 1.5px solid var(--border-paper);
+    border-radius: var(--radius-lg); overflow: hidden; background: var(--surface-card); }
+  .tier { flex: 1; padding: 12px 18px; display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+    border-top: 4px solid; }
+  .tier + .tier { border-left: 1.5px solid var(--border-paper); }
+  .tier .nm { font-family: var(--font-display); font-weight: 800; font-size: 20px; line-height: 1; color: var(--wc-ink); }
+  .tier .price { font-family: var(--font-display); font-weight: 800; font-size: 22px; line-height: 1; color: var(--wc-crimson); }
+  .cta-line { font-family: var(--font-display); font-weight: 800; font-style: italic; font-size: 28px; color: var(--wc-crimson); }
+  .b-urlbar { display: inline-flex; align-items: baseline; gap: 14px;
+    padding: 13px 22px; border: 1.5px solid var(--border-paper); border-radius: var(--radius-pill);
+    background: var(--surface-card); }
+  .b-urlbar .k { font-family: var(--font-mono); font-weight: 700; font-size: 13px;
+    letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-muted); }
+  .b-urlbar .u { font-family: var(--font-mono); font-weight: 700; font-size: 20px;
+    letter-spacing: var(--ls-mono); color: var(--accent); }
+  .feat-deadline {
+    display: inline-flex; align-items: center; gap: 14px; font-family: var(--font-mono); font-weight: 700;
+    font-size: 20px; letter-spacing: var(--ls-label); text-transform: uppercase; line-height: 1;
+    color: var(--surface-dark); background: var(--wc-gold); padding: 14px 24px; border-radius: var(--radius-pill);
+  }
+  .feat-deadline .d-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+</style>
+</head>
+<body>
+<div class="banner wc-grain banner--feat" data-download-name="WCBLR-2026-Call-for-Sponsors-Featured">
+  <span class="b-ghost" style="font-size: 520px; right: 40px; bottom: -120px; z-index: 0;">₹</span>
+  <img class="feat-sky" src="../assets/illustrations/hero-banner.png" alt="" />
+
+  <div class="b-pad">
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; gap: 24px;">
+      <span class="b-eyebrow">
+        <span class="kn">ವರ್ಡ್‌ಕ್ಯಾಂಪ್ ಬೆಂಗಳೂರು</span>
+        <span class="div"></span>
+        <span class="tag">#WCBLR</span>
+      </span>
+      <span class="b-chip">add_filter( 'sponsors' );</span>
+    </div>
+
+    <div style="margin-top: 26px; display:flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+      <span class="b-tag b-tag--crimson">Sponsorships open</span>
+      <span class="b-tag b-tag--gold">Closes 15 Oct 2026</span>
+    </div>
+
+    <h1 class="b-headline feat-h" style="margin: 16px 0 0; max-width: 720px;">
+      Call for <span class="b-italic">Sponsors.</span>
+    </h1>
+
+    <p class="b-lead" style="margin-top: 16px; font-size: 24px; max-width: 540px;">
+      Put your brand in front of the developers, designers and agencies who
+      build the open web, and shape the tools their teams and clients run on.
+    </p>
+
+    <div style="margin-top: auto;">
+      <div style="max-width: 620px;">
+        <span class="tier-label">Sponsorship tiers</span>
+        <div class="tier-strip">
+          <div class="tier" style="border-top-color: #c99a2e;"><span class="nm">Suvarna</span><span class="price">₹80,000</span></div>
+          <div class="tier" style="border-top-color: #a9afb8;"><span class="nm">Belli</span><span class="price">₹40,000</span></div>
+          <div class="tier" style="border-top-color: #a75f30;"><span class="nm">Kanchu</span><span class="price">₹20,000</span></div>
+        </div>
+      </div>
+      <div class="b-urlbar" style="margin-top: 16px; white-space: nowrap;">
+        <span class="k">Grab your slot now</span>
+        <span class="u">bengaluru.wordcamp.org/call-for-sponsors</span>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<script src="download-png.js"></script>
+</body>
+</html>
