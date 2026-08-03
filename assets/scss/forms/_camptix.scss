@@ -66,19 +66,29 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 
    No rule under it: the block it opens draws its own, either the order
    summary's column heads or the attendee group's hairline, and both sit about
-   35px below. Two rules that close read as one mistake. */
+   35px below. Two rules that close read as one mistake.
+
+   Every value carries `!important` because `content/_guide.scss` sets
+   `.wcblr-post.wcblr-guide .wcblr-sec h2 { font-size: 46px !important }` to
+   undo the theme's heading crush, and CampTix renders inside a `.wcblr-sec`,
+   so its two sub-heads were coming out at a section-heading 46px. An id beats
+   three classes on specificity but loses to `!important`, so this has to
+   answer in kind. */
 #tix h2 {
-	font-family: Fraunces, Georgia, serif;
-	font-size: 20px;
-	font-weight: 500;
-	line-height: 1.3;
-	letter-spacing: -0.01em;
+	font-family: Fraunces, Georgia, serif !important;
+	font-size: 20px !important;
+	font-weight: 500 !important;
+	line-height: 1.3 !important;
+	letter-spacing: -0.01em !important;
 	color: #2a1d14;
-	margin: 0 0 18px;
+	margin: 0 0 18px !important;
 }
 #tix h2 + table,
 #tix h2 + div { margin-top: 0; }
-#tix form > h2 ~ h2 { margin-top: 38px; }
+/* `!important` again, and for the same reason: the rule above had to use it to
+   beat the guide layer, so a plain `margin-top` here loses to its own `margin:
+   0`. Without this "Registration Information" sits flush on the order panel. */
+#tix form > h2 ~ h2 { margin-top: 42px !important; }
 
 /* CampTix's own prose: the code-of-conduct and mask paragraphs it appends
    under the questions. */
@@ -117,11 +127,15 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	border: 0;
 }
 
-/* Full row: the `1. Ticket name` header, anything with a choice list, and
-   anything with a textarea. Same set as `grid-column: 1 / -1` in
-   _jetpack-grid.scss. */
+/* Full row: the `1. Ticket name` header, every custom question, and the email,
+   which is where the receipt goes and has no natural partner once first and
+   last name have paired off. Leaving it at half width left 60% of the row
+   empty and made the form look unfinished. */
 #tix .tix-attendee-form tr:has(> th),
 #tix .tix-receipt-form tr:has(> th),
+#tix .tix-attendee-form tr.tix-row-email,
+#tix .tix-attendee-form tr[class*="tix-row-question-"],
+#tix .tix-attendee-form tr.tix-row-health-advisory,
 #tix .tix-attendee-form tr:has(textarea),
 #tix .tix-attendee-form tr:has(input[type="radio"]),
 #tix .tix-attendee-form tr:has(input[type="checkbox"]) {
@@ -170,21 +184,74 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 #tix .tix-attendee-form td.tix-left a { color: inherit; }
 #tix .tix-required-star { color: #C8344B; }
 
-/* CampTix puts its health-advisory copy in a `td.tix-left` too, so without
-   this a paragraph of prose renders in 12px uppercase mono with 0.14em of
-   tracking. A label never contains a `<p>`; that is the tell. */
+/* A QUESTION IS NOT A FIELD LABEL. The built-in fields are 18 to 22
+   characters ("First Name", "E-mail") and read well as mono uppercase, which
+   is what the Jetpack forms use. CampTix's custom questions run 64 to 137
+   ("Do you have any accessibility needs, such as a sign language interpreter
+   or wheelchair access, to participate in WordCamp?"), and five of those in
+   tracked uppercase mono is the wall of capitals that made this screen look
+   like a database dump rather than a form. Sentences get set as sentences. */
+#tix .tix-attendee-form tr[class*="tix-row-question-"] > td.tix-left {
+	font-family: "Hanken Grotesk", sans-serif;
+	font-size: 16px;
+	font-weight: 500;
+	letter-spacing: normal;
+	line-height: 1.5;
+	text-transform: none;
+	color: #2a1d14;
+	max-width: 62ch;
+}
+#tix .tix-attendee-form tr[class*="tix-row-question-"] { gap: 12px; }
+
+/* The options become chips rather than bare radios floating on the card.
+   A choice list is the one place this form has something to press, so it is
+   the one place worth the chrome, and it also uses the row: five questions
+   whose answers huddled in the left 40% was most of what read as empty. */
+#tix .tix-attendee-form tr[class*="tix-row-question-"] .tix-right label,
+#tix .tix-receipt-form .tix-right label {
+	background: #fff;
+	border: 1.5px solid rgba(42, 29, 20, 0.16);
+	border-radius: 10px;
+	padding: 11px 16px;
+	color: #2a1d14;
+	transition: border-color 0.15s, background-color 0.15s;
+}
+#tix .tix-attendee-form tr[class*="tix-row-question-"] .tix-right label:hover,
+#tix .tix-receipt-form .tix-right label:hover {
+	border-color: rgba(42, 29, 20, 0.4);
+}
+/* Selected state. Degrades to the native dot alone if `:has()` ever goes,
+   which is legible, just quieter. */
+#tix .tix-attendee-form tr[class*="tix-row-question-"] .tix-right label:has(:checked),
+#tix .tix-receipt-form .tix-right label:has(:checked) {
+	border-color: #C8344B;
+	background: rgba(200, 52, 75, 0.06);
+}
+#tix .tix-attendee-form tr[class*="tix-row-question-"] .tix-screen-reader-fieldset { gap: 12px; }
+
+/* CampTix's health advisory is a `<p>` inside a `td.tix-left`, so without this
+   408 characters of prose render in 12px uppercase mono with 0.14em of
+   tracking. It is a note, not a question: give it the quiet panel so it stops
+   competing with the fields above it. A label never contains a `<p>`, which is
+   the tell for the general case. */
 #tix .tix-attendee-form td.tix-left:has(p) {
 	font-family: "Hanken Grotesk", sans-serif;
 	font-size: 15px;
 	font-weight: 400;
 	letter-spacing: normal;
-	line-height: 1.6;
+	line-height: 1.65;
 	text-transform: none;
-	max-width: 68ch;
+	color: #7a6757;
+	background: rgba(42, 29, 20, 0.045);
+	border-radius: 12px;
+	padding: 20px 24px;
+	max-width: none;
 }
-#tix .tix-attendee-form td.tix-left p { margin: 0 0 12px; }
+/* The panel spans the row; its COPY does not. Without this the advisory ran
+   about 130 characters a line against a comfortable 60 to 75. */
+#tix .tix-attendee-form td.tix-left p { margin: 0 0 12px; max-width: 70ch; }
 #tix .tix-attendee-form td.tix-left p:last-child { margin-bottom: 0; }
-#tix .tix-attendee-form tr:has(td.tix-left p) { grid-column: 1 / -1; }
+#tix .tix-attendee-form tr:has(td.tix-left p) { grid-column: 1 / -1; margin-top: 6px; }
 
 /* field cell */
 #tix .tix-attendee-form td.tix-right,
@@ -287,40 +354,85 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	box-shadow: none;
 }
 
-/* ---- 3. The order summary, which stays a table -------------------------
-   Four numeric columns that line up: this one IS tabular, so it keeps table
-   layout and gets the site's hairline + mono column heads instead. */
+/* ---- 3. The order summary, which is the ticket you just chose -----------
+   As a four-column table it was a spreadsheet: thin type, three hairlines and
+   a lot of dead space where the number people actually care about should be.
+
+   It is the same object as the stub on the previous screen, so it gets the
+   same treatment: espresso card, ticket name in the serif, quantity muted in
+   mono, price in turmeric, and the total under the stub's own dashed
+   perforation. Landing on step two and recognising the thing you just picked
+   is most of what makes a checkout feel considered. */
 #tix .tix-order-summary {
+	display: block;
 	width: 100%;
-	border-collapse: collapse;
-	background: transparent;
 	margin: 0;
+	border: 0;
+	background: #2a1d14;
+	color: #F2ECE0;
+	border-radius: 14px;
+	padding: 24px 28px;
 }
-#tix .tix-order-summary th,
+#tix .tix-order-summary thead { display: none; }
+#tix .tix-order-summary tbody { display: block; }
+#tix .tix-order-summary tbody tr {
+	display: flex;
+	align-items: baseline;
+	gap: 18px;
+	border: 0;
+}
 #tix .tix-order-summary td {
 	border: 0;
-	border-bottom: 1px solid #ddd9d2;
-	padding: 12px 10px;
-	vertical-align: top;
+	padding: 0;
 	text-align: left;
 }
-#tix .tix-order-summary thead th {
+#tix .tix-order-summary td.tix-column-description {
+	flex: 1;
+	font-family: Fraunces, Georgia, serif;
+	font-size: 19px;
+	font-weight: 500;
+	line-height: 1.25;
+	color: #F2ECE0;
+}
+#tix .tix-order-summary td.tix-column-description strong { font-weight: 500; }
+#tix .tix-order-summary td.tix-column-per-ticket,
+#tix .tix-order-summary td.tix-column-quantity {
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 13px;
+	color: #978f87;
+	white-space: nowrap;
+}
+#tix .tix-order-summary td.tix-column-quantity::before { content: "\00d7 "; }
+#tix .tix-order-summary td.tix-column-price {
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 17px;
+	color: #e0a526;
+	white-space: nowrap;
+}
+
+/* The total, under the same dashed perforation the stub tears along. */
+#tix .tix-order-summary .tix-row-total {
+	margin-top: 18px;
+	padding-top: 18px;
+	border-top: 2px dashed rgba(242, 236, 224, 0.22);
+}
+#tix .tix-order-summary .tix-row-total td:first-child {
+	flex: 1;
 	font-family: "JetBrains Mono", ui-monospace, monospace;
 	font-size: 11px;
-	font-weight: 700;
+	font-weight: 500;
 	letter-spacing: 1.32px;
 	text-transform: uppercase;
-	color: #7a6757;
+	color: #978f87;
 }
-#tix .tix-order-summary .tix-column-per-ticket,
-#tix .tix-order-summary .tix-column-quantity,
-#tix .tix-order-summary .tix-column-price {
+#tix .tix-order-summary .tix-row-total td:first-child::before { content: "Total"; }
+#tix .tix-order-summary .tix-row-total td:last-child,
+#tix .tix-order-summary .tix-row-total strong {
 	font-family: "JetBrains Mono", ui-monospace, monospace;
-	font-size: 14px;
-}
-#tix .tix-row-total td {
-	font-weight: 600;
-	border-bottom: 0;
+	font-size: 22px;
+	font-weight: 500;
+	color: #e0a526;
+	white-space: nowrap;
 }
 
 /* ---- 4. The checkout block ----------------------------------------------
