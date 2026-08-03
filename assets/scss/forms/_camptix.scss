@@ -585,6 +585,15 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	#tix { padding: 22px 18px !important; border-radius: 14px; }
 	#tix .tix-attendee-form tbody,
 	#tix .tix-receipt-form tbody { grid-template-columns: 1fr; gap: 18px; }
+
+	/* The order row is a ticket name plus three `white-space: nowrap` numbers
+	   on one line. On a 390px phone the card leaves about 294px of content
+	   width, which that line cannot fit and, being nowrap, cannot shrink into
+	   either: it would simply run out of the card. Give the name its own line
+	   and let the numbers sit under it. 485px is the narrowest width headless
+	   Chrome will lay out honestly, so this one is arithmetic, not a render. */
+	#tix .tix-order-summary tbody tr { flex-wrap: wrap; gap: 8px 14px; }
+	#tix .tix-order-summary td.tix-column-description { flex: 1 0 100%; }
 	/* iOS Safari zooms the page in on focusing a field under 16px and does not
 	   zoom back out on blur. Same guard as forms/_form-card.scss. */
 	#tix input,
