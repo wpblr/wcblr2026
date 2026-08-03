@@ -51,7 +51,10 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	border: 1.5px solid #dad5cd;
 	border-radius: 16px;
 	padding: 38px !important;
-	margin: 28px 0 0;
+	/* The bottom margin is not decoration: on the registration screen the card
+	   IS the end of the page, and with `margin: 28px 0 0` its bottom edge
+	   landed on the footer's top edge at exactly the same pixel. */
+	margin: 28px 0 56px;
 	position: relative;
 	overflow: visible !important;
 	font-family: "Hanken Grotesk", sans-serif;
@@ -117,7 +120,7 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 #tix .tix-receipt-form tbody {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	gap: 22px 26px;
+	gap: 26px;
 }
 #tix .tix-attendee-form tr,
 #tix .tix-receipt-form tr {
@@ -201,7 +204,11 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	color: #2a1d14;
 	max-width: 62ch;
 }
-#tix .tix-attendee-form tr[class*="tix-row-question-"] { gap: 12px; }
+/* A question is a block, not a field, so it wants more room above it than two
+   fields side by side do. Safe as a margin because every question is a
+   full-width row: a margin on a half-width row would drop it out of line with
+   its neighbour. */
+#tix .tix-attendee-form tr[class*="tix-row-question-"] { gap: 12px; margin-top: 12px; }
 
 /* The options become chips rather than bare radios floating on the card.
    A choice list is the one place this form has something to press, so it is
@@ -251,7 +258,7 @@ $tix-select: "#tix:has(#{$tix-select-table})";
    about 130 characters a line against a comfortable 60 to 75. */
 #tix .tix-attendee-form td.tix-left p { margin: 0 0 12px; max-width: 70ch; }
 #tix .tix-attendee-form td.tix-left p:last-child { margin-bottom: 0; }
-#tix .tix-attendee-form tr:has(td.tix-left p) { grid-column: 1 / -1; margin-top: 6px; }
+#tix .tix-attendee-form tr:has(td.tix-left p) { grid-column: 1 / -1; margin-top: 14px; }
 
 /* field cell */
 #tix .tix-attendee-form td.tix-right,
@@ -283,6 +290,10 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	width: 100%;
 	max-width: 100%;
 	height: auto;
+	/* Without this the fields are content-box: `width: 100%` plus 28px of
+	   padding and 3px of border made a 617px input in a 587px column, which
+	   ate the whole 26px column gap and left the two name fields touching. */
+	box-sizing: border-box;
 	box-shadow: none;
 	transition: border-color 0.15s, box-shadow 0.15s;
 }
@@ -506,17 +517,33 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	margin: 0;
 }
 
-/* CampTix's notices, e.g. "please fill in all required fields" */
+/* CampTix's notices. It prints them into `#tix-errors` / `#tix-notices` /
+   `#tix-infos` ABOVE the form (camptix.php line 7490), and its own stylesheet
+   gives an error `#FFEBE8` on `#C00`, which is the one colour combination on
+   this page that belongs to no part of the palette. An error is crimson; a
+   notice is not an error and should not be dressed as one. */
+#tix #tix-errors,
+#tix #tix-notices,
+#tix #tix-infos { margin: 0 0 26px; }
+#tix .tix-error,
 #tix .tix-notice,
-#tix .tix-error {
-	background: rgba(200, 52, 75, 0.05);
-	border: 1.5px solid rgba(200, 52, 75, 0.25);
+#tix .tix-info {
 	border-radius: 10px;
 	padding: 16px 18px;
-	margin: 0 0 24px;
+	margin: 0 0 10px;
 	font-size: 15px;
+	line-height: 1.6;
 	color: #2a1d14;
+	background: rgba(42, 29, 20, 0.05);
+	border: 1.5px solid rgba(42, 29, 20, 0.12);
 }
+#tix .tix-error {
+	background: rgba(200, 52, 75, 0.06);
+	border-color: rgba(200, 52, 75, 0.28);
+}
+#tix .tix-error p:last-child,
+#tix .tix-notice p:last-child,
+#tix .tix-info p:last-child { margin-bottom: 0; }
 
 @media (max-width: 782px) {
 	#tix { padding: 22px 18px !important; border-radius: 14px; }
@@ -577,18 +604,14 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 		padding: 8px 16px;
 	}
 
-	/* left notch — page-cream circle on the perforation line.
-	   Nudge `top` to sit on the dashed line on your build. */
-	form::after {
-		content: "";
-		position: absolute;
-		left: -11px;
-		top: 118px;
-		width: 22px;
-		height: 22px;
-		border-radius: 50%;
-		background: #f2ece0;
-	}
+	/* The notch used to be `form::after` at a hardcoded `top: 118px`, which is
+	   the distance to the perforation on a card with exactly one ticket that
+	   has an excerpt. Two ticket types and it floated in the middle of nothing.
+	   Hang it off the perforation instead: the dashed line IS the description
+	   cell's bottom border, so a circle on that cell's bottom edge can never
+	   drift. `left` is the form's 30px padding plus half the circle, to put it
+	   on the card's edge. One notch per ticket, which reads as a strip of
+	   stubs rather than one card with a dent in it. */
 
 	/* --- linearise the table into vertical rows --- */
 	.tix_tickets_table { border-collapse: collapse; width: 100%; }
@@ -636,6 +659,22 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 		color: #978f87;
 		text-align: left;
 	}
+
+	.tix_tickets_table tbody .tix-column-description::after {
+		content: "";
+		position: absolute;
+		left: -41px;
+		bottom: -12px;
+		width: 22px;
+		height: 22px;
+		border-radius: 50%;
+		background: #f2ece0;
+	}
+
+	/* Each ticket is its own block. Without this the next ticket's title
+	   started immediately under the previous one's QUANTITY row and the two
+	   ran together into one unreadable column. */
+	.tix_tickets_table tbody tr + tr { margin-top: 34px; }
 
 	/* Perforation under the ticket-name row (aligns with the notch).
 	   `padding-left` keeps the wrapped excerpt clear of the absolutely
@@ -690,7 +729,7 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 		form { padding: 24px 22px 22px; }
 		.tix_tickets_table td,
 		.tix_tickets_table tbody .tix-column-description { padding-left: 90px; }
-		form::after { display: none; }
+		.tix_tickets_table tbody .tix-column-description::after { display: none; }
 	}
 }
 
