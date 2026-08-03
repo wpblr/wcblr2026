@@ -939,16 +939,24 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 
 /* The way back. CampTix gives you no route from the registration screen to
    the ticket list: the only exits are Checkout and the browser's back button,
-   and this page takes money, so a dead end is not acceptable. There is no
-   JavaScript on WordCamp.org, so the link lives in the page markup and this
-   shows it exactly when there is something to go back FROM.
+   and this page takes money, so a dead end is not acceptable.
 
-   Hidden by default, revealed on the attendee screen, so losing `:has()` costs
-   a link rather than leaving a stray one on the ticket list. */
+   The link CANNOT live in the page content. On any `tix_action` screen this
+   build replaces the whole of `.entry-content` with `#tix` alone: measured in
+   the live DOM, where the content element has exactly one child and the
+   wrapper, the eyebrows, the FAQ and every other block are simply gone. A
+   first attempt put the link in the page and it could never have rendered.
+
+   So it lives in `templates/pages.html`, which CampTix does not touch, and
+   `main:has()` reaches across from there into the content to ask whether
+   there is an attendee form on this screen. Hidden by default, so on every
+   other page using that template it costs nothing, and losing `:has()` costs
+   a link rather than leaving a stray one on every page of the site. */
 .wcblr-tix-back {
 	display: none;
 }
-.wcblr-tix-row:has(.tix-attendee-form) .wcblr-tix-back {
+main:has(.tix-attendee-form) .wcblr-tix-back,
+main:has(.tix-order-summary) .wcblr-tix-back {
 	display: block;
 }
 .wcblr-tix-back a {
