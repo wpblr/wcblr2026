@@ -160,14 +160,20 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	padding: 0 0 12px;
 	margin: 0;
 }
-/* CampTix emits ONE TABLE PER ATTENDEE, plus another for the receipt, so the
-   space between groups belongs between the tables. Putting it on the header
-   ROW instead does nothing (each header is the first row of its own tbody) and
-   putting it on a field row is worse: any vertical offset on one field drops
-   it out of line with its neighbour in the other column. */
-#tix .tix-attendee-form + .tix-attendee-form,
+/* CampTix emits ONE TABLE PER ATTENDEE, plus one for the receipt and one more
+   holding nothing but the health advisory, so the space between groups belongs
+   between the TABLES. Putting it on the header row does nothing (each header is
+   the first row of its own tbody) and putting it on a field row is worse: any
+   vertical offset on one field drops it out of line with its neighbour.
+
+   `~` and not `+`. Checked in the live DOM with two tickets in the order:
+   between the tables sit a hidden `<input>` carrying the ticket id and, on the
+   builds that use them, a `<label>` and a `<style>`. The adjacent-sibling
+   version matched none of it, so two attendees ran together with a measured
+   gap of exactly 0px. */
+#tix .tix-attendee-form ~ .tix-attendee-form,
 #tix .tix-show-if-js,
-#tix .tix-receipt-form { margin-top: 30px; }
+#tix .tix-receipt-form { margin-top: 40px; }
 
 /* label */
 #tix .tix-attendee-form td.tix-left,
@@ -235,6 +241,33 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	background: rgba(200, 52, 75, 0.06);
 }
 #tix .tix-attendee-form tr[class*="tix-row-question-"] .tix-screen-reader-fieldset { gap: 12px; }
+
+/* The "I don't know who will use this ticket yet" toggle on the second and
+   later attendees. Its `<input>` and `<label>` are siblings inside a bare
+   `<td colspan="2">` with no `.tix-left` or `.tix-right`, so the chip has to
+   be the cell rather than the label, and `align-self` stops it stretching the
+   full row like a field would. */
+#tix .tix-attendee-form tr.unknown-attendee > td {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	align-self: flex-start;
+	width: auto;
+	padding: 11px 16px;
+	border: 1.5px solid rgba(42, 29, 20, 0.16);
+	border-radius: 10px;
+	background: #fff;
+	font-size: 15.5px;
+	color: #2a1d14;
+	cursor: pointer;
+	transition: border-color 0.15s, background-color 0.15s;
+}
+#tix .tix-attendee-form tr.unknown-attendee > td:hover { border-color: rgba(42, 29, 20, 0.4); }
+#tix .tix-attendee-form tr.unknown-attendee > td:has(:checked) {
+	border-color: #C8344B;
+	background: rgba(200, 52, 75, 0.06);
+}
+#tix .tix-attendee-form tr.unknown-attendee label { margin: 0; cursor: pointer; }
 
 /* CampTix's health advisory is a `<p>` inside a `td.tix-left`, so without this
    408 characters of prose render in 12px uppercase mono with 0.14em of
@@ -461,8 +494,11 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	float: none;
 	width: auto;
 	text-align: left;
-	margin-top: 32px;
-	padding-top: 26px;
+	/* The last thing above this is usually the advisory's grey panel, and at
+	   32px the rule sat close enough under it to read as the panel's own
+	   underline rather than as the start of the checkout block. */
+	margin-top: 52px;
+	padding-top: 28px;
 	border-top: 1.5px solid #ddd9d2;
 }
 #tix .tix-payment-method {
@@ -671,10 +707,18 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 		background: #f2ece0;
 	}
 
-	/* Each ticket is its own block. Without this the next ticket's title
-	   started immediately under the previous one's QUANTITY row and the two
-	   ran together into one unreadable column. */
-	.tix_tickets_table tbody tr + tr { margin-top: 34px; }
+	/* Each ticket is its own block, and the boundary between two tickets needs
+	   its own line. The dashed rule belongs to ONE ticket: it is the tear
+	   between that ticket's name and its numbers, and the notch sits on it. So
+	   with two ticket types the only line on the card was inside each item and
+	   nothing marked where one item ended, which is what made the divider read
+	   as wrong. A quiet solid rule says "next ticket" without competing with
+	   the tear, because it is a different weight and a different style. */
+	.tix_tickets_table tbody tr + tr {
+		margin-top: 30px;
+		padding-top: 30px;
+		border-top: 1px solid rgba(242, 236, 224, 0.13);
+	}
 
 	/* Perforation under the ticket-name row (aligns with the notch).
 	   `padding-left` keeps the wrapped excerpt clear of the absolutely
@@ -761,6 +805,30 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 .wcblr-tix-row:has(#{$tix-select-table}) > .wp-block-column + .wp-block-column {
 	margin-top: 0;
 }
+
+/* The way back. CampTix gives you no route from the registration screen to
+   the ticket list: the only exits are Checkout and the browser's back button,
+   and this page takes money, so a dead end is not acceptable. There is no
+   JavaScript on WordCamp.org, so the link lives in the page markup and this
+   shows it exactly when there is something to go back FROM.
+
+   Hidden by default, revealed on the attendee screen, so losing `:has()` costs
+   a link rather than leaving a stray one on the ticket list. */
+.wcblr-tix-back {
+	display: none;
+}
+.wcblr-tix-row:has(.tix-attendee-form) .wcblr-tix-back {
+	display: block;
+}
+.wcblr-tix-back a {
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 13px;
+	letter-spacing: 0.5px;
+	text-decoration: none;
+	border-bottom: 1px solid rgba(42, 29, 20, 0.25);
+	padding-bottom: 2px;
+}
+.wcblr-tix-back a:hover { border-bottom-color: #C8344B; }
 
 /* "Pick your quantity and register below" is an instruction for one screen and
    stale on every screen after it. Same fail-safe direction: hidden unless the
