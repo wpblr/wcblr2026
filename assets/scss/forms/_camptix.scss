@@ -41,6 +41,20 @@
 $tix-select-table: ".tix_tickets_table:not(.tix-order-summary):not(.tix-attendee-form)";
 $tix-select: "#tix:has(#{$tix-select-table})";
 
+/* ---- 0. A ticketing page is not an article -------------------------------
+   `templates/pages.html` opens every page with a "Last updated" line, a
+   centred title and a dashed rule. On a page whose whole job is to take money
+   that reads as a blog post with a form stapled underneath, and on the
+   registration screen it is worse: CampTix has replaced the content, so the
+   article furniture introduces nothing.
+
+   Scoped by CONTENT rather than by body class, so it needs no per-page rule
+   and cannot go stale when the slug changes: any page carrying a CampTix form
+   drops the article head. Nothing else on the site is affected. */
+main:has(#tix) .wcblr-page-head {
+	display: none;
+}
+
 /* ---- 1. The card ---------------------------------------------------------
    Same values as the `wcblr-form` / `wcblr-sponsor-form` group on the call
    posts: #FBF8F1, 1.5px #dad5cd, radius 16, 38px of padding. Those are block
@@ -148,6 +162,18 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 /* The `1. Ticket name` / `Receipt` header row. The hairline is what separates
    one attendee's fields from the next when someone buys two tickets, which is
    the only thing telling them apart. */
+/* The lanyard slot. One quiet detail that makes each attendee group read as
+   the badge it becomes, and it echoes the ticket illustration further down the
+   page. Drawn rather than added as markup, because CampTix owns this DOM. */
+#tix .tix-attendee-form th::before {
+	content: "";
+	display: block;
+	width: 34px;
+	height: 7px;
+	margin-bottom: 12px;
+	border-radius: 4px;
+	background: rgba(42, 29, 20, 0.13);
+}
 #tix .tix-attendee-form th,
 #tix .tix-receipt-form th {
 	font-family: Fraunces, Georgia, serif;
@@ -191,6 +217,39 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	color: #7a6757;
 }
 #tix .tix-attendee-form td.tix-left a { color: inherit; }
+
+/* Field hints. A real `placeholder` is an HTML attribute and CampTix does not
+   write one, so it cannot be added from CSS. The faux-placeholder trick
+   (overlaying `::after` on an empty field via `:invalid`) is exact for a text
+   field but wrong for the email, where `:invalid` also means half-typed: the
+   hint would sit on top of what someone had already entered. On a form that
+   takes money that is not a trade worth making.
+
+   So the hint is permanent, and it sits UNDER THE FIELD rather than under the
+   label. Under the label it pushes that field down and it stops lining up with
+   its neighbour in the other column, which is the same alignment trap that
+   caught the attendee-group spacing: nothing may add height above a field.
+   Below it, the row simply grows and both inputs stay on one line.
+
+   Only the two fields where it changes what you would type. */
+#tix .tix-attendee-form tr.tix-row-first-name > td.tix-right::after,
+#tix .tix-attendee-form tr.tix-row-email > td.tix-right::after {
+	display: block;
+	margin-top: 8px;
+	font-family: "Hanken Grotesk", sans-serif;
+	font-size: 13px;
+	font-weight: 400;
+	letter-spacing: normal;
+	line-height: 1.4;
+	text-transform: none;
+	color: #a3907f;
+}
+#tix .tix-attendee-form tr.tix-row-first-name > td.tix-right::after {
+	content: "As you would like it printed on your badge";
+}
+#tix .tix-attendee-form tr.tix-row-email > td.tix-right::after {
+	content: "Your ticket and receipt are sent here";
+}
 #tix .tix-required-star { color: #C8344B; }
 
 /* A QUESTION IS NOT A FIELD LABEL. The built-in fields are 18 to 22
@@ -905,6 +964,57 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 		.tix_tickets_table td,
 		.tix_tickets_table tbody .tix-column-description { padding-left: 90px; }
 		.tix_tickets_table tbody .tix-column-description::after { display: none; }
+	}
+}
+
+/* ---- 7. The opening, on load --------------------------------------------
+   Both CampTix screens are a single object at the top of the page, which is
+   the one case `content/_motion.scss` says load-triggered motion suits: the
+   reader is looking at it while it happens. Nothing below the first screen
+   animates, because a ladder run down a form plays to an empty room.
+
+   Vocabulary reused, not reinvented: the same keyframes, the same
+   cubic-bezier(0.22, 0.61, 0.36, 1) and the same 0.95s spring the home page
+   and the guide layer use, so this reads as the same site rather than as a
+   page that animates on its own terms. Gated on `no-preference` so the
+   failure direction is "no animation", never "hidden content", and
+   transform-only on whatever might be the largest contentful paint. */
+@media (prefers-reduced-motion: no-preference) {
+
+	/* --- the ticket stub --- */
+	#{$tix-select} form {
+		animation: wcblr-rise 0.6s 0.05s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	}
+	/* The badge, on the site's own beat: last, on something small, once the
+	   card has settled. `wcblr-stamp-in` ends on rotate(5deg), which is this
+	   stamp's resting tilt, so it does not flatten at the end of its entrance.
+	   Same 0.95s the home page gives `add_filter( 'coffee' );`. */
+	#{$tix-select} form::before {
+		animation: wcblr-stamp-in 0.45s 0.95s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+	}
+	/* the notch belongs to the card, so it arrives with it rather than after */
+	#{$tix-select} .tix_tickets_table tbody .tix-column-description::after {
+		animation: wcblr-fade 0.4s 0.5s ease-out both;
+	}
+
+	/* --- the registration card --- */
+	/* The card fades without moving: it is the full width of the content and
+	   sliding something that large reads as the page settling badly. */
+	#tix:has(.tix-attendee-form) { animation: wcblr-fade 0.5s ease-out both; }
+
+	/* The order panel is the biggest, darkest thing on the screen and the
+	   likeliest LCP candidate, so it LIFTS and never fades. */
+	#tix .tix-order-summary {
+		animation: wcblr-lift 0.75s 0.1s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	}
+	#tix form > h2 {
+		animation: wcblr-rise 0.55s 0.18s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	}
+	#tix form > h2 ~ h2 { animation-delay: 0.3s; }
+	/* Only the first attendee group: everything after it is below the fold on
+	   every screen this site sees. */
+	#tix .tix-attendee-form:not(.tix-attendee-form ~ .tix-attendee-form) {
+		animation: wcblr-rise 0.6s 0.38s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 	}
 }
 
