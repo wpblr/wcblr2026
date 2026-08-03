@@ -7,19 +7,20 @@
    form_attendee_info() 5459, form_access_tickets() 5723, form_edit_attendee()
    5935, form_refund_request() 6126, form_refund_success() 6188.
 
-   So a rule written for one screen lands on all six. The espresso "ticket
-   stub" below was designed for the selection screen and, unscoped, it also put
-   the registration form inside a 394px dark card with an
-   `add_filter( 'ticket' );` stamp on it, every cell right-aligned at 20px in
-   cream, and the text inputs at the browser's default width. That is the bug
-   this file's structure exists to prevent, so keep the two parts separate:
+   So a rule written for one screen lands on all six, and the two screens want
+   opposite things. Selection is one object, a dark ticket stub. Everything
+   after it is a form, and a form on this site already has a settled look: the
+   card on `call-for-sponsors` and `call-for-speakers`, mono uppercase labels
+   over white rounded fields in a two-column grid, espresso submit. This file
+   gives each screen its own half:
 
-     1. every screen        house type, fields and buttons, full width
-     2. the selection screen only   the stub
+     1-4. every screen but selection   the house form card
+     5.   the selection screen only    the stub
+     6.   the row the shortcode sits in
 
    The screens are told apart by their table, which is the only marker CampTix
-   gives us. Verified in the live DOM on /2026/?page_id=13 (preview), not
-   inferred: selection is `tix_tickets_table tix-tickets-list`, registration is
+   gives us. Verified in the live DOM on /2026/?page_id=13, not inferred:
+   selection is `tix_tickets_table tix-tickets-list`, registration is
    `tix_tickets_table tix-order-summary` plus one
    `tix_tickets_table tix-attendee-form` per attendee. So "neither of those two
    classes" identifies the selection screen on this build AND on master, where
@@ -27,141 +28,324 @@
    `.tix-tickets-list`: master does not emit it.
 
    `:has()` survives the WordCamp CSS sanitizer (checked against the served
-   stylesheet), and if it ever stops doing so the selection screen degrades to
-   part 1, which is plain but correct, rather than the registration screen
-   degrading to the stub, which is not.
+   stylesheet). Every `:has()` below is written so that losing it degrades to
+   the FORM look, never to the stub look: a plain card where a ticket stub was
+   meant to be is odd, a registration form wearing a 394px dark ticket stub is
+   the bug this file exists to prevent.
 
-   The page markup has to hold up its end: `[camptix]` belongs in a full-width
-   block, never in a narrow column. The old tickets TEMPLATE put it in a 40%
-   column, so even a correctly scoped registration form was capped at 435px.
+   Nothing here is visible in the block editor; CampTix only renders on the
+   front end. Judge it there.
    ============================================================= */
 
 /* the selection screen's own table, and nothing else */
 $tix-select-table: ".tix_tickets_table:not(.tix-order-summary):not(.tix-attendee-form)";
 $tix-select: "#tix:has(#{$tix-select-table})";
 
-/* ---- 1. Every CampTix screen -------------------------------------------- */
-
-/* Left-aligned and capped rather than full width. CampTix splits each row
-   40% label / 60% field, so at the page's full 1200px every label sits a
-   third of a screen away from the box it belongs to. 760px is about the
-   width at which the pair still reads as one row. The stub overrides this
-   with its own 394px below. */
+/* ---- 1. The card ---------------------------------------------------------
+   Same values as the `wcblr-form` / `wcblr-sponsor-form` group on the call
+   posts: #FBF8F1, 1.5px #dad5cd, radius 16, 38px of padding. Those are block
+   attributes there because the card is markup the page owns; here CampTix owns
+   the markup, so the card has to be drawn in CSS. Keep the two in step. */
 #tix {
-	max-width: 760px;
+	background: #FBF8F1;
+	border: 1.5px solid #dad5cd;
+	border-radius: 16px;
+	padding: 38px !important;
 	margin: 28px 0 0;
 	position: relative;
 	overflow: visible !important;
-	padding: 0 !important;
 	font-family: "Hanken Grotesk", sans-serif;
+	font-size: 15.5px;
 	color: #2a1d14;
 }
 
-/* "Order Summary" and "Registration Information" */
+/* "Order Summary" and "Registration Information" are sub-heads INSIDE a card,
+   so they are the house serif at a step down from a section h2. Not the mono
+   label treatment: that belongs to the fields, and reusing it here would make
+   a heading and a field label indistinguishable.
+
+   No rule under it: the block it opens draws its own, either the order
+   summary's column heads or the attendee group's hairline, and both sit about
+   35px below. Two rules that close read as one mistake. */
 #tix h2 {
 	font-family: Fraunces, Georgia, serif;
-	font-size: 24px;
+	font-size: 20px;
 	font-weight: 500;
-	line-height: 1.25;
-	margin: 34px 0 14px;
+	line-height: 1.3;
+	letter-spacing: -0.01em;
+	color: #2a1d14;
+	margin: 0 0 18px;
+}
+#tix h2 + table,
+#tix h2 + div { margin-top: 0; }
+#tix form > h2 ~ h2 { margin-top: 38px; }
+
+/* CampTix's own prose: the code-of-conduct and mask paragraphs it appends
+   under the questions. */
+#tix form > p {
+	font-size: 15px;
+	line-height: 1.6;
+	color: #7a6757;
+	max-width: 68ch;
+	margin: 18px 0 0;
 }
 
-/* `.tix-receipt-form` is NOT a `.tix_tickets_table`, so it has to be named
-   separately or the receipt row is the one unstyled thing on the screen. */
-#tix .tix_tickets_table,
+/* ---- 2. The registration form, as a Jetpack form ------------------------
+   CampTix emits a `<table>` with a label cell and a field cell per row. The
+   site's forms stack the label above the field and flow two per row, so the
+   table is unwound into a grid: tbody is the grid, each `tr` is one field.
+   Values are the ones in forms/_jetpack-fields.scss and _jetpack-grid.scss;
+   changing them there without changing them here is how the two drift. */
+#tix .tix-attendee-form,
 #tix .tix-receipt-form {
+	display: block;
+	width: 100%;
+	border-collapse: collapse;
+	margin: 0;
+}
+#tix .tix-attendee-form tbody,
+#tix .tix-receipt-form tbody {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 22px 26px;
+}
+#tix .tix-attendee-form tr,
+#tix .tix-receipt-form tr {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	border: 0;
+}
+
+/* Full row: the `1. Ticket name` header, anything with a choice list, and
+   anything with a textarea. Same set as `grid-column: 1 / -1` in
+   _jetpack-grid.scss. */
+#tix .tix-attendee-form tr:has(> th),
+#tix .tix-receipt-form tr:has(> th),
+#tix .tix-attendee-form tr:has(textarea),
+#tix .tix-attendee-form tr:has(input[type="radio"]),
+#tix .tix-attendee-form tr:has(input[type="checkbox"]) {
+	grid-column: 1 / -1;
+}
+
+/* The `1. Ticket name` / `Receipt` header row. The hairline is what separates
+   one attendee's fields from the next when someone buys two tickets, which is
+   the only thing telling them apart. */
+#tix .tix-attendee-form th,
+#tix .tix-receipt-form th {
+	font-family: Fraunces, Georgia, serif;
+	font-size: 17px;
+	font-weight: 500;
+	color: #2a1d14;
+	text-align: left;
+	border: 0;
+	border-bottom: 1px solid #ddd9d2;
+	padding: 0 0 12px;
+	margin: 0;
+}
+/* CampTix emits ONE TABLE PER ATTENDEE, plus another for the receipt, so the
+   space between groups belongs between the tables. Putting it on the header
+   ROW instead does nothing (each header is the first row of its own tbody) and
+   putting it on a field row is worse: any vertical offset on one field drops
+   it out of line with its neighbour in the other column. */
+#tix .tix-attendee-form + .tix-attendee-form,
+#tix .tix-show-if-js,
+#tix .tix-receipt-form { margin-top: 30px; }
+
+/* label */
+#tix .tix-attendee-form td.tix-left,
+#tix .tix-receipt-form td.tix-left {
+	display: block;
+	width: auto;
+	padding: 0;
+	border: 0;
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 12px;
+	font-weight: 500;
+	letter-spacing: 0.14em;
+	line-height: 1.5;
+	text-transform: uppercase;
+	color: #7a6757;
+}
+#tix .tix-attendee-form td.tix-left a { color: inherit; }
+#tix .tix-required-star { color: #C8344B; }
+
+/* CampTix puts its health-advisory copy in a `td.tix-left` too, so without
+   this a paragraph of prose renders in 12px uppercase mono with 0.14em of
+   tracking. A label never contains a `<p>`; that is the tell. */
+#tix .tix-attendee-form td.tix-left:has(p) {
+	font-family: "Hanken Grotesk", sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+	letter-spacing: normal;
+	line-height: 1.6;
+	text-transform: none;
+	max-width: 68ch;
+}
+#tix .tix-attendee-form td.tix-left p { margin: 0 0 12px; }
+#tix .tix-attendee-form td.tix-left p:last-child { margin-bottom: 0; }
+#tix .tix-attendee-form tr:has(td.tix-left p) { grid-column: 1 / -1; }
+
+/* field cell */
+#tix .tix-attendee-form td.tix-right,
+#tix .tix-receipt-form td.tix-right {
+	display: block;
+	width: auto;
+	padding: 0;
+	border: 0;
+}
+
+/* Fields. Exactly the chrome in _jetpack-fields.scss: white on the card, not
+   the card colour on the card. */
+#tix input[type="text"],
+#tix input[type="email"],
+#tix input[type="url"],
+#tix input[type="tel"],
+#tix input[type="number"],
+#tix input[type="date"],
+#tix textarea,
+#tix select {
+	font-family: "Hanken Grotesk", sans-serif;
+	font-size: 15.5px;
+	line-height: 1.5;
+	color: #2a1d14;
+	background: #fff;
+	border: 1.5px solid rgba(42, 29, 20, 0.16);
+	border-radius: 10px;
+	padding: 12px 14px;
+	width: 100%;
+	max-width: 100%;
+	height: auto;
+	box-shadow: none;
+	transition: border-color 0.15s, box-shadow 0.15s;
+}
+#tix textarea {
+	min-height: 100px;
+	resize: vertical;
+	line-height: 1.6;
+}
+#tix input:focus,
+#tix textarea:focus,
+#tix select:focus {
+	outline: none;
+	border-color: #2a1d14;
+	box-shadow: 0 0 0 3px rgba(42, 29, 20, 0.08);
+}
+
+/* Choice lists. CampTix separates the options with `<br>`, so the row is a
+   wrapping flex line with the breaks suppressed rather than a column of
+   labels. Gap and sizes from _jetpack-fields.scss.
+
+   The question types wrap their options in `<fieldset
+   class="tix-screen-reader-fieldset">`, so the flex row has to be the
+   fieldset, not the cell: putting it on the cell alone lays out a single
+   child and every option keeps its default inline spacing. The receipt
+   radio has no fieldset, so both are named. A fieldset also needs
+   `min-width: 0`, or its `min-inline-size: min-content` default stops the
+   options wrapping. */
+#tix .tix-screen-reader-fieldset,
+#tix .tix-right:has(input[type="radio"]),
+#tix .tix-right:has(input[type="checkbox"]) {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 16px 26px;
+	border: 0;
+	margin: 0;
+	padding: 0;
+	min-width: 0;
+}
+#tix .tix-right br { display: none; }
+#tix .tix-screen-reader-fieldset legend {
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 10.5px;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: #7a6757;
+	padding: 0;
+}
+#tix .tix-right label {
+	display: inline-flex;
+	align-items: center;
+	gap: 9px;
+	font-size: 15.5px;
+	line-height: 1.4;
+	cursor: pointer;
+	margin: 0;
+}
+#tix input[type="radio"],
+#tix input[type="checkbox"] {
+	width: 16px;
+	height: 16px;
+	accent-color: #C8344B;
+	flex-shrink: 0;
+	cursor: pointer;
+	padding: 0;
+	margin: 0;
+	background: none;
+	border: 0;
+	box-shadow: none;
+}
+
+/* ---- 3. The order summary, which stays a table -------------------------
+   Four numeric columns that line up: this one IS tabular, so it keeps table
+   layout and gets the site's hairline + mono column heads instead. */
+#tix .tix-order-summary {
 	width: 100%;
 	border-collapse: collapse;
 	background: transparent;
 	margin: 0;
 }
-#tix .tix_tickets_table th,
-#tix .tix_tickets_table td,
-#tix .tix-receipt-form th,
-#tix .tix-receipt-form td {
+#tix .tix-order-summary th,
+#tix .tix-order-summary td {
 	border: 0;
 	border-bottom: 1px solid #ddd9d2;
 	padding: 12px 10px;
 	vertical-align: top;
 	text-align: left;
 }
-#tix .tix_tickets_table thead th {
+#tix .tix-order-summary thead th {
 	font-family: "JetBrains Mono", ui-monospace, monospace;
 	font-size: 11px;
 	font-weight: 700;
 	letter-spacing: 1.32px;
 	text-transform: uppercase;
-	color: #2a1d14;
+	color: #7a6757;
 }
-/* the attendee tables lead with a `1. Ticket name` row spanning both columns */
-#tix .tix-attendee-form th[colspan],
-#tix .tix-receipt-form th[colspan] {
-	font-family: Fraunces, Georgia, serif;
-	font-size: 18px;
-	font-weight: 500;
+#tix .tix-order-summary .tix-column-per-ticket,
+#tix .tix-order-summary .tix-column-quantity,
+#tix .tix-order-summary .tix-column-price {
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 14px;
 }
-#tix .tix-row-total td { font-weight: 600; }
-#tix .tix-required-star { color: #C8344B; }
-
-/* Fields. The plugin sizes them (40/60 label/value, inputs at 70%); this only
-   restyles them, so the widths keep coming from camptix.css. */
-#tix input[type="text"],
-#tix input[type="email"],
-#tix input[type="url"],
-#tix input[type="tel"],
-#tix input[type="number"],
-#tix textarea,
-#tix select {
-	font-family: "Hanken Grotesk", sans-serif;
-	font-size: 15px;
-	color: #2a1d14;
-	background: #FBF8F1;
-	border: 1.5px solid #dad5cd;
-	border-radius: 8px;
-	padding: 10px 12px;
-	max-width: 100%;
-}
-/* One column position for every attendee table. The plugin's 40/60 split is
-   advisory under `table-layout: auto`, so each table sized itself off its own
-   longest label and the fields for attendee 2 landed 200px left of the fields
-   for attendee 1. Never `width: 100%` without excluding radio and checkbox:
-   that stretches each control across its whole row and it overlaps its label. */
-#tix .tix-attendee-form td.tix-left,
-#tix .tix-receipt-form td.tix-left { width: 42%; }
-#tix .tix-attendee-form td.tix-right,
-#tix .tix-receipt-form td.tix-right { width: 58%; }
-#tix .tix-attendee-form input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]),
-#tix .tix-attendee-form textarea,
-#tix .tix-attendee-form select { width: 100%; }
-
-#tix input:focus,
-#tix textarea:focus,
-#tix select:focus {
-	outline: 2px solid #e0a526;
-	outline-offset: 1px;
-	border-color: #a8760f;
+#tix .tix-row-total td {
+	font-weight: 600;
+	border-bottom: 0;
 }
 
-/* The checkout block. CampTix builds it as a right-floated, right-aligned box
-   with each payment method as a "tab": the tab itself is `float: right` with a
-   5px solid rgb(10,10,10) bottom border to mark the selected one. Two problems
-   on this site. The float leaves `.tix-payment-method` at zero height so the
-   tab escapes its own box, and a 5px near-black slab on cream does not read as
-   a selected tab, it reads as a stray black bar sitting under the label.
+/* ---- 4. The checkout block ----------------------------------------------
+   CampTix builds this as a right-floated, right-aligned box with each payment
+   method as a "tab": the tab is `float: right` with a 5px solid rgb(10,10,10)
+   bottom border to mark the selected one. Two problems on cream. The float
+   leaves `.tix-payment-method` at zero height so the tab escapes its own box,
+   and a 5px near-black slab does not read as a selected tab, it reads as a
+   stray black bar under the label.
 
-   Unfloat the lot and keep the tab metaphor in the house idiom: a mono label
-   with a 2px crimson underline when selected. Still correct if a second
-   payment method is ever enabled, which a plain label would not be. */
+   Unfloat it and keep the tab metaphor in the house idiom: a mono label with a
+   crimson underline when selected, which still works if a second payment
+   method is ever enabled, where a plain label would not. */
 #tix .tix-submit {
 	float: none;
 	width: auto;
 	text-align: left;
-	margin-top: 28px;
+	margin-top: 32px;
+	padding-top: 26px;
+	border-top: 1.5px solid #ddd9d2;
 }
 #tix .tix-payment-method {
 	float: none;
 	width: auto;
-	margin-bottom: 16px;
+	margin-bottom: 20px;
 }
 #tix .tix-payment-tab {
 	float: none;
@@ -183,40 +367,68 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	border-bottom-color: #C8344B;
 }
 
-/* Register / Checkout / Save. Red is the site's primary action colour. */
+/* Espresso, like every other form submit on the site. The one crimson button
+   on this page is Register, on the stub. */
 #tix input[type="submit"] {
 	float: none !important;
-	background: #C8344B;
-	color: #fff;
 	font-family: "Hanken Grotesk", sans-serif;
-	font-weight: 600;
 	font-size: 15px;
+	font-weight: 600;
+	background: #2a1d14;
+	color: #F2ECE0;
 	border: 0;
 	border-radius: 8px;
-	padding: 14px 28px;
+	padding: 14px 34px;
+	width: auto;
 	cursor: pointer;
-	transition: background .15s ease;
+	transition: opacity 0.15s;
 }
-#tix input[type="submit"]:hover { background: #a12339; }
+#tix input[type="submit"]:hover { opacity: 0.85; }
 /* CampTix ships `#tix .tix-submit .tix-checkout-button { padding: 7px;
    text-transform: uppercase }`, which is (1,2,0) and beats the rule above.
    Match its specificity rather than reaching for !important. */
 #tix .tix-submit .tix-checkout-button {
-	padding: 14px 28px;
+	padding: 14px 34px;
 	text-transform: none;
 	width: auto;
 	margin: 0;
 }
 
-/* ---- 2. The ticket-selection screen: the espresso stub ------------------ */
+/* CampTix's notices, e.g. "please fill in all required fields" */
+#tix .tix-notice,
+#tix .tix-error {
+	background: rgba(200, 52, 75, 0.05);
+	border: 1.5px solid rgba(200, 52, 75, 0.25);
+	border-radius: 10px;
+	padding: 16px 18px;
+	margin: 0 0 24px;
+	font-size: 15px;
+	color: #2a1d14;
+}
 
-/* The native table is linearised into vertical label -> value rows (like
+@media (max-width: 782px) {
+	#tix { padding: 22px 18px !important; border-radius: 14px; }
+	#tix .tix-attendee-form tbody,
+	#tix .tix-receipt-form tbody { grid-template-columns: 1fr; gap: 18px; }
+	/* iOS Safari zooms the page in on focusing a field under 16px and does not
+	   zoom back out on blur. Same guard as forms/_form-card.scss. */
+	#tix input,
+	#tix textarea,
+	#tix select { font-size: 16px; }
+}
+
+/* ---- 5. The ticket-selection screen: the espresso stub ------------------
+   The native table is linearised into vertical label -> value rows (like
    .wcblr-stub__row on the home page): mono label left, value right, on the
    espresso card, with dashed perforation, left notch, corner stamp, and a
-   full-width red CTA. Form markup is fixed; this ONLY styles it.
-   Not shown in the editor, so judge it on the front end. */
+   full-width red CTA. Form markup is fixed; this ONLY styles it. */
 
 #{$tix-select} {
+	/* the stub draws its own card, so drop the form card above */
+	background: none;
+	border: 0;
+	border-radius: 0;
+	padding: 0 !important;
 	max-width: 394px;
 	margin: 28px auto 0;
 
@@ -267,7 +479,7 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	}
 
 	/* --- linearise the table into vertical rows --- */
-	.tix_tickets_table { border-collapse: collapse; }
+	.tix_tickets_table { border-collapse: collapse; width: 100%; }
 	.tix_tickets_table thead { display: none; }                 /* drop native header */
 	.tix_tickets_table,
 	.tix_tickets_table tbody,
@@ -339,16 +551,27 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	/* quantity select = light chip, aligned right */
 	.tix-column-quantity select {
 		font-size: 15px;
+		color: #2a1d14;
 		background: #F2ECE0;
 		border: 0;
 		border-radius: 8px;
 		padding: 9px 14px;
+		width: auto;
 		cursor: pointer;
 	}
+	.tix-column-quantity select:focus { box-shadow: none; border: 0; outline: 2px solid #e0a526; }
 
 	/* --- Register -> full-width red CTA at the card bottom --- */
 	p { margin: 22px 0 0; }
-	input[type="submit"] { display: block; width: 100%; }
+	input[type="submit"] {
+		display: block;
+		width: 100%;
+		background: #C8344B;
+		color: #fff;
+		border-radius: 8px;
+		padding: 14px 28px;
+	}
+	input[type="submit"]:hover { background: #a12339; opacity: 1; }
 
 	/* mobile */
 	@media (max-width: 600px) {
@@ -359,21 +582,19 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	}
 }
 
-/* ---- 3. The row the shortcode sits in ----------------------------------- */
+/* ---- 6. The row the shortcode sits in ----------------------------------- */
 
 /* The tickets page opens as copy on the left and the stub on the right, which
    is the shape the old hero had and the one worth keeping. But a `wp:columns`
    is a property of the PAGE, and CampTix swaps what is inside it: the same 42%
-   column that flatters a 394px stub renders the registration form at 484px,
+   column that flatters a 394px stub renders the registration card at 484px,
    which is the whole bug this file is about, reintroduced from the markup side.
 
    So the row is two columns only while the stub is what is in it.
 
    Written as "stacked by default, two columns on the selection screen" rather
-   than the reverse, on purpose. Both need `:has()`, but only this order fails
-   safe: if `:has()` ever stops surviving the sanitizer, every screen stacks at
-   full width, which is plain but correct. The reverse would leave a
-   registration form wedged into 42% of the row, which is not.
+   than the reverse, on purpose, for the reason in the header: losing `:has()`
+   has to fail towards the form, and a full-width form card is the form.
 
    Put `wcblr-tix-row` on the `wp:columns` block that holds `[camptix]`. */
 .wcblr-tix-row {
