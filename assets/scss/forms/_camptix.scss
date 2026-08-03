@@ -142,6 +142,47 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	border-color: #a8760f;
 }
 
+/* The checkout block. CampTix builds it as a right-floated, right-aligned box
+   with each payment method as a "tab": the tab itself is `float: right` with a
+   5px solid rgb(10,10,10) bottom border to mark the selected one. Two problems
+   on this site. The float leaves `.tix-payment-method` at zero height so the
+   tab escapes its own box, and a 5px near-black slab on cream does not read as
+   a selected tab, it reads as a stray black bar sitting under the label.
+
+   Unfloat the lot and keep the tab metaphor in the house idiom: a mono label
+   with a 2px crimson underline when selected. Still correct if a second
+   payment method is ever enabled, which a plain label would not be. */
+#tix .tix-submit {
+	float: none;
+	width: auto;
+	text-align: left;
+	margin-top: 28px;
+}
+#tix .tix-payment-method {
+	float: none;
+	width: auto;
+	margin-bottom: 16px;
+}
+#tix .tix-payment-tab {
+	float: none;
+	width: auto;
+	display: inline-block;
+	border: 0;
+	border-bottom: 2px solid transparent;
+	padding: 6px 0;
+	margin: 0 22px 0 0;
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 1.32px;
+	text-transform: uppercase;
+	color: #7a6757;
+}
+#tix .tix-payment-tab.tix-tab-selected {
+	color: #2a1d14;
+	border-bottom-color: #C8344B;
+}
+
 /* Register / Checkout / Save. Red is the site's primary action colour. */
 #tix input[type="submit"] {
 	float: none !important;
@@ -157,6 +198,15 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	transition: background .15s ease;
 }
 #tix input[type="submit"]:hover { background: #a12339; }
+/* CampTix ships `#tix .tix-submit .tix-checkout-button { padding: 7px;
+   text-transform: uppercase }`, which is (1,2,0) and beats the rule above.
+   Match its specificity rather than reaching for !important. */
+#tix .tix-submit .tix-checkout-button {
+	padding: 14px 28px;
+	text-transform: none;
+	width: auto;
+	margin: 0;
+}
 
 /* ---- 2. The ticket-selection screen: the espresso stub ------------------ */
 
