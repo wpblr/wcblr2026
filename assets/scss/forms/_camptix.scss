@@ -466,6 +466,37 @@ $tix-select: "#tix:has(#{$tix-select-table})";
    own, larger, spacing below. */
 #tix .tix-order-summary tbody tr + tr:not(.tix-row-total) { margin-top: 12px; }
 
+/* With a coupon in play CampTix adds a "Discounted ₹500" line under the
+   ticket name, and puts "Coupon Applied: NAME, 20% discount" in the total
+   row's otherwise empty first cell. That cell is styled as the TOTAL label,
+   so without this the note arrives as tiny tracked uppercase mono. */
+#tix .tix-order-summary td.tix-column-description small {
+	display: block;
+	margin-top: 6px;
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 12px;
+	font-weight: 400;
+	color: #e0a526;
+}
+#tix .tix-order-summary .tix-row-total td:first-child small {
+	font-family: "Hanken Grotesk", sans-serif;
+	font-size: 13px;
+	font-weight: 400;
+	letter-spacing: normal;
+	text-transform: none;
+	color: #978f87;
+}
+#tix .tix-order-summary .tix-row-total td:first-child strong {
+	font-family: inherit;
+	font-size: inherit;
+	color: #e0a526;
+	font-weight: 500;
+}
+/* and no injected TOTAL label in front of a coupon note */
+#tix .tix-order-summary .tix-row-total:has(td:first-child > small) td:first-child::before {
+	content: none;
+}
+
 /* The total, under the same dashed perforation the stub tears along. */
 #tix .tix-order-summary .tix-row-total {
 	margin-top: 18px;
@@ -747,17 +778,77 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 		background: #f2ece0;
 	}
 
-	/* Each ticket is its own block, and the boundary between two tickets needs
-	   its own line. The dashed rule belongs to ONE ticket: it is the tear
-	   between that ticket's name and its numbers, and the notch sits on it. So
-	   with two ticket types the only line on the card was inside each item and
-	   nothing marked where one item ended, which is what made the divider read
-	   as wrong. A quiet solid rule says "next ticket" without competing with
-	   the tear, because it is a different weight and a different style. */
-	.tix_tickets_table tbody tr + tr {
-		margin-top: 30px;
-		padding-top: 30px;
+	/* ONE divider, and it is the tear. An earlier pass added a solid rule
+	   between tickets on top of the dashed tear under each name, which put two
+	   lines within about 60px of each other and read as a double divider. The
+	   tear plus its notch already chunks the card once per ticket; the
+	   boundary between tickets is space. */
+	.tix_tickets_table tbody tr + tr { margin-top: 44px; }
+
+	/* The coupon row is an action, not a ticket, so it is the one place a
+	   second line earns itself: it separates "what you are buying" from "do
+	   something else". Nowhere near the last tear, so nothing doubles up. */
+	.tix_tickets_table tbody tr.tix-row-coupon {
+		margin-top: 32px;
+		padding-top: 28px;
 		border-top: 1px solid rgba(242, 236, 224, 0.13);
+	}
+
+	/* --- Coupons, on the dark card ---
+	   `#tix-coupon-container` carries an inline `display: none` that CampTix's
+	   own script flips to `block`, so this must not touch `display`: an
+	   `!important` strong enough to beat the inline hidden state would also
+	   beat the hidden state, and the form would sit open from the start.
+	   Inline-block children lay themselves out on one line inside it. */
+	#tix-coupon-link {
+		font-family: "JetBrains Mono", ui-monospace, monospace;
+		font-size: 13px;
+		color: #e0a526;
+		text-decoration: none;
+		border-bottom: 1px solid rgba(224, 165, 38, 0.4);
+	}
+	#tix-coupon-link:hover { border-bottom-color: #e0a526; }
+	#tix-coupon-container { margin-top: 16px; }
+	#tix-coupon-input {
+		font-family: "JetBrains Mono", ui-monospace, monospace;
+		font-size: 14px;
+		color: #2a1d14;
+		background: #F2ECE0;
+		border: 0;
+		border-radius: 8px;
+		padding: 11px 14px;
+		width: 58%;
+		margin-right: 8px;
+	}
+	/* Secondary to Register, which is the full-width crimson button below.
+	   Two identical red buttons in one card is two primary actions.
+
+	   `input[type="submit"][name=...]` and not `input[name=...]`: the Register
+	   rule below is `input[type="submit"]`, which ties on specificity and,
+	   being later in the file, wins. The extra attribute breaks the tie
+	   without reaching for `!important` or reordering the file. */
+	input[type="submit"][name="tix_coupon_submit"] {
+		display: inline-block;
+		width: auto;
+		background: transparent;
+		border: 1.5px solid rgba(242, 236, 224, 0.35);
+		color: #F2ECE0;
+		padding: 11px 18px;
+		font-size: 14px;
+	}
+	input[type="submit"][name="tix_coupon_submit"]:hover {
+		background: rgba(242, 236, 224, 0.08);
+		border-color: rgba(242, 236, 224, 0.6);
+	}
+	/* "Coupon Applied: NAME, 20% discount", once one is in play */
+	.tix-row-coupon strong { color: #e0a526; font-weight: 500; }
+	/* the per-ticket "Discounted ₹500" line under the ticket name */
+	.tix-discount {
+		display: block;
+		margin-top: 6px;
+		font-family: "JetBrains Mono", ui-monospace, monospace;
+		font-size: 12px;
+		color: #e0a526;
 	}
 
 	/* Perforation under the ticket-name row (aligns with the notch).
