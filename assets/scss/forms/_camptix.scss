@@ -1,157 +1,309 @@
 /* =============================================================
-   WCBLR — CampTix form styled as the homepage espresso "ticket stub".
-   Form markup is fixed; this ONLY styles it, scoped to #tix.
-   Enqueue on the FRONT END (form is not shown in the editor).
+   WCBLR — CampTix.
 
-   The native table is linearised into vertical label -> value rows
-   (like .wcblr-stub__row): mono label left, value right, on the
-   espresso card, with dashed perforation, left notch, corner stamp,
-   and a full-width red CTA.
+   CampTix renders EVERY step of the flow into the same `<div id="tix">`:
+   ticket selection, registration, checkout, edit-attendee, refund request,
+   refund success. Verified in camptix.php: form_start() line 5272,
+   form_attendee_info() 5459, form_access_tickets() 5723, form_edit_attendee()
+   5935, form_refund_request() 6126, form_refund_success() 6188.
+
+   So a rule written for one screen lands on all six. The espresso "ticket
+   stub" below was designed for the selection screen and, unscoped, it also put
+   the registration form inside a 394px dark card with an
+   `add_filter( 'ticket' );` stamp on it, every cell right-aligned at 20px in
+   cream, and the text inputs at the browser's default width. That is the bug
+   this file's structure exists to prevent, so keep the two parts separate:
+
+     1. every screen        house type, fields and buttons, full width
+     2. the selection screen only   the stub
+
+   The screens are told apart by their table, which is the only marker CampTix
+   gives us. Verified in the live DOM on /2026/?page_id=13 (preview), not
+   inferred: selection is `tix_tickets_table tix-tickets-list`, registration is
+   `tix_tickets_table tix-order-summary` plus one
+   `tix_tickets_table tix-attendee-form` per attendee. So "neither of those two
+   classes" identifies the selection screen on this build AND on master, where
+   the selection table has no second class at all. Do not key on
+   `.tix-tickets-list`: master does not emit it.
+
+   `:has()` survives the WordCamp CSS sanitizer (checked against the served
+   stylesheet), and if it ever stops doing so the selection screen degrades to
+   part 1, which is plain but correct, rather than the registration screen
+   degrading to the stub, which is not.
+
+   The page markup has to hold up its end: `[camptix]` belongs in a full-width
+   block, never in a narrow column. The old tickets TEMPLATE put it in a 40%
+   column, so even a correctly scoped registration form was capped at 435px.
    ============================================================= */
 
-#tix{max-width:394px;margin:28px auto 0;position:relative;overflow:visible !important;padding:0 !important;}
-#tix br{display:none;}
+/* the selection screen, and nothing else */
+$tix-select: "#tix:has(.tix_tickets_table:not(.tix-order-summary):not(.tix-attendee-form))";
 
-/* the FORM becomes the espresso stub card */
-#tix form{
-  position:relative;
-  margin:0;
-  background:#2a1d14;
-  color:#F2ECE0;
-  border-radius:14px;
-  padding:40px 30px 16px;
-  font-family:"Hanken Grotesk",sans-serif;
+/* ---- 1. Every CampTix screen -------------------------------------------- */
+
+/* Left-aligned and capped rather than full width. CampTix splits each row
+   40% label / 60% field, so at the page's full 1200px every label sits a
+   third of a screen away from the box it belongs to. 760px is about the
+   width at which the pair still reads as one row. The stub overrides this
+   with its own 394px below. */
+#tix {
+	max-width: 760px;
+	margin: 28px 0 0;
+	position: relative;
+	overflow: visible !important;
+	padding: 0 !important;
+	font-family: "Hanken Grotesk", sans-serif;
+	color: #2a1d14;
 }
 
-/* turmeric dashed corner stamp (like .wcblr-stamp) */
-#tix form::before{
-  content:"add_filter( 'ticket' );";
-  position:absolute;
-  top:-10px;
-  right:-12px;
-  transform:rotate(5deg);
-  white-space:nowrap;
-  z-index:4;
-  margin:0;
-  font-family:"JetBrains Mono",ui-monospace,monospace;
-  font-size:12px;
-  font-weight:500;
-  color:#2a1d14;
-  background:#e0a526;
-  border:2px dashed #2a1d14;
-  border-radius:30px;
-  padding:8px 16px;
+/* "Order Summary" and "Registration Information" */
+#tix h2 {
+	font-family: Fraunces, Georgia, serif;
+	font-size: 24px;
+	font-weight: 500;
+	line-height: 1.25;
+	margin: 34px 0 14px;
 }
 
-/* left notch — page-cream circle on the perforation line.
-   Nudge `top` to sit on the dashed line on your build. */
-#tix form::after{
-  content:"";
-  position:absolute;
-  left:-11px;
-  top:118px;
-  width:22px;
-  height:22px;
-  border-radius:50%;
-  background:#f2ece0;
-}
-
-/* --- linearise the table into vertical rows --- */
-#tix .tix_tickets_table{width:100%;background:transparent;border:0;margin:0;border-collapse:collapse;}
-#tix .tix_tickets_table thead{display:none;}                 /* drop native header */
+/* `.tix-receipt-form` is NOT a `.tix_tickets_table`, so it has to be named
+   separately or the receipt row is the one unstyled thing on the screen. */
 #tix .tix_tickets_table,
-#tix .tix_tickets_table tbody,
-#tix .tix_tickets_table tbody tr{display:block;width:100%;}
-
-/* every cell becomes a label(left) / value(right) row */
-#tix .tix_tickets_table tbody th.tix-column-description,
-#tix .tix_tickets_table td{
-  display:block;
-  position:relative;
-  text-align:right;
-  border:0;
-  background:0 0;
-  color:#f2ece0;
-  font-size:20px;
+#tix .tix-receipt-form {
+	width: 100%;
+	border-collapse: collapse;
+	background: transparent;
+	margin: 0;
 }
-#tix .tix_tickets_table tbody tr td{padding:0;margin-top:1.2rem;}
-#tix .tix-column-description br,
-#tix .tix_tickets_table p br{display:none;}
+#tix .tix_tickets_table th,
+#tix .tix_tickets_table td,
+#tix .tix-receipt-form th,
+#tix .tix-receipt-form td {
+	border: 0;
+	border-bottom: 1px solid #ddd9d2;
+	padding: 12px 10px;
+	vertical-align: top;
+	text-align: left;
+}
+#tix .tix_tickets_table thead th {
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 1.32px;
+	text-transform: uppercase;
+	color: #2a1d14;
+}
+/* the attendee tables lead with a `1. Ticket name` row spanning both columns */
+#tix .tix-attendee-form th[colspan],
+#tix .tix-receipt-form th[colspan] {
+	font-family: Fraunces, Georgia, serif;
+	font-size: 18px;
+	font-weight: 500;
+}
+#tix .tix-row-total td { font-weight: 600; }
+#tix .tix-required-star { color: #C8344B; }
 
-/* hardcoded mono labels (thead is hidden, so inject them here) */
-#tix .tix_tickets_table tbody th.tix-column-description::before{content:"TICKET";}
-#tix .tix-column-price::before{content:"PRICE";}
-#tix .tix-column-remaining::before{content:"REMAINING";}
-#tix .tix-column-quantity::before{content:"QUANTITY";}
-#tix .tix_tickets_table td::before,
-#tix .tix_tickets_table tbody th.tix-column-description::before{
-  position:absolute;
-  left:0;
-  top:18px;
-  font-family:"JetBrains Mono",monospace;
-  font-size:11px;
-  font-weight:500;
-  letter-spacing:1.4px;
-  text-transform:uppercase;
-  color:#978f87;
-  text-align:left;
+/* Fields. The plugin sizes them (40/60 label/value, inputs at 70%); this only
+   restyles them, so the widths keep coming from camptix.css. */
+#tix input[type="text"],
+#tix input[type="email"],
+#tix input[type="url"],
+#tix input[type="tel"],
+#tix input[type="number"],
+#tix textarea,
+#tix select {
+	font-family: "Hanken Grotesk", sans-serif;
+	font-size: 15px;
+	color: #2a1d14;
+	background: #FBF8F1;
+	border: 1.5px solid #dad5cd;
+	border-radius: 8px;
+	padding: 10px 12px;
+	max-width: 100%;
+}
+/* One column position for every attendee table. The plugin's 40/60 split is
+   advisory under `table-layout: auto`, so each table sized itself off its own
+   longest label and the fields for attendee 2 landed 200px left of the fields
+   for attendee 1. Never `width: 100%` without excluding radio and checkbox:
+   that stretches each control across its whole row and it overlaps its label. */
+#tix .tix-attendee-form td.tix-left,
+#tix .tix-receipt-form td.tix-left { width: 42%; }
+#tix .tix-attendee-form td.tix-right,
+#tix .tix-receipt-form td.tix-right { width: 58%; }
+#tix .tix-attendee-form input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]),
+#tix .tix-attendee-form textarea,
+#tix .tix-attendee-form select { width: 100%; }
+
+#tix input:focus,
+#tix textarea:focus,
+#tix select:focus {
+	outline: 2px solid #e0a526;
+	outline-offset: 1px;
+	border-color: #a8760f;
 }
 
-/* perforation under the ticket-name row (aligns with the notch) */
-#tix .tix_tickets_table tbody th.tix-column-description{
-  border-bottom:2px dashed rgba(242,236,224,.22);
-  padding-bottom:22px;
+/* Register / Checkout / Save. Red is the site's primary action colour. */
+#tix input[type="submit"] {
+	float: none !important;
+	background: #C8344B;
+	color: #fff;
+	font-family: "Hanken Grotesk", sans-serif;
+	font-weight: 600;
+	font-size: 15px;
+	border: 0;
+	border-radius: 8px;
+	padding: 14px 28px;
+	cursor: pointer;
+	transition: background .15s ease;
 }
+#tix input[type="submit"]:hover { background: #a12339; }
 
-/* values */
-#tix .tix-ticket-title{
-  display:block;
-  font-family:Fraunces,Georgia,serif;
-  font-size:18px;
-  font-weight:500;
-  line-height:1.2;
-  color:#f2ece0;
-}
-#tix .tix-ticket-excerpt{display:block;margin-top:6px;font-size:13px;color:#978f87;}
-#tix .tix-column-price{font-family:"JetBrains Mono",monospace;font-size:18px;color:#e0a526;}
-#tix .tix-column-remaining{font-family:"JetBrains Mono",monospace;font-size:14px;color:#978f87;}
+/* ---- 2. The ticket-selection screen: the espresso stub ------------------ */
 
-/* quantity select = light chip, aligned right */
-#tix .tix-column-quantity select{
-  font-family:"Hanken Grotesk",sans-serif;
-  font-size:15px;
-  color:#2a1d14;
-  background:#F2ECE0;
-  border:0;
-  border-radius:8px;
-  padding:9px 14px;
-  cursor:pointer;
-}
-#tix .tix-column-quantity select:focus{outline:2px solid #e0a526;outline-offset:1px;}
+/* The native table is linearised into vertical label -> value rows (like
+   .wcblr-stub__row on the home page): mono label left, value right, on the
+   espresso card, with dashed perforation, left notch, corner stamp, and a
+   full-width red CTA. Form markup is fixed; this ONLY styles it.
+   Not shown in the editor, so judge it on the front end. */
 
-/* --- Register -> full-width red CTA at the card bottom --- */
-#tix p{margin:22px 0 0;}
-#tix input[type="submit"]{
-  float:none !important;
-  display:block;
-  width:100%;
-  background:#C8344B;
-  color:#fff;
-  font-family:"Hanken Grotesk",sans-serif;
-  font-weight:600;
-  font-size:15px;
-  border:0;
-  border-radius:8px;
-  padding:14px 28px;
-  cursor:pointer;
-  transition:background .15s ease;
-}
-#tix input[type="submit"]:hover{background:#a12339;}
+#{$tix-select} {
+	max-width: 394px;
+	margin: 28px auto 0;
 
-/* mobile */
-@media(max-width:600px){
-  #tix form{padding:24px 22px 22px;}
-  #tix .tix_tickets_table td,
-  #tix .tix_tickets_table tbody th.tix-column-description{padding-left:90px;}
-  #tix form::after{display:none;}
+	br { display: none; }
+
+	/* the FORM becomes the espresso stub card */
+	form {
+		position: relative;
+		margin: 0;
+		background: #2a1d14;
+		color: #F2ECE0;
+		border-radius: 14px;
+		padding: 40px 30px 16px;
+		font-family: "Hanken Grotesk", sans-serif;
+	}
+
+	/* turmeric dashed corner stamp (like .wcblr-stamp) */
+	form::before {
+		content: "add_filter( 'ticket' );";
+		position: absolute;
+		top: -10px;
+		right: -12px;
+		transform: rotate(5deg);
+		white-space: nowrap;
+		z-index: 4;
+		margin: 0;
+		font-family: "JetBrains Mono", ui-monospace, monospace;
+		font-size: 12px;
+		font-weight: 500;
+		color: #2a1d14;
+		background: #e0a526;
+		border: 2px dashed #2a1d14;
+		border-radius: 30px;
+		padding: 8px 16px;
+	}
+
+	/* left notch — page-cream circle on the perforation line.
+	   Nudge `top` to sit on the dashed line on your build. */
+	form::after {
+		content: "";
+		position: absolute;
+		left: -11px;
+		top: 118px;
+		width: 22px;
+		height: 22px;
+		border-radius: 50%;
+		background: #f2ece0;
+	}
+
+	/* --- linearise the table into vertical rows --- */
+	.tix_tickets_table { border-collapse: collapse; }
+	.tix_tickets_table thead { display: none; }                 /* drop native header */
+	.tix_tickets_table,
+	.tix_tickets_table tbody,
+	.tix_tickets_table tbody tr { display: block; width: 100%; }
+
+	/* Every cell becomes a label(left) / value(right) row.
+	   Tag-agnostic on purpose. WordCamp.org's CampTix emits the body
+	   description cell as a `th` (checked in the live DOM), while CampTix
+	   master emits a `td` (camptix.php line 5318). A `th`-only selector is
+	   correct today and silently drops the perforation, the TICKET label and
+	   the notch's line the day the plugin is updated. */
+	.tix_tickets_table tbody .tix-column-description,
+	.tix_tickets_table td {
+		display: block;
+		position: relative;
+		text-align: right;
+		border: 0;
+		background: 0 0;
+		color: #f2ece0;
+		font-size: 20px;
+		padding: 0;
+	}
+	.tix_tickets_table tbody tr td { margin-top: 1.2rem; }
+	.tix-column-description br,
+	.tix_tickets_table p br { display: none; }
+
+	/* hardcoded mono labels (thead is hidden, so inject them here) */
+	.tix_tickets_table tbody .tix-column-description::before { content: "TICKET"; }
+	.tix-column-price::before { content: "PRICE"; }
+	.tix-column-remaining::before { content: "REMAINING"; }
+	.tix-column-quantity::before { content: "QUANTITY"; }
+	.tix_tickets_table td::before,
+	.tix_tickets_table tbody .tix-column-description::before {
+		position: absolute;
+		left: 0;
+		top: 18px;
+		font-family: "JetBrains Mono", monospace;
+		font-size: 11px;
+		font-weight: 500;
+		letter-spacing: 1.4px;
+		text-transform: uppercase;
+		color: #978f87;
+		text-align: left;
+	}
+
+	/* Perforation under the ticket-name row (aligns with the notch).
+	   `padding-left` keeps the wrapped excerpt clear of the absolutely
+	   positioned TICKET label; every other row is a single short value on the
+	   right and never reaches it. */
+	.tix_tickets_table tbody .tix-column-description {
+		border-bottom: 2px dashed rgba(242, 236, 224, .22);
+		padding-bottom: 22px;
+		padding-left: 66px;
+	}
+
+	/* values */
+	.tix-ticket-title {
+		display: block;
+		font-family: Fraunces, Georgia, serif;
+		font-size: 18px;
+		font-weight: 500;
+		line-height: 1.2;
+		color: #f2ece0;
+	}
+	.tix-ticket-excerpt { display: block; margin-top: 6px; font-size: 13px; color: #978f87; }
+	.tix-column-price { font-family: "JetBrains Mono", monospace; font-size: 18px; color: #e0a526; }
+	.tix-column-remaining { font-family: "JetBrains Mono", monospace; font-size: 14px; color: #978f87; }
+
+	/* quantity select = light chip, aligned right */
+	.tix-column-quantity select {
+		font-size: 15px;
+		background: #F2ECE0;
+		border: 0;
+		border-radius: 8px;
+		padding: 9px 14px;
+		cursor: pointer;
+	}
+
+	/* --- Register -> full-width red CTA at the card bottom --- */
+	p { margin: 22px 0 0; }
+	input[type="submit"] { display: block; width: 100%; }
+
+	/* mobile */
+	@media (max-width: 600px) {
+		form { padding: 24px 22px 22px; }
+		.tix_tickets_table td,
+		.tix_tickets_table tbody .tix-column-description { padding-left: 90px; }
+		form::after { display: none; }
+	}
 }
