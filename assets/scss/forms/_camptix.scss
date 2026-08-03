@@ -291,7 +291,13 @@ $tix-select: "#tix:has(#{$tix-select-table})";
    about 130 characters a line against a comfortable 60 to 75. */
 #tix .tix-attendee-form td.tix-left p { margin: 0 0 12px; max-width: 70ch; }
 #tix .tix-attendee-form td.tix-left p:last-child { margin-bottom: 0; }
-#tix .tix-attendee-form tr:has(td.tix-left p) { grid-column: 1 / -1; margin-top: 14px; }
+/* `> p` and not ` p`. gulp-clean-css does not understand `:has()` and strips
+   the whitespace inside it, so `:has(td.tix-left p)` was minified to
+   `:has(td.tix-leftp)`: an invalid selector that silently matched nothing, in
+   a file that had otherwise built and pushed clean. NEVER use a descendant
+   combinator inside `:has()` in this project. A child combinator survives
+   because it is punctuation. */
+#tix .tix-attendee-form tr:has(td.tix-left > p) { grid-column: 1 / -1; margin-top: 14px; }
 
 /* field cell */
 #tix .tix-attendee-form td.tix-right,
@@ -454,6 +460,12 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	white-space: nowrap;
 }
 
+/* One line item per ticket type, so they need to read as separate lines
+   rather than as one paragraph of numbers. Measured at 0px apart with two
+   types in the order. `:not(.tix-row-total)` because the total row sets its
+   own, larger, spacing below. */
+#tix .tix-order-summary tbody tr + tr:not(.tix-row-total) { margin-top: 12px; }
+
 /* The total, under the same dashed perforation the stub tears along. */
 #tix .tix-order-summary .tix-row-total {
 	margin-top: 18px;
@@ -470,6 +482,25 @@ $tix-select: "#tix:has(#{$tix-select-table})";
 	color: #978f87;
 }
 #tix .tix-order-summary .tix-row-total td:first-child::before { content: "Total"; }
+/* WordCamp.org's CampTix puts its own `<span>Total:</span>` inside the amount
+   cell; CampTix master emits no label at all, which is why the label above is
+   injected. Both together print "Total" twice, so style theirs where it exists
+   and withhold ours in that case. Checked in the live DOM: the cell's children
+   are SPAN then STRONG. */
+#tix .tix-order-summary .tix-row-total td:last-child span {
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 11px;
+	font-weight: 500;
+	letter-spacing: 1.32px;
+	text-transform: uppercase;
+	color: #978f87;
+	margin-right: 10px;
+}
+/* `>` for the reason above: ` span` inside `:has()` minifies to `span` glued
+   onto the pseudo-class. */
+#tix .tix-order-summary .tix-row-total:has(td:last-child > span) td:first-child::before {
+	content: none;
+}
 #tix .tix-order-summary .tix-row-total td:last-child,
 #tix .tix-order-summary .tix-row-total strong {
 	font-family: "JetBrains Mono", ui-monospace, monospace;
