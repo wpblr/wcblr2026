@@ -36,8 +36,9 @@
    column, so even a correctly scoped registration form was capped at 435px.
    ============================================================= */
 
-/* the selection screen, and nothing else */
-$tix-select: "#tix:has(.tix_tickets_table:not(.tix-order-summary):not(.tix-attendee-form))";
+/* the selection screen's own table, and nothing else */
+$tix-select-table: ".tix_tickets_table:not(.tix-order-summary):not(.tix-attendee-form)";
+$tix-select: "#tix:has(#{$tix-select-table})";
 
 /* ---- 1. Every CampTix screen -------------------------------------------- */
 
@@ -306,4 +307,45 @@ $tix-select: "#tix:has(.tix_tickets_table:not(.tix-order-summary):not(.tix-atten
 		.tix_tickets_table tbody .tix-column-description { padding-left: 90px; }
 		form::after { display: none; }
 	}
+}
+
+/* ---- 3. The row the shortcode sits in ----------------------------------- */
+
+/* The tickets page opens as copy on the left and the stub on the right, which
+   is the shape the old hero had and the one worth keeping. But a `wp:columns`
+   is a property of the PAGE, and CampTix swaps what is inside it: the same 42%
+   column that flatters a 394px stub renders the registration form at 484px,
+   which is the whole bug this file is about, reintroduced from the markup side.
+
+   So the row is two columns only while the stub is what is in it.
+
+   Written as "stacked by default, two columns on the selection screen" rather
+   than the reverse, on purpose. Both need `:has()`, but only this order fails
+   safe: if `:has()` ever stops surviving the sanitizer, every screen stacks at
+   full width, which is plain but correct. The reverse would leave a
+   registration form wedged into 42% of the row, which is not.
+
+   Put `wcblr-tix-row` on the `wp:columns` block that holds `[camptix]`. */
+.wcblr-tix-row {
+	display: block;
+}
+.wcblr-tix-row > .wp-block-column + .wp-block-column {
+	margin-top: 28px;
+}
+
+.wcblr-tix-row:has(#{$tix-select-table}) {
+	display: flex;
+}
+.wcblr-tix-row:has(#{$tix-select-table}) > .wp-block-column + .wp-block-column {
+	margin-top: 0;
+}
+
+/* "Pick your quantity and register below" is an instruction for one screen and
+   stale on every screen after it. Same fail-safe direction: hidden unless the
+   selection table is on the page. Put `wcblr-tix-hint` on that paragraph. */
+.wcblr-tix-row .wcblr-tix-hint {
+	display: none;
+}
+.wcblr-tix-row:has(#{$tix-select-table}) .wcblr-tix-hint {
+	display: block;
 }
