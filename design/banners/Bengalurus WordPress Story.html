@@ -1,0 +1,241 @@
+<!-- Banner · 1080×1080 · Bengaluru's WordPress Story
+     The year grid + the three ways the room meets · parchment -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>WCBLR 2026 Bengaluru's WordPress Story</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="banner.css" />
+<!-- Design-system type throughout (Playfair Display / Hanken Grotesk /
+     Space Mono), so this sits with the speaker, sponsor, media and guide
+     banners. Only Noto Sans Kannada is added; the tokens carry no
+     Kannada face. -->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400..700&display=swap" />
+<style>
+  html, body { margin: 0; background: #d8cdb8; }
+
+  .banner { --font-kn: 'Noto Sans Kannada', sans-serif; }
+  .b-pad { padding: 54px 72px 0; }
+
+  /* ── Masthead: a ruled band, as on every other banner in the set. ─── */
+  .s-mast { display: flex; align-items: baseline; justify-content: space-between; gap: 24px;
+    padding-bottom: 16px; border-bottom: 2px solid var(--wc-espresso); }
+  .s-mast .kn { font-family: var(--font-kn); font-size: 25px; line-height: 1.4; color: var(--wc-gold-deep); }
+  .s-mast .tag, .s-mast .yr { font-family: var(--font-mono); font-weight: 700; font-size: 15px;
+    letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-muted); }
+  .s-mast .tag { border-left: 1px solid var(--border-paper); padding-left: 16px; margin-left: 16px; }
+
+  .s-eyebrow { font-family: var(--font-mono); font-weight: 700;
+    font-size: 18px; letter-spacing: 0.02em; color: var(--accent); }
+  /* No status pill on this one. The other calls put a crimson pill here to
+     carry a date or a state, but this post announces nothing and asks for
+     nothing, and the weekend already sits in the third column of the foot
+     strip. A pill would also push the canvas past its accent budget:
+     crimson is spoken for by the headline italic and by the November mark
+     in the grid, which is the one thing here that has to be read. */
+  .s-kickrow { display: flex; align-items: center; gap: 20px; margin-top: 24px; }
+
+  /* ── Headline. Same two-line shape as the rest of the set, and the same
+        words as the post's h1, because someone who sees this and clicks
+        through has to land somewhere that looks like it. ────────────── */
+  .s-h { font-family: var(--font-display); color: var(--wc-ink); margin: 10px 0 0; }
+  .s-h .a { display: block; font-weight: 900; font-size: 84px; line-height: 1; letter-spacing: -0.025em; }
+  .s-h .b { display: block; font-weight: 500; font-style: italic; font-size: 96px; line-height: 0.98;
+    letter-spacing: -0.02em; color: var(--accent); margin-top: -2px; }
+
+  .s-lead { font-family: var(--font-body); font-weight: 400; line-height: 1.5;
+    color: var(--text-body); max-width: 540px; margin: 26px 0 0; font-size: 27px; }
+
+  /* ── The year grid. This campaign's whole argument is a rhythm: the room
+        meets on an ordinary weekend afternoon most months, and once a year
+        the same mark is twice as wide and lasts a weekend. A disc, a card,
+        a ticket, a ballot and a tier strip are all taken by other banners,
+        and a matrix is in any case the only shape that can show repetition
+        at all. November's is a single WIDE crimson mark rather than two,
+        because it is one event that runs long rather than two separate ones.
+
+        THIS GRID IS A RECORD, NOT A PATTERN. The first version inked all
+        twelve rows because the idea was "one a month", and that put a
+        checkable false claim on a public poster: there was no meetup in
+        February or March 2026, and September, October and December have not
+        happened yet. It now inks the six that are real, each positioned by
+        its actual day of the month, so 9 August sits left of 30 May. Verify
+        against meetup.com/bengaluruwordpress before reusing this object for
+        another year, and change the lead with it: the lead used to say
+        "every month" and had to become "most months" when the grid stopped
+        agreeing with it.
+
+        Translucent parchment, so the engraving reads through it. ─────── */
+  .s-year { position: absolute; top: 182px; right: 74px; z-index: 2; transform: rotate(-7deg);
+    width: 224px; padding: 20px 20px 18px; border-radius: 18px;
+    background: rgba(248, 244, 236, 0.93); border: 1.5px solid rgba(42, 29, 20, 0.55);
+    box-shadow: 0 26px 50px -28px rgba(42, 29, 20, 0.5); }
+  .s-year .yh { display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+    font-family: var(--font-mono); font-weight: 700; font-size: 12px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-muted); line-height: 1;
+    padding-bottom: 11px; margin-bottom: 12px; border-bottom: 1px solid var(--border-paper); }
+  .s-year .row + .row { margin-top: 5px; }
+  /* A CONTINUOUS track per month, with the month name set INSIDE its own
+     left end. Two earlier versions failed the same way and both were thrown
+     out. Five discrete week cells per row read as scattered confetti. Moving
+     to one track fixed that but left the label outside it, and the card is
+     turned 7 degrees, so a label 150px to the left of its own mark sits
+     visibly lower than the row it names: at DEC you pair the word with the
+     wrong track. Rotation cannot separate a label from a track it lives in,
+     so the label went inside, and the marks start clear of it. */
+  .s-year .tr { position: relative; width: 184px; height: 22px;
+    border-radius: 6px; background: rgba(42, 29, 20, 0.08);
+    display: flex; align-items: center; }
+  .s-year .mo { position: relative; z-index: 1; padding-left: 9px;
+    font-family: var(--font-mono); font-weight: 700;
+    font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--wc-ink-45); line-height: 1; }
+  .s-year .tr i { position: absolute; top: 0; bottom: 0; width: 22px;
+    border-radius: 6px; background: var(--wc-espresso); }
+  /* The one loud mark on the canvas. More than twice the width of a meetup,
+     crimson against eleven months of espresso, and the reason the object
+     still reads at thumbnail size. One wide mark rather than two adjacent
+     ones, because it is a single event that runs long. */
+  .s-year .nov .tr i { width: 50px; background: var(--accent); }
+  .s-year .nov .mo { color: var(--accent); }
+
+  /* ── The foot strip: the three ways this community actually exists, in
+        the same order and the same words the post uses. Day, month, year,
+        so it escalates left to right and lands on the camp. Translucent
+        parchment again, and quiet: the grid is the subject. ─────────── */
+  .s-waywrap { position: absolute; left: 74px; right: 74px; bottom: 184px; z-index: 2;
+    transform: rotate(-1deg); }
+  .s-ways { position: relative; display: flex; align-items: stretch; overflow: hidden;
+    background: rgba(248, 244, 236, 0.96); border: 1.5px solid rgba(42, 29, 20, 0.55);
+    border-radius: 18px; box-shadow: 0 26px 50px -28px rgba(42, 29, 20, 0.5); }
+  .s-ways .w { flex: 1; min-width: 0; padding: 28px 26px 30px;
+    display: flex; flex-direction: column; gap: 15px; }
+  .s-ways .w + .w { border-left: 2px dashed rgba(42, 29, 20, 0.4); }
+  .s-ways .k { font-family: var(--font-mono); font-weight: 700; font-size: 13px;
+    letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-muted); line-height: 1; }
+  .s-ways .w.cam .k { color: var(--wc-gold-deep); }
+  .s-ways .v { display: flex; align-items: center; gap: 13px;
+    font-family: var(--font-body); font-size: 21px; line-height: 1.15; color: var(--wc-ink); }
+  .s-ways .v svg { width: 25px; height: 25px; display: block; flex: none; }
+
+  /* The theme's rubber stamp. This campaign has no deadline, so it carries
+     the hook instead, and it is the same line the post prints at the end of
+     its opening section. That repetition is what ties poster to page. Kept
+     mostly clear of the strip, which fills from its own top edge. */
+  .s-stamp { position: absolute; top: -26px; right: 34px; transform: rotate(4deg); z-index: 3;
+    font-family: var(--font-mono); font-weight: 700; font-size: 16px; letter-spacing: 0.06em;
+    color: var(--wc-espresso); background: var(--wc-gold);
+    border: 2px dashed var(--wc-espresso); border-radius: 30px; padding: 10px 19px; white-space: nowrap; }
+
+  /* ── The gold band carries the one destination, ruled top and bottom in
+        espresso like the live site's marquee. ────────────────────────── */
+  .banner .b-marquee { background: var(--wc-gold); color: var(--wc-espresso); padding: 18px 0;
+    border-top: 2px solid var(--wc-espresso); border-bottom: 2px solid var(--wc-espresso);
+    font-family: var(--font-mono); font-weight: 700; font-size: 18px; letter-spacing: 0.07em;
+    justify-content: center; }
+  .banner .b-marquee .dot { background: var(--accent); width: 7px; height: 7px; margin: 0 22px; }
+</style>
+</head>
+<body>
+<div class="banner wc-grain" data-download-name="WCBLR-2026-Bengalurus-WordPress-Story">
+  <img class="b-skyline" src="../assets/illustrations/hero-banner.png" alt="Bengaluru city banner"
+       style="bottom: 62px; width: 1152px; left: -36px; right: auto;" />
+
+  <div class="s-year">
+    <div class="yh"><span>2026</span><span>Meetups</span></div>
+    <div class="row"><span class="tr"><span class="mo">Jan</span><i style="left: 134px"></i></span></div>
+    <div class="row"><span class="tr"><span class="mo">Feb</span></span></div>
+    <div class="row"><span class="tr"><span class="mo">Mar</span></span></div>
+    <div class="row"><span class="tr"><span class="mo">Apr</span><i style="left: 138px"></i></span></div>
+    <div class="row"><span class="tr"><span class="mo">May</span><i style="left: 158px"></i></span></div>
+    <div class="row"><span class="tr"><span class="mo">Jun</span><i style="left: 119px"></i></span></div>
+    <div class="row"><span class="tr"><span class="mo">Jul</span><i style="left: 111px"></i></span></div>
+    <div class="row"><span class="tr"><span class="mo">Aug</span><i style="left: 75px"></i></span></div>
+    <div class="row"><span class="tr"><span class="mo">Sep</span></span></div>
+    <div class="row"><span class="tr"><span class="mo">Oct</span></span></div>
+    <div class="row nov"><span class="tr"><span class="mo">Nov</span><i style="left: 104px"></i></span></div>
+    <div class="row"><span class="tr"><span class="mo">Dec</span></span></div>
+  </div>
+
+  <div class="b-pad">
+    <div class="s-mast">
+      <span>
+        <span class="kn">ವರ್ಡ್‌ಕ್ಯಾಂಪ್ ಬೆಂಗಳೂರು</span>
+        <span class="tag">#WCBLR</span>
+      </span>
+      <span class="yr">Bengaluru &middot; 2026</span>
+    </div>
+
+    <div class="s-kickrow">
+      <span class="s-eyebrow">// bengaluru_wordpress_story</span>
+    </div>
+
+    <h1 class="s-h">
+      <span class="a">Bengaluru's</span>
+      <span class="b">WordPress story.</span>
+    </h1>
+
+    <p class="s-lead">
+      A meetup most months. Once a year it fills a school on Museum Road.
+    </p>
+  </div>
+
+  <div class="s-waywrap">
+    <span class="s-stamp">add_action( 'most_months' );</span>
+
+    <div class="s-ways">
+      <div class="w">
+        <span class="k">Every day</span>
+        <span class="v">
+          <!-- message-circle -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="#4A413A" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+          </svg>
+          <span>The WhatsApp room</span>
+        </span>
+      </div>
+
+      <div class="w">
+        <span class="k">Most months</span>
+        <span class="v">
+          <!-- users -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="#4A413A" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+          <span>A free meetup</span>
+        </span>
+      </div>
+
+      <div class="w cam">
+        <span class="k">Once a year</span>
+        <span class="v">
+          <!-- tent -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C9344A" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3.5 21 14 3" /><path d="M20.5 21 10 3" />
+            <path d="M15.5 21 12 15l-3.5 6" /><path d="M2 21h20" />
+          </svg>
+          <span>21&ndash;22 November</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="b-marquee">
+    <div class="seg">
+      <span>READ THE STORY</span>
+      <span class="dot"></span><span>BENGALURU.WORDCAMP.ORG/BENGALURU-WORDPRESS-STORY</span>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<script src="download-png.js"></script>
+</body>
+</html>

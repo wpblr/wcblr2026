@@ -1,0 +1,221 @@
+<!-- Banner · 1200×630 · Bengaluru's WordPress Story — Featured
+     The year grid + the three ways the room meets · parchment · 1200x630 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>WCBLR 2026 Bengaluru's WordPress Story — Featured</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="banner.css" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400..700&display=swap" />
+<style>
+  html, body { margin: 0; background: #d8cdb8; }
+
+  /* Landscape featured-image / OG variant (WordPress recommends 1200×630).
+     The square laid on its side: masthead rule, headline left, the year grid
+     top right, and the three ways the room meets along the foot. */
+  .banner--feat { width: 1200px; height: 630px; }
+  .banner { --font-kn: 'Noto Sans Kannada', sans-serif; }
+  .banner--feat .b-pad { padding: 40px 64px 0; }
+
+  .s-mast { display: flex; align-items: baseline; justify-content: space-between; gap: 24px;
+    padding-bottom: 13px; border-bottom: 2px solid var(--wc-espresso); }
+  .s-mast .kn { font-family: var(--font-kn); font-size: 21px; line-height: 1.4; color: var(--wc-gold-deep); }
+  .s-mast .tag, .s-mast .yr { font-family: var(--font-mono); font-weight: 700; font-size: 13px;
+    letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-muted); }
+  .s-mast .tag { border-left: 1px solid var(--border-paper); padding-left: 14px; margin-left: 14px; }
+
+  .s-eyebrow { font-family: var(--font-mono); font-weight: 700;
+    font-size: 15px; letter-spacing: 0.02em; color: var(--accent); }
+  /* No status pill, for the reason given on the square: this post announces
+     nothing, the weekend already sits in the strip's third column, and the
+     accent budget is spent on the headline italic and the November mark. */
+  .s-kickrow { display: flex; align-items: center; gap: 18px; margin-top: 15px; }
+
+  .s-h { font-family: var(--font-display); color: var(--wc-ink); margin: 6px 0 0; }
+  .s-h .a { display: block; font-weight: 900; font-size: 56px; line-height: 1.02; letter-spacing: -0.025em; }
+  .s-h .b { display: block; font-weight: 500; font-style: italic; font-size: 64px; line-height: 0.98;
+    letter-spacing: -0.02em; color: var(--accent); margin-top: -1px; }
+
+  .s-lead { font-family: var(--font-body); font-weight: 400; font-size: 20px; line-height: 1.45;
+    color: var(--text-body); max-width: 470px; margin: 18px 0 0; }
+
+  /* ── The year grid, shrunk. The square's version is 393px tall, which on a
+        630px canvas would run straight into the foot strip, so the rows lose
+        8px of height each rather than the object losing rows: twelve months
+        is the whole point of the object and eleven would say nothing. Same
+        continuous tracks as the square, for the same reason (see its
+        comment): the card is turned 7 degrees and only an unbroken track
+        keeps a month label tied to its own mark.
+
+        Same six real meetups as the square, at the same day-of-month
+        positions scaled to this track. February, March, September, October
+        and December are deliberately EMPTY and must stay that way unless
+        meetup.com says otherwise; see the square's comment. ──────────── */
+  .s-year { position: absolute; top: 100px; right: 66px; z-index: 2; transform: rotate(-7deg);
+    width: 186px; padding: 16px 16px 14px; border-radius: 14px;
+    background: rgba(248, 244, 236, 0.93); border: 1.5px solid rgba(42, 29, 20, 0.55);
+    box-shadow: 0 20px 40px -22px rgba(42, 29, 20, 0.5); }
+  .s-year .yh { display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+    font-family: var(--font-mono); font-weight: 700; font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-muted); line-height: 1;
+    padding-bottom: 8px; margin-bottom: 9px; border-bottom: 1px solid var(--border-paper); }
+  .s-year .row + .row { margin-top: 3px; }
+  /* Month name inside its own track, for the reason given on the square:
+     at 7 degrees of rotation a label sitting outside the track drifts far
+     enough to pair with the wrong row. */
+  .s-year .tr { position: relative; width: 154px; height: 14px;
+    border-radius: 4px; background: rgba(42, 29, 20, 0.08);
+    display: flex; align-items: center; }
+  .s-year .mo { position: relative; z-index: 1; padding-left: 7px;
+    font-family: var(--font-mono); font-weight: 700;
+    font-size: 9px; letter-spacing: 0.03em; text-transform: uppercase;
+    color: var(--wc-ink-45); line-height: 1; }
+  .s-year .tr i { position: absolute; top: 0; bottom: 0; width: 17px;
+    border-radius: 4px; background: var(--wc-espresso); }
+  .s-year .nov .tr i { width: 39px; background: var(--accent); }
+  .s-year .nov .mo { color: var(--accent); }
+
+  /* The engraving, masked so it fades out under the copy column. Narrower
+     and lower than the media-partners pair: this foot strip is a single
+     line per column rather than a three-row ledger, so there is more canvas
+     showing and the skyline can afford to sit down in it. */
+  .feat-sky {
+    position: absolute; right: -20px; bottom: 90px; width: 640px; z-index: 1;
+    -webkit-mask-image: linear-gradient(100deg, transparent 0%, rgba(0,0,0,0.5) 24%, #000 52%);
+            mask-image: linear-gradient(100deg, transparent 0%, rgba(0,0,0,0.5) 24%, #000 52%);
+    pointer-events: none; user-select: none;
+  }
+
+  /* ── The foot strip, same three columns and same words as the square. ── */
+  .s-waywrap { position: absolute; left: 64px; right: 64px; bottom: 96px; z-index: 2;
+    transform: rotate(-1deg); }
+  .s-ways { position: relative; display: flex; align-items: stretch; overflow: hidden;
+    background: rgba(248, 244, 236, 0.96); border: 1.5px solid rgba(42, 29, 20, 0.55);
+    border-radius: 14px; box-shadow: 0 20px 40px -22px rgba(42, 29, 20, 0.5); }
+  .s-ways .w { flex: 1; min-width: 0; padding: 20px 20px 22px;
+    display: flex; flex-direction: column; gap: 11px; }
+  .s-ways .w + .w { border-left: 2px dashed rgba(42, 29, 20, 0.4); }
+  .s-ways .k { font-family: var(--font-mono); font-weight: 700; font-size: 11px;
+    letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-muted); line-height: 1; }
+  .s-ways .w.cam .k { color: var(--wc-gold-deep); }
+  .s-ways .v { display: flex; align-items: center; gap: 10px;
+    font-family: var(--font-body); font-size: 16px; line-height: 1.15; color: var(--wc-ink); }
+  .s-ways .v svg { width: 19px; height: 19px; display: block; flex: none; }
+
+  /* The stamp, carrying the hook rather than a deadline. Smaller tracking
+     than the square's so the same 28 characters still clear the strip's
+     right-hand column at this width. */
+  .s-stamp { position: absolute; top: -24px; right: 30px; transform: rotate(4deg); z-index: 3;
+    font-family: var(--font-mono); font-weight: 700; font-size: 12px; letter-spacing: 0.04em;
+    color: var(--wc-espresso); background: var(--wc-gold);
+    border: 2px dashed var(--wc-espresso); border-radius: 30px; padding: 8px 15px; white-space: nowrap; }
+
+  .banner .b-marquee { background: var(--wc-gold); color: var(--wc-espresso); padding: 15px 0;
+    border-top: 2px solid var(--wc-espresso); border-bottom: 2px solid var(--wc-espresso);
+    font-family: var(--font-mono); font-weight: 700; font-size: 16px; letter-spacing: 0.06em;
+    justify-content: center; }
+  .banner .b-marquee .dot { background: var(--accent); width: 6px; height: 6px; margin: 0 18px; }
+</style>
+</head>
+<body>
+<div class="banner wc-grain banner--feat" data-download-name="WCBLR-2026-Bengalurus-WordPress-Story-Featured">
+  <img class="feat-sky" src="../assets/illustrations/hero-banner.png" alt="" />
+
+  <div class="s-year">
+    <div class="yh"><span>2026</span><span>Meetups</span></div>
+    <div class="row"><span class="tr"><span class="mo">Jan</span><i style="left: 114px"></i></span></div>
+    <div class="row"><span class="tr"><span class="mo">Feb</span></span></div>
+    <div class="row"><span class="tr"><span class="mo">Mar</span></span></div>
+    <div class="row"><span class="tr"><span class="mo">Apr</span><i style="left: 117px"></i></span></div>
+    <div class="row"><span class="tr"><span class="mo">May</span><i style="left: 134px"></i></span></div>
+    <div class="row"><span class="tr"><span class="mo">Jun</span><i style="left: 100px"></i></span></div>
+    <div class="row"><span class="tr"><span class="mo">Jul</span><i style="left: 94px"></i></span></div>
+    <div class="row"><span class="tr"><span class="mo">Aug</span><i style="left: 64px"></i></span></div>
+    <div class="row"><span class="tr"><span class="mo">Sep</span></span></div>
+    <div class="row"><span class="tr"><span class="mo">Oct</span></span></div>
+    <div class="row nov"><span class="tr"><span class="mo">Nov</span><i style="left: 89px"></i></span></div>
+    <div class="row"><span class="tr"><span class="mo">Dec</span></span></div>
+  </div>
+
+  <div class="b-pad">
+    <div class="s-mast">
+      <span>
+        <span class="kn">ವರ್ಡ್‌ಕ್ಯಾಂಪ್ ಬೆಂಗಳೂರು</span>
+        <span class="tag">#WCBLR</span>
+      </span>
+      <span class="yr">Bengaluru &middot; 2026</span>
+    </div>
+
+    <div class="s-kickrow">
+      <span class="s-eyebrow">// bengaluru_wordpress_story</span>
+    </div>
+
+    <h1 class="s-h">
+      <span class="a">Bengaluru's</span>
+      <span class="b">WordPress story.</span>
+    </h1>
+
+    <p class="s-lead">
+      A meetup most months. Once a year it fills a school on Museum Road.
+    </p>
+  </div>
+
+  <div class="s-waywrap">
+    <span class="s-stamp">add_action( 'most_months' );</span>
+
+    <div class="s-ways">
+      <div class="w">
+        <span class="k">Every day</span>
+        <span class="v">
+          <!-- message-circle -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="#4A413A" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+          </svg>
+          <span>The WhatsApp room</span>
+        </span>
+      </div>
+
+      <div class="w">
+        <span class="k">Most months</span>
+        <span class="v">
+          <!-- users -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="#4A413A" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+          <span>A free meetup</span>
+        </span>
+      </div>
+
+      <div class="w cam">
+        <span class="k">Once a year</span>
+        <span class="v">
+          <!-- tent -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C9344A" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3.5 21 14 3" /><path d="M20.5 21 10 3" />
+            <path d="M15.5 21 12 15l-3.5 6" /><path d="M2 21h20" />
+          </svg>
+          <span>21&ndash;22 November</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="b-marquee">
+    <div class="seg">
+      <span>READ THE STORY</span>
+      <span class="dot"></span><span>BENGALURU.WORDCAMP.ORG/BENGALURU-WORDPRESS-STORY</span>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<script src="download-png.js"></script>
+</body>
+</html>

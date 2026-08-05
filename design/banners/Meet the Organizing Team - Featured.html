@@ -1,0 +1,215 @@
+<!-- Banner · 1200×630 · Meet the Organizing Team — Featured
+     The roll call sheet + the three facts along the foot · parchment -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>WCBLR 2026 Meet the Organizing Team — Featured</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="banner.css" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400..700&display=swap" />
+<style>
+  html, body { margin: 0; background: #d8cdb8; }
+
+  /* Landscape featured-image / OG variant (WordPress recommends 1200x630).
+     The square laid on its side: masthead rule, headline left, the roll call
+     sheet top right, the three facts along the foot. */
+  .banner--feat { width: 1200px; height: 630px; }
+  .banner { --font-kn: 'Noto Sans Kannada', sans-serif; }
+  .banner--feat .b-pad { padding: 40px 64px 0; }
+
+  .s-mast { display: flex; align-items: baseline; justify-content: space-between; gap: 24px;
+    padding-bottom: 13px; border-bottom: 2px solid var(--wc-espresso); }
+  .s-mast .kn { font-family: var(--font-kn); font-size: 21px; line-height: 1.4; color: var(--wc-gold-deep); }
+  .s-mast .tag, .s-mast .yr { font-family: var(--font-mono); font-weight: 700; font-size: 13px;
+    letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-muted); }
+  .s-mast .tag { border-left: 1px solid var(--border-paper); padding-left: 14px; margin-left: 14px; }
+
+  .s-eyebrow { font-family: var(--font-mono); font-weight: 700;
+    font-size: 15px; letter-spacing: 0.02em; color: var(--accent); }
+  .s-kickrow { display: flex; align-items: center; gap: 18px; margin-top: 15px; }
+
+  /* Crimson, matching the square: the count is the claim this poster makes,
+     and gold is already spoken for by the stamp and the marquee. */
+  .s-flag { display: inline-flex; align-items: center; gap: 9px; background: var(--accent);
+    color: var(--wc-paper); font-family: var(--font-mono); font-weight: 700; font-size: 12px;
+    letter-spacing: var(--ls-label); text-transform: uppercase; line-height: 1;
+    padding: 8px 15px; border-radius: var(--radius-pill); }
+  .s-flag .d { width: 7px; height: 7px; border-radius: 50%; background: var(--wc-gold); flex: none; }
+
+  /* The italic runs to 68px, inside the kit's 64 for this size, because
+     "organizing team" is 15 characters and the landscape copy column has to
+     clear the sheet at x=938. */
+  .s-h { font-family: var(--font-display); color: var(--wc-ink); margin: 6px 0 0; }
+  .s-h .a { display: block; font-weight: 900; font-size: 56px; line-height: 1.02; letter-spacing: -0.025em; }
+  .s-h .b { display: block; font-weight: 500; font-style: italic; font-size: 68px; line-height: 0.98;
+    letter-spacing: -0.02em; color: var(--accent); }
+
+  .s-lead { font-family: var(--font-body); font-weight: 400; font-size: 20px; line-height: 1.45;
+    color: var(--text-body); max-width: 470px; margin: 16px 0 0; }
+
+  /* -- The roll call sheet, at 196px rather than the square's 244. Its own
+        padding drops from 18 to 13 and the caption from 11/24 to 9/18, because
+        a card scaled down without scaling its padding has nothing left inside;
+        the kit names that as where the featured variant usually goes wrong. -- */
+  .s-sheet { position: absolute; top: 96px; right: 66px; z-index: 2; transform: rotate(-7deg); }
+  .s-sheet .card { width: 196px; padding: 13px 13px 15px;
+    background: rgba(248, 244, 236, 0.93); border: 1.5px solid rgba(42, 29, 20, 0.55);
+    border-radius: 16px; box-shadow: 0 22px 44px -24px rgba(42, 29, 20, 0.5); }
+  .s-sheet .cap { display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+    padding-bottom: 11px; margin-bottom: 10px; border-bottom: 2px dashed rgba(42, 29, 20, 0.4); }
+  .s-sheet .cap .k { font-family: var(--font-mono); font-weight: 700; font-size: 9px;
+    letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-muted); line-height: 1; }
+  .s-sheet .cap .n { font-family: var(--font-display); font-weight: 900; font-size: 18px;
+    line-height: 1; letter-spacing: -0.02em; color: var(--wc-ink); }
+  .s-sheet .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .s-sheet .cell { aspect-ratio: 1; border-radius: 7px; overflow: hidden;
+    background: rgba(42, 29, 20, 0.055); border: 1px solid rgba(42, 29, 20, 0.2); }
+  .s-sheet .cell.alt { background: rgba(42, 29, 20, 0.1); }
+  .s-sheet .cell svg { width: 100%; height: 100%; display: block; }
+
+  /* Bengaluru, held right so the copy column stays on clean paper. 640px at
+     bottom 62 rather than the travel guide's 600/54: this pair's foot strip is
+     three legs of larger type and sits taller, and at the travel numbers the
+     engraving came back as a sliver. */
+  .feat-sky {
+    position: absolute; right: -30px; bottom: 62px; width: 640px; z-index: 1;
+    -webkit-mask-image: linear-gradient(100deg, transparent 0%, rgba(0,0,0,0.5) 24%, #000 52%);
+            mask-image: linear-gradient(100deg, transparent 0%, rgba(0,0,0,0.5) 24%, #000 52%);
+    pointer-events: none; user-select: none;
+  }
+
+  /* -- The foot: the same three facts the square and the post's hero state. -- */
+  .s-stripwrap { position: absolute; left: 64px; right: 64px; bottom: 96px; z-index: 2;
+    transform: rotate(-0.7deg); }
+  .s-strip { display: flex; align-items: stretch; overflow: hidden;
+    background: rgba(248, 244, 236, 0.91); border: 1.5px solid rgba(42, 29, 20, 0.55);
+    border-radius: 16px; box-shadow: 0 22px 44px -24px rgba(42, 29, 20, 0.5); }
+  .s-strip .leg { flex: 1; min-width: 0; padding: 17px 20px 19px;
+    display: flex; flex-direction: column; gap: 7px;
+    border-left: 2px dashed rgba(42, 29, 20, 0.4); }
+  .s-strip .leg:first-child { border-left: 0; }
+  .s-strip .k { font-family: var(--font-mono); font-weight: 700; font-size: 11px;
+    letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-muted); line-height: 1; }
+  .s-strip .v { font-family: var(--font-display); font-weight: 900; font-size: 25px; line-height: 1;
+    letter-spacing: -0.02em; color: var(--wc-ink); white-space: nowrap; }
+  .s-strip .s { font-family: var(--font-body); font-size: 13px; line-height: 1.35; color: var(--text-body); }
+  /* The last leg is where the reader is being sent, so it gets the gold. */
+  .s-strip .leg--end { background: rgba(225, 165, 39, 0.2); }
+  .s-strip .leg--end .k { color: var(--wc-gold-deep); }
+
+  /* The theme's rubber stamp, carrying the post's own badge verbatim; there is
+     no deadline on this campaign, so the slot takes the joke instead. Held in
+     to right: 300px for the square's reason: a gold stamp landing on the gold
+     leg loses its edge and reads as one smeared shape. */
+  .s-stamp { position: absolute; top: -28px; right: 300px; transform: rotate(4deg); z-index: 3;
+    font-family: var(--font-mono); font-weight: 700; font-size: 13px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--wc-espresso); background: var(--wc-gold);
+    border: 2px dashed var(--wc-espresso); border-radius: 30px; padding: 8px 16px; white-space: nowrap; }
+
+  /* The gold band carries the one action rather than a generic ticker. */
+  .banner .b-marquee { background: var(--wc-gold); color: var(--wc-espresso); padding: 15px 0;
+    border-top: 2px solid var(--wc-espresso); border-bottom: 2px solid var(--wc-espresso);
+    font-family: var(--font-mono); font-weight: 700; font-size: 16px; letter-spacing: 0.08em;
+    justify-content: center; }
+  .banner .b-marquee .dot { background: var(--accent); width: 6px; height: 6px; margin: 0 22px; }
+</style>
+</head>
+<body>
+<div class="banner wc-grain banner--feat" data-download-name="WCBLR-2026-Meet-the-Organizing-Team-Featured">
+  <img class="feat-sky" src="../assets/illustrations/hero-banner.png" alt="" />
+
+  <div class="s-sheet">
+    <div class="card">
+      <div class="cap">
+        <span class="k">Organizing team</span>
+        <span class="n">16/16</span>
+      </div>
+      <div class="grid">
+        <!-- build A -->
+        <span class="cell"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="15.5" r="7" fill="#2B1C14" opacity="0.8"/><path d="M6.5 40c0-7.5 6-13.5 13.5-13.5S33.5 32.5 33.5 40z" fill="#2B1C14" opacity="0.8"/></svg></span>
+        <!-- build B: narrower shoulders, head sits a touch higher -->
+        <span class="cell alt"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="14.5" r="6.4" fill="#2B1C14" opacity="0.8"/><path d="M8.5 40c0-6.6 5.2-12 11.5-12s11.5 5.4 11.5 12z" fill="#2B1C14" opacity="0.8"/></svg></span>
+        <!-- build C: broader shoulders -->
+        <span class="cell"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="15" r="7.4" fill="#2B1C14" opacity="0.8"/><path d="M4.8 40c0-8.2 6.8-14.6 15.2-14.6S35.2 31.8 35.2 40z" fill="#2B1C14" opacity="0.8"/></svg></span>
+        <!-- build D: smaller head, wider set -->
+        <span class="cell alt"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="16" r="6.1" fill="#2B1C14" opacity="0.8"/><path d="M6 40c0-7.2 6.3-13 14-13s14 5.8 14 13z" fill="#2B1C14" opacity="0.8"/></svg></span>
+
+        <span class="cell alt"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="14.5" r="6.4" fill="#2B1C14" opacity="0.8"/><path d="M8.5 40c0-6.6 5.2-12 11.5-12s11.5 5.4 11.5 12z" fill="#2B1C14" opacity="0.8"/></svg></span>
+        <span class="cell"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="15" r="7.4" fill="#2B1C14" opacity="0.8"/><path d="M4.8 40c0-8.2 6.8-14.6 15.2-14.6S35.2 31.8 35.2 40z" fill="#2B1C14" opacity="0.8"/></svg></span>
+        <span class="cell alt"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="16" r="6.1" fill="#2B1C14" opacity="0.8"/><path d="M6 40c0-7.2 6.3-13 14-13s14 5.8 14 13z" fill="#2B1C14" opacity="0.8"/></svg></span>
+        <span class="cell"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="15.5" r="7" fill="#2B1C14" opacity="0.8"/><path d="M6.5 40c0-7.5 6-13.5 13.5-13.5S33.5 32.5 33.5 40z" fill="#2B1C14" opacity="0.8"/></svg></span>
+
+        <span class="cell"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="15" r="7.4" fill="#2B1C14" opacity="0.8"/><path d="M4.8 40c0-8.2 6.8-14.6 15.2-14.6S35.2 31.8 35.2 40z" fill="#2B1C14" opacity="0.8"/></svg></span>
+        <span class="cell alt"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="16" r="6.1" fill="#2B1C14" opacity="0.8"/><path d="M6 40c0-7.2 6.3-13 14-13s14 5.8 14 13z" fill="#2B1C14" opacity="0.8"/></svg></span>
+        <span class="cell"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="15.5" r="7" fill="#2B1C14" opacity="0.8"/><path d="M6.5 40c0-7.5 6-13.5 13.5-13.5S33.5 32.5 33.5 40z" fill="#2B1C14" opacity="0.8"/></svg></span>
+        <span class="cell alt"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="14.5" r="6.4" fill="#2B1C14" opacity="0.8"/><path d="M8.5 40c0-6.6 5.2-12 11.5-12s11.5 5.4 11.5 12z" fill="#2B1C14" opacity="0.8"/></svg></span>
+
+        <span class="cell alt"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="16" r="6.1" fill="#2B1C14" opacity="0.8"/><path d="M6 40c0-7.2 6.3-13 14-13s14 5.8 14 13z" fill="#2B1C14" opacity="0.8"/></svg></span>
+        <span class="cell"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="15.5" r="7" fill="#2B1C14" opacity="0.8"/><path d="M6.5 40c0-7.5 6-13.5 13.5-13.5S33.5 32.5 33.5 40z" fill="#2B1C14" opacity="0.8"/></svg></span>
+        <span class="cell alt"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="14.5" r="6.4" fill="#2B1C14" opacity="0.8"/><path d="M8.5 40c0-6.6 5.2-12 11.5-12s11.5 5.4 11.5 12z" fill="#2B1C14" opacity="0.8"/></svg></span>
+        <span class="cell"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="15" r="7.4" fill="#2B1C14" opacity="0.8"/><path d="M4.8 40c0-8.2 6.8-14.6 15.2-14.6S35.2 31.8 35.2 40z" fill="#2B1C14" opacity="0.8"/></svg></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="b-pad">
+    <div class="s-mast">
+      <span>
+        <span class="kn">ವರ್ಡ್‌ಕ್ಯಾಂಪ್ ಬೆಂಗಳೂರು</span>
+        <span class="tag">#WCBLR</span>
+      </span>
+      <span class="yr">Bengaluru &middot; 2026</span>
+    </div>
+
+    <div class="s-kickrow">
+      <span class="s-eyebrow">// organizing_team</span>
+      <span class="s-flag"><span class="d"></span>16 organizers</span>
+    </div>
+
+    <h1 class="s-h">
+      <span class="a">Meet the</span>
+      <span class="b">Organizing Team</span>
+    </h1>
+
+    <p class="s-lead">
+      Sixteen organizers from the Bengaluru WordPress community. Every one of them has a day job.
+    </p>
+  </div>
+
+  <div class="s-stripwrap">
+    <span class="s-stamp">add_filter( 'weekends' );</span>
+
+    <div class="s-strip">
+      <div class="leg">
+        <span class="k">Run by</span>
+        <span class="v">Volunteers</span>
+        <span class="s">Not-for-profit, community organised</span>
+      </div>
+
+      <div class="leg">
+        <span class="k">When</span>
+        <span class="v">21&ndash;22 November</span>
+        <span class="s">Saturday and Sunday, 2026</span>
+      </div>
+
+      <div class="leg leg--end">
+        <span class="k">Where</span>
+        <span class="v">SJBHS</span>
+        <span class="s">Museum Road, Bengaluru</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="b-marquee">
+    <div class="seg">
+      <span>MEET THE TEAM</span>
+      <span class="dot"></span><span>BENGALURU.WORDCAMP.ORG/2026/ORGANIZERS</span>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<script src="download-png.js"></script>
+</body>
+</html>

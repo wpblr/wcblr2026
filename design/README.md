@@ -135,7 +135,8 @@ button says so rather than failing quietly.
 
 - **Call for Media Partners** (1080×1080) and **Call for Media Partners — Featured**
   (1200×630), for the call at `bengaluru.wordcamp.org/call-for-media-partners`.
-  Deadline **31 Aug 2026**.
+  Deadline **24 Aug 2026**. (31 August is when applicants hear back, not the
+  cutoff. Both banners carried the wrong one of those two dates for a while.)
 
   Headline shape is the speaker banner's on purpose — upright Playfair black over a
   crimson italic — because this is the same kind of thing, a call whose name has to be
@@ -245,5 +246,73 @@ button says so rather than failing quietly.
   One deliberate echo: the engraving already carries two steel tumblers and a
   dosa plate at its far right. The hero object pulls one of them out and makes it
   the subject.
+
+- **Meet the Organizing Team** (1080×1080) and **Meet the Organizing Team —
+  Featured** (1200×630), the roll call.
+
+  The object is **a sheet of sixteen frames, every one of them filled**, over the
+  caption `ORGANIZING TEAM 16/16`. A grid, because the rest of the set is a
+  ticket, a tier strip, a disc, a dark card and a ballot, and the set only stays a
+  set if the next one is a shape none of them use. It is the campaign's argument
+  in one shape: a WordCamp is made of people before it is made of anything else.
+
+  The silhouettes cycle through four builds rather than repeating one glyph
+  sixteen times, and the cell tints alternate four points apart. Sixteen identical
+  marks on a flat ground read as a loading state, which is the failure this object
+  sits one step away from. No cell is accented and no cell is larger: the post
+  says the order means nothing, so the sheet has to agree.
+
+  Along the foot, the three facts the post's hero states, in the same words: RUN
+  BY / Volunteers, WHEN / 21–22 Nov, WHERE / SJBHS, gold on the last leg as usual.
+  The kit's "reuse the post's icons" rule does not apply here, because this post
+  carries no icons at all by design, so the continuity between page and poster is
+  the numbers instead.
+
+  No deadline on this campaign, so the gold stamp takes the post's own badge
+  verbatim, `add_filter( 'weekends' );`, which is also the running gag on the
+  site's home hero.
+
+  Watch out when editing: the stamp sits inboard at `right: 286px` (300 on the
+  featured) rather than the travel pair's 36, because the last foot leg is the
+  gold one and a gold stamp landing on a gold fill loses its dashed edge. The
+  italic is 92px rather than the kit's 96–104: "Organizing Team" is the longest
+  italic line in the set, and at 104 against a 276px sheet the two collide.
+  `check.sh` cannot catch that one, because the sheet is absolutely positioned
+  outside `.b-pad`.
+
+- **Bengaluru's WordPress Story** (1080×1080) and **Bengaluru's WordPress Story —
+  Featured** (1200×630). No deadline, because the post asks for nothing: its only
+  CTA is the free WhatsApp community.
+
+  The idea is **the year, as a grid**. Every other object in the kit is a single
+  thing you hold, and none of them can show a *rhythm*, which is this campaign's
+  whole argument: the community meets on an ordinary weekend afternoon most
+  months, and once a year the same mark is more than twice as wide and lasts a
+  weekend. Twelve tracks, an inked espresso mark on each month that had a meetup,
+  November's mark crimson and wide, `NOV` the one month label in crimson.
+
+  **The grid is a record, not a pattern.** The first version inked all twelve
+  rows, which invented five meetups that never happened. It now inks the six real
+  ones (24 Jan, 25 Apr, 30 May, 20 Jun, 18 Jul, 9 Aug), each positioned along its
+  track by actual day of the month. If you ever re-cut it for another year, check
+  `meetup.com/bengaluruwordpress` first, and remember the copy has to move with
+  the picture: the lead, the foot strip's middle column and the stamp all said
+  "every month" against a grid that shows most months.
+
+  The foot strip carries the three ways this community exists, in the post's own
+  words and order: `Every day` / the WhatsApp room, `Every month` / a free meetup,
+  `Once a year` / 21–22 November. Day, month, year, so it escalates left to right
+  and lands on the camp.
+
+  There is no crimson status pill on the kicker row, unlike every other call in
+  the set. The post announces nothing and asks for nothing, so a pill would have
+  to invent a state, and the accent budget is already spent on the headline italic
+  and the November mark.
+
+  Watch out when editing: `box-sizing: border-box` is global, so `.s-year { width }`
+  includes its 40px of padding. Size the card as content plus padding, or the
+  right-hand column of cells hangs outside it. The month label also has to live
+  inside its own track: as a separate flex item it lands far from its own mark and
+  the row stops reading as one thing.
 
 - **Community Poll** (1080×1080), a ballot asking where your WordPress time goes.
