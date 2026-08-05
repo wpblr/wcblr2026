@@ -523,3 +523,24 @@
 	.wcblr-motion .wcblr-idx[open] > .wp-block-group { animation-delay: 0.10s; }
 	.wcblr-motion .wcblr-idx[open] > .wp-block-columns { animation-delay: 0.14s; }
 }
+
+/* 14. Surfaces on a phone.
+   Every surface on these pages carries its horizontal padding as an inline
+   style on the block: 28 to 40px depending on which one it is. All of those are
+   right at 1100px and all of them are wrong at 375, where 40px is a fifth of
+   the screen spent twice over. Measured on the organizers post, the darkest
+   offender left its content box at 203px.
+
+   One selector and one value, deliberately. Three rules at 22, 24 and 26 would
+   overlap on any panel that is also `has-background`, and then the winner is
+   decided by specificity rather than by anyone's intention. `!important` is
+   what it takes to beat an inline style, and beating it here is the point: no
+   post has to be repasted for this to land. */
+@media (max-width: 600px) {
+	.wcblr-guide .wcblr-panel,
+	.wcblr-guide .wcblr-statcard,
+	.wcblr-guide .wp-block-group.has-background {
+		padding-left: 24px !important;
+		padding-right: 24px !important;
+	}
+}

@@ -277,17 +277,53 @@
 	}
 }
 
-@media (max-width: 480px) {
+/* ---- Phone ---------------------------------------------------------------
+   Shrinking the photo and keeping the card two columns was the wrong move, and
+   measuring it says so: in a 375px viewport the text column came out at 157px,
+   which is about twenty characters a line. Every bio became a narrow ragged
+   stack ten lines deep, half the names wrapped, and the photo sat alone at the
+   top with a column of dead space under it. That is the same failure that ruled
+   out three across on the desktop grid, reached from the other direction.
+
+   So below 600px the card stops being photo-beside-text. The photo and the name
+   make a header row, and the bio and the socials span both columns underneath,
+   which hands the bio the card's full width instead of a third of it. The photo
+   drops to 64px because at 88 it set a floor on the header row that a one-line
+   name never filled.
+
+   The socials matter here too: five glyphs at 18px with 12px gaps need 138px,
+   and they were being asked to share the 157px column with everything else. */
+@media (max-width: 600px) {
 	.wcblr-guide .wcblr-person {
-		grid-template-columns: 88px minmax(0, 1fr);
-		column-gap: 16px;
+		grid-template-columns: 64px minmax(0, 1fr);
+		grid-template-rows: auto auto auto;
+		column-gap: 14px;
+		row-gap: 12px;
 	}
 	.wcblr-guide .wcblr-person-photo {
-		width: 88px;
-		height: 88px;
+		grid-column: 1;
+		grid-row: 1;
+		width: 64px;
+		height: 64px;
+		align-self: center;
+	}
+	.wcblr-guide .wcblr-person-name {
+		grid-column: 2;
+		grid-row: 1;
+		align-self: center;
+		/* still clearing the arrow, which is pinned to the card's right edge */
+		padding-right: 26px;
+	}
+	.wcblr-guide .wcblr-person-bio {
+		grid-column: 1 / -1;
+		grid-row: 2;
+	}
+	.wcblr-guide .wcblr-person-social {
+		grid-column: 1 / -1;
+		grid-row: 3;
 	}
 	.wcblr-guide .wcblr-person::after {
-		top: 22px;
+		top: 20px;
 		right: 20px;
 	}
 }

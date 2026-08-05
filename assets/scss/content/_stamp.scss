@@ -65,3 +65,22 @@
 		margin-bottom: 18px;
 	}
 }
+
+/* The 56px inset that gives this panel its presence on a desktop is 36 per cent
+   of a 375px screen. Measured there, the panel's content box came out at 203px:
+   the heading broke to three lines and the intro ran at roughly twenty-five
+   characters, which reads as a column of debris rather than a lede.
+
+   `!important` because the padding is written into the block markup as an
+   inline style, and the point of fixing it here is that four posts carry this
+   panel and none of them need repasting. The vertical inset comes down with it,
+   since the pin has already dropped into flow above and no longer needs the
+   headroom it was reserving. */
+@media (max-width: 600px) {
+	.wcblr-stamp-host {
+		padding-left: 24px !important;
+		padding-right: 24px !important;
+		padding-top: 32px !important;
+		padding-bottom: 32px !important;
+	}
+}
