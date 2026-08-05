@@ -1,0 +1,110 @@
+/* ---- The community story layer ------------------------------------------
+   Opt-in, scoped under `.wcblr-story` on the post's own wrapper, so nothing
+   already published moves. Everything here is something block markup cannot
+   express: hover state, a rail drawn with a pseudo-element, a dashed frame
+   with a caption pinned to it.
+
+   Written for `posts/bengaluru-wordpress-story.html`. The names describe the
+   idea rather than the shape, per the note in `_guide.scss` about
+   `wcblr-unsched`: if another campaign wants a card that lifts on hover, give
+   it its own block rather than reusing `wcblr-liftcard` for a new meaning. */
+
+/* 1. Cards that respond to the cursor.
+   The talk cards were flat: no hover, no depth, so a row of four read as four
+   grey boxes. A 3px lift and a warm shadow is enough; anything more and the
+   page starts bouncing. `transform` and `box-shadow` only, so nothing
+   reflows, and the whole thing sits behind the reduced-motion gate because a
+   lift is motion like any other. Touch devices never fire :hover, so this is
+   purely additive. */
+.wcblr-story .wcblr-liftcard {
+	transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-story .wcblr-liftcard:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 18px 34px -22px rgba(42, 29, 20, 0.55);
+		border-color: #c9c2b6;
+	}
+}
+
+/* 2. The figures strip.
+   Three numbers under the opening prose. They are NOT a stat card: this post
+   is a story and a KPI panel in the hero is what made an earlier draft read
+   as an advert. So: a hairline above, generous letter-spaced labels, and the
+   numbers in the body serif rather than a display weight. It reads as a
+   caption line, which is what it is. */
+.wcblr-story .wcblr-figures {
+	border-top: 1px solid #d9d3c9;
+	padding-top: 18px;
+}
+
+.wcblr-story .wcblr-figure-n {
+	font-variant-numeric: tabular-nums;
+}
+
+/* 3. The frame for a photograph that does not exist yet.
+   November has no group photo, so its slot in the editions row is a dashed
+   frame at the same 4:3 the real photographs are cropped to. Drawn rather
+   than left as a paragraph in a box, because the point is that it is the
+   fourth frame in a row of four. */
+.wcblr-story .wcblr-shot {
+	aspect-ratio: 4 / 3;
+	border: 2px dashed rgba(42, 29, 20, 0.38);
+	border-radius: 14px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-end;
+	padding: 22px;
+	background: rgba(42, 29, 20, 0.02);
+}
+
+/* 4. The afternoon, as a ruled timetable.
+   A rail down the left of the beats, with each row hung off it. The earlier
+   version used `core/details` and read as a UI widget in the middle of an
+   article: chevrons, summaries, something to operate. This is a printed
+   running order instead, which is what an afternoon actually is. */
+.wcblr-story .wcblr-runsheet {
+	position: relative;
+	padding-left: 26px;
+}
+
+.wcblr-story .wcblr-runsheet::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 6px;
+	bottom: 6px;
+	width: 2px;
+	background: linear-gradient(#e0a526, rgba(224, 165, 38, 0.15));
+	border-radius: 2px;
+}
+
+.wcblr-story .wcblr-beat {
+	position: relative;
+}
+
+.wcblr-story .wcblr-beat + .wcblr-beat {
+	margin-top: 22px !important;
+	padding-top: 22px !important;
+	border-top: 1px solid #e2ddd4;
+}
+
+/* The dot sits on the rail, not beside it. `left` is the runsheet's padding
+   plus half the rail, negated, so it stays centred if the padding changes. */
+.wcblr-story .wcblr-beat::before {
+	content: "";
+	position: absolute;
+	left: -30px;
+	top: 7px;
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+	background: #e0a526;
+	border: 2px solid #F2ECE0;
+}
+
+.wcblr-story .wcblr-beat + .wcblr-beat::before {
+	top: 29px;
+}
