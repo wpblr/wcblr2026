@@ -58,6 +58,19 @@
 	padding-left: 30px;
 	max-width: 26ch;
 }
+
+/* The 26ch above never applied. A pull quote is always a direct child of a
+   section group, which is the one place `.wcblr-guide .wcblr-sec > p` also
+   matches, and that selector is (0,2,1) against this rule's (0,2,0). The
+   measure won on specificity regardless of source order, so every pull quote
+   rendered at 68ch: one long line with a gold rule beside it, which is a
+   paragraph, not a pull quote. Restating it as a direct-child selector takes it
+   to (0,3,0) and it lands. Found rendering meet-the-organizing-team; it was
+   already true of what-happens-at-a-wordcamp, which is drafted but unpublished. */
+.wcblr-guide .wcblr-sec > .wcblr-pull {
+	max-width: 26ch;
+}
+
 @media (max-width: 781px) {
 	.wcblr-guide .wcblr-pull { padding-left: 20px; }
 }
