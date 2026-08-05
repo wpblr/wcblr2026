@@ -175,17 +175,11 @@
 .wcblr-story .wcblr-beat:nth-child(3)::after { background-color: #a8760f; }
 .wcblr-story .wcblr-beat:nth-child(4)::after { background-color: #2a1d14; }
 
-/* The highlighter. `mark` is a core inline format, so this survives the
-   editor round-trip, and the tint is set inline in the markup rather than
-   here so an un-refreshed Remote CSS cannot leave the browser's default
-   yellow behind. All this rule adds is the shape. */
-.wcblr-story .wcblr-beat mark {
-	border-radius: 3px;
-	padding: 1px 5px;
-	margin: 0 -1px;
-	box-decoration-break: clone;
-	-webkit-box-decoration-break: clone;
-}
+/* There was a highlighter here, tinting one phrase per beat to match that
+   beat's accent. It was cut: on cream, a translucent wash behind body copy
+   reads as a marker pen someone dragged over the page rather than as
+   emphasis, and the gold one in particular looked like a defect. The beats
+   already carry their colour in the dot and the time, which is enough. */
 
 
 /* 6. Two things that only go wrong once the columns stack.
