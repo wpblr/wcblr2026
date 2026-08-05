@@ -47,27 +47,51 @@
 	gap: 0;
 	height: 100%;
 }
+
+/* Every margin on a direct child of the card is !important, and none of it is
+   cargo cult. Core ships `.is-layout-flex > :is(*, div) { margin: 0 }`, which at
+   (0,1,1) outranks a single class, and the card is .is-layout-flex once the
+   block's layout is applied. Without the flag that rule flattens all of the
+   spacing below and, worse, turns the avatar's `0 auto` into `0` so the photo
+   sits hard left under a centred name. */
 .wcblr-org-card__bio {
 	flex: 1;
-	margin: 10px 0 0;
+	margin: 10px 0 0 !important;
 	color: #7a6757;
 }
 
 /* ---- Avatar -------------------------------------------------------------- */
-/* Not every organizer uploaded a square photo, and a portrait one letterboxes
-   inside the circle instead of filling it, so crop to cover. The figure carries
-   the size because it is also what centres, the card being a stretch column. */
+/* Not every organizer uploaded a square photo, and several are tall portraits,
+   so the frame is fixed at 150px square and the photo crops to cover it.
+   The sizes are !important because core's `.wp-block-image img { height: auto }`
+   ties this selector on specificity, at (0,1,1) each, and beats it on order:
+   WordPress prints the block library stylesheet after the Remote CSS, so load
+   order cannot be relied on here. Losing that one declaration leaves the image
+   at its natural aspect ratio, up to 150x333, which object-fit then has no box
+   to crop against, so the card shows the top of the photo rather than the
+   middle. That is what put a ceiling where Hussna's face should be. */
 .wcblr-org-card__avatar {
 	width: 150px;
 	height: 150px;
-	margin: 0 auto;
+	margin: 0 auto !important;
 	overflow: hidden;
 	border-radius: 50%;
 }
-.wcblr-org-card__avatar img {
+
+/* The photo links to the profile, so an <a> sits between the figure and the
+   image. Left inline it has no definite height, the image's own `height:100%`
+   resolves against it and collapses back to auto, and a tall portrait renders
+   at 150x333 with nothing for object-fit to crop against. The anchor has to
+   carry the frame's size for the crop below to mean anything. */
+.wcblr-org-card__avatar a {
 	display: block;
 	width: 100%;
 	height: 100%;
+}
+.wcblr-org-card__avatar img {
+	display: block;
+	width: 100% !important;
+	height: 100% !important;
 	object-fit: cover;
 	object-position: center;
 	border-radius: 50%;
@@ -76,7 +100,7 @@
 
 /* ---- Name ---------------------------------------------------------------- */
 .wcblr-org-card__name {
-	margin: 16px 0 0;
+	margin: 16px 0 0 !important;
 }
 .wcblr-org-card__name a {
 	color: #111111;
@@ -104,7 +128,7 @@
 	justify-content: center;
 	gap: 10px;
 	padding-left: 0;
-	margin: 16px 0 0;
+	margin: 16px 0 0 !important;
 }
 .wcblr-org-card__social .wp-block-social-link,
 .wcblr-org-card__social .wp-block-social-link-anchor {
@@ -118,7 +142,7 @@
 
 /* ---- Read profile -------------------------------------------------------- */
 .wcblr-org-card__more {
-	margin: 14px 0 0;
+	margin: 14px 0 0 !important;
 }
 .wcblr-org-card__more a {
 	color: #cd2653;
