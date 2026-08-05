@@ -52,10 +52,32 @@
 	border-radius: 14px;
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start;
-	justify-content: flex-end;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
 	padding: 26px;
 	background-color: rgba(42, 29, 20, 0.02);
+}
+
+/* The mark in the middle of the empty frame. A dashed ring with a plus in it,
+   matching the frame's own dashes, so it reads as "this slot is open" rather
+   than as an icon someone dropped in. Sized off the type, not in pixels
+   picked at random: 2.6em of the 20px glyph. */
+.wcblr-story .wcblr-shot-mark {
+	width: 58px;
+	height: 58px;
+	border: 2px dashed rgba(42, 29, 20, 0.38);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 26px;
+	line-height: 1;
+	color: rgba(42, 29, 20, 0.5);
+}
+
+.wcblr-story .wcblr-shot-mark p {
+	margin: 0 !important;
 }
 
 /* 3. The afternoon, as a run sheet.
@@ -137,5 +159,55 @@
 @media (prefers-reduced-motion: no-preference) {
 	.wcblr-story .wcblr-beat-open::after {
 		animation: wcblr-pulse 6s ease-in-out infinite;
+	}
+}
+
+
+/* 5. Four beats, four accents.
+   The first version made every time, every dot and the whole rail gold, so a
+   section with four distinct moments in it read as one long monotone block.
+   The dots and the times now rotate through the house sequence (crimson,
+   green, gold, espresso) the way card labels do elsewhere on the site, while
+   the RAIL stays gold throughout: the rail is the afternoon, which is one
+   continuous thing, and the beats are moments in it, which are not. */
+.wcblr-story .wcblr-beat:nth-child(1)::after { background-color: #C8344B; }
+.wcblr-story .wcblr-beat:nth-child(2)::after { background-color: #1d8b6e; }
+.wcblr-story .wcblr-beat:nth-child(3)::after { background-color: #a8760f; }
+.wcblr-story .wcblr-beat:nth-child(4)::after { background-color: #2a1d14; }
+
+/* The highlighter. `mark` is a core inline format, so this survives the
+   editor round-trip, and the tint is set inline in the markup rather than
+   here so an un-refreshed Remote CSS cannot leave the browser's default
+   yellow behind. All this rule adds is the shape. */
+.wcblr-story .wcblr-beat mark {
+	border-radius: 3px;
+	padding: 1px 5px;
+	margin: 0 -1px;
+	box-decoration-break: clone;
+	-webkit-box-decoration-break: clone;
+}
+
+
+/* 6. Two things that only go wrong once the columns stack.
+   Checked in a real 390px viewport, by loading the rendered post in an
+   iframe that width rather than trusting a headless screenshot: headless
+   Chrome clamps its layout viewport at 485px, so neither of these shows up
+   there.
+
+   The opening photograph's column carries 26px of left padding on desktop,
+   which is what stops the tagpill (`left: -16px`) colliding with the prose
+   beside it. Stacked, there is no prose beside it and the padding just
+   indents the photograph out of line with the text above. The pill has the
+   full page gutter to sit in at that width, so the padding goes.
+
+   And the essentials panel loses its row gap when its three columns stack,
+   so each value ran straight into the next label. */
+@media (max-width: 781px) {
+	.wcblr-story .wcblr-leadshot {
+		padding-left: 0 !important;
+	}
+
+	.wcblr-story .wcblr-facts .wp-block-column + .wp-block-column {
+		margin-top: 20px;
 	}
 }
