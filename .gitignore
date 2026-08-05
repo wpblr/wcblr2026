@@ -7,3 +7,9 @@ tools/.preview-cache/
 
 # Banner PNGs from design/tools/render.sh. Regenerate, don't commit.
 design/exports/
+
+# Campaign carousels live in the working copy only (wordcamp/design/carousels/).
+# export-to-repo.sh never writes them here, and they must not arrive by hand:
+# their assets are third-party sponsor logos and organizers' headshots, and
+# their exports/ and thumbs/ are ~11MB of generated PNG.
+design/carousels/
