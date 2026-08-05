@@ -122,6 +122,11 @@
    display only through .aligncenter or the render-time layout class, and its
    items are inline-block, so on their own they would sit in a left-aligned text
    row and justify-content would have nothing to act on. */
+/* Core sizes these off font-size on the list and only offers 16, 24, 36 and
+   48px. 16 read as an afterthought under a 22px name and 24 shouts over the
+   read-profile link, so the block carries no size attribute and the in-between
+   value lives here. Flagged because the block library stylesheet, which sets
+   24px on .wp-block-social-links, is printed after the Remote CSS. */
 .wcblr-org-card__social {
 	display: flex;
 	flex-wrap: wrap;
@@ -129,6 +134,7 @@
 	gap: 10px;
 	padding-left: 0;
 	margin: 16px 0 0 !important;
+	font-size: 20px !important;
 }
 .wcblr-org-card__social .wp-block-social-link,
 .wcblr-org-card__social .wp-block-social-link-anchor {
