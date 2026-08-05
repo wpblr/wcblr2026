@@ -28,6 +28,16 @@
 			   panel's radius (overflow stays visible for the ::before hover
 			   bridge above, so the panel cannot clip them for us). */
 			padding: 0 !important;
+			/* 170px is a floor, not the width. The items carry
+			   `width: 100% !important`, which makes the panel's shrink-to-fit
+			   circular, so without an explicit `width` it collapses to the
+			   min-width and any label wider than 170px spills out of the panel
+			   instead of widening it. "Call for Media Partners" needs 186px
+			   (154px of text plus the items' 16px side padding) and overflowed
+			   by 16px until this was added. `max-content` sizes to the longest
+			   label; the min-width still holds the shorter panels at 170px so
+			   People and Community are unchanged. */
+			width: max-content !important;
 			min-width: 170px !important;
 
 			/* Bridge the 12px gap so hover isn't lost crossing it */
