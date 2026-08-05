@@ -568,3 +568,32 @@
 		padding-right: 0 !important;
 	}
 }
+
+/* 16. The follow strip.
+   `is-style-logos-only` draws the glyph in currentColor, which inside a panel
+   resolves to whatever the link colour happens to be rather than to anything
+   chosen. The footer sets it explicitly and so does the organizer roster; this
+   is the third place that needs to, so it is stated here rather than inherited
+   and hoped for.
+
+   One muted tone for all four glyphs on purpose. The network labels beside
+   them already carry the crimson/green/gold/espresso rotation, and colouring
+   the icons to match would say the same thing twice at the cost of turning a
+   quiet strip into a paint chart. */
+/* Core leaves the <ul>'s own margins to the theme, which makes the gap between
+   a glyph and its label depend on which theme is active. Zeroed so the 14px on
+   the label below is the only thing setting it. */
+.wcblr-guide .wcblr-follow {
+	margin: 0 !important;
+	padding-left: 0 !important;
+}
+
+.wcblr-guide .wcblr-follow .wp-block-social-link,
+.wcblr-guide .wcblr-follow .wp-block-social-link-anchor {
+	color: #7a6757 !important;
+	transition: color 0.15s ease;
+}
+.wcblr-guide .wcblr-follow .wp-block-social-link:hover,
+.wcblr-guide .wcblr-follow .wp-block-social-link:hover .wp-block-social-link-anchor {
+	color: #c8344b !important;
+}
