@@ -544,3 +544,27 @@
 		padding-right: 24px !important;
 	}
 }
+
+/* 15. Gutters that are really padding.
+   Some column rows set `blockGap` left to 0 and space themselves with padding
+   on the columns instead: 0/34 on the first, 34/34 on the middle, 34/0 on the
+   last, which adds up to an even gutter and flush outer edges. Correct while
+   they sit in a row. The moment they stack, that padding stops being a gutter
+   and becomes an indent, and an asymmetric one: the first entry sits flush and
+   every entry below it steps 34px to the right. That is the "still broken" in
+   the day job panel, and no amount of trimming the panel's own padding touches
+   it, because the offset is on the columns inside.
+
+   The distinction that makes this safe to do broadly: a column that is a CARD
+   carries `has-background` or a card class, and its padding is the card's own
+   inset, which must survive stacking. A column with padding and neither is
+   spacing itself against a neighbour it no longer has. Checked against every
+   guide page before writing it; those are the only two shapes in use.
+
+   781px, not the 600 above, because that is where core stacks columns. */
+@media (max-width: 781px) {
+	.wcblr-guide .wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell) {
+		padding-left: 0 !important;
+		padding-right: 0 !important;
+	}
+}
