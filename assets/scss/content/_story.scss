@@ -1,21 +1,34 @@
 /* ---- The community story layer ------------------------------------------
    Opt-in, scoped under `.wcblr-story` on the post's own wrapper, so nothing
    already published moves. Everything here is something block markup cannot
-   express: hover state, a rail drawn with a pseudo-element, a dashed frame
-   with a caption pinned to it.
+   express: hover state, a rail drawn with pseudo-elements, a dashed frame.
 
-   Written for `posts/bengaluru-wordpress-story.html`. The names describe the
-   idea rather than the shape, per the note in `_guide.scss` about
-   `wcblr-unsched`: if another campaign wants a card that lifts on hover, give
-   it its own block rather than reusing `wcblr-liftcard` for a new meaning. */
+   A note on the rail, because the obvious diagnosis was the wrong one. The
+   first version drew it with `background: linear-gradient(#e0a526, rgba(224,
+   165, 38, 0.15))` and it read as broken: the dots were there, the line
+   between them was not. The guess was that WordCamp's sanitizer had eaten it,
+   since it does strip `background-image`. Measured on the live served sheet
+   instead of guessed, by reading `document.styleSheets` on the page:
 
-/* 1. Cards that respond to the cursor.
-   The talk cards were flat: no hover, no depth, so a row of four read as four
-   grey boxes. A 3px lift and a warm shadow is enough; anything more and the
-   page starts bouncing. `transform` and `box-shadow` only, so nothing
-   reflows, and the whole thing sits behind the reduced-motion gate because a
-   lift is motion like any other. Touch devices never fire :hover, so this is
-   purely additive. */
+     background-image  0     mask-image  0     clip-path  0
+     linear-gradient   1     <- this rule, intact
+
+   So gradients in the `background` shorthand survive; only the
+   `background-image` property itself is dropped. The rail was not stripped,
+   it was doing exactly what it was told, fading to 15% opacity by the bottom
+   of a tall section, which is invisible against cream. It is a flat
+   `background-color` now because a rail either connects or it does not, and
+   there is no reason for this one to fade at all.
+
+   Written for `posts/bengaluru-wordpress-story.html`. Names describe the idea
+   rather than the shape: a later campaign wanting a hover card should declare
+   its own block rather than reuse `wcblr-liftcard` for a new meaning. */
+
+/* 1. Cards that answer the cursor.
+   A 3px lift and a warm shadow. Anything more and the page starts bouncing.
+   `transform` and `box-shadow` only, so nothing reflows; behind the
+   reduced-motion gate because a lift is motion like any other. Touch never
+   fires :hover, so this is purely additive. */
 .wcblr-story .wcblr-liftcard {
 	transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 }
@@ -28,26 +41,11 @@
 	}
 }
 
-/* 2. The figures strip.
-   Three numbers under the opening prose. They are NOT a stat card: this post
-   is a story and a KPI panel in the hero is what made an earlier draft read
-   as an advert. So: a hairline above, generous letter-spaced labels, and the
-   numbers in the body serif rather than a display weight. It reads as a
-   caption line, which is what it is. */
-.wcblr-story .wcblr-figures {
-	border-top: 1px solid #d9d3c9;
-	padding-top: 18px;
-}
-
-.wcblr-story .wcblr-figure-n {
-	font-variant-numeric: tabular-nums;
-}
-
-/* 3. The frame for a photograph that does not exist yet.
-   November has no group photo, so its slot in the editions row is a dashed
+/* 2. The frame for a photograph that does not exist yet.
+   November has no group photo, so its slot in the editions grid is a dashed
    frame at the same 4:3 the real photographs are cropped to. Drawn rather
    than left as a paragraph in a box, because the point is that it is the
-   fourth frame in a row of four. */
+   fourth frame in a grid of four. */
 .wcblr-story .wcblr-shot {
 	aspect-ratio: 4 / 3;
 	border: 2px dashed rgba(42, 29, 20, 0.38);
@@ -56,55 +54,88 @@
 	flex-direction: column;
 	align-items: flex-start;
 	justify-content: flex-end;
-	padding: 22px;
-	background: rgba(42, 29, 20, 0.02);
+	padding: 26px;
+	background-color: rgba(42, 29, 20, 0.02);
 }
 
-/* 4. The afternoon, as a ruled timetable.
-   A rail down the left of the beats, with each row hung off it. The earlier
-   version used `core/details` and read as a UI widget in the middle of an
-   article: chevrons, summaries, something to operate. This is a printed
-   running order instead, which is what an afternoon actually is. */
+/* 3. The afternoon, as a run sheet.
+   A gold rail with one segment per beat. The segments are drawn on the beats
+   themselves and span them exactly (`top: 0; bottom: 0`), and the beats are
+   spaced with PADDING rather than margin, so consecutive segments touch and
+   the rail reads as one continuous line. Spacing the beats with margin leaves
+   a gap in the rail at every row, which is the obvious way to get this wrong.
+
+   The dot is the beat's `::after`, sitting on the rail with a cream ring so
+   the line appears to pass behind it. */
 .wcblr-story .wcblr-runsheet {
 	position: relative;
-	padding-left: 26px;
-}
-
-.wcblr-story .wcblr-runsheet::before {
-	content: "";
-	position: absolute;
-	left: 0;
-	top: 6px;
-	bottom: 6px;
-	width: 2px;
-	background: linear-gradient(#e0a526, rgba(224, 165, 38, 0.15));
-	border-radius: 2px;
+	padding-left: 42px;
 }
 
 .wcblr-story .wcblr-beat {
 	position: relative;
-}
-
-.wcblr-story .wcblr-beat + .wcblr-beat {
-	margin-top: 22px !important;
 	padding-top: 22px !important;
-	border-top: 1px solid #e2ddd4;
+	padding-bottom: 22px !important;
+	margin-top: 0 !important;
 }
 
-/* The dot sits on the rail, not beside it. `left` is the runsheet's padding
-   plus half the rail, negated, so it stays centred if the padding changes. */
+.wcblr-story .wcblr-beat:first-child {
+	padding-top: 4px !important;
+}
+
 .wcblr-story .wcblr-beat::before {
 	content: "";
 	position: absolute;
 	left: -30px;
-	top: 7px;
-	width: 9px;
-	height: 9px;
-	border-radius: 50%;
-	background: #e0a526;
-	border: 2px solid #F2ECE0;
+	top: 0;
+	bottom: 0;
+	width: 3px;
+	background-color: #e0a526;
 }
 
-.wcblr-story .wcblr-beat + .wcblr-beat::before {
-	top: 29px;
+/* The rail begins at the first dot rather than above it. */
+.wcblr-story .wcblr-beat:first-child::before {
+	top: 9px;
+}
+
+.wcblr-story .wcblr-beat::after {
+	content: "";
+	position: absolute;
+	left: -36px;
+	top: 20px;
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	background-color: #e0a526;
+	border: 3px solid #F2ECE0;
+	box-sizing: border-box;
+}
+
+.wcblr-story .wcblr-beat:first-child::after {
+	top: 2px;
+}
+
+/* 4. The part nobody schedules.
+   The last beat's rail goes DASHED and runs on past the final row instead of
+   stopping at it. That is the one piece of ornament in this section that is
+   carrying an argument: the copy says the long tail is the bit nobody puts on
+   the agenda, and the line refuses to end. A dashed border rather than a
+   dashed gradient, for the reason at the top of this file. */
+.wcblr-story .wcblr-beat-open::before {
+	background-color: transparent;
+	border-left: 3px dashed #e0a526;
+	width: 0;
+	bottom: -40px;
+}
+
+/* Its dot is the only thing on the page that moves on its own. `wcblr-pulse`
+   is the theme's existing keyframe, reused so "still going" reads the same
+   here as it does in the nav: two pulses inside a mostly-idle 6s cycle rather
+   than a relentless throb, which is what keeps it the right side of WCAG
+   2.2.2 (motion over five seconds needs a way to stop it). Gated, so anyone
+   who asked for less motion gets a plain dot. */
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-story .wcblr-beat-open::after {
+		animation: wcblr-pulse 6s ease-in-out infinite;
+	}
 }
