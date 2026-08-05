@@ -586,6 +586,14 @@
 .wcblr-guide .wcblr-follow {
 	margin: 0 !important;
 	padding-left: 0 !important;
+	/* Core sizes these glyphs off `font-size` on the <ul> and offers only 16, 24,
+	   36 and 48 through the block's `size` attribute. 24 read as an ornament
+	   beside a 17px handle rather than as the thing you click, and 36 is a step
+	   too far in a quarter-width column, so the in-between value lives here.
+	   Same reasoning, and the same escape hatch, as `.wcblr-person-social`.
+	   !important because the block library stylesheet sets 24px on
+	   .wp-block-social-links and is printed after the Remote CSS. */
+	font-size: 32px !important;
 }
 
 .wcblr-guide .wcblr-follow .wp-block-social-link,
