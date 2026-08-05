@@ -168,28 +168,3 @@
 		height: 128px;
 	}
 }
-
-/* ---- The same links on the profile page ---------------------------------- */
-/* single-organizer.html is one template shared by every organizer, so it has no
-   way to carry per-person links; these sit at the end of the bio instead, in
-   the post content, which is the only per-post thing on that page. Left aligned
-   rather than centred because they follow a column of running text.
-   Same restatement of display as the card row above: without it the block is a
-   left-aligned line of inline-block items and the gap never applies. */
-.wcblr-org-profile-social {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: flex-start;
-	gap: 14px;
-	padding-left: 0;
-	margin: 14px 0 0;
-}
-.wcblr-org-profile-social .wp-block-social-link,
-.wcblr-org-profile-social .wp-block-social-link-anchor {
-	color: #7a6757 !important;
-	transition: color 0.15s;
-}
-.wcblr-org-profile-social .wp-block-social-link:hover,
-.wcblr-org-profile-social .wp-block-social-link:hover .wp-block-social-link-anchor {
-	color: #c8344b !important;
-}
