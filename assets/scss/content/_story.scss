@@ -182,7 +182,67 @@
    already carry their colour in the dot and the time, which is enough. */
 
 
-/* 6. Two things that only go wrong once the columns stack.
+/* 6. The archive readout.
+   `// eleven_years` was four #FBF8F1 cards in a row, each with its number in a
+   different accent. Four points off the cream they sat on, so the borders did
+   all the work, and the rotation said nothing: no reader can tell you why 143
+   is crimson and 2,915 is gold. It is one espresso slab now, four columns
+   divided by hairlines, every number in cream.
+
+   That fixes two things at once. The page had exactly one dark surface, the
+   closing CTA, and 7,000px of cream above it; this puts a tonal anchor a
+   quarter of the way down, so the article has a top, a middle and an end
+   instead of one long field. And a readout is what the section IS: the numbers
+   the archive adds up to. Colour is not carrying that, the tone is.
+
+   Two dark surfaces on the page, well apart, which is the house limit. Do not
+   add a third. */
+.wcblr-story .wcblr-readout .wp-block-column + .wp-block-column {
+	border-left: 1px solid rgba(242, 236, 224, 0.14);
+	padding-left: 30px;
+}
+
+/* 781px is where core stacks columns, and a vertical rule between things that
+   are now above and below each other is a rule pointing the wrong way. */
+@media (max-width: 781px) {
+	.wcblr-story .wcblr-readout .wp-block-column + .wp-block-column {
+		border-left: 0;
+		border-top: 1px solid rgba(242, 236, 224, 0.14);
+		padding-top: 26px;
+	}
+}
+
+
+/* 7. The opening card is a citation, not a feature grid.
+   It held three 2015 meetups as three rows, each led by a tinted chip with a
+   party popper, a shield and a code tag in it, each with its date in a
+   different accent. The icons illustrated the talk titles and the colours
+   meant nothing, which is the look of a page assembled rather than designed.
+
+   The chips now carry `#1 #2 #3`, which is real information: these are the
+   first three listings of the 143 the next section counts. Numbering earns its
+   place when the content is genuinely a sequence, and this is the only place on
+   the page where it is. One tone throughout, so the card reads as an extract
+   from a record.
+
+   The colour overrides need `!important` and the extra class, because
+   `_guide.scss` colours `.wcblr-statrow:nth-of-type(n) > p:first-of-type` that
+   way for the stat strips on other posts and those must not move. */
+.wcblr-story .wcblr-archivehead {
+	padding-bottom: 14px;
+	border-bottom: 1px solid #ddd9d2;
+}
+
+.wcblr-story .wcblr-archivecard .wcblr-statrow .wcblr-statchip {
+	background-color: rgba(42, 29, 20, 0.06);
+}
+
+.wcblr-story .wcblr-archivecard .wcblr-statrow > p:first-of-type {
+	color: #7a6757 !important;
+}
+
+
+/* 8. Two things that only go wrong once the columns stack.
    Checked in a real 390px viewport, by loading the rendered post in an
    iframe that width rather than trusting a headless screenshot: headless
    Chrome clamps its layout viewport at 485px, so neither of these shows up

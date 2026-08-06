@@ -576,10 +576,10 @@
    is the third place that needs to, so it is stated here rather than inherited
    and hoped for.
 
-   One muted tone for all four glyphs on purpose. The network labels beside
-   them already carry the crimson/green/gold/espresso rotation, and colouring
-   the icons to match would say the same thing twice at the cost of turning a
-   quiet strip into a paint chart. */
+   One muted tone for all four glyphs on purpose: a network name is a label,
+   not a category worth a colour, and four coloured glyphs beside four coloured
+   labels turns a quiet strip into a paint chart. The story post's labels are
+   set to this same #7a6757 for the same reason. */
 /* Core leaves the <ul>'s own margins to the theme, which makes the gap between
    a glyph and its label depend on which theme is active. Zeroed so the 14px on
    the label below is the only thing setting it. */
