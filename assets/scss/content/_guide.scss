@@ -576,10 +576,21 @@
    is the third place that needs to, so it is stated here rather than inherited
    and hoped for.
 
-   One muted tone for all four glyphs on purpose: a network name is a label,
-   not a category worth a colour, and four coloured glyphs beside four coloured
-   labels turns a quiet strip into a paint chart. The story post's labels are
-   set to this same #7a6757 for the same reason. */
+   Each glyph takes its own network's colour. The earlier version made all four
+   #7a6757 on the theory that four colours beside four coloured labels is a
+   paint chart, which was true of the version it was written against, where the
+   LABELS were also rotating crimson/green/gold/espresso. The labels are one
+   muted tone now, so the only colour left in the strip is the four marks people
+   already recognise, and a recognisable mark is doing a job a brown one is not.
+
+   These are glyphs, not text, so the bar is WCAG 1.4.11 at 3:1 rather than
+   4.5:1. On #FBF8F1: LinkedIn 5.9, X 19.6, Instagram 3.9, Meetup 4.3. All
+   clear, and the handle underneath carries the name in espresso regardless, so
+   nothing here is colour-only.
+
+   Instagram is a solid #E4405F and not its brand gradient on purpose: the
+   sanitizer strips `background-image` in every form, so a gradient glyph would
+   arrive as an empty square on the live site. */
 /* Core leaves the <ul>'s own margins to the theme, which makes the gap between
    a glyph and its label depend on which theme is active. Zeroed so the 14px on
    the label below is the only thing setting it. */
@@ -596,12 +607,36 @@
 	font-size: 32px !important;
 }
 
+/* The anchor is listed alongside the <li> in every pair below because the
+   theme colours `.wp-block-social-link-anchor` directly. Setting the <li>
+   alone leaves the glyph inheriting the theme's link colour, not this one. */
 .wcblr-guide .wcblr-follow .wp-block-social-link,
 .wcblr-guide .wcblr-follow .wp-block-social-link-anchor {
-	color: #7a6757 !important;
-	transition: color 0.15s ease;
+	transition: opacity 0.15s ease;
 }
-.wcblr-guide .wcblr-follow .wp-block-social-link:hover,
-.wcblr-guide .wcblr-follow .wp-block-social-link:hover .wp-block-social-link-anchor {
-	color: #c8344b !important;
+
+.wcblr-guide .wcblr-follow .wp-social-link-linkedin,
+.wcblr-guide .wcblr-follow .wp-social-link-linkedin .wp-block-social-link-anchor {
+	color: #0a66c2 !important;
+}
+
+.wcblr-guide .wcblr-follow .wp-social-link-x,
+.wcblr-guide .wcblr-follow .wp-social-link-x .wp-block-social-link-anchor {
+	color: #000000 !important;
+}
+
+.wcblr-guide .wcblr-follow .wp-social-link-instagram,
+.wcblr-guide .wcblr-follow .wp-social-link-instagram .wp-block-social-link-anchor {
+	color: #e4405f !important;
+}
+
+.wcblr-guide .wcblr-follow .wp-social-link-meetup,
+.wcblr-guide .wcblr-follow .wp-social-link-meetup .wp-block-social-link-anchor {
+	color: #ed1c40 !important;
+}
+
+/* Fading rather than recolouring: a hover that repaints a brand mark crimson
+   undoes the only reason it is coloured. */
+.wcblr-guide .wcblr-follow .wp-block-social-link:hover {
+	opacity: 0.7;
 }

@@ -80,109 +80,61 @@
 	margin: 0 !important;
 }
 
-/* 3. The afternoon, as a run sheet.
-   A gold rail with one segment per beat. The segments are drawn on the beats
-   themselves and span them exactly (`top: 0; bottom: 0`), and the beats are
-   spaced with PADDING rather than margin, so consecutive segments touch and
-   the rail reads as one continuous line. Spacing the beats with margin leaves
-   a gap in the rail at every row, which is the obvious way to get this wrong.
+/* 3. The 2020 run, as records rather than a rail.
+   This was a 3px gold rail in a 42px gutter with a 15px dot per beat, the dots
+   rotating crimson, green, gold. Rendered on the live post it was the worst
+   thing on the page. Three faults, and the third is the one that matters:
 
-   The dot is the beat's `::after`, sitting on the rail with a cream ring so
-   the line appears to pass behind it. */
+   - a 15px dot with a 3px cream ring leaves nine pixels of colour, which is
+     too small to read as a marker and just big enough to look like a bullet
+     that failed to load;
+   - three colours for three moments is the same decorative rotation that was
+     stripped out of every other block on this page, left in one place;
+   - and the open beat's dashed rail ran forty pixels PAST the last row into
+     empty cream, ending on nothing. It was meant to say "this did not finish".
+     What a short dashed stub hanging in a gutter actually says is that a
+     border is broken.
+
+   So the rail goes. The beats are hairline records now, which is the shape the
+   opening card already uses, so the two rhyme instead of being two unrelated
+   ways of drawing the same thing: a run of dated moments. Same hairline
+   (#ddd9d2), same 22px rhythm.
+
+   Records also fix the geometry. The rail forced 42px of left padding on a
+   column that only gets 520px on the real page, and the dates now start at the
+   column edge where the eye is already looking. */
 .wcblr-story .wcblr-runsheet {
-	position: relative;
-	padding-left: 42px;
+	padding-left: 0;
 }
 
-.wcblr-story .wcblr-beat {
-	position: relative;
+.wcblr-story .wcblr-beat + .wcblr-beat {
+	border-top: 1px solid #ddd9d2;
+	margin-top: 22px !important;
 	padding-top: 22px !important;
-	padding-bottom: 22px !important;
-	margin-top: 0 !important;
 }
 
-.wcblr-story .wcblr-beat:first-child {
-	padding-top: 4px !important;
-}
 
-.wcblr-story .wcblr-beat::before {
+/* 4. The thing that did not end.
+   The argument the dashed rail was trying to make is worth keeping, so it is
+   made horizontally instead: the last record closes on a dashed gold rule
+   running the full width of the column rather than a stub pointing down into
+   nothing. An edge that refuses to be solid reads as unfinished; a two-inch
+   dash floating in a margin reads as a defect. Same gold, same meaning as
+   "still going" in the closing band, and it is the only gold on the page
+   besides that.
+
+   The pulsing dot went with the dot. It was an infinite animation carrying an
+   idea the rule now carries statically, which is the better trade under WCAG
+   2.2.2 anyway. */
+.wcblr-story .wcblr-beat-open::after {
 	content: "";
-	position: absolute;
-	left: -30px;
-	top: 0;
-	bottom: 0;
-	width: 3px;
-	background-color: #e0a526;
-}
-
-/* The rail begins at the first dot rather than above it. */
-.wcblr-story .wcblr-beat:first-child::before {
-	top: 9px;
-}
-
-.wcblr-story .wcblr-beat::after {
-	content: "";
-	position: absolute;
-	left: -36px;
-	top: 20px;
-	width: 15px;
-	height: 15px;
-	border-radius: 50%;
-	background-color: #e0a526;
-	border: 3px solid #F2ECE0;
-	box-sizing: border-box;
-}
-
-.wcblr-story .wcblr-beat:first-child::after {
-	top: 2px;
-}
-
-/* 4. The part nobody schedules.
-   The last beat's rail goes DASHED and runs on past the final row instead of
-   stopping at it. That is the one piece of ornament in this section that is
-   carrying an argument: the copy says the long tail is the bit nobody puts on
-   the agenda, and the line refuses to end. A dashed border rather than a
-   dashed gradient, for the reason at the top of this file. */
-.wcblr-story .wcblr-beat-open::before {
-	background-color: transparent;
-	border-left: 3px dashed #e0a526;
-	width: 0;
-	bottom: -40px;
-}
-
-/* Its dot is the only thing on the page that moves on its own. `wcblr-pulse`
-   is the theme's existing keyframe, reused so "still going" reads the same
-   here as it does in the nav: two pulses inside a mostly-idle 6s cycle rather
-   than a relentless throb, which is what keeps it the right side of WCAG
-   2.2.2 (motion over five seconds needs a way to stop it). Gated, so anyone
-   who asked for less motion gets a plain dot. */
-@media (prefers-reduced-motion: no-preference) {
-	.wcblr-story .wcblr-beat-open::after {
-		animation: wcblr-pulse 6s ease-in-out infinite;
-	}
+	display: block;
+	margin-top: 22px;
+	border-top: 1px dashed #e0a526;
 }
 
 
-/* 5. Four beats, four accents.
-   The first version made every time, every dot and the whole rail gold, so a
-   section with four distinct moments in it read as one long monotone block.
-   The dots and the times now rotate through the house sequence (crimson,
-   green, gold, espresso) the way card labels do elsewhere on the site, while
-   the RAIL stays gold throughout: the rail is the afternoon, which is one
-   continuous thing, and the beats are moments in it, which are not. */
-.wcblr-story .wcblr-beat:nth-child(1)::after { background-color: #C8344B; }
-.wcblr-story .wcblr-beat:nth-child(2)::after { background-color: #1d8b6e; }
-.wcblr-story .wcblr-beat:nth-child(3)::after { background-color: #a8760f; }
-.wcblr-story .wcblr-beat:nth-child(4)::after { background-color: #2a1d14; }
-
-/* There was a highlighter here, tinting one phrase per beat to match that
-   beat's accent. It was cut: on cream, a translucent wash behind body copy
-   reads as a marker pen someone dragged over the page rather than as
-   emphasis, and the gold one in particular looked like a defect. The beats
-   already carry their colour in the dot and the time, which is enough. */
-
-
-/* 6. The archive readout.
+/* 5. The archive readout.
    `// eleven_years` was four #FBF8F1 cards in a row, each with its number in a
    different accent. Four points off the cream they sat on, so the borders did
    all the work, and the rotation said nothing: no reader can tell you why 143
@@ -213,7 +165,7 @@
 }
 
 
-/* 7. The opening card is a citation, not a feature grid.
+/* 6. The opening card is a citation, not a feature grid.
    It held three 2015 meetups as three rows, each led by a tinted chip with a
    party popper, a shield and a code tag in it, each with its date in a
    different accent. The icons illustrated the talk titles and the colours
@@ -239,6 +191,61 @@
 
 .wcblr-story .wcblr-archivecard .wcblr-statrow > p:first-of-type {
 	color: #7a6757 !important;
+}
+
+
+/* 7. The heading and its deck share a row.
+   The complaint that started this pass was that the page reads as one cream
+   field with a bunch of paragraphs on it, and this is where that came from.
+   Five of the eight sections open the same way: a 46px heading, then a 20px
+   grey lead capped at the 68ch measure. On the live page the wide column is
+   1000px and 68ch is 762, so every one of those leads left 238px of cream dead
+   beside it, five times down the screen, always on the same side. Nothing was
+   wrong with any single one. The repetition is what reads as unstyled.
+
+   The measure is not the thing to change: 68ch is right for reading and the
+   full 1000px would be about 89 characters a line. The fix the house rules
+   already name is to give the copy a partner instead of conceding the width,
+   so the partner is the heading itself. Eyebrow stays on its own line, full
+   width, because it carries the section divider and because every other page
+   on the site opens a section that way. Under it the heading takes 56 and the
+   deck takes 44, and the deck sits on the heading's baseline.
+
+   `:has()` is what keeps this honest. Three sections open straight into a
+   columns block with no deck at all, and their headings must stay full width
+   or a 46px line gets squeezed into 560px and breaks in the wrong place. So
+   the two-column treatment applies only to a heading that actually has a
+   paragraph after it. `:has()` survives the WordCamp sanitizer; it is in the
+   kept column of the table in page-craft.md, verified on the served sheet.
+
+   Only above 782px, which is where core stacks columns anyway. Narrower than
+   that the section is a single column and the deck falls back under the
+   heading, which is the right shape for a phone and needs no rules. */
+@media (min-width: 782px) {
+	.wcblr-story .wcblr-sec {
+		display: grid;
+		grid-template-columns: 56fr 44fr;
+		column-gap: 56px;
+		/* Every block in here already carries its own margin-top, and a grid
+		   row-gap would be added on top of it rather than collapsed into it.
+		   The vertical rhythm is the markup's, not this rule's. */
+		row-gap: 0;
+	}
+
+	.wcblr-story .wcblr-sec > * {
+		grid-column: 1 / -1;
+	}
+
+	.wcblr-story .wcblr-sec > h2:has(+ p) {
+		grid-column: 1;
+	}
+
+	.wcblr-story .wcblr-sec > h2:has(+ p) + p {
+		grid-column: 2;
+		max-width: none;
+		margin-top: 0 !important;
+		align-self: end;
+	}
 }
 
 
