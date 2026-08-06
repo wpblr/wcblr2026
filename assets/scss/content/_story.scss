@@ -95,22 +95,66 @@
      What a short dashed stub hanging in a gutter actually says is that a
      border is broken.
 
-   So the rail goes. The beats are hairline records now, which is the shape the
-   opening card already uses, so the two rhyme instead of being two unrelated
-   ways of drawing the same thing: a run of dated moments. Same hairline
-   (#ddd9d2), same 22px rhythm.
+   So the rail goes. The first replacement was a bare stack of hairline records
+   on cream, and that was worse: a full-width hairline, a tiny muted mono label,
+   then a paragraph, three times over. page-craft.md has that shape in its
+   rejected list under "info rows carrying prose" for exactly the reason it
+   failed again here. Nothing anchors the item, the hairlines do all the work,
+   and with the dates muted to #7a6757 in the same pass there was no weight
+   anywhere in the block. It read as an unstyled definition list.
 
-   Records also fix the geometry. The rail forced 42px of left padding on a
-   column that only gets 520px on the real page, and the dates now start at the
-   column edge where the eye is already looking. */
+   What anchors a run of dated records is the dates, so they get a column of
+   their own: 106px, espresso, 600, abbreviated to "1 Feb 2020" the way the
+   203-day panel further down already writes its dates. The eye gets a hard
+   vertical edge to run
+   down, the dates line up as a column instead of floating above their
+   paragraphs, and the hairlines go back to separating rows rather than being
+   the only structure present. That is a ledger, which is what an archive of
+   listings actually is.
+
+   It also sits on the house card now rather than on bare cream. Three records
+   is well over the ~150 characters of unsupported prose the house rules put the
+   limit at, and half of why the bare version looked unstyled was that it had no
+   surface under it at all. */
 .wcblr-story .wcblr-runsheet {
 	padding-left: 0;
+}
+
+.wcblr-story .wcblr-beat {
+	display: grid;
+	grid-template-columns: 106px minmax(0, 1fr);
+	column-gap: 22px;
+	align-items: start;
+}
+
+/* The date is 12px against 16px/1.6 body, so its line box is shallower and the
+   two would not share a baseline without this. Three pixels, measured. */
+.wcblr-story .wcblr-beat > p:first-of-type {
+	margin-bottom: 0 !important;
+	padding-top: 3px;
 }
 
 .wcblr-story .wcblr-beat + .wcblr-beat {
 	border-top: 1px solid #ddd9d2;
 	margin-top: 22px !important;
 	padding-top: 22px !important;
+}
+
+/* Between 782 and 950 the columns have not stacked yet but the right-hand one
+   is down to about 325px, and 106 of that spent on a date column leaves under
+   200px of prose. The ledger folds back to a stack there. Below 782 the columns
+   DO stack, so the run gets the full width back and could hold the ledger
+   again, but flipping the layout twice on the way down a phone is worse than
+   one honest fallback. */
+@media (max-width: 950px) {
+	.wcblr-story .wcblr-beat {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.wcblr-story .wcblr-beat > p:first-of-type {
+		margin-bottom: 8px !important;
+		padding-top: 0;
+	}
 }
 
 
@@ -125,12 +169,21 @@
 
    The pulsing dot went with the dot. It was an infinite animation carrying an
    idea the rule now carries statically, which is the better trade under WCAG
-   2.2.2 anyway. */
+   2.2.2 anyway.
+
+   The beat is a grid, so this ::after is a grid ITEM, not a box drawn across
+   the element. Without the explicit span it drops into the next free cell and
+   draws a dash under the date column only. */
 .wcblr-story .wcblr-beat-open::after {
 	content: "";
 	display: block;
+	grid-column: 1 / -1;
 	margin-top: 22px;
-	border-top: 1px dashed #e0a526;
+	/* 2px, against the 1px hairlines separating the rows above it. Matched at
+	   1px it read as one more row divider that happened to be dashed, which is
+	   the opposite of the point: this is not separating two records, it is the
+	   edge of the card declining to close. */
+	border-top: 2px dashed #e0a526;
 }
 
 
@@ -218,10 +271,15 @@
    paragraph after it. `:has()` survives the WordCamp sanitizer; it is in the
    kept column of the table in page-craft.md, verified on the served sheet.
 
-   Only above 782px, which is where core stacks columns anyway. Narrower than
-   that the section is a single column and the deck falls back under the
-   heading, which is the right shape for a phone and needs no rules. */
-@media (min-width: 782px) {
+   1100px, not the 782 where core stacks columns. 782 was the obvious number
+   and it was wrong: rendered at 800 the heading gets 330px, which puts "So they
+   built websites for charities instead" on three lines against a 260px deck,
+   and two cramped columns are worse than one roomy one. 1100 viewport is where
+   the wide column reaches its full 1000 and the split lands at 528/415, which
+   is what this was designed against. Below it the deck falls back under the
+   heading, and the dead space it leaves there is 162px rather than the 238px
+   that started this, because the column has narrowed but the measure has not. */
+@media (min-width: 1100px) {
 	.wcblr-story .wcblr-sec {
 		display: grid;
 		grid-template-columns: 56fr 44fr;
