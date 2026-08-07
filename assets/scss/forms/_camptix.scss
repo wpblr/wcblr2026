@@ -1475,13 +1475,40 @@ main:has(.tix-order-summary) .wcblr-tix-assure {
    A tinted panel rather than a bordered card. The form above it is already a
    `#FBF8F1` card with a `#dad5cd` edge, and a second one directly under it
    reads as two stacked cards; a wash with no border reads as a note. */
+/* THE CARD'S FOOTER, not a panel under it. The first cut left it as its own
+   rounded box 56px below the form, and at that distance it stopped being the
+   form's small print and became a slab sitting on the page with nothing to do
+   with the thing above it.
+
+   So the form and the footer join into one object, the same way the tickets
+   page joins the illustration to its facts: `#tix` gives up its bottom border
+   and its bottom corners, this takes them, and the divider between them is
+   this element's top border. Padding matches the card's 38px so the labels
+   line up with the fields above rather than sitting in their own margin.
+
+   The fill is `#F4F0E9`, which is the card's `#FBF8F1` under a 3.5% wash of
+   espresso, computed rather than eyeballed. It has to be a flat colour: the
+   footer is a sibling of the card, not a child, so a translucent fill would
+   composite over the PAGE and come out the wrong shade. */
 .wcblr-tix-assure {
 	grid-template-columns: repeat(3, minmax(0, 1fr));
 	gap: 26px 34px;
-	margin: 26px 0 0;
-	padding: 24px 28px;
-	background: rgba(42, 29, 20, 0.035);
-	border-radius: 14px;
+	margin: 0 0 56px;
+	padding: 26px 38px 28px;
+	background: #F4F0E9;
+	border: 1.5px solid #dad5cd;
+	border-top: 1px solid #e6e0d6;
+	border-radius: 0 0 16px 16px;
+}
+
+/* The card opens itself up for it. Scoped to the screens the footer actually
+   appears on, so the selection-screen stub keeps its own bottom edge and the
+   56px that stops it landing on the footer. */
+main:has(.tix-attendee-form) #tix,
+main:has(.tix-order-summary) #tix {
+	margin-bottom: 0;
+	border-bottom: 0;
+	border-radius: 16px 16px 0 0;
 }
 .wcblr-tix-assure-label {
 	font-size: 10.5px;
@@ -1505,7 +1532,8 @@ main:has(.tix-order-summary) .wcblr-tix-assure {
 .wcblr-tix-assure-body a:hover { color: #C8344B; }
 
 @media (max-width: 781px) {
-	.wcblr-tix-assure { grid-template-columns: 1fr; gap: 20px; padding: 20px 22px; }
+	/* the card drops to `padding: 22px 18px` here, and the footer follows it */
+	.wcblr-tix-assure { grid-template-columns: 1fr; gap: 20px; padding: 22px 18px 24px; }
 	.wcblr-tix-head-title { font-size: 30px !important; }
 }
 
