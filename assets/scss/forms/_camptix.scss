@@ -1237,6 +1237,24 @@ main:has(#tix) .wcblr-page-head {
 	#{$tix-page} .wcblr-sec:first-child > .wcblr-tix-row > .wp-block-column:first-child > .wcblr-tix-art {
 		animation: wcblr-lift 0.9s 0.2s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 	}
+
+	/* The facts close the opening, so they arrive after both columns have
+	   started and still finish before the stamp springs at 0.95s. `rise-sm`,
+	   not `rise`: four items on one line lifting 14px each is jitter, which is
+	   this file's own rule for dense repeated things.
+
+	   0.34s with a 0.05s step, so the fourth fact finishes at 0.94s and the
+	   stamp still springs into a page that has stopped moving. At 0.42/0.06 the
+	   last one was landing at 1.05s, a tenth of a second INTO the spring, which
+	   is exactly the ordering `_motion.scss` says not to break. */
+	#{$tix-page} .wcblr-sec:first-child .wcblr-tix-fact {
+		animation: wcblr-rise-sm 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	}
+	@for $i from 1 through 4 {
+		#{$tix-page} .wcblr-sec:first-child .wcblr-tix-fact:nth-child(#{$i}) {
+			animation-delay: 0.34s + 0.05s * ($i - 1);
+		}
+	}
 }
 
 /* ---- 7c. Everything below the fold, on interaction ----------------------
@@ -1394,4 +1412,60 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	aspect-ratio: 16 / 9;
 	object-fit: cover;
 	object-position: center bottom;
+	/* The radius the red note promised and this file never delivered: the note
+	   told whoever inserted the image that the class carried "the ratio, the
+	   radius and the hide-on-later-screens behaviour", and only two of those
+	   three were ever written. Square corners on the one illustration in a
+	   column of 16px-rounded cards.
+
+	   The hairline is the same job the `#e0a5261f` border does on the ticket
+	   illustration further down: this artwork's own ground is cream, within a
+	   few points of the page's #F2ECE0, so with no edge it does not read as a
+	   placed object, it reads as a hole in the page. #dad5cd rather than the
+	   turmeric, because every card around it is bordered #dad5cd. */
+	border: 1.5px solid #dad5cd;
+	border-radius: 16px;
+}
+
+/* ---- The essentials, closing the register section ------------------------
+   This page took money without ever saying what for. Before this strip the
+   word "November" appeared once on it, in the sign-off at the very bottom,
+   and the venue not at all: someone arriving on /tickets/ from a shared link
+   could buy a ticket without ever being told the date or the place.
+
+   Four facts, and the venue is TWO of them on purpose. `pages/attending.html`
+   carries SATURDAY VENUE and SUNDAY VENUE as separate rows because they are
+   different places and only Sunday's is settled. A single "Venue: St Joseph's"
+   row here would have read as the whole event and contradicted the sibling
+   page, which is the kind of thing nobody notices until someone turns up at
+   the wrong address.
+
+   Drawn as a grid rather than a `wp:columns`, so it needs no render-time
+   layout class and looks the same in the editor, in preview.py and on the
+   front end. The hairlines are on the container, not per cell: four boxed
+   cells would be a fifth card row on a page that already has three. */
+.wcblr-guide .wcblr-tix-essentials {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 22px 34px;
+	border-top: 1px solid #ddd9d2;
+	border-bottom: 1px solid #ddd9d2;
+}
+
+/* Core's flow layout emits a `wp-container-*` blockGap rule for the group and
+   for each fact, and it outranks a plain class. The spacing here is the grid's
+   and the label's own margin, so the block margins are flattened. */
+.wcblr-guide .wcblr-tix-essentials > *,
+.wcblr-guide .wcblr-tix-fact > * {
+	margin-top: 0 !important;
+}
+.wcblr-guide .wcblr-tix-fact > p:first-child {
+	margin-bottom: 5px !important;
+}
+
+@media (max-width: 900px) {
+	.wcblr-guide .wcblr-tix-essentials { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+	.wcblr-guide .wcblr-tix-essentials { grid-template-columns: 1fr; gap: 18px; }
 }
