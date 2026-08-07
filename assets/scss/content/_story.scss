@@ -330,3 +330,85 @@
 		margin-top: 20px;
 	}
 }
+
+
+/* 9. Three tones instead of two.
+   The complaint this answers: nine sections, one ground colour, one card
+   treatment repeated down the whole 9,000px. Rule 5 above put a tonal anchor a
+   quarter of the way down and capped the page at two dark surfaces, and that
+   cap stands. This is the other half of the same argument, made in the light
+   range where there is room to work: `#F2ECE0` and `#FBF8F1` are five points
+   apart and the page spends both of them on ground and card, so a card floats
+   on cream and nothing else varies at all.
+
+   So three sections sit on a raised panel and the rest stay on open cream. The
+   alternation is the rhythm; nothing gains a hue it did not have. Which three
+   is not arbitrary. `the_camp_that_was_cancelled`, `five_people_and_a_food_court`
+   and `find_us` are the sections that carry a self-contained episode, and they
+   alternate with the open-cream sections rather than clustering.
+
+   Contained, not full-bleed, and that is deliberate. A band the width of the
+   viewport needs `100vw` or a `box-shadow` spread, and both overflow by the
+   scrollbar's width on a page that scrolls. preview.py's own warning names a
+   band built from box-shadow copies as something that already shipped broken
+   here, and a headless screenshot cannot catch it because headless draws no
+   scrollbar. A panel inset to the content column needs no viewport maths and
+   renders identically at 1440 and 2560.
+
+   The radius is 20px against the cards' 16, the padding is 44px against their
+   28, and there is no border. All three keep it reading as ground the section
+   is standing on rather than as one more, larger card. */
+.wcblr-story .wcblr-band {
+	background: #FBF8F1;
+	border-radius: 20px;
+	padding: 44px;
+	/* The section's own 56px top margin plus 44px of panel padding would put
+	   100px above a banded eyebrow and 56px above an unbanded one. The panel
+	   absorbs the difference so the eyebrows stay on one rhythm. */
+	margin-top: 34px !important;
+}
+
+/* The panel grows outward, not inward.
+   Padded alone, it pushed its own contents 44px right of every unbanded
+   section, so the eyebrows and headings zig-zagged down the page and the 46px
+   heading lost enough width to break "in 2020" onto a line of its own. Pulling
+   the panel out by exactly what it pads keeps every text edge on the same line
+   it was on, and the surface is what moves.
+
+   Gated at 1240 because that is where the gutter beside the 1000px wide column
+   is comfortably wider than the 44px being borrowed. Below it the panel keeps
+   its padding and gives up the alignment: an inset band is untidy, a band
+   hanging off the side of the viewport is broken. */
+@media (min-width: 1240px) {
+	.wcblr-story .wcblr-band {
+		margin-left: -44px;
+		margin-right: -44px;
+	}
+}
+
+/* The panel is the section's ground now, so anything that was a card ON that
+   ground has to clear it or the two merge into one flat shape. White is the
+   only surface left above #FBF8F1 in this palette, and the border warms a step
+   to hold its edge against the lighter fill. Specificity, not !important:
+   three classes beats `.wcblr-guide .wcblr-panel`, and none of these carry an
+   inline background. */
+.wcblr-story .wcblr-band .wcblr-panel {
+	background: #FFFFFF;
+	border-color: #e2dbcf;
+}
+
+/* Inside a 44px panel the columns already have less room, and the runsheet's
+   106px date column is measured against the full width. Give it back the
+   padding the panel took. */
+@media (max-width: 1100px) {
+	.wcblr-story .wcblr-band {
+		padding: 34px 26px;
+	}
+}
+
+@media (max-width: 600px) {
+	.wcblr-story .wcblr-band {
+		padding: 28px 20px;
+		border-radius: 16px;
+	}
+}
