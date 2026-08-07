@@ -1928,6 +1928,25 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	max-width: 394px;
 	margin: 12px auto 0 !important;
 }
+/* The link inherits the crimson rather than taking the theme's link colour,
+   which would put a second red on the same line and read as two different
+   kinds of thing. It carries an underline instead, which is what marks it as
+   the clickable part, and goes espresso on hover so the whole note stops being
+   one flat block of red. */
+.wcblr-guide .wcblr-tix-terms a {
+	color: inherit;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+	transition: color 0.15s ease;
+}
+.wcblr-guide .wcblr-tix-terms a:hover {
+	color: #2a1d14;
+}
+/* "Note:" is the one word that has to be caught before the sentence is read,
+   so it is the only thing here heavier than the rest. */
+.wcblr-guide .wcblr-tix-terms strong {
+	font-weight: 700;
+}
 
 /* Landing under the sticky header is the classic anchor bug and this page now
    has five in-page jumps: the two tier headings, `#register` from the tier
