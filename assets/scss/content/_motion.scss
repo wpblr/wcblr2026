@@ -190,6 +190,37 @@
 	.wcblr-motion .wcblr-sec:first-child .wcblr-statrow:nth-of-type(3) { animation-delay: 0.66s; }
 	.wcblr-motion .wcblr-sec:first-child .wcblr-statrow:nth-of-type(4) { animation-delay: 0.73s; }
 
+	/* ---- The face wall, swept rather than lifted as one block ----------------
+	   Sixteen photographs arriving together is one object moving; arriving in
+	   sequence is a roll call, and on a page whose entire subject is "here are
+	   the sixteen people" that is the one beat worth spending. The wall is an
+	   8-across grid, so an nth-child ladder reads as a left-to-right sweep along
+	   the top row and then the bottom, which is also the reading order of the
+	   roster further down.
+
+	   `rise-sm`, not `rise`: this file's own rule for dense repeated items. A
+	   14px lift repeated across sixteen circles is jitter, 7px is a sweep.
+
+	   The step is 0.022s and not a frame more. The last face has to land before
+	   the stamp springs at 0.95s, or the wall is still filling in behind the beat
+	   that is supposed to be the last word: 0.2 + 15 x 0.022 = 0.53s, plus the
+	   0.5s rise, is 1.03s. The stamp then runs 0.95s to 1.4s and stays last.
+	   Widen the step and that ordering breaks silently, because nothing here
+	   errors, it just stops reading as a sequence.
+
+	   The parent carries no motion class of its own. It used to take
+	   `wcblr-m-lift wcblr-m-d3`, and leaving that on would compound the group's
+	   translate with each child's. */
+	.wcblr-motion .wcblr-facewall .wp-block-image {
+		animation: wcblr-rise-sm 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	}
+
+	@for $i from 1 through 16 {
+		.wcblr-motion .wcblr-facewall .wp-block-image:nth-child(#{$i}) {
+			animation-delay: 0.2s + 0.022s * ($i - 1);
+		}
+	}
+
 	/* and the chips pop last, on the spring, once the page is otherwise still */
 	.wcblr-motion .wcblr-sec:first-child .wcblr-statchip {
 		animation: wcblr-pop 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) both;
