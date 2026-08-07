@@ -746,7 +746,10 @@ main:has(#tix) .wcblr-page-head {
 		background: #2a1d14;
 		color: #F2ECE0;
 		border-radius: 14px;
-		padding: 40px 30px 16px;
+		/* Each ticket now carries its own 22px of panel padding, so the card
+		   only has to hold the panels off its own edge. 30px on both counts
+		   put 52px between the card edge and the ticket name. */
+		padding: 36px 24px 20px;
 		font-family: "Hanken Grotesk", sans-serif;
 	}
 
@@ -770,87 +773,110 @@ main:has(#tix) .wcblr-page-head {
 		padding: 8px 16px;
 	}
 
-	/* The notch used to be `form::after` at a hardcoded `top: 118px`, which is
-	   the distance to the perforation on a card with exactly one ticket that
-	   has an excerpt. Two ticket types and it floated in the middle of nothing.
-	   Hang it off the perforation instead: the dashed line IS the description
-	   cell's bottom border, so a circle on that cell's bottom edge can never
-	   drift. `left` is the form's 30px padding plus half the circle, to put it
-	   on the card's edge. One notch per ticket, which reads as a strip of
-	   stubs rather than one card with a dent in it. */
+	/* --- One ticket, one stub -------------------------------------------
+	   This was four label/value rows per ticket: TICKET, PRICE, REMAINING,
+	   QUANTITY, each one a mono label hard left and a value hard right. Two
+	   things were wrong with it, and both only showed up once a second ticket
+	   type went on sale.
 
-	/* --- linearise the table into vertical rows --- */
+	   The ticket's NAME sat at the far right of a line whose left end read
+	   "TICKET", so the one word that says what you are buying was formatted as
+	   the answer to a form field rather than as the heading of a thing. And
+	   with two types the eight rows ran together as a single column of numbers
+	   against a column of labels: the only thing marking where one ticket
+	   ended and the next began was 44px of space, and 44px does not survive
+	   the reader's eye running down a repeating label list.
+
+	   So a row is now a stub of its own. Name and excerpt at the top left, the
+	   dashed tear under them with a notch bitten out of each edge, and beneath
+	   it the price with what is left of it under that, and the quantity
+	   control opposite. Reading order is name, price, scarcity, choice, which
+	   is the order the decision is actually made in.
+
+	   The labels are gone with it, all but one. A serif line at the top of a
+	   ticket is its name, turmeric mono in the biggest size on the card is a
+	   price, and "50 left" says what "REMAINING / 50" needed two lines to say.
+	   Only the select keeps a label, because a lone `0` in a dropdown is the
+	   one value on the card that does not explain itself. */
 	.tix_tickets_table { border-collapse: collapse; width: 100%; }
 	.tix_tickets_table thead { display: none; }                 /* drop native header */
 	.tix_tickets_table,
-	.tix_tickets_table tbody,
-	.tix_tickets_table tbody tr { display: block; width: 100%; }
+	.tix_tickets_table tbody { display: block; width: 100%; }
 
-	/* Every cell becomes a label(left) / value(right) row.
-	   Tag-agnostic on purpose. WordCamp.org's CampTix emits the body
+	/* The panel. `overflow: hidden` is not tidiness: it is what turns the two
+	   notch circles below into notches. They are drawn straddling the panel's
+	   left and right edges in the CARD's colour, and this clips each one to the
+	   half that falls inside, so the panel looks bitten rather than dotted. */
+	.tix_tickets_table tbody tr {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		column-gap: 16px;
+		row-gap: 6px;
+		padding: 20px 22px;
+		border: 1.5px solid rgba(242, 236, 224, 0.15);
+		border-radius: 12px;
+		background: rgba(242, 236, 224, 0.045);
+		overflow: hidden;
+	}
+	.tix_tickets_table tbody tr + tr { margin-top: 14px; }
+
+	/* Tag-agnostic on purpose. WordCamp.org's CampTix emits the body
 	   description cell as a `th` (checked in the live DOM), while CampTix
 	   master emits a `td` (camptix.php line 5318). A `th`-only selector is
-	   correct today and silently drops the perforation, the TICKET label and
-	   the notch's line the day the plugin is updated. */
+	   correct today and silently drops the perforation and the notches the day
+	   the plugin is updated. */
 	.tix_tickets_table tbody .tix-column-description,
-	.tix_tickets_table td {
+	.tix_tickets_table tbody td {
 		display: block;
 		position: relative;
-		text-align: right;
+		text-align: left;
 		border: 0;
 		background: 0 0;
 		color: #f2ece0;
-		font-size: 20px;
 		padding: 0;
+		/* The description cell is a `th` on this build, so without these the
+		   excerpt inherits the browser's bold centred default. Measured: it was
+		   rendering at font-weight 700. */
+		font-weight: 400;
 	}
-	.tix_tickets_table tbody tr td { margin-top: 1.2rem; }
 	.tix-column-description br,
 	.tix_tickets_table p br { display: none; }
 
-	/* hardcoded mono labels (thead is hidden, so inject them here) */
-	.tix_tickets_table tbody .tix-column-description::before { content: "TICKET"; }
-	.tix-column-price::before { content: "PRICE"; }
-	.tix-column-remaining::before { content: "REMAINING"; }
-	.tix-column-quantity::before { content: "QUANTITY"; }
-	.tix_tickets_table td::before,
-	.tix_tickets_table tbody .tix-column-description::before {
-		position: absolute;
-		left: 0;
-		top: 18px;
-		font-family: "JetBrains Mono", monospace;
-		font-size: 11px;
-		font-weight: 500;
-		letter-spacing: 1.4px;
-		text-transform: uppercase;
-		color: #978f87;
-		text-align: left;
+	/* The tear. Negative margins pull it out to the panel's own edges: inset
+	   by the panel's padding it stops 22px short on each side and reads as an
+	   underline beneath the name rather than as a perforation across the
+	   ticket. The notches then hang off it, so they can never drift out of
+	   line with it the way a hardcoded offset did. */
+	.tix_tickets_table tbody .tix-column-description {
+		grid-column: 1 / -1;
+		margin: 0 -22px 12px;
+		padding: 0 22px 18px;
+		border-bottom: 2px dashed rgba(242, 236, 224, 0.22);
 	}
-
+	.tix_tickets_table tbody .tix-column-description::before,
 	.tix_tickets_table tbody .tix-column-description::after {
 		content: "";
 		position: absolute;
-		left: -41px;
 		bottom: -12px;
 		width: 22px;
 		height: 22px;
 		border-radius: 50%;
-		background: #f2ece0;
+		background: #2a1d14;
 	}
+	.tix_tickets_table tbody .tix-column-description::after { left: -11px; }
+	.tix_tickets_table tbody .tix-column-description::before { right: -11px; }
 
-	/* ONE divider, and it is the tear. An earlier pass added a solid rule
-	   between tickets on top of the dashed tear under each name, which put two
-	   lines within about 60px of each other and read as a double divider. The
-	   tear plus its notch already chunks the card once per ticket; the
-	   boundary between tickets is space. */
-	.tix_tickets_table tbody tr + tr { margin-top: 44px; }
-
-	/* The coupon row is an action, not a ticket, so it is the one place a
-	   second line earns itself: it separates "what you are buying" from "do
-	   something else". Nowhere near the last tear, so nothing doubles up. */
+	/* The coupon row is an action, not a ticket, so it gets none of the panel:
+	   a bordered box around "Have a coupon?" would read as a third thing on
+	   sale. Space alone separates it from the last stub. */
 	.tix_tickets_table tbody tr.tix-row-coupon {
-		margin-top: 32px;
-		padding-top: 28px;
-		border-top: 1px solid rgba(242, 236, 224, 0.13);
+		display: block;
+		margin-top: 26px;
+		padding: 0;
+		border: 0;
+		border-radius: 0;
+		background: none;
+		overflow: visible;
 	}
 
 	/* --- Coupons, on the dark card ---
@@ -910,30 +936,73 @@ main:has(#tix) .wcblr-page-head {
 		color: #e0a526;
 	}
 
-	/* Perforation under the ticket-name row (aligns with the notch).
-	   `padding-left` keeps the wrapped excerpt clear of the absolutely
-	   positioned TICKET label; every other row is a single short value on the
-	   right and never reaches it. */
-	.tix_tickets_table tbody .tix-column-description {
-		border-bottom: 2px dashed rgba(242, 236, 224, .22);
-		padding-bottom: 22px;
-		padding-left: 66px;
-	}
-
 	/* values */
 	.tix-ticket-title {
 		display: block;
 		font-family: Fraunces, Georgia, serif;
-		font-size: 18px;
+		font-size: 20px;
 		font-weight: 500;
 		line-height: 1.2;
 		color: #f2ece0;
 	}
-	.tix-ticket-excerpt { display: block; margin-top: 6px; font-size: 13px; color: #978f87; }
-	.tix-column-price { font-family: "JetBrains Mono", monospace; font-size: 18px; color: #e0a526; }
-	.tix-column-remaining { font-family: "JetBrains Mono", monospace; font-size: 14px; color: #978f87; }
+	.tix-ticket-excerpt {
+		display: block;
+		margin-top: 7px;
+		font-size: 13.5px;
+		line-height: 1.5;
+		color: #a2968b;
+	}
 
-	/* quantity select = light chip, aligned right */
+	/* The price is the biggest thing in the panel and what is left of it is
+	   its footnote, directly underneath and in the muted grey, so the two read
+	   as one statement rather than as two rows of a table. Stacked rather than
+	   side by side for width: at the card's 394px a nowrap price, a nowrap
+	   count, a label and a select on one line came to within a few pixels of
+	   the content box, and a longer price string (five figures, or a coupon's
+	   struck-through original) would have run out of the panel. */
+	.tix-column-price {
+		grid-column: 1;
+		grid-row: 2;
+		font-family: "JetBrains Mono", monospace;
+		font-size: 24px;
+		font-weight: 500;
+		line-height: 1.15;
+		color: #e0a526;
+	}
+	.tix-column-remaining {
+		grid-column: 1;
+		grid-row: 3;
+		font-family: "JetBrains Mono", monospace;
+		font-size: 12px;
+		letter-spacing: 0.06em;
+		line-height: 1.4;
+		color: #978f87;
+	}
+	/* `:not(:empty)` because CampTix leaves this cell blank on a ticket with no
+	   quantity cap, and a bare " left" under the price is worse than nothing. */
+	.tix-column-remaining:not(:empty)::after { content: " left"; }
+
+	/* Spans both value rows so the control sits centred against the price and
+	   its footnote together, not against one or the other. */
+	.tix-column-quantity {
+		grid-column: 2;
+		grid-row: 2 / span 2;
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 10px;
+		align-self: center;
+	}
+	.tix-column-quantity::before {
+		content: "QTY";
+		font-family: "JetBrains Mono", monospace;
+		font-size: 10.5px;
+		font-weight: 500;
+		letter-spacing: 0.14em;
+		color: #978f87;
+	}
+
+	/* quantity select = light chip */
 	.tix-column-quantity select {
 		font-size: 15px;
 		color: #2a1d14;
@@ -958,12 +1027,18 @@ main:has(#tix) .wcblr-page-head {
 	}
 	input[type="submit"]:hover { background: #a12339; opacity: 1; }
 
-	/* mobile */
+	/* mobile
+	   The notches stay. They used to be hidden here because they were absolute
+	   circles hanging outside the card, and on a narrow screen the card's own
+	   edge was close enough to the viewport that one of them fell off it. They
+	   are now clipped by the panel, so there is nothing to fall off. */
 	@media (max-width: 600px) {
-		form { padding: 24px 22px 22px; }
-		.tix_tickets_table td,
-		.tix_tickets_table tbody .tix-column-description { padding-left: 90px; }
-		.tix_tickets_table tbody .tix-column-description::after { display: none; }
+		form { padding: 30px 16px 18px; }
+		.tix_tickets_table tbody tr { padding: 18px; }
+		.tix_tickets_table tbody .tix-column-description {
+			margin: 0 -18px 12px;
+			padding: 0 18px 16px;
+		}
 	}
 }
 
@@ -992,7 +1067,8 @@ main:has(#tix) .wcblr-page-head {
 	#{$tix-select} form::before {
 		animation: wcblr-stamp-in 0.45s 0.95s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 	}
-	/* the notch belongs to the card, so it arrives with it rather than after */
+	/* the notches belong to the card, so they arrive with it rather than after */
+	#{$tix-select} .tix_tickets_table tbody .tix-column-description::before,
 	#{$tix-select} .tix_tickets_table tbody .tix-column-description::after {
 		animation: wcblr-fade 0.4s 0.5s ease-out both;
 	}
@@ -1079,12 +1155,38 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 }
 .wcblr-tix-back a:hover { border-bottom-color: #C8344B; }
 
-/* "Pick your quantity and register below" is an instruction for one screen and
-   stale on every screen after it. Same fail-safe direction: hidden unless the
-   selection table is on the page. Put `wcblr-tix-hint` on that paragraph. */
-.wcblr-tix-row .wcblr-tix-hint {
+/* "Pick your ticket and quantity, then register" is an instruction for one
+   screen and stale on every screen after it, and the illustration underneath it
+   is there to fill the column beside a tall stub, which is a job that only
+   exists on that screen too. Same fail-safe direction as everything else here:
+   hidden unless the selection table is on the page. Put `wcblr-tix-hint` on the
+   paragraph and `wcblr-tix-art` on the image. */
+.wcblr-tix-row .wcblr-tix-hint,
+.wcblr-tix-row .wcblr-tix-art {
 	display: none;
 }
-.wcblr-tix-row:has(#{$tix-select-table}) .wcblr-tix-hint {
+.wcblr-tix-row:has(#{$tix-select-table}) .wcblr-tix-hint,
+.wcblr-tix-row:has(#{$tix-select-table}) .wcblr-tix-art {
 	display: block;
+}
+
+/* The art is here to STOP the column looking short next to the stub, so it must
+   not overshoot and make the stub look short instead. The ratio pins that: the
+   column renders around 660px wide on a desktop, so 16:9 puts the image at
+   about 371px and the whole column at roughly 640px against the stub's 590. A
+   4:3 source left the column 200px taller than the card, which is the same
+   imbalance upside down.
+
+   Fixing it here rather than trusting the export also means a replacement image
+   at the wrong ratio cannot break the row: it gets cropped, not obeyed.
+   `object-position: bottom` because the prompt asks for empty cream space along
+   the bottom edge, and that is the part worth keeping when a taller source is
+   cropped. */
+.wcblr-tix-art img {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 16 / 9;
+	object-fit: cover;
+	object-position: center bottom;
 }
