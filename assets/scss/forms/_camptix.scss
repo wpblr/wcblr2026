@@ -40,6 +40,11 @@
 /* the selection screen's own table, and nothing else */
 $tix-select-table: ".tix_tickets_table:not(.tix-order-summary):not(.tix-attendee-form)";
 $tix-select: "#tix:has(#{$tix-select-table})";
+/* The PAGE, on the selection screen. `$tix-select` reaches the card; this
+   reaches the copy beside it, which lives outside `#tix` and cannot be
+   addressed from there. Same fail-safe direction as everything else in this
+   file: lose `:has()` and the ladder simply does not run. */
+$tix-page: ".wcblr-motion:has(#{$tix-select-table})";
 
 /* ---- 0. A ticketing page is not an article -------------------------------
    `templates/pages.html` opens every page with a "Last updated" line, a
@@ -1129,8 +1134,12 @@ main:has(#tix) .wcblr-page-head {
 @media (prefers-reduced-motion: no-preference) {
 
 	/* --- the ticket stub --- */
+	/* 0.3s, not 0.05s. At 0.05 the card was the first thing on the page to
+	   move, ahead of the eyebrow and the heading it belongs to, so the opening
+	   read as a card that had arrived and some copy catching up with it. The
+	   ladder below now runs eyebrow, heading, copy, card, stamp. */
 	#{$tix-select} form {
-		animation: wcblr-rise 0.6s 0.05s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+		animation: wcblr-rise 0.6s 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 	}
 	/* The badge, on the site's own beat: last, on something small, once the
 	   card has settled. `wcblr-stamp-in` ends on rotate(5deg), which is this
@@ -1139,9 +1148,13 @@ main:has(#tix) .wcblr-page-head {
 	#{$tix-select} form::before {
 		animation: wcblr-stamp-in 0.45s 0.95s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 	}
-	/* the notches belong to the card, so they arrive with it rather than after */
-	#{$tix-select} .tix_tickets_table tbody .tix-column-description::before,
-	#{$tix-select} .tix_tickets_table tbody .tix-column-description::after {
+	/* The notches belong to the card, so they arrive with it rather than after.
+	   Retargeted when the panels came out: the notches used to hang off the
+	   description cell and now hang off the row, and this rule was left
+	   animating two pseudo-elements that no longer have `content`. It failed
+	   silently, which is how motion bugs always fail. */
+	#{$tix-select} .tix_tickets_table tbody tr + tr::before,
+	#{$tix-select} .tix_tickets_table tbody tr + tr::after {
 		animation: wcblr-fade 0.4s 0.5s ease-out both;
 	}
 
@@ -1163,6 +1176,126 @@ main:has(#tix) .wcblr-page-head {
 	   every screen this site sees. */
 	#tix .tix-attendee-form:not(.tix-attendee-form ~ .tix-attendee-form) {
 		animation: wcblr-rise 0.6s 0.38s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	}
+}
+
+/* ---- 7b. The copy beside it, on the same ladder --------------------------
+   `content/_motion.scss` already animates the first section's columns, but it
+   does it a column at a time: prose at 0.26s, card at 0.36s. That is right for
+   a section whose left side is one block of text, and wrong here twice over.
+
+   The card is not a block. It runs its own five-step ladder inside `#tix`
+   (form, notches, stamp), and animating its column as well translates the
+   whole thing a second time while its own rise is still playing. That is the
+   compounding trap `_motion.scss` documents on the face wall, reached from the
+   other direction.
+
+   And the left column is five separate things: eyebrow, heading, lead, hint,
+   illustration. Moving them as one slab wastes the one screen on this page
+   where anybody is watching.
+
+   So both column-level animations are switched off and the pieces are laddered
+   instead. The order is the reading order, and the whole sequence lands at
+   about 1.4s, which is the home page's.
+
+     0.05  // register              rise
+     0.12  Get your ticket          LIFT, no fade
+     0.20  the lead paragraph       rise
+     0.20  the illustration         LIFT, no fade, long
+     0.27  the hint                 rise
+     0.30  the ticket card          rise, from section 7
+     0.95  add_filter( 'ticket' );  the spring, last and small
+
+   The heading and the illustration lift without fading for the reason
+   `wcblr-lift` exists: they are the two largest-contentful-paint candidates on
+   this screen, and an element at `opacity: 0` has not been painted, so fading
+   it moves LCP back by the length of the animation. */
+@media (prefers-reduced-motion: no-preference) {
+
+	/* off, so nothing compounds with the pieces below */
+	#{$tix-page} .wcblr-sec:first-child > .wcblr-tix-row > .wp-block-column {
+		animation: none;
+	}
+
+	/* The default step for anything in the copy column that is not named
+	   below, so a paragraph added later joins the ladder instead of sitting
+	   still while everything around it moves. */
+	#{$tix-page} .wcblr-sec:first-child > .wcblr-tix-row > .wp-block-column:first-child > * {
+		animation: wcblr-rise 0.6s 0.2s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	}
+	#{$tix-page} .wcblr-sec:first-child > .wcblr-tix-row > .wp-block-column:first-child > .wcblr-eyebrow {
+		animation: wcblr-rise 0.55s 0.05s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	}
+	#{$tix-page} .wcblr-sec:first-child > .wcblr-tix-row > .wp-block-column:first-child > h2 {
+		animation: wcblr-lift 0.75s 0.12s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	}
+	#{$tix-page} .wcblr-sec:first-child > .wcblr-tix-row > .wp-block-column:first-child > .wcblr-tix-hint {
+		animation-delay: 0.27s;
+	}
+	/* Early and long, so the picture moves WITH the copy rather than after it.
+	   Same reasoning as the home page's skyline. */
+	#{$tix-page} .wcblr-sec:first-child > .wcblr-tix-row > .wp-block-column:first-child > .wcblr-tix-art {
+		animation: wcblr-lift 0.9s 0.2s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	}
+}
+
+/* ---- 7c. Everything below the fold, on interaction ----------------------
+   The page is about 6,000px long. `content/_motion.scss` is explicit that a
+   load ladder run past the first screen plays to an empty room, so nothing
+   below the register row animates until the reader does something.
+
+   Scoped to this page rather than written against `.wp-block-column`, and that
+   is deliberate: eight posts and pages carry `wcblr-motion`, and most of them
+   build cards the same way, so a rule on the bare class would have quietly
+   restyled seven published pages to fix one. */
+@media (prefers-reduced-motion: no-preference) {
+
+	/* Every card on the page: the two ticket tiers, the six things a ticket
+	   gets you, the four good-to-know notes, and the questions. Transform only,
+	   plus a shadow that starts fully transparent so there is something to
+	   animate FROM; `box-shadow: none` to a real shadow does not interpolate,
+	   it snaps. Nothing here changes what the page looks like at rest. */
+	#{$tix-page} .wcblr-sec .wp-block-columns > .wp-block-column.has-background,
+	#{$tix-page} .wcblr-sec .wp-block-accordion-item {
+		box-shadow: 0 0 0 0 rgba(42, 29, 20, 0);
+		transition: transform 0.3s cubic-bezier(0.2, 0.6, 0.2, 1),
+			box-shadow 0.3s cubic-bezier(0.2, 0.6, 0.2, 1);
+	}
+	#{$tix-page} .wcblr-sec .wp-block-columns > .wp-block-column.has-background:hover,
+	#{$tix-page} .wcblr-sec .wp-block-accordion-item:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 16px 30px -22px rgba(42, 29, 20, 0.5);
+	}
+
+	/* The icon chip answers with the card it sits in, which is the one place
+	   the six benefit cards have anything to move. Small: 1.06 on a 44px chip
+	   is under three pixels, and the point is that the card feels alive rather
+	   than that the icon is doing something. */
+	#{$tix-page} .wcblr-sec .wcblr-chip {
+		transition: transform 0.3s cubic-bezier(0.2, 0.6, 0.2, 1);
+	}
+	#{$tix-page} .wcblr-sec .wp-block-column.has-background:hover .wcblr-chip {
+		transform: translateY(-2px) scale(1.06);
+	}
+
+	/* The question rows read as pressable before they are pressed. */
+	#{$tix-page} .wp-block-accordion-heading__toggle {
+		transition: color 0.18s ease;
+	}
+	#{$tix-page} .wp-block-accordion-item:hover .wp-block-accordion-heading__toggle {
+		color: #C8344B;
+	}
+	#{$tix-page} .wp-block-accordion-heading__toggle-icon {
+		transition: transform 0.22s cubic-bezier(0.2, 0.6, 0.2, 1);
+	}
+	/* UNVERIFIED, and safe to be wrong. The tickets page is not published, so
+	   the accordion's open-state DOM could not be read; this bets on the ARIA
+	   attribute the block has to set for a screen reader either way. If the bet
+	   is wrong the `+` simply does not turn, which is exactly where it is
+	   today. Do not build anything load-bearing on this selector until someone
+	   has looked at the rendered page. */
+	#{$tix-page} .wp-block-accordion-heading__toggle[aria-expanded="true"] .wp-block-accordion-heading__toggle-icon {
+		transform: rotate(45deg);
 	}
 }
 
