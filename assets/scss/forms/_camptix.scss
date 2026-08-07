@@ -1608,3 +1608,79 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	border: 1.5px solid #b3a595;
 	border-radius: 50%;
 }
+
+
+/* ---- The way from a ticket to what it is ---------------------------------
+   The card names a ticket and prices it and says nothing about what is in it,
+   and what is in it is 500px further down the page. The obvious fix is a link
+   on each ticket name in the card, and it is not available: CampTix renders
+   that DOM, WordCamp.org allows no JavaScript in post content, and a CSS
+   pseudo-element cannot be a link. Nothing the page owns can get inside the
+   form.
+
+   So the link sits directly under the card instead, in the same column, and is
+   sized to the card so it reads as the card's own footnote rather than as a
+   stray line of page copy. `max-width: 394px` and `margin: auto` are the stub's
+   own values from section 5; if that width changes, change it here too.
+
+   The one other route worth knowing about, and it is worth TESTING before
+   trusting: CampTix prints a ticket's description into `.tix-ticket-excerpt`,
+   so if that field passes HTML through unescaped a real per-ticket link could
+   live in the card after all. It was not used here because whether it escapes
+   could not be checked without the plugin source, and a page that takes money
+   is the wrong place to find out by shipping. */
+.wcblr-guide .wcblr-tix-jump {
+	max-width: 394px;
+	margin: 14px auto 0 !important;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 4px 9px;
+	line-height: 1.5;
+}
+.wcblr-guide .wcblr-tix-jump-label,
+.wcblr-guide .wcblr-tix-jump-sep {
+	color: #9c8d7c;
+}
+.wcblr-guide .wcblr-tix-jump-label {
+	font-size: 10.5px;
+	font-weight: 500;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+}
+/* Underlined at rest, not on hover. This is a jump inside the page rather than
+   a call to action, so it should read as available without competing with the
+   crimson Register button a few pixels above it. */
+.wcblr-guide .wcblr-tix-jump a {
+	text-decoration: none;
+	border-bottom: 1px solid rgba(42, 29, 20, 0.3);
+	padding-bottom: 1px;
+	transition: color 0.15s ease, border-color 0.15s ease;
+}
+.wcblr-guide .wcblr-tix-jump a:hover {
+	color: #C8344B !important;
+	border-bottom-color: #C8344B;
+}
+
+/* Landing under the sticky header is the classic anchor bug and this page now
+   has five in-page jumps: the two tier headings, `#register` from the tier
+   buttons and from the "ticket box above" line, and `#included`.
+
+   Measured on the live site rather than guessed: `.wcblr-header` is
+   `position: sticky; top: 0` and computes to 75px at 1440 and 165px at 600,
+   where the navigation wraps. So the desktop offset clears 75 with room and
+   the narrow one clears 165.
+
+   Scoped to the guide layer rather than to this page because it changes no
+   pixel of any rendered page: `scroll-margin-top` only applies while the
+   browser is scrolling something into view. */
+.wcblr-guide .wcblr-sec[id],
+.wcblr-guide h3[id] {
+	scroll-margin-top: 96px;
+}
+@media (max-width: 782px) {
+	.wcblr-guide .wcblr-sec[id],
+	.wcblr-guide h3[id] {
+		scroll-margin-top: 182px;
+	}
+}
