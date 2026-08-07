@@ -359,7 +359,12 @@
    28, and there is no border. All three keep it reading as ground the section
    is standing on rather than as one more, larger card. */
 .wcblr-story .wcblr-band {
-	background: #FBF8F1;
+	/* #FBF6EA, the warm cream the tickets page gives its second tier, not the
+	   #FBF8F1 the cards use. Two reasons. It is a step warmer and a step darker
+	   than the card tone, so the white panels sitting on it have somewhere to
+	   go; and at #FBF8F1 the band read as white against cream, which is the
+	   note this page has the least use for. */
+	background: #FBF6EA;
 	border-radius: 20px;
 	padding: 44px;
 	/* The section's own 56px top margin plus 44px of panel padding would put
@@ -410,5 +415,117 @@
 	.wcblr-story .wcblr-band {
 		padding: 28px 20px;
 		border-radius: 16px;
+	}
+}
+
+
+/* 10. Colour, on a rule.
+   Rules 5 and 6 stripped a decorative rotation: four stat numbers in four
+   accents, three archive rows with three different dates. That was right, the
+   rotation meant nothing. Read back afterwards the page had the opposite
+   problem, espresso and crimson and nothing else, so the answer is not to put
+   the rotation back but to give each accent one job and let it repeat:
+
+     gold    #a8760f / #E0A526   counting and archive: the readout numbers,
+                                 the numbered listings, the file tagpills
+     green   #136451             the community-build beats: do_action, and the
+                                 meetups that moved online rather than stopping
+     crimson                     unchanged: section eyebrows, links, the CTA
+
+   Two colours added, each used more than once, each answering "why is this
+   that colour" with a sentence. */
+
+/* The readout numbers, in one accent rather than cream or four.
+   Inline `color:#F2ECE0` sits on every one of them, so this needs the
+   !important; the alternative is editing four inline styles that the block
+   editor will happily put back. */
+.wcblr-story .wcblr-readout .wcblr-num {
+	color: #E0A526 !important;
+}
+
+/* The first three listings, as archive rather than as three anonymous rows.
+   Rule 6 muted these to #7a6757 when it took the rotation out and the card
+   went flat grey. Same tone family as the numbers above, because it is the
+   same idea: this is the record. */
+.wcblr-story .wcblr-archivecard .wcblr-statrow .wcblr-statchip {
+	background-color: rgba(168, 118, 15, 0.13);
+	color: #a8760f;
+}
+
+.wcblr-story .wcblr-archivecard .wcblr-statrow > p:first-of-type {
+	color: #a8760f !important;
+}
+
+/* The three community-build cards get an icon and the green.
+   Chips are the house mechanism from `_cfs-icons.scss`: an empty group block
+   carrying the shape class and an icon class. These paint from CSS rather than
+   from an <img> pointing at raw.githubusercontent, so they render in
+   preview.py before anything is pushed, and there is no request to fail.
+
+   Both the colour longhand and the image need `!important`, for the same
+   reason: `_cfs-icons.scss` sets the shorthand that way, and a shorthand
+   resets `background-image` at its own priority. `background-color`, never the
+   `background` shorthand. `_cfs-icons.scss`
+   sets `.wcblr-chip { background: rgb(168 118 15 / 12%) !important }`, and a
+   shorthand answering it in kind resets background-image to none, which is
+   exactly how the first version of this rendered: three green squares with no
+   glyph in them. The longhand overrides the colour and leaves the image the
+   icon class puts there. */
+.wcblr-story .wcblr-chip.c-story {
+	background-color: rgba(19, 100, 81, 0.11) !important;
+	/* Every one of these is !important because they are all answering the same
+	   one shorthand. It resets repeat to `repeat` and size to `auto` at that
+	   priority too, so the version with plain longhands rendered a 24px icon
+	   tiled four times and spilling out of a 44px chip. */
+	background-repeat: no-repeat !important;
+	background-position: center !important;
+	background-size: 21px 21px !important;
+}
+
+.wcblr-story .s-hands {
+	background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23136451%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M11%2012h2a2%202%200%201%200%200-4h-3c-.6%200-1.1.2-1.4.6L3%2014%27%2F%3E%3Cpath%20d%3D%27m7%2018%201.6-1.4c.3-.4.8-.6%201.4-.6h4c1.1%200%202.1-.4%202.8-1.2l4.6-4.4a2%202%200%200%200-2.75-2.91l-4.2%203.9%27%2F%3E%3Cpath%20d%3D%27m2%2013%206%206%27%2F%3E%3C%2Fsvg%3E") !important;
+}
+
+.wcblr-story .s-video {
+	background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23136451%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M16%2021v-2a4%204%200%200%200-4-4H6a4%204%200%200%200-4%204v2%27%2F%3E%3Cpath%20d%3D%27M16%203.128a4%204%200%200%201%200%207.744%27%2F%3E%3Cpath%20d%3D%27M22%2021v-2a4%204%200%200%200-3-3.87%27%2F%3E%3Ccircle%20cx%3D%279%27%20cy%3D%277%27%20r%3D%274%27%2F%3E%3C%2Fsvg%3E") !important;
+}
+
+.wcblr-story .s-code {
+	background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23136451%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27m18%2016%204-4-4-4%27%2F%3E%3Cpath%20d%3D%27m6%208-4%204%204%204%27%2F%3E%3Cpath%20d%3D%27m14.5%204-5%2016%27%2F%3E%3C%2Fsvg%3E") !important;
+}
+
+/* 11. Two coffee meets, as a count rather than as paragraphs.
+   The section ran three stacked paragraphs down its left column, and the two
+   after the first restated dates the 203-day panel beside them was already
+   printing. What the passage is actually about is a number going the wrong
+   way: fourteen people said they were coming, then five, and they held it
+   anyway. So the numbers get to be numbers.
+
+   Not another card row: `what_they_did_instead` is a three-up of cards
+   directly above this, and two card rows back to back is the repetition this
+   whole pass is trying to remove. A tally is a different object. */
+.wcblr-story .wcblr-tally-row {
+	display: grid;
+	grid-template-columns: 92px minmax(0, 1fr);
+	column-gap: 22px;
+	/* Top, not baseline. Baseline put the 46px numeral's foot on the 12px
+	   label's foot, which reads as the number having slipped a line: the
+	   numeral's bulk ends up above everything it belongs to. Aligned at the
+	   top, the label sits beside the numeral's cap and the sentence hangs
+	   under the label where it belongs. */
+	align-items: start;
+}
+
+.wcblr-story .wcblr-tally-row + .wcblr-tally-row {
+	border-top: 1px solid #e4ddd0;
+	margin-top: 20px !important;
+	padding-top: 20px !important;
+}
+
+/* Same fold as the ledger in rule 3, and for the same reason: below this the
+   column is too narrow to spend 92px on a numeral column. */
+@media (max-width: 950px) {
+	.wcblr-story .wcblr-tally-row {
+		grid-template-columns: minmax(0, 1fr);
 	}
 }
