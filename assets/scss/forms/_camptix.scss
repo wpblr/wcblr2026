@@ -1234,8 +1234,12 @@ main:has(#tix) .wcblr-page-head {
 	}
 	/* Early and long, so the picture moves WITH the copy rather than after it.
 	   Same reasoning as the home page's skyline. */
-	#{$tix-page} .wcblr-sec:first-child > .wcblr-tix-row > .wp-block-column:first-child > .wcblr-tix-art {
-		animation: wcblr-lift 0.9s 0.2s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	/* The band is a direct child of the section now, not of the copy column.
+	   It also sits about 600px down, at or below the fold on a laptop, so it
+	   gets the slow lift rather than a rise: transform only, nothing to fade
+	   in for a reader who is already past it. */
+	#{$tix-page} .wcblr-sec:first-child > .wcblr-tix-art {
+		animation: wcblr-lift 0.9s 0.36s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 	}
 
 	/* The facts close the opening, so they arrive after both columns have
@@ -1379,17 +1383,19 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 .wcblr-tix-back a:hover { border-bottom-color: #C8344B; }
 
 /* "Pick your ticket and quantity, then register" is an instruction for one
-   screen and stale on every screen after it, and the illustration underneath it
-   is there to fill the column beside a tall stub, which is a job that only
-   exists on that screen too. Same fail-safe direction as everything else here:
-   hidden unless the selection table is on the page. Put `wcblr-tix-hint` on the
-   paragraph and `wcblr-tix-art` on the image. */
-.wcblr-tix-row .wcblr-tix-hint,
-.wcblr-tix-row .wcblr-tix-art {
+   screen and stale on every screen after it, so it is hidden unless the
+   selection table is on the page. Put `wcblr-tix-hint` on that paragraph.
+
+   The illustration used to be hidden the same way, back when it sat in the
+   column and its whole job was filling the space beside the stub. It is a
+   full-width band now and it carries no instruction, so hiding it bought
+   nothing and cost the one thing this file is careful about: a rule that
+   HIDES content on a failed `:has()` fails in the wrong direction. On every
+   screen after selection CampTix replaces the page content anyway. */
+.wcblr-tix-row .wcblr-tix-hint {
 	display: none;
 }
-.wcblr-tix-row:has(#{$tix-select-table}) .wcblr-tix-hint,
-.wcblr-tix-row:has(#{$tix-select-table}) .wcblr-tix-art {
+.wcblr-tix-row:has(#{$tix-select-table}) .wcblr-tix-hint {
 	display: block;
 }
 
@@ -1405,13 +1411,32 @@ main:has(.tix-order-summary) .wcblr-tix-back {
    `object-position: bottom` because the prompt asks for empty cream space along
    the bottom edge, and that is the part worth keeping when a taller source is
    cropped. */
+/* A BAND, not a picture in a column, and the move is what fixes the section.
+   The illustration used to sit under the copy in the 58% column. That made the
+   column about 643px tall against a ticket card of 212px, so the card floated
+   in a field of cream with the whole bottom right of the section empty. The
+   card is short because it is short: one ticket type is three lines and a
+   button, and no amount of arranging the copy changes that.
+
+   So the picture comes out of the column and runs the full content width
+   underneath the row. The two columns then stand at 285px and 212px, which
+   sit together, and the illustration gets to be the section's one image
+   instead of a block wedged in a text column.
+
+   3.2:1 rather than 16:9, which is the wide-body-illustration band in the
+   imagery reference. `center 62%` and not `center`: the source is 1376x768
+   with generous empty cream top and bottom, and a centred crop at this ratio
+   takes the figures off at the knees. 62% keeps the desk, the luggage and the
+   floor, and spends the crop on the palm fronds instead, which are the part
+   nobody is looking at. Checked by cutting all three candidates and looking at
+   them, not by picking a number. */
 .wcblr-tix-art img {
 	display: block;
 	width: 100%;
 	height: auto;
-	aspect-ratio: 16 / 9;
+	aspect-ratio: 3.2 / 1;
 	object-fit: cover;
-	object-position: center bottom;
+	object-position: center 62%;
 	/* The radius the red note promised and this file never delivered: the note
 	   told whoever inserted the image that the class carried "the ratio, the
 	   radius and the hide-on-later-screens behaviour", and only two of those
@@ -1425,6 +1450,14 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	   turmeric, because every card around it is bordered #dad5cd. */
 	border: 1.5px solid #dad5cd;
 	border-radius: 16px;
+}
+
+/* 3.2:1 is a ratio for a band 1,200px wide. On a 390px phone the same ratio
+   is 107px tall and the four figures are about 60px each, which is a letterbox
+   strip rather than a picture. The band is the full column width on a phone
+   either way, so it can afford the height. */
+@media (max-width: 781px) {
+	.wcblr-tix-art img { aspect-ratio: 2 / 1; }
 }
 
 /* ---- The essentials, closing the register section ------------------------
