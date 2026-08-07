@@ -1574,6 +1574,57 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 }
 
 
+/* ---- One tier on sale, not two ------------------------------------------
+   Friend of WC BLR is off the page until it goes on sale, which leaves the
+   tier row holding a single `wp:column`. A column on its own takes the full
+   content width, so the card that was a neat half-width panel became a
+   1,200px slab with a heading, three bullets and a button stacked down its
+   left edge and 800px of nothing to the right of them.
+
+   Rather than pin it back to half width and leave the other half empty, the
+   lone card turns on its side: identity on the left, what you get in the
+   middle, the action on the right. That is a shape a single featured tier can
+   actually fill, and it stops the row reading as a two-up grid missing its
+   second item.
+
+   Keyed on `:only-child`, so the day Friend of WC BLR comes back the row has
+   two columns again and this rule stops applying by itself. Nothing to
+   remember, nothing to undo. */
+.wcblr-guide .wcblr-tiers > .wp-block-column:only-child {
+	display: grid;
+	grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr) auto;
+	align-items: center;
+	column-gap: 44px;
+}
+.wcblr-guide .wcblr-tiers > .wp-block-column:only-child > p:first-child { grid-area: 1 / 1; }
+.wcblr-guide .wcblr-tiers > .wp-block-column:only-child > h3 { grid-area: 2 / 1; }
+.wcblr-guide .wcblr-tiers > .wp-block-column:only-child > p:nth-child(3) { grid-area: 3 / 1; }
+/* Both span the three rows the left column makes, and both drop the bottom
+   margin they carried as inline block attributes for the stacked layout: with
+   `align-items: center` a 20px bottom margin lifts the item ten pixels off the
+   centre line and the row goes visibly crooked. */
+.wcblr-guide .wcblr-tiers > .wp-block-column:only-child > ul {
+	grid-area: 1 / 2 / span 3;
+	margin: 0 !important;
+	align-self: center;
+}
+.wcblr-guide .wcblr-tiers > .wp-block-column:only-child > .wp-block-buttons {
+	grid-area: 1 / 3 / span 3;
+	margin: 0 !important;
+	align-self: center;
+}
+
+/* Below the columns breakpoint the card is narrow again and the three across
+   would be three cramped strips, so it goes back to the stack it was built as. */
+@media (max-width: 781px) {
+	.wcblr-guide .wcblr-tiers > .wp-block-column:only-child {
+		display: block;
+	}
+	.wcblr-guide .wcblr-tiers > .wp-block-column:only-child > ul {
+		margin: 0 0 20px !important;
+	}
+}
+
 /* ---- A tier that is not on sale yet -------------------------------------
    Only Early Bird is selling. Friend of WC BLR stays on the page, because
    somebody deciding today should know what is coming, but it must not look
