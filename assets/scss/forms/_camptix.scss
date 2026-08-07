@@ -803,22 +803,67 @@ main:has(#tix) .wcblr-page-head {
 	.tix_tickets_table,
 	.tix_tickets_table tbody { display: block; width: 100%; }
 
-	/* The panel. `overflow: hidden` is not tidiness: it is what turns the two
-	   notch circles below into notches. They are drawn straddling the panel's
-	   left and right edges in the CARD's colour, and this clips each one to the
-	   half that falls inside, so the panel looks bitten rather than dotted. */
+	/* ONE CARD, TORN INTO STUBS. No panel, and that is the point.
+	   The version before this one gave each ticket a rounded box with its own
+	   fill and hairline. On espresso, `rgba(242,236,224,.045)` over `#2a1d14`
+	   resolves to about `#392c23`, and two of those stacked inside a dark card
+	   read as grey slabs sitting ON the card rather than as parts of it. It
+	   solved the right problem, telling two tickets apart, with the wrong
+	   object.
+
+	   A ticket is not a box on a card. It is a piece of the card that tears
+	   off, so the separator IS the design: a perforation running the full width
+	   with a notch bitten out of both edges, and nothing else. Same reason the
+	   tear bleeds past the card's padding via negative margins; a perforation
+	   that stops 24px short of the edge is an underline.
+
+	   Everything here is drawn with border, radius and background-colour on
+	   purpose. Verified against the served stylesheet, not assumed: WordCamp's
+	   sanitiser keeps the `background-image` PROPERTY and empties its VALUE, so
+	   all 24 `url(data:image/svg+xml,...)` icons in this build arrive as
+	   `background-image: ` and paint nothing. CampTix owns this DOM, so no
+	   `<img>` can be added either. Any mark on this card has to be drawn from
+	   box properties or be a text glyph. */
 	.tix_tickets_table tbody tr {
+		position: relative;
 		display: grid;
 		grid-template-columns: minmax(0, 1fr) auto;
-		column-gap: 16px;
-		row-gap: 6px;
-		padding: 20px 22px;
-		border: 1.5px solid rgba(242, 236, 224, 0.15);
-		border-radius: 12px;
-		background: rgba(242, 236, 224, 0.045);
-		overflow: hidden;
+		column-gap: 18px;
+		row-gap: 4px;
+		/* bleed to the card's own edges, so the tear can reach them */
+		margin: 0 -24px;
+		padding: 0 24px;
 	}
-	.tix_tickets_table tbody tr + tr { margin-top: 14px; }
+
+	/* The perforation, between tickets and nowhere else. Not under the last
+	   one: a tear with nothing below it to tear off is just a rule. */
+	.tix_tickets_table tbody tr + tr {
+		margin-top: 30px;
+		padding-top: 30px;
+		border-top: 2px dashed rgba(242, 236, 224, 0.22);
+	}
+
+	/* The notches, in the PAGE's colour, biting into the card from outside.
+	   `position: absolute` is doing two jobs: it places them, and it takes them
+	   out of the grid. A `tr` is the grid container here, so a static
+	   pseudo-element would become a grid ITEM and open two extra tracks.
+
+	   `top: -12px` centres the 22px circle on the 2px border: `top` resolves
+	   against the padding box, which starts 2px below the border box, so -12
+	   puts the circle's centre 1px above the padding edge, which is the
+	   border's own middle. */
+	.tix_tickets_table tbody tr + tr::before,
+	.tix_tickets_table tbody tr + tr::after {
+		content: "";
+		position: absolute;
+		top: -12px;
+		width: 22px;
+		height: 22px;
+		border-radius: 50%;
+		background: #F2ECE0;
+	}
+	.tix_tickets_table tbody tr + tr::before { left: -11px; }
+	.tix_tickets_table tbody tr + tr::after { right: -11px; }
 
 	/* Tag-agnostic on purpose. WordCamp.org's CampTix emits the body
 	   description cell as a `th` (checked in the live DOM), while CampTix
@@ -842,42 +887,27 @@ main:has(#tix) .wcblr-page-head {
 	.tix-column-description br,
 	.tix_tickets_table p br { display: none; }
 
-	/* The tear. Negative margins pull it out to the panel's own edges: inset
-	   by the panel's padding it stops 22px short on each side and reads as an
-	   underline beneath the name rather than as a perforation across the
-	   ticket. The notches then hang off it, so they can never drift out of
-	   line with it the way a hardcoded offset did. */
+	/* 10px, not 15. A ticket with no excerpt is just a name, and at 15 the gap
+	   between it and its own price read as wider than the gap between the two
+	   grid rows below it, so the name floated away from the thing it prices.
+	   The excerpt case barely notices the difference. */
 	.tix_tickets_table tbody .tix-column-description {
 		grid-column: 1 / -1;
-		margin: 0 -22px 12px;
-		padding: 0 22px 18px;
-		border-bottom: 2px dashed rgba(242, 236, 224, 0.22);
+		margin-bottom: 10px;
 	}
-	.tix_tickets_table tbody .tix-column-description::before,
-	.tix_tickets_table tbody .tix-column-description::after {
-		content: "";
-		position: absolute;
-		bottom: -12px;
-		width: 22px;
-		height: 22px;
-		border-radius: 50%;
-		background: #2a1d14;
-	}
-	.tix_tickets_table tbody .tix-column-description::after { left: -11px; }
-	.tix_tickets_table tbody .tix-column-description::before { right: -11px; }
 
-	/* The coupon row is an action, not a ticket, so it gets none of the panel:
-	   a bordered box around "Have a coupon?" would read as a third thing on
-	   sale. Space alone separates it from the last stub. */
+	/* The coupon row is an action, not a ticket. It gets the thin solid rule
+	   rather than the dashed tear and the notches, because a perforation says
+	   "this part comes off" and a coupon link is not a thing you take away.
+	   Two different jobs, two different lines. */
 	.tix_tickets_table tbody tr.tix-row-coupon {
 		display: block;
-		margin-top: 26px;
-		padding: 0;
-		border: 0;
-		border-radius: 0;
-		background: none;
-		overflow: visible;
+		margin-top: 28px;
+		padding: 26px 24px 0;
+		border-top: 1px solid rgba(242, 236, 224, 0.13);
 	}
+	.tix_tickets_table tbody tr.tix-row-coupon::before,
+	.tix_tickets_table tbody tr.tix-row-coupon::after { content: none; }
 
 	/* --- Coupons, on the dark card ---
 	   `#tix-coupon-container` carries an inline `display: none` that CampTix's
@@ -940,43 +970,86 @@ main:has(#tix) .wcblr-page-head {
 	.tix-ticket-title {
 		display: block;
 		font-family: Fraunces, Georgia, serif;
-		font-size: 20px;
+		font-size: 21px;
 		font-weight: 500;
 		line-height: 1.2;
 		color: #f2ece0;
 	}
+
+	/* The mark. A turmeric rail at the head of each ticket name, and it is
+	   deliberately NOT an icon.
+
+	   Two things rule an icon out. CampTix owns this DOM, so no `<img>` can be
+	   added; and the sanitiser keeps `background-image` as a property but
+	   empties its value, verified against the served stylesheet, so all 24 of
+	   this build's `url(data:image/svg+xml,...)` icons arrive as
+	   `background-image: ` and paint nothing. That leaves border, radius and
+	   background-colour, and a first pass tried to spend them on a drawn ticket
+	   stub: a 22x15 turmeric outline with a dashed right edge. Rendered, the
+	   dashes were invisible at that size and it read as a small empty gold box.
+	   A tiny ticket inside a card that is already a ticket, complete with
+	   perforation and notches, was redundant even when it worked.
+
+	   So the mark says "a thing starts here" and nothing more, which is the
+	   only job it has. Everything in the stub then hangs off the rail's text
+	   edge: 17px, the rail plus its margin. */
+	.tix-ticket-title::before {
+		content: "";
+		display: inline-block;
+		vertical-align: -2px;
+		width: 3px;
+		height: 18px;
+		margin-right: 14px;
+		border-radius: 2px;
+		background: #e0a526;
+	}
+
+	/* The excerpt hangs off the title's text, not off the card's edge, so it
+	   sits under the words rather than under the rail. */
 	.tix-ticket-excerpt {
 		display: block;
-		margin-top: 7px;
+		margin: 7px 0 0 17px;
 		font-size: 13.5px;
 		line-height: 1.5;
 		color: #a2968b;
 	}
 
-	/* The price is the biggest thing in the panel and what is left of it is
-	   its footnote, directly underneath and in the muted grey, so the two read
-	   as one statement rather than as two rows of a table. Stacked rather than
-	   side by side for width: at the card's 394px a nowrap price, a nowrap
-	   count, a label and a select on one line came to within a few pixels of
-	   the content box, and a longer price string (five figures, or a coupon's
-	   struck-through original) would have run out of the panel. */
+	/* The price is the biggest thing on the card and what is left of it is its
+	   footnote, directly underneath, so the two read as one statement rather
+	   than as two rows of a table. Stacked rather than side by side for width:
+	   at the card's 394px a nowrap price, a nowrap count, a label and a select
+	   on one line came to within a few pixels of the content box, and a longer
+	   price string (five figures, or a coupon's struck-through original) would
+	   have run off the end.
+
+	   Both are indented to 17px, which is where the rail puts the title text.
+	   Unindented, the price started 17px to the left of the name it belongs
+	   to. */
 	.tix-column-price {
 		grid-column: 1;
 		grid-row: 2;
+		margin-left: 17px;
 		font-family: "JetBrains Mono", monospace;
 		font-size: 24px;
 		font-weight: 500;
 		line-height: 1.15;
 		color: #e0a526;
 	}
+	/* Uppercase and tracked, so a two-character number does not read as part of
+	   the price above it. #978f87 was the grey used everywhere on the old panel
+	   and it was the dimmest thing on the card; scarcity is worth more than
+	   that. */
 	.tix-column-remaining {
 		grid-column: 1;
 		grid-row: 3;
+		margin: 2px 0 0 17px;
 		font-family: "JetBrains Mono", monospace;
-		font-size: 12px;
-		letter-spacing: 0.06em;
+		font-size: 11px;
+		font-weight: 500;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
 		line-height: 1.4;
-		color: #978f87;
+		color: #b3a595;
 	}
 	/* `:not(:empty)` because CampTix leaves this cell blank on a ticket with no
 	   quantity cap, and a bare " left" under the price is worse than nothing. */
@@ -1033,12 +1106,11 @@ main:has(#tix) .wcblr-page-head {
 	   edge was close enough to the viewport that one of them fell off it. They
 	   are now clipped by the panel, so there is nothing to fall off. */
 	@media (max-width: 600px) {
-		form { padding: 30px 16px 18px; }
-		.tix_tickets_table tbody tr { padding: 18px; }
-		.tix_tickets_table tbody .tix-column-description {
-			margin: 0 -18px 12px;
-			padding: 0 18px 16px;
-		}
+		form { padding: 30px 18px 18px; }
+		/* the bleed has to follow the card's padding or the tear stops short */
+		.tix_tickets_table tbody tr { margin: 0 -18px; padding: 0 18px; }
+		.tix_tickets_table tbody tr + tr { margin-top: 26px; padding-top: 26px; }
+		.tix_tickets_table tbody tr.tix-row-coupon { padding: 24px 18px 0; }
 	}
 }
 
