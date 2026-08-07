@@ -1350,6 +1350,179 @@ main:has(#tix) .wcblr-page-head {
 	margin-top: 0;
 }
 
+/* ---- 8. The furniture around the registration screen --------------------
+   The registration screen had nothing on it but the form. Not "a bit empty":
+   CONTEXTLESS. `main:has(#tix) .wcblr-page-head` hides the article head on
+   purpose, because a centred title and a "Last updated" line on a payment
+   screen read as a blog post with a form stapled underneath, but nothing ever
+   replaced it. So the page named no event, no date and no venue while asking
+   for money. Somebody arriving from a shared link, or coming back to a tab
+   they left, saw a form with no name on it.
+
+   ALL OF THIS LIVES IN `templates/pages.html`, and it has to. On any
+   `tix_action` screen this build replaces the whole of `.entry-content` with
+   `#tix` alone: measured in the live DOM, where the content element has
+   exactly one child and every block the page owns is simply gone. Nothing
+   added to `pages/tickets.html` can ever appear here. The template is the only
+   surface CampTix does not touch, which is why the back link already lived
+   there.
+
+   AND THAT TEMPLATE RENDERS ON EVERY PAGE OF THE SITE. Each piece below is
+   `display: none` first and revealed only by `main:has()`, so a page with no
+   CampTix form on it cannot show a checkout header. Get that backwards and
+   "WordCamp Bengaluru 2026 / Choose a ticket / Your details / Pay" appears on
+   the code of conduct. */
+
+.wcblr-tix-head,
+.wcblr-tix-steps,
+.wcblr-tix-assure {
+	display: none;
+}
+main:has(.tix-attendee-form) .wcblr-tix-head,
+main:has(.tix-order-summary) .wcblr-tix-head {
+	display: block;
+}
+main:has(.tix-attendee-form) .wcblr-tix-steps,
+main:has(.tix-order-summary) .wcblr-tix-steps {
+	display: flex;
+}
+main:has(.tix-attendee-form) .wcblr-tix-assure,
+main:has(.tix-order-summary) .wcblr-tix-assure {
+	display: grid;
+}
+
+/* ---- The header ---------------------------------------------------------- */
+.wcblr-tix-head {
+	margin-bottom: 0;
+}
+.wcblr-tix-head-title {
+	font-family: Fraunces, Georgia, serif;
+	color: #2a1d14;
+}
+
+/* ---- The steps -----------------------------------------------------------
+   CampTix tells you nothing about where you are in its flow, and not knowing
+   how much is left is a real reason people abandon a checkout. Three steps,
+   and the third one is honest about leaving the site: "Pay" happens at the
+   payment provider, not here.
+
+   The numerals come from a CSS counter rather than from the markup, so they
+   can never drift out of step with the list if one is added or removed. */
+.wcblr-tix-steps {
+	counter-reset: wcblr-tix-step;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px 26px;
+	/* 20px below, because the back link that follows carries `margin-top: 0` as
+	   an inline block attribute and would otherwise sit on the steps' baseline
+	   with its underline almost touching them. */
+	margin: 26px 0 20px;
+}
+.wcblr-tix-step {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+	font-size: 12.5px;
+	letter-spacing: 0.04em;
+	color: #9c8d7c;
+	margin: 0;
+}
+.wcblr-tix-step::before {
+	counter-increment: wcblr-tix-step;
+	content: counter(wcblr-tix-step);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 21px;
+	height: 21px;
+	flex: none;
+	border: 1.5px solid currentColor;
+	border-radius: 50%;
+	font-size: 11px;
+	line-height: 1;
+}
+/* Done: filled, and the numeral is replaced by a check. A step you have
+   finished does not need its number any more, and the tick is the one mark
+   that says "behind you" without any words. */
+.wcblr-tix-step.is-done {
+	color: #7a6757;
+}
+.wcblr-tix-step.is-done::before {
+	content: "\2713";
+	background: #7a6757;
+	border-color: #7a6757;
+	color: #F2ECE0;
+	font-size: 12px;
+}
+/* Current: the only one in full espresso, and the only filled ring in the
+   accent. Everything ahead of it stays muted. */
+.wcblr-tix-step.is-now {
+	color: #2a1d14;
+	font-weight: 500;
+}
+.wcblr-tix-step.is-now::before {
+	background: #C8344B;
+	border-color: #C8344B;
+	color: #fff;
+}
+
+/* ---- What happens after the money moves ---------------------------------
+   Trust copy, and the reason it is here rather than only in the FAQ: the
+   no-refund rule belongs in front of somebody BEFORE they pay, not in an
+   accordion on a page they may never have opened. It says the same thing the
+   FAQ says, in the same words, so the two cannot drift.
+
+   A tinted panel rather than a bordered card. The form above it is already a
+   `#FBF8F1` card with a `#dad5cd` edge, and a second one directly under it
+   reads as two stacked cards; a wash with no border reads as a note. */
+.wcblr-tix-assure {
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 26px 34px;
+	margin: 26px 0 0;
+	padding: 24px 28px;
+	background: rgba(42, 29, 20, 0.035);
+	border-radius: 14px;
+}
+.wcblr-tix-assure-label {
+	font-size: 10.5px;
+	font-weight: 500;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: #a8760f;
+	margin: 0 0 6px;
+}
+.wcblr-tix-assure-body {
+	font-size: 14px;
+	line-height: 1.55;
+	color: #7a6757;
+	margin: 0;
+}
+.wcblr-tix-assure-body a {
+	color: #7a6757;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+.wcblr-tix-assure-body a:hover { color: #C8344B; }
+
+@media (max-width: 781px) {
+	.wcblr-tix-assure { grid-template-columns: 1fr; gap: 20px; padding: 20px 22px; }
+	.wcblr-tix-head-title { font-size: 30px !important; }
+}
+
+/* The header is the first thing on the screen and the card below it already
+   fades in, so it gets the same opening rather than none. Nothing else here
+   animates: a checkout is not a page to decorate. */
+@media (prefers-reduced-motion: no-preference) {
+	main:has(.tix-attendee-form) .wcblr-tix-head,
+	main:has(.tix-order-summary) .wcblr-tix-head {
+		animation: wcblr-rise 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	}
+	main:has(.tix-attendee-form) .wcblr-tix-steps,
+	main:has(.tix-order-summary) .wcblr-tix-steps {
+		animation: wcblr-rise 0.5s 0.08s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	}
+}
+
 /* The way back. CampTix gives you no route from the registration screen to
    the ticket list: the only exits are Checkout and the browser's back button,
    and this page takes money, so a dead end is not acceptable.
