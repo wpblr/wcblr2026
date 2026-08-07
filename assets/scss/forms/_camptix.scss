@@ -1914,6 +1914,21 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	border-bottom-color: #C8344B;
 }
 
+/* The terms, at the moment of choosing.
+   "Not refundable" belongs in front of somebody while they are deciding, not
+   only in an accordion further down the page that many readers never open. It
+   sits under the jump line, sized to the card like it, and quiet: this is a
+   condition of sale, not a warning, and setting it in red would make buying a
+   ticket feel risky when it is not.
+
+   The wording is the FAQ's own sentence, "We are not able to refund tickets.",
+   and so is the registration footer's. Three places, one sentence, so no two
+   can drift into saying slightly different things about money. */
+.wcblr-guide .wcblr-tix-terms {
+	max-width: 394px;
+	margin: 10px auto 0 !important;
+}
+
 /* Landing under the sticky header is the classic anchor bug and this page now
    has five in-page jumps: the two tier headings, `#register` from the tier
    buttons and from the "ticket box above" line, and `#included`.
