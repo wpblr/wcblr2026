@@ -1448,8 +1448,11 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	   few points of the page's #F2ECE0, so with no edge it does not read as a
 	   placed object, it reads as a hole in the page. #dad5cd rather than the
 	   turmeric, because every card around it is bordered #dad5cd. */
+	/* Top corners only, and no bottom edge: the facts strip below is the same
+	   object and closes it. See the essentials block. */
 	border: 1.5px solid #dad5cd;
-	border-radius: 16px;
+	border-bottom: 0;
+	border-radius: 16px 16px 0 0;
 }
 
 /* 3.2:1 is a ratio for a band 1,200px wide. On a 390px phone the same ratio
@@ -1460,29 +1463,52 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	.wcblr-tix-art img { aspect-ratio: 2 / 1; }
 }
 
-/* ---- The essentials, closing the register section ------------------------
+/* The band needs its own air, and it has none of its own.
+   The image block was inserted through the editor's + button, so it carries no
+   spacing attributes at all, and core's figure margin is not enough: the ticket
+   card is vertically centred in the row and hangs below the copy column, so
+   with only the default margin the card's bottom edge and the band's top edge
+   came within about eight pixels of each other and read as one stacked object.
+   Set here rather than on the block so it cannot be lost the next time the page
+   is pasted back from WordPress. */
+.wcblr-guide .wcblr-tix-art {
+	margin: 44px 0 0;
+}
+
+/* ---- The essentials, as the illustration's footer -----------------------
    This page took money without ever saying what for. Before this strip the
-   word "November" appeared once on it, in the sign-off at the very bottom,
-   and the venue not at all: someone arriving on /tickets/ from a shared link
-   could buy a ticket without ever being told the date or the place.
+   word "November" appeared once on it, in the sign-off at the very bottom, and
+   the venue not at all: someone arriving on /tickets/ from a shared link could
+   buy without being told the date or the place.
+
+   The first two versions of it were a hairline row floating under the picture,
+   and both looked like a footer somebody forgot to style. The problem was not
+   the type or the rules, it was that four facts sitting on bare cream have no
+   object to belong to; every other block in this section is a surface with an
+   edge, and this one was a set of words between two lines.
+
+   So it stops being a strip and becomes the picture's footer. The illustration
+   takes the top corners and drops its bottom border, this takes the bottom
+   corners and the sides, and the two read as one poster: image above, the four
+   facts printed underneath it. That also puts the facts inside the object the
+   eye is already on, rather than below the point where the eye has left.
 
    Four facts, and the venue is TWO of them on purpose. `pages/attending.html`
-   carries SATURDAY VENUE and SUNDAY VENUE as separate rows because they are
-   different places and only Sunday's is settled. A single "Venue: St Joseph's"
-   row here would have read as the whole event and contradicted the sibling
-   page, which is the kind of thing nobody notices until someone turns up at
-   the wrong address.
+   carries SATURDAY VENUE and SUNDAY VENUE separately because they are
+   different places and only Sunday's is settled. A single "Venue" row would
+   have read as the whole event and contradicted the sibling page, which is the
+   kind of thing nobody notices until someone turns up at the wrong address.
 
-   Drawn as a grid rather than a `wp:columns`, so it needs no render-time
-   layout class and looks the same in the editor, in preview.py and on the
-   front end. The hairlines are on the container, not per cell: four boxed
-   cells would be a fifth card row on a page that already has three. */
+   A grid rather than a `wp:columns`, so it needs no render-time layout class
+   and looks the same in the editor, in preview.py and on the front end. */
 .wcblr-guide .wcblr-tix-essentials {
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: 22px 34px;
-	border-top: 1px solid #ddd9d2;
-	border-bottom: 1px solid #ddd9d2;
+	gap: 24px 0;
+	padding: 24px 30px 26px;
+	background: #FBF8F1;
+	border: 1.5px solid #dad5cd;
+	border-radius: 0 0 16px 16px;
 }
 
 /* Core's flow layout emits a `wp-container-*` blockGap rule for the group and
@@ -1493,12 +1519,92 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	margin-top: 0 !important;
 }
 .wcblr-guide .wcblr-tix-fact > p:first-child {
-	margin-bottom: 5px !important;
+	margin-bottom: 6px !important;
+}
+
+/* Hairlines BETWEEN the facts. Four label/value pairs in a row with nothing
+   separating them read as a list; ruled apart they read as a spec strip. The
+   divider goes on the cell rather than in the gap so it stretches the full cell
+   height and stays put when a value wraps to two lines.
+
+   Keyed on the row, not on `:not(:first-child)`, because the grid drops to two
+   columns and then one: at two columns the third fact starts a new row and a
+   left rule there would hang off nothing. */
+.wcblr-guide .wcblr-tix-fact {
+	padding: 0 26px;
+}
+.wcblr-guide .wcblr-tix-fact:not(:nth-child(4n + 1)) {
+	border-left: 1px solid #e6e0d6;
+}
+.wcblr-guide .wcblr-tix-fact:nth-child(4n + 1) {
+	padding-left: 0;
+}
+
+/* The hierarchy was upside down. The label was espresso and bold and the value
+   was the same muted grey as body copy, so "SUNDAY VENUE" carried more weight
+   than the name of the school. A label is a category and should recede; the
+   value is the fact somebody came here for.
+
+   `!important` on both because the colours and sizes are inline block
+   attributes and a class loses to a style attribute. #a8760f is the deep gold
+   the tier eyebrows use, so the two label treatments on this page are one. */
+.wcblr-guide .wcblr-tix-fact > p:first-child {
+	color: #a8760f !important;
+}
+.wcblr-guide .wcblr-tix-fact > p:last-child {
+	color: #2a1d14 !important;
+	font-size: 17px !important;
+	line-height: 1.45 !important;
 }
 
 @media (max-width: 900px) {
 	.wcblr-guide .wcblr-tix-essentials { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.wcblr-guide .wcblr-tix-fact:not(:nth-child(2n + 1)) { border-left: 1px solid #e6e0d6; }
+	.wcblr-guide .wcblr-tix-fact:nth-child(2n + 1) { border-left: 0; padding-left: 0; }
 }
 @media (max-width: 520px) {
-	.wcblr-guide .wcblr-tix-essentials { grid-template-columns: 1fr; gap: 18px; }
+	.wcblr-guide .wcblr-tix-essentials { grid-template-columns: 1fr; gap: 20px; padding: 22px 20px 24px; }
+	/* One per row: a left rule on a full-width cell is a stray vertical line, so
+	   the separation goes back to being space. */
+	.wcblr-guide .wcblr-tix-fact,
+	.wcblr-guide .wcblr-tix-fact:not(:nth-child(2n + 1)) {
+		border-left: 0;
+		padding: 0;
+	}
+}
+
+
+/* ---- A tier that is not on sale yet -------------------------------------
+   Only Early Bird is selling. Friend of WC BLR stays on the page, because
+   somebody deciding today should know what is coming, but it must not look
+   like a thing you can buy: it lost the 2px gold border and the warm fill to
+   Early Bird, which is the card that actually has a button.
+
+   The dashed edge is the signal. Solid means settled, and everything else on
+   this page that is dashed is provisional in the same way: the ticket card's
+   perforation, the stamp's border. It cannot be a block attribute, because
+   core's border support has no style control, so it lives here.
+
+   The gap in the card where the button was is deliberate and is NOT filled
+   with a disabled button. A greyed-out control invites the click it then
+   refuses; a line of mono saying where the announcement will happen answers
+   the actual question, which is "how will I know". */
+.wcblr-guide .wcblr-tier-soon {
+	border-style: dashed !important;
+}
+.wcblr-guide .wcblr-tier-soon-note {
+	position: relative;
+	padding-left: 20px;
+}
+/* A small hollow ring rather than a filled dot: the tier is pending, and a
+   filled mark reads as an item that is done. */
+.wcblr-guide .wcblr-tier-soon-note::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0.42em;
+	width: 9px;
+	height: 9px;
+	border: 1.5px solid #b3a595;
+	border-radius: 50%;
 }
