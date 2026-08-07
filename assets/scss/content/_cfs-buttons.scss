@@ -38,6 +38,29 @@
 		color 0.18s ease;
 }
 
+/* THE RESTING STATE, and it is not decoration.
+   Core ships the outline reset as
+   `:root :where(.wp-block-button.is-style-outline > .wp-block-button__link)
+   { background-color: initial }`, which is specificity (0,1,0) because
+   everything inside `:where()` counts as zero. The theme's global styles then
+   ship `:root :where(.wp-block-button .wp-block-button__link)
+   { background-color: var(--accent-1) }` at the SAME (0,1,0), later in the
+   document. Source order breaks the tie and the outline style loses.
+
+   Measured on the live site, not inferred: an `is-style-outline` button
+   injected into /2026/sponsors/ computes to background rgb(205,38,83) with the
+   block's own inline colour rgb(42,29,20) on top of it. That is espresso text
+   on crimson, about 2.8:1, and it is the state every outline button on a cream
+   page has been shipping in.
+
+   The hover rule below has always assumed a transparent resting state; without
+   this it was flipping a crimson button to an espresso one. Scoped to the
+   helper class rather than to `.is-style-outline`, so pages that never opted in
+   do not move. */
+.wcblr-btn-onlight .is-style-outline .wp-block-button__link {
+	background-color: transparent !important;
+}
+
 .wcblr-btn-onlight .is-style-outline .wp-block-button__link:hover,
 .wcblr-btn-onlight .is-style-outline .wp-block-button__link:focus-visible {
 	background-color: #2a1d14 !important;

@@ -641,23 +641,3 @@
 	opacity: 0.7;
 }
 
-/* ---- Ticket tier tags ----------------------------------------------------
-   The pill next to a tier's name in the tickets page's "What your ticket gets
-   you" column: LIMITED NUMBER on Early Bird, SUPPORTS THE COMMUNITY on Friend
-   of WC BLR.
-
-   It is a `wp:paragraph` with a background, sitting in a flex group next to the
-   name, and a paragraph is a block: at full width the pill runs the whole
-   column and stops reading as a tag. Core's flex layout would size it to its
-   content, but that layout is applied by a `wp-container-*` rule emitted at
-   RENDER time, so anything printing the saved markup without running the layout
-   engine (tools/preview.py, and the editor for a moment while it resolves) gets
-   a full-width slab.
-
-   `display: inline-block` costs nothing inside the flex container, where a flex
-   item is blockified and sized by its content either way, and is the whole fix
-   without it. */
-.wcblr-guide .wcblr-tier-tag {
-	display: inline-block;
-	width: auto;
-}
