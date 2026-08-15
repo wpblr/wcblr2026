@@ -358,6 +358,55 @@
 		}
 	}
 
+	/* The lockup is sized for a 1,200px row and does not fit a phone. Measured
+	   in a 390px frame: the mark at 56 plus its rule and gutter leaves about
+	   250px for the type, and "WordCamp Bengaluru 2026" at 20px Fraunces needs
+	   more, so the wordmark broke after "Bengaluru" and the lockup went to
+	   three lines with the Kannada under it.
+
+	   Everything steps down together rather than the type alone, because a
+	   56px mark next to 17px type is no longer a lockup, it is a big badge
+	   with a caption. At 40/17/11 the wordmark holds one line at 390px and the
+	   header keeps its proportions. */
+	@media (max-width: 600px) {
+		.wcblr-site-logo {
+			gap: 11px !important;
+		}
+
+		.wcblr-site-logo > .wp-block-group {
+			padding-left: 11px;
+		}
+
+		/* `!important` on all three: the mark's width is a block attribute and
+		   the title's size an inline typography style, and a class loses to
+		   both. */
+		.wcblr-site-logo .wp-block-site-logo img {
+			width: 40px !important;
+			height: auto !important;
+		}
+
+		.wcblr-site-logo .wp-block-site-title {
+			font-size: 17px !important;
+		}
+
+		.wcblr-site-logo .wcblr-eyebrow--plain {
+			font-size: 10px !important;
+			letter-spacing: 0.09em !important;
+		}
+	}
+
+	/* One more step for the 360px class of phone, where 17px still broke the
+	   wordmark after "Bengaluru" by a couple of pixels. */
+	@media (max-width: 400px) {
+		.wcblr-site-logo .wp-block-site-logo img {
+			width: 36px !important;
+		}
+
+		.wcblr-site-logo .wp-block-site-title {
+			font-size: 16px !important;
+		}
+	}
+
 	.wp-block-buttons .wp-block-button .wp-block-button__link {
 		word-break: keep-all !important;
 	}
@@ -380,12 +429,27 @@
 	   wrong now. The group leads with the ticket CTA, and a phone is where most
 	   of this traffic is, so hiding it takes the primary action off the screen
 	   for the majority of readers. The secondary one still goes. */
-	@media (max-width: 480px) {
-		/* The community button used to be hidden here too, back when it was a
-		   236px labelled control competing with the ticket CTA for a 380px
-		   row. As a 42px glyph it costs almost nothing and it is the one link
-		   on this site people are most likely to want from a phone, so it
-		   stays. */
+	/* 576, not 480. The header is a single row below 576px (the rule further
+	   up flips it back from column) and a column from 577 to 1,039, so the
+	   band that can actually run out of width is 0 to 576. Measured in a 560px
+	   frame with the valve at 480: the row did not wrap, the lockup was
+	   squeezed from 286px to 236, and the wordmark broke after "Bengaluru"
+	   again. Matching the valve to the row band fixes the whole strip at once.
+
+	   The community button used to be hidden in here too, back when it was a
+	   236px labelled control competing with the ticket CTA for a 380px row. As
+	   a 42px glyph it costs almost nothing and it is the one link on this site
+	   people are most likely to want from a phone, so it stays. */
+	@media (max-width: 576px) {
+		/* Once the row has wrapped, the second line holds the hamburger and the
+		   two buttons and is only as wide as they are, so it sat bunched to the
+		   left with dead space beside it. Full width and space-between puts the
+		   menu at one edge and the actions at the other, which is the shape a
+		   phone header is expected to have. */
+		.wcblr-header_right {
+			width: 100%;
+			justify-content: space-between;
+		}
 
 		/* The safety valve. The header row is `nowrap` everywhere else, so if
 		   the lockup, the hamburger and the button do not fit on one line they
