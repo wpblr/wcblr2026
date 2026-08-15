@@ -125,20 +125,36 @@ $wcblr-hover-ease: cubic-bezier(0.2, 0.6, 0.2, 1); /* the footer social row's */
 /* ---- The lockup ---------------------------------------------------------- */
 /*
  * Both ends of the site carry the same lockup, so it answers the pointer the
- * same way in both. The seal lifts a little and the wordmark warms to crimson.
+ * same way in both. The seal zooms and the wordmark warms to crimson.
  *
- * The lift is on the MARK alone, not the whole lockup. Moving the lockup moves
- * the hairline rule and the Kannada line with it, which reads as the header
- * itself twitching rather than as a control responding.
+ * A zoom rather than the tilt this used to do. The mark is a detailed circular
+ * seal with "#WCBLR" lettering inside it, and rotating that reads as the badge
+ * being knocked askew; scaling it reads as leaning in to look at it, which is
+ * what a logo hover is for.
+ *
+ * It stays sharp because the file is far larger than the frame: the source is
+ * 300x225 and it is drawn at 56x42 in the header and 48px in the footer, so a
+ * 10% zoom is still sampling down. Do not raise this much past 1.1 without
+ * checking that, and do not use it on a mark that is served at its display
+ * size.
+ *
+ * The easing overshoots slightly, cubic-bezier(0.34, 1.4, 0.64, 1), so it
+ * settles rather than stopping dead. Kept mild on purpose: a full spring is
+ * fine for a one-shot entrance like the hero stamp, but on hover it has to
+ * survive someone sweeping the pointer back and forth across it.
+ *
+ * The zoom is on the MARK alone, not the whole lockup. Scaling the lockup
+ * scales the hairline rule and the Kannada line with it, which reads as the
+ * header itself swelling rather than as a control responding.
  *
  * `will-change` is deliberately absent. It would promote two layers on every
- * page for a 2px move that happens rarely, and the browser handles a transform
- * this small without help.
+ * page for a transform that happens rarely, and the browser handles one this
+ * small without help.
  */
 .wcblr-header .wcblr-site-logo,
 .wcblr-footer .wcblr-footer-lockup {
 	.wp-block-site-logo img {
-		transition: transform 0.28s $wcblr-hover-ease;
+		transition: transform 0.26s cubic-bezier(0.34, 1.4, 0.64, 1);
 	}
 
 	.wp-block-site-title a {
@@ -150,7 +166,7 @@ $wcblr-hover-ease: cubic-bezier(0.2, 0.6, 0.2, 1); /* the footer social row's */
 	@media (prefers-reduced-motion: no-preference) {
 		.wcblr-header .wcblr-site-logo:hover .wp-block-site-logo img,
 		.wcblr-footer .wcblr-footer-lockup:hover .wp-block-site-logo img {
-			transform: translateY(-2px) rotate(-4deg);
+			transform: scale(1.1);
 		}
 	}
 
