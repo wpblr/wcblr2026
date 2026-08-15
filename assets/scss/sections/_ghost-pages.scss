@@ -1,0 +1,178 @@
+/* ---- Ghost "26" on the inner pages --------------------------------------- */
+/*
+ * The front page has one in its hero and the footer has one on every page.
+ * This is for the space in between, so the device runs the whole site rather
+ * than only its two ends.
+ *
+ * Nothing here adds markup. The front-page ghost is a real `wp:heading` block
+ * with class `wcblr-ghost`, which is fine for one page and wrong for nine:
+ * every page would have to be edited and re-pasted through the block editor,
+ * and each paste is a chance to break a page that currently works. These are
+ * `::before` pseudo-elements instead, so the whole feature is one CSS file and
+ * the pages on disk and in the database are untouched.
+ *
+ * TWO RULES, because the pages are not built the same way.
+ *
+ *   A. Pages and posts that paint their own opaque wrapper. That is
+ *      `.wcblr-post`: attendees, attending, tickets, and every blog post. The
+ *      wrapper fills itself with #F2ECE0, so a ghost behind it is simply not
+ *      visible. It has to sit INSIDE the wrapper, above that background and
+ *      below the copy.
+ *
+ *   B. Pages with no opaque wrapper: about, contact, news, organizers,
+ *      sponsors. Their top-level group carries no background at all, so the
+ *      cream comes from `body`. These hang off `.entry-content` instead.
+ *
+ * WHY B IS A SLUG LIST AND NOT A GENERAL RULE.
+ * The obvious version is "every page that is not a .wcblr-post page", which
+ * needs `:has()` on the body. That is one selector for the whole site and it
+ * would pick up new pages for free. It is not used because WordCamp.org
+ * sanitises Remote CSS, and a selector it does not understand takes its whole
+ * rule with it. The slug list cannot silently stop working. The cost is real
+ * and worth saying out loud: A NEW PAGE DOES NOT GET A GHOST UNTIL ITS SLUG IS
+ * ADDED BELOW, unless it uses the .wcblr-post wrapper, in which case rule A
+ * already covers it.
+ *
+ * Z-INDEX, which is the part that breaks if it is guessed at:
+ *
+ *   Rule A puts the ghost at `z-index: 0` and lifts the wrapper's own children
+ *   to `z-index: 1`. Both halves are required. A positioned element with
+ *   z-index 0 paints ABOVE ordinary in-flow content, so on its own the ghost
+ *   would land on top of the article text rather than behind it. This is the
+ *   same pairing `.wcblr-hero` already uses for the front-page ghost.
+ *
+ *   Rule B does the same thing one level further out, on `.entry-content`.
+ *   The first attempt put it at `z-index: -1` on `.wp-site-blocks` and rendered
+ *   nothing at all. See the note above rule B.
+ *
+ * NO `overflow: hidden` ANYWHERE IN HERE, deliberately, on both counts:
+ *
+ *   - `.wp-site-blocks` contains the sticky header. An ancestor with a clipping
+ *     overflow kills `position: sticky` outright, and the header would come
+ *     unstuck on every page on the site. (`body` already carries
+ *     `overflow-x: clip`, which is the one form that does NOT break sticky, so
+ *     the horizontal-scrollbar case is already handled site-wide.)
+ *   - `.wcblr-post` contains the rotated turmeric stamp, which is meant to hang
+ *     off the edge of things.
+ *
+ *   The hero can clip because its ghost hangs 40px past the right edge. These
+ *   sit fully inside the box instead. That is also what keeps them from
+ *   starting a horizontal scrollbar on a narrow window.
+ */
+
+/* Faint. The alpha matches where the footer ghost settled rather than the
+   hero's 0.07: the hero is one screen of display type and can carry a heavier
+   watermark, whereas these sit under long-form copy for the length of an
+   article. A watermark you notice is not a watermark. */
+@mixin wcblr-ghost-26 {
+	content: "26";
+	position: absolute;
+	top: 96px;
+	right: 28px;
+	font-family: "Fraunces", Georgia, serif;
+	font-weight: 600;
+	font-size: clamp(150px, 21vw, 320px);
+	line-height: 0.8;
+	color: transparent;
+	-webkit-text-stroke: 1.5px rgba(42, 29, 20, 0.05);
+	pointer-events: none;
+	user-select: none;
+}
+
+/* ── A. Pages and posts with their own opaque wrapper ─────────────────────── */
+.wcblr-post {
+	position: relative;
+
+	&::before {
+		@include wcblr-ghost-26;
+		z-index: 0;
+	}
+
+	/* Required, not optional. See the z-index note above. */
+	> * {
+		position: relative;
+		z-index: 1;
+	}
+}
+
+/* ── B. Pages whose top-level group paints no background ──────────────────── */
+/* Add a slug here when a page like these is added. */
+/*
+ * This hangs off `.entry-content`, the post-content wrapper, and NOT off
+ * `.wp-site-blocks`. Two reasons, the first found the hard way:
+ *
+ *   `.wp-site-blocks::before { z-index: -1 }` renders nothing. A negative
+ *   z-index child paints below the in-flow blocks of its stacking context,
+ *   and `body` carries `background-color: #f2ece0eb`, which is 92% opaque
+ *   cream. The ghost was drawn, and then the body background was painted on
+ *   top of it. Verified in a headless render before it shipped.
+ *
+ *   `.entry-content` also excludes the header, which matters: the header is
+ *   `position: sticky`, and the z-index pattern below sets `position: relative`
+ *   on its container's children. Applied to `.wp-site-blocks` that would have
+ *   overwritten `sticky` with `relative` and unstuck the header site-wide.
+ *
+ * So it is the same shape as rule A, one level further out.
+ */
+body.page-slug-about,
+body.page-slug-contact,
+body.page-slug-news,
+body.page-slug-organizers,
+body.page-slug-sponsors {
+	.entry-content {
+		position: relative;
+
+		&::before {
+			@include wcblr-ghost-26;
+			z-index: 0;
+		}
+
+		> * {
+			position: relative;
+			z-index: 1;
+		}
+	}
+}
+
+/* ── Small screens ────────────────────────────────────────────────────────── */
+/* Fainter and smaller, for the reason the footer ghost is: the columns go full
+   width when stacked, so the numerals sit directly behind body copy instead of
+   beside it, and the same alpha reads much heavier. */
+@media (max-width: 767px) {
+	.wcblr-post::before,
+	body.page-slug-about .entry-content::before,
+	body.page-slug-contact .entry-content::before,
+	body.page-slug-news .entry-content::before,
+	body.page-slug-organizers .entry-content::before,
+	body.page-slug-sponsors .entry-content::before {
+		top: 64px;
+		right: 8px;
+		font-size: clamp(110px, 34vw, 190px);
+		-webkit-text-stroke-color: rgba(42, 29, 20, 0.035);
+	}
+}
+
+/* ── The entrance ─────────────────────────────────────────────────────────── */
+/*
+ * Reuses the front page's `wcblr-hero-ghost` keyframes, defined in
+ * sections/hero-intro, so the two ends of the site drift in identically.
+ *
+ * Gated the same way the hero intro is, and for the same reasons: anyone who
+ * asked for less motion, and any browser that does not know the query, gets the
+ * static ghost rather than a hidden one. No rule outside a keyframe sets
+ * opacity to 0, so if WordCamp's sanitiser ever strips @keyframes the ghost
+ * still paints, it just does not move.
+ *
+ * These are decoration and never the LCP element, so unlike the h1 and the
+ * skyline they are free to fade rather than only slide.
+ */
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-post::before,
+	body.page-slug-about .entry-content::before,
+	body.page-slug-contact .entry-content::before,
+	body.page-slug-news .entry-content::before,
+	body.page-slug-organizers .entry-content::before,
+	body.page-slug-sponsors .entry-content::before {
+		animation: wcblr-hero-ghost 1.4s 0.25s ease-out both;
+	}
+}
