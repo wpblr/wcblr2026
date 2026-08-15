@@ -86,20 +86,29 @@
 	user-select: none;
 }
 
-/* ── A. Pages and posts with their own opaque wrapper ─────────────────────── */
+/* ── The wrapper must not paint over it ──────────────────────────────────── */
+/*
+ * There used to be a SECOND ghost here, on `.wcblr-post`, because that wrapper
+ * paints its own #F2ECE0 and covered main's. Two rules meant two ghosts the
+ * moment the position changed: main's now hangs past the right edge, and
+ * `.wcblr-post` is narrower than `main`, so the overhang stuck out beyond the
+ * wrapper and both were visible at once on /tickets/. The claim in the commit
+ * that "only one is ever visible" was true only while the ghost sat inside the
+ * wrapper's box.
+ *
+ * One ghost now, on `main`, and the wrapper is made transparent so it shows
+ * through. That is a visual no-op: `main` already paints
+ * `--wp--preset--color--custom-body-background`, which is #f2ece0, and the
+ * wrapper's inline style is #F2ECE0. Checked on a page (/tickets/) and a post
+ * (/meet-the-organizing-team/); both are the same colour and the wrapper is
+ * inside that `main` in both. `!important` is needed because the colour is an
+ * inline style on the block.
+ *
+ * If `.wcblr-post` is ever used somewhere that is NOT inside a cream `main`,
+ * this is the line that will make its background vanish.
+ */
 .wcblr-post {
-	position: relative;
-
-	&::before {
-		@include wcblr-ghost-26;
-		z-index: 0;
-	}
-
-	/* Required, not optional. See the z-index note above. */
-	> * {
-		position: relative;
-		z-index: 1;
-	}
+	background-color: transparent !important;
 }
 
 /* ── B. Every page ───────────────────────────────────────────────────────── */
@@ -149,7 +158,6 @@ body:not(.home) {
    width when stacked, so the numerals sit directly behind body copy instead of
    beside it, and the same alpha reads much heavier. */
 @media (max-width: 767px) {
-	.wcblr-post::before,
 	body:not(.home) main::before {
 		top: 20px;
 		right: -30px;
@@ -173,7 +181,6 @@ body:not(.home) {
  * skyline they are free to fade rather than only slide.
  */
 @media (prefers-reduced-motion: no-preference) {
-	.wcblr-post::before,
 	body:not(.home) main::before {
 		animation: wcblr-hero-ghost 1.4s 0.25s ease-out both;
 	}
