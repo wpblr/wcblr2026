@@ -467,3 +467,107 @@ body.home .wcblr-hero-banner .wcblr-skyline img {
 		}
 	}
 }
+
+/* ---- 7. The about facts -------------------------------------------------
+   `WHAT IT IS` / `WHO IT'S FOR` / `WHY THIS YEAR` / `WHAT'S IN STORE` were
+   four groups each carrying its own top and bottom hairline, which is the
+   shape `references/page-craft.md` records as rejected in as many words: "a
+   full-width hairline, a tiny mono label, then a paragraph, repeated four
+   times. It reads as an unstyled definition list: nothing anchors the item,
+   the hairlines do all the work." Five rules down a 47% column, and the eye
+   reads the rules before it reads the copy.
+
+   FIRST ATTEMPT, AND WHY IT WAS WORSE. The five horizontal rules were turned
+   into one vertical spine with a dot per item. It was rejected on sight and
+   correctly: a spine with markers down it is a TIMELINE, and this content is
+   not a sequence. WHAT IT IS, WHO IT'S FOR, WHY THIS YEAR and WHAT'S IN STORE
+   are four independent answers, in no order. The device said "these happen one
+   after another", which is not true, and stripped of that meaning all it left
+   was a bulleted list with a stray line beside it. A structural device has to
+   encode something true or it is just decoration that also lies.
+
+   WHAT THIS IS INSTEAD. Four labelled facts is a spec sheet, so it is set as
+   one: the label in a fixed column, the answer in the next, four rows aligned
+   on a common left edge. That is the same label-over-value idiom as the
+   checkout masthead in `forms/_camptix.scss` and the tickets essentials strip,
+   turned on its side because here there is height to spend and not width.
+
+   A FIXED 132px label column, not `max-content`. max-content is right in the
+   checkout masthead, where the grid holds every row and sizes itself to the
+   longest label. Here each item is its own element, so it must be, or there is
+   nothing to hover; and four independent grids sizing themselves independently
+   would put four different left edges on the answers. The one number is what
+   keeps the column straight.
+
+   No rules, no dots, nothing drawn at rest. The alignment does the work the
+   five hairlines were doing, which is why removing them cost nothing. */
+body.home .wcblr-facts {
+	display: grid;
+	row-gap: 2px;
+}
+
+body.home .wcblr-fact {
+	display: grid;
+	grid-template-columns: 132px minmax(0, 1fr);
+	column-gap: 22px;
+	align-items: start;
+	/* Padding always, negative margin to match, so the hover tint has room to
+	   breathe without the row moving when it appears. */
+	padding: 13px 14px;
+	margin: 0 -14px;
+	border-radius: 10px;
+	transition: background-color 0.2s ease;
+}
+
+/* Core emits a blockGap rule for each child of the group and it outranks a
+   plain class, so the paragraphs have to be flattened or they push the grid
+   rows apart from the inside. */
+body.home .wcblr-fact > * {
+	margin: 0 !important;
+}
+
+/* 25px, matching the body's 16px at 1.55, so an 11px label sits on the same
+   first line as the answer beside it instead of floating above it. */
+body.home .wcblr-fact__label {
+	line-height: 25px !important;
+}
+
+body.home .wcblr-fact__label,
+body.home .wcblr-fact__body {
+	transition: color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	/* A row highlight, which is what a spec sheet does and needs no ornament
+	   of its own. 4 per cent espresso: enough to say which row, not enough to
+	   become a band. */
+	body.home .wcblr-fact:hover {
+		background-color: rgba(42, 29, 20, 0.04);
+	}
+
+	/* The label goes DARKER on hover, not brighter. Gold on cream is 3.4:1,
+	   which is why the design system only allows it on small mono labels; the
+	   espresso it moves to is 12:1. The one moment a reader is looking straight
+	   at it is also the one moment it is easiest to read. */
+	body.home .wcblr-fact:hover .wcblr-fact__label {
+		color: #2a1d14 !important;
+	}
+
+	body.home .wcblr-fact:hover .wcblr-fact__body {
+		color: #5c4c3e !important;
+	}
+}
+
+/* The label column is 132px of a roughly 560px column. Below that the answers
+   have too little left, so label and answer stack and the row highlight still
+   marks which one you are on. */
+@media (max-width: 900px) {
+	body.home .wcblr-fact {
+		grid-template-columns: minmax(0, 1fr);
+		row-gap: 4px;
+	}
+
+	body.home .wcblr-fact__label {
+		line-height: 1.4 !important;
+	}
+}
