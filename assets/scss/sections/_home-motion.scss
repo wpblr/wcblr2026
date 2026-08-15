@@ -501,95 +501,114 @@ body.home .wcblr-hero-banner .wcblr-skyline img {
    the five full-width hairlines could not do, and four of them do not build a
    ladder because they never reach the next item. */
 body.home .wcblr-facts {
-	/* ONE OBJECT, NOT FOUR.
-	   These were four label/rule/paragraph blocks stacked with 30px of air
-	   between them, each label carrying its own 28px gold stub. The stubs were
-	   meant to anchor an item rather than separate two, and four of them read as
-	   scattered tick marks with nothing holding the set together, which is what
-	   made the column feel both plain and slightly odd next to the framed
-	   photograph opposite. The copy also sat on bare cream, which is the one
-	   thing the page's own prose audit says a run of body text should not do.
+	/* A 2x2 GRID OF ICON-LED ITEMS, not a stack of paragraphs.
+	   This has now been three shapes. It was four label/rule/paragraph blocks
+	   with a 28px gold stub under each label, which read as scattered ticks.
+	   Then a two-column ruled list, which was tidier and still, correctly,
+	   "a bunch of text": four rows of 25 to 35 words is a wall however it is
+	   ruled, and no amount of CSS fixes that. The copy came down with this
+	   change, in pages/home.html, and the layout stopped being a list.
 
-	   It is a two-column ruled list now. The label column is a spine the four
-	   rows hang off, which is what ties them together, so the stubs are gone,
-	   and the dashed rules separate rather than anchor, which is the job that
-	   actually needed doing here.
+	   Halving the height is the point. Four full-measure rows ran the length
+	   of the photograph beside them; two rows of two read as a block the eye
+	   takes in at once, which is what a teaser section is for.
 
-	   NO SURFACE, and that was a real decision. A lifted card was tried and
-	   rendered; it works, but the by_the_numbers row directly below is already
-	   four cards, so it put two card blocks back to back, and boxing the list
-	   pulls its left edge off the headline and the lead above it and narrows
-	   the measure enough to push every answer onto an extra line. Flat keeps
-	   one left edge running down the whole column.
-
-	   NOT a vertical rule between the columns either. Horizontal rules plus a
-	   vertical one is a spreadsheet, which is the note layout/footer already
-	   carries about its own columns. */
+	   The icons are the site's own Lucide set from assets/icons, inlined as
+	   data URIs the way sections/bento-icons does it, so this needs no markup
+	   for them. They are gold at full strength rather than the bento cells'
+	   0.07 wash, because there they are a background texture and here they are
+	   the thing that makes an item scannable. */
 	display: grid;
-	row-gap: 0;
-	margin-top: 22px;
+	grid-template-columns: 1fr 1fr;
+	column-gap: 36px;
+	row-gap: 32px;
+	margin-top: 30px;
 }
 
 body.home .wcblr-fact > * {
 	margin: 0 !important;
 }
 
-/* Label left, answer right. 128px holds "WHAT'S IN STORE", the longest of the
-   four, on one line at 11px/1.32px tracking. Check that before editing a label:
-   a wrapped label breaks the baseline alignment the whole list depends on. */
+/* The icon sits in a LEFT GUTTER, not above the label on its own line.
+   The block carries inline `padding-top:0;padding-bottom:0` from the editor,
+   so a padding-top here is overridden and the icon lands on top of the label.
+   padding-left is not in that inline style, so the gutter needs no !important
+   and nothing has to fight the markup. */
 body.home .wcblr-fact {
-	display: grid;
-	grid-template-columns: 128px 1fr;
-	column-gap: 24px;
-	align-items: baseline;
-	padding: 19px 0;
-	border-bottom: 1px dashed rgba(42, 29, 20, 0.16);
+	position: relative;
+	display: block;
+	padding: 0 0 0 36px;
+	border: 0;
 }
 
-body.home .wcblr-fact:last-child {
-	border-bottom: none;
+body.home .wcblr-fact::before {
+	content: "";
+	position: absolute;
+	top: 1px;
+	left: 0;
+	width: 22px;
+	height: 22px;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+}
+
+/* ORDER IS LOAD-BEARING. There is nothing in the markup naming these, so the
+   icon is matched by position: 1 what it is, 2 who it is for, 3 why this year,
+   4 what is in store. Reorder the blocks in home.html and the icons follow the
+   old order until these are changed too. */
+body.home .wcblr-fact:nth-child(1)::before {
+	background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23a8760f%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M11%2012h2a2%202%200%201%200%200-4h-3c-.6%200-1.1.2-1.4.6L3%2014%22%2F%3E%3Cpath%20d%3D%22m7%2018%201.6-1.4c.3-.4.8-.6%201.4-.6h4c1.1%200%202.1-.4%202.8-1.2l4.6-4.4a2%202%200%200%200-2.75-2.91l-4.2%203.9%22%2F%3E%3Cpath%20d%3D%22m2%2013%206%206%22%2F%3E%3C%2Fsvg%3E");
+}
+
+body.home .wcblr-fact:nth-child(2)::before {
+	background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23a8760f%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M16%2021v-2a4%204%200%200%200-4-4H6a4%204%200%200%200-4%204v2%22%2F%3E%3Cpath%20d%3D%22M16%203.128a4%204%200%200%201%200%207.744%22%2F%3E%3Cpath%20d%3D%22M22%2021v-2a4%204%200%200%200-3-3.87%22%2F%3E%3Ccircle%20cx%3D%229%22%20cy%3D%227%22%20r%3D%224%22%2F%3E%3C%2Fsvg%3E");
+}
+
+body.home .wcblr-fact:nth-child(3)::before {
+	background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23a8760f%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12%205a3%203%200%201%200-5.997.125%204%204%200%200%200-2.526%205.77%204%204%200%200%200%20.556%206.588A4%204%200%201%200%2012%2018Z%22%2F%3E%3Cpath%20d%3D%22M9%2013a4.5%204.5%200%200%200%203-4%22%2F%3E%3Cpath%20d%3D%22M6.003%205.125A3%203%200%200%200%206.401%206.5%22%2F%3E%3Cpath%20d%3D%22M3.477%2010.896a4%204%200%200%201%20.585-.396%22%2F%3E%3Cpath%20d%3D%22M6%2018a4%204%200%200%201-1.967-.516%22%2F%3E%3Cpath%20d%3D%22M12%2013h4%22%2F%3E%3Cpath%20d%3D%22M12%2018h6a2%202%200%200%201%202%202v1%22%2F%3E%3Cpath%20d%3D%22M12%208h8%22%2F%3E%3Cpath%20d%3D%22M16%208V5a2%202%200%200%201%202-2%22%2F%3E%3Ccircle%20cx%3D%2216%22%20cy%3D%2213%22%20r%3D%22.5%22%2F%3E%3Ccircle%20cx%3D%2218%22%20cy%3D%223%22%20r%3D%22.5%22%2F%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2221%22%20r%3D%22.5%22%2F%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%228%22%20r%3D%22.5%22%2F%3E%3C%2Fsvg%3E");
+}
+
+body.home .wcblr-fact:nth-child(4)::before {
+	background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23a8760f%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12%2019v3%22%2F%3E%3Cpath%20d%3D%22M19%2010v2a7%207%200%200%201-14%200v-2%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%222%22%20width%3D%226%22%20height%3D%2213%22%20rx%3D%223%22%2F%3E%3C%2Fsvg%3E");
 }
 
 body.home .wcblr-fact__label {
 	color: #a8760f !important;
 	padding-bottom: 0;
+	margin-bottom: 7px !important;
 	transition: color 0.2s ease;
 }
 
-/* The stub is gone with the layout that needed it. */
+/* The stub went with the layout that needed it. */
 body.home .wcblr-fact__label::after {
 	content: none;
 }
 
-/* 17px and #453729, against 16px and #7a6757. The size is what stops it
-   reading as a caption and the colour is what stops it reading as an aside;
-   #453729 is 9.4:1 on the page cream where the old brown was 4.6. It clears
-   that on #fcfaf6 too, which is lighter than the cream it was measured on. */
+/* 16px in a half-width cell, against 17px across the full measure. #453729 is
+   9.4:1 on the page cream where the old brown was 4.6. */
 body.home .wcblr-fact__body {
-	font-size: 17px !important;
-	line-height: 1.6 !important;
+	font-size: 16px !important;
+	line-height: 1.55 !important;
 	color: #453729 !important;
 	margin-top: 0 !important;
 	transition: color 0.2s ease;
 }
 
-/* Stacked under 700px. The answers run three lines at that width, and a 128px
-   label column beside a 3-line paragraph leaves the label stranded at the top
-   of a tall empty cell. */
-@media (max-width: 700px) {
-	body.home .wcblr-fact {
+/* One column under 600px. Two 150px-wide cells is not a grid, it is two
+   very narrow columns of ragged text. */
+@media (max-width: 600px) {
+	body.home .wcblr-facts {
 		grid-template-columns: 1fr;
-		row-gap: 7px;
-		padding: 17px 0;
+		row-gap: 26px;
 	}
 }
 
 @media (hover: hover) and (pointer: fine) {
-	/* The row was the hover target before and stays it, but the response is a
-	   colour shift alone now. Gold on the page cream is 3.4:1, which the design
-	   system only allows on small mono labels; espresso is 12:1, so the moment
-	   a reader is looking straight at a row is the moment it is easiest to
-	   read. Darker, not brighter. */
+	/* Colour only. Gold on cream is 3.4:1, which the design system allows on
+	   small mono labels alone; espresso is 12:1, so the moment a reader is
+	   looking straight at an item is the moment it is easiest to read.
+	   Darker, not brighter. */
 	body.home .wcblr-fact:hover .wcblr-fact__label,
 	body.home .wcblr-fact:hover .wcblr-fact__body {
 		color: #2a1d14 !important;
