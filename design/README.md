@@ -320,28 +320,27 @@ button says so rather than failing quietly.
   `bengaluru.wordcamp.org/2026/tickets`. Early Bird opened Fri 14 Aug 2026 and ends
   Thu 17 Sep, or when the batch sells out.
 
-  The object is a roll of tickets, fanned, the face card stubbed gold. Every other
-  object in the kit is a single thing you hold, and none of them can show
-  depletion, which is this campaign's whole argument: Early Bird is a fixed batch
-  and it goes down. A stack says that without printing a count, which matters
-  because the real count lives in CampTix and would be stale the moment the PNG
-  was exported. No price appears anywhere on the set, for the same reason.
+  The canvas is the ticket: full bleed, perforated down the right, body on the left,
+  stub on the right, punched at both ends of the tear. There is no object in the
+  top-right corner because the poster is the object. The first version of this pair
+  followed the kit's usual spine and put a small drawing of a ticket in the corner of
+  a poster about tickets, which read as the template with the words swapped. When the
+  subject of a banner is a physical object, consider making the canvas that object.
 
-  This is the first campaign cut in three sizes. **Instagram's profile grid is 3:4,
-  and it crops a 1080×1080 post to 74.6% of its width, 137px off each side.** That
-  is wider than the kit's 72px gutter, so it takes the first letter of the headline
-  with it. A 1080×1350 loses only 34px a side, which lands inside the gutter and
-  touches no ink. Post the 4:5 to Instagram; the square is still correct for
+  This is also the first campaign cut in three sizes. **Instagram's profile grid is
+  3:4, and it crops a 1080×1080 post to 74.6% of its width, 137px off each side.**
+  That is wider than the kit's 72px gutter, so it takes the first letter of the
+  headline with it. A 1080×1350 loses only 34px a side, which lands inside the gutter
+  and touches no ink. Post the 4:5 to Instagram; the square is still correct for
   LinkedIn, X and WhatsApp, none of which crop it. Keep every piece of ink at least
   40px from the left and right edges of any new 4:5 and the grid cannot clip it.
 
-  Watch out when editing: the gold stamp sits at the left of the foot strip, not
-  the right where the rest of the set puts it, because the last leg is the gold one
-  and a gold stamp on a gold fill loses its dashed edge. On the featured, the
-  engraving sits at `left: 322px` and the lead is cut to one sentence, because at
-  the set's usual placement the copy runs under the castle and goes unreadable. On
-  the 4:5 the object moves out of the corner into the middle of the poster, or the
-  extra 270px pools into a void, and its caption comes off because it now sits over
-  inked buildings.
+  Watch out when editing: the engraving lives inside the body panel and is clipped by
+  its `overflow: hidden` so it stops at the perforation, which is deliberate. The
+  punches are drawn in the sunk paper tone, not the page colour, because a full-bleed
+  ticket has no outside for a notch to show through. The perforation and the bottom
+  punch stop above the gold marquee, or the tear crosses the band and the object stops
+  reading. The featured body is two columns rather than a stack, because stacked it
+  leaves the engraving a 70px sliver on a 630px canvas.
 
 - **Community Poll** (1080×1080), a ballot asking where your WordPress time goes.
