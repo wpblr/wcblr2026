@@ -1958,15 +1958,20 @@ main:has(.tix-order-summary) .wcblr-tix-back {
    you can find yourself in it, which is the entire reason a tickets page runs a
    crowd shot. */
 
-/* 2:1, and the source is 1600x772, which is 2.07:1. That is deliberate: the
-   picture is chosen to fit the band rather than the band tuned to crop the
-   picture. `cover` takes 28px off each side and nothing off the top or bottom,
-   so there is no vertical window to place and `object-position` has nothing to
-   do. It stays at the default.
+/* 2:1. The source is 4096x2731, which is 3:2, so `cover` keeps 2048 of its 2731
+   rows and there are 683 rows of travel to place the window with.
 
-   An earlier build ran the 2023 courtyard photograph here at `center 70%`, with
-   a long note about which rows of it the window kept. All of that went with the
-   photograph; see the shot block below for why it was the wrong picture. */
+   **There is no `object-position` here and that is a decision, not an
+   omission.** Four candidate windows were cut out of the file and compared: 0%
+   takes the front rows off at the knees, 70% fills the bottom of the band with
+   empty auditorium chairs, 30% clips the front row's feet. 50% holds the whole
+   crowd head to foot with almost no dead space, and 50% is the initial value,
+   so the correct answer is to write nothing. Anyone re-cropping this should
+   cut the candidates again rather than nudge a number.
+
+   Two earlier photographs sat here with different arithmetic, which is why this
+   comment is specific about the file it describes: change the picture and every
+   number above is void. */
 .wcblr-tix-shot {
 	margin: 44px 0 0 !important;
 }
@@ -1990,12 +1995,11 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	color: #7a6757;
 }
 
-/* No ratio at all on a phone, which is the opposite of what this said while the
-   3:2 courtyard photograph was here. That one was squarer than the band, so
-   4:3 on mobile CROPPED LESS. This one is a 2.07:1 panorama of a stage, so 4:3
-   would throw away a third of its width and take the people at both ends of the
-   row with it. Native is 188px tall at 390px wide, which is short, but a
-   panorama is short and everyone in it stays in it. */
+/* No ratio at all on a phone, so the picture falls back to its own 3:2 and
+   nothing is cropped in either direction. 4:3 was tried and is worse here: it
+   is squarer than the source, so it crops the WIDTH, about 6 per cent off each
+   side, and this crowd runs to both edges of the frame. Six per cent of a group
+   photo is somebody's face. 260px tall at 390px wide is enough. */
 @media (max-width: 781px) {
 	.wcblr-tix-shot {
 		margin-top: 32px !important;
