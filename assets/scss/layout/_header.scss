@@ -320,9 +320,24 @@
 		}
 	}
 
+	/* This used to hide the whole button group, which was right when the group
+	   held one button and that button was "Join WhatsApp Community": a
+	   nice-to-have, and the same link is in the footer of every page. It is
+	   wrong now. The group leads with the ticket CTA, and a phone is where most
+	   of this traffic is, so hiding it takes the primary action off the screen
+	   for the majority of readers. The secondary one still goes. */
 	@media (max-width: 480px) {
-		.wp-block-buttons {
+		.wcblr-wa-btn {
 			display: none !important;
+		}
+
+		/* The safety valve. The header row is `nowrap` everywhere else, so if
+		   the lockup, the hamburger and the button do not fit on one line they
+		   would overflow rather than reflow. Wrapping only engages when it is
+		   actually needed, so this costs nothing at widths where it fits. */
+		> .wp-block-group {
+			flex-wrap: wrap !important;
+			row-gap: 12px;
 		}
 	}
 
@@ -431,6 +446,127 @@
 
 	.wcblr-tix-btn .wp-block-button__link {
 		white-space: nowrap;
+	}
+
+	/* ---- Hover, focus and press ----------------------------------------
+	   The header sits outside `.wcblr-motion`, which is the post-content
+	   opt-in, so these two buttons had no states at all: no hover, no press,
+	   and a focus ring only from the browser default. Everything below follows
+	   the system in `content/_cfs-buttons.scss` (0.18s, `:hover` and
+	   `:focus-visible` always written as a pair) rather than inventing a
+	   second one.
+
+	   Colour and transform are separated on purpose. Colour transitions run
+	   everywhere, including for readers who have asked for less motion; only
+	   the movement is behind the reduced-motion query. */
+	.wcblr-tix-btn .wp-block-button__link,
+	.wcblr-wa-btn .wp-block-button__link {
+		transition: background-color 0.18s ease, border-color 0.18s ease,
+			color 0.18s ease, box-shadow 0.18s ease;
+	}
+
+	/* Hover is gated on a device that actually has a pointer. Without this,
+	   a tap on a phone leaves the button stuck in its hover state until you
+	   touch something else, which reads as a stuck button rather than a
+	   pressed one. `:focus-visible` stays OUTSIDE the query so a keyboard
+	   still gets the same treatment on any device. */
+	@media (hover: hover) and (pointer: fine) {
+		/* Primary. The hero pattern for a solid red button is a cream halo,
+		   which works on the dark band it was written for and is invisible
+		   here on cream. So the halo is the accent instead, at low alpha:
+		   the button gains weight rather than changing colour, and the label
+		   never moves against its own background. */
+		.wcblr-tix-btn .wp-block-button__link:hover {
+			box-shadow: 0 4px 14px rgba(200, 52, 75, 0.32);
+		}
+
+		/* Secondary. The cream-page convention is to fill espresso and flip
+		   the text to cream, and it cannot be used here: the glyph is an
+		   `<img>` of whatsapp-dark.svg at `fill="#2a1d14"`, and CSS cannot
+		   swap an img's source, so an espresso fill would swallow it exactly
+		   the way the white one vanished on the outline. The button firms up
+		   instead. The border goes to full espresso and the fill takes a 5 per
+		   cent wash of it, which is a clear response and keeps every part of
+		   the button legible. */
+		.wcblr-wa-btn .wp-block-button__link:hover {
+			background-color: rgba(42, 29, 20, 0.05) !important;
+			border-color: #2a1d14 !important;
+		}
+	}
+
+	.wcblr-tix-btn .wp-block-button__link:focus-visible {
+		box-shadow: 0 4px 14px rgba(200, 52, 75, 0.32);
+	}
+
+	.wcblr-wa-btn .wp-block-button__link:focus-visible {
+		background-color: rgba(42, 29, 20, 0.05) !important;
+		border-color: #2a1d14 !important;
+	}
+
+	/* One ring for both, drawn outside the button so it never sits on the
+	   label. Espresso on cream is 12:1, so it is visible without needing to be
+	   thick, and it does not depend on the button's own colour. */
+	.wcblr-tix-btn .wp-block-button__link:focus-visible,
+	.wcblr-wa-btn .wp-block-button__link:focus-visible {
+		outline: 2px solid #2a1d14;
+		outline-offset: 3px;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.wcblr-tix-btn .wp-block-button__link,
+		.wcblr-wa-btn .wp-block-button__link {
+			transition: background-color 0.18s ease, border-color 0.18s ease,
+				color 0.18s ease, box-shadow 0.18s ease,
+				transform 0.18s cubic-bezier(0.2, 0.6, 0.2, 1);
+		}
+
+		@media (hover: hover) and (pointer: fine) {
+			.wcblr-tix-btn .wp-block-button__link:hover,
+			.wcblr-wa-btn .wp-block-button__link:hover {
+				transform: translateY(-2px);
+			}
+		}
+
+		/* The press, and it needs to be written twice, because it is not the
+		   same gesture on the two kinds of device.
+
+		   With a pointer, the button is already lifted 2px when you press it,
+		   so the press is it settling back down: `translateY(0)`, not
+		   `transform: none`, so it animates through the same transition
+		   instead of snapping. */
+		@media (hover: hover) and (pointer: fine) {
+			.wcblr-tix-btn .wp-block-button__link:active,
+			.wcblr-wa-btn .wp-block-button__link:active {
+				transform: translateY(0);
+				transition-duration: 0.05s;
+			}
+		}
+
+		/* On touch there is no hover and therefore no lift to come back from,
+		   so the desktop rule above would resolve to `translateY(0)` against a
+		   resting `translateY(0)` and a tap would produce nothing at all. A
+		   phone is where most of this traffic is and the primary CTA is the
+		   thing being tapped, so it gets a real press of its own: a small
+		   inward scale, which is the gesture people already read as "this
+		   took". Fast, because a press that lingers reads as lag. */
+		@media (hover: none) {
+			.wcblr-tix-btn .wp-block-button__link:active,
+			.wcblr-wa-btn .wp-block-button__link:active {
+				transform: scale(0.96);
+				transition-duration: 0.06s;
+			}
+		}
+	}
+
+	/* Touch targets. 10px of padding on a 17px line is a 37px control, under
+	   the 44px that a thumb wants. The desktop geometry is deliberate and stays
+	   put; this only applies where there is no fine pointer. */
+	@media (hover: none) {
+		.wcblr-tix-btn .wp-block-button__link,
+		.wcblr-wa-btn .wp-block-button__link {
+			padding-top: 13px !important;
+			padding-bottom: 13px !important;
+		}
 	}
 
 	/* The second button costs 142px (132 plus the 10px gap) and there is not
