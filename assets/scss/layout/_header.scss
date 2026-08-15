@@ -397,19 +397,68 @@
 		}
 	}
 
-	/* ---- Join WhatsApp Community button --------------------------------- */
-	/* The glyph itself is an <img> in the header markup, pointing at
-	   assets/icons/whatsapp.svg in this repo, because that is the only thing
-	   that works here: WordCamp's Remote CSS sanitiser strips url() out of
-	   every declaration it passes, data URIs included. That is also why the
+	/* ---- The two header CTAs -------------------------------------------
+	   "Get your ticket" in the site red, "Join WhatsApp Community" outlined
+	   beside it. The header carried only the WhatsApp button for months, in
+	   the red, while the page that takes money was not linked from the header
+	   at all. Red is this site's primary action colour, so the button wearing
+	   it has to be the primary action, and joining a chat group is not it.
+
+	   Both buttons keep the same 4px radius, 10/20 padding and 14px type, so
+	   the pair reads as one control with two weights rather than as two
+	   unrelated buttons that happen to be adjacent. */
+	.wcblr-header-ctas {
+		flex: none;
+	}
+
+	/* The glyph is an <img> in the header markup, pointing at
+	   assets/icons/whatsapp-dark.svg in this repo, because that is the only
+	   thing that works here: WordCamp's Remote CSS sanitiser strips url() out
+	   of every declaration it passes, data URIs included. That is also why the
 	   background-image rules in content/cfs-icons never paint anything, and
 	   why those blocks carry their own <img> too.
 
-	   All this rule does is line the glyph up with the label. */
+	   `-dark` and that is not a detail. The original whatsapp.svg is
+	   `fill="#ffffff"`, which was correct while the button was a red fill and
+	   is invisible on an outlined one. Demoting the button without swapping
+	   the file leaves a button that looks like it has a rendering fault. */
 	.wcblr-wa-btn .wp-block-button__link {
 		display: inline-flex;
 		align-items: center;
 		gap: 8px;
+		white-space: nowrap;
+	}
+
+	.wcblr-tix-btn .wp-block-button__link {
+		white-space: nowrap;
+	}
+
+	/* The second button costs 142px (132 plus the 10px gap) and there is not
+	   always 142px to spend. Measured on the live header rather than estimated:
+	   logo 309 + nav 441 + both buttons 378 = 1,128px of content, in a row that
+	   caps at 1,200 with 50px of root padding each side. So the pair fits while
+	   `viewport - 100 >= 1,128`, which is about 1,250px, and below that the row
+	   overflows because `wcblr-header_right` is `flex-wrap: nowrap` and nothing
+	   can wrap.
+
+	   Only that band needs fixing. At 1,039px the rule above already turns the
+	   header into a column, and once the logo has its own line the nav and the
+	   buttons have the full width again. So this is a window, not a ceiling:
+	   between the point where the column layout takes over and the point where
+	   both buttons fit on one line, the SECONDARY button steps aside. The
+	   ticket button never does. It is the reason the pair exists, and the
+	   community link is still in the footer of every page and in the home hero.
+
+	   Dropped outright rather than collapsed to its glyph, which was the first
+	   attempt: hiding the label with `font-size: 0` leaves a control whose only
+	   remaining content is an `alt=""` image, so it has no accessible name at
+	   all, and `core/button` has no `aria-label` attribute to give it one back
+	   without failing block validation. A button nobody can name is worse than
+	   a button that is not there. */
+	@media (min-width: 1040px) and (max-width: 1250px) {
+		.wcblr-wa-btn {
+			display: none;
+		}
 	}
 }
 
