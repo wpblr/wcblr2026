@@ -1494,6 +1494,14 @@ main:has(#tix) .wcblr-page-head {
    "WordCamp Bengaluru 2026 / Choose a ticket / Your details / Pay" appears on
    the code of conduct. */
 
+/* `.wcblr-tix-headrow` is the two-column band that holds the head and the step
+   rail. It is listed here as well as its children, and both matter: the ROW
+   hide is what keeps an empty two-column grid off every other page, and the
+   CHILD hides are what keep the header itself off every other page if an older
+   copy of `templates/pages.html` is on the site when this stylesheet lands.
+   Deploy order is Remote CSS first, template second, and this list is what
+   makes the gap between them harmless in both directions. */
+.wcblr-tix-headrow,
 .wcblr-tix-head,
 .wcblr-tix-steps,
 .wcblr-tix-assure,
@@ -1509,6 +1517,10 @@ main:has(#tix) .wcblr-page-head {
 main:has(.tix-ticket-form) .wcblr-tix-manage {
 	display: block;
 	margin-bottom: 0;
+}
+main:has(.tix-attendee-form) .wcblr-tix-headrow,
+main:has(.tix-order-summary) .wcblr-tix-headrow {
+	display: flex;
 }
 main:has(.tix-attendee-form) .wcblr-tix-head,
 main:has(.tix-order-summary) .wcblr-tix-head {
@@ -1539,25 +1551,62 @@ main:has(.tix-order-summary) .wcblr-tix-assure {
    payment provider, not here.
 
    The numerals come from a CSS counter rather than from the markup, so they
-   can never drift out of step with the list if one is added or removed. */
+   can never drift out of step with the list if one is added or removed.
+
+   VERTICAL, and beside the header rather than under it. It ran horizontally as
+   three chips on their own line, and two things were wrong with that. The
+   header was five short lines stacked in a 1,100px column with 700px of empty
+   width beside them, so the screen that asks for money opened with 230px of
+   almost nothing. And three chips in a row with no line between them do not
+   read as progress; they read as three tags. A rail needs a rail.
+
+   Turned on its side it fixes both: it fills the column the header was not
+   using, the steps stack to about the height of the header text so the band
+   squares up, and there is somewhere for the connecting line to go. */
 .wcblr-tix-steps {
 	counter-reset: wcblr-tix-step;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 10px 26px;
-	/* 20px below, because the back link that follows carries `margin-top: 0` as
-	   an inline block attribute and would otherwise sit on the steps' baseline
-	   with its underline almost touching them. */
-	margin: 26px 0 20px;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0;
+	margin: 4px 0 0;
 }
 .wcblr-tix-step {
+	position: relative;
 	display: flex;
-	align-items: center;
-	gap: 9px;
+	/* `flex-start`, not `center`: with the connecting line running out of the
+	   bottom of the ring, the ring has to sit on the first line of the label
+	   rather than in the middle of a padded box. */
+	align-items: flex-start;
+	gap: 11px;
 	font-size: 12.5px;
+	line-height: 21px;
 	letter-spacing: 0.04em;
 	color: #9c8d7c;
 	margin: 0;
+	padding-bottom: 20px;
+}
+.wcblr-tix-step:last-child {
+	padding-bottom: 0;
+}
+
+/* The line, drawn from the bottom of one ring to the top of the next. `::before`
+   is already the numeral, so this is `::after`. 10px from the left is the
+   centre of the 21px ring, less half the line's own 1.5px.
+
+   It takes the colour of the step it leaves, so the run from "done" to "now" is
+   the darker brown and the run from "now" to "Pay" is the muted one. The rail
+   then reads as filling up, which is the one thing a progress rail is for. */
+.wcblr-tix-step:not(:last-child)::after {
+	content: "";
+	position: absolute;
+	left: 9.75px;
+	top: 25px;
+	bottom: 4px;
+	width: 1.5px;
+	background: #ded7cb;
+}
+.wcblr-tix-step.is-done:not(:last-child)::after {
+	background: #bfae9b;
 }
 .wcblr-tix-step::before {
 	counter-increment: wcblr-tix-step;
@@ -1700,6 +1749,12 @@ main:has(.tix-ticket-form) .wp-block-post-content {
 	/* the card drops to `padding: 22px 18px` here, and the footer follows it */
 	.wcblr-tix-assure { grid-template-columns: 1fr; gap: 20px; padding: 22px 18px 24px; }
 	.wcblr-tix-head-title { font-size: 30px !important; }
+	/* Core stacks the two columns, so the rail lands under the header. It stays
+	   vertical: it is a rail on a phone for the same reason it is a rail on a
+	   desktop, and there is no width to lay it out sideways in anyway. Tighter,
+	   because it is no longer holding a column height against the header. */
+	.wcblr-tix-step { padding-bottom: 14px; }
+	.wcblr-tix-headrow { margin-bottom: 20px !important; }
 }
 
 /* The header is the first thing on the screen and the card below it already
