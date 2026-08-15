@@ -56,9 +56,25 @@
 	width: auto;
 	height: auto;
 	margin: 0;
+	/* A WRAPPING flex row, which is the only shape that solves this. The
+	   shortcode prints the profile links as bare <a> siblings of the name with
+	   no wrapper we could turn into a row of their own, so the card itself has
+	   to do the wrapping.
+
+	   The name carries `flex: 0 0 100%`, and that one declaration drives the
+	   whole layout: it cannot share a line, so it pushes the photo onto line
+	   one alone and the links onto line three together, where
+	   `justify-content: center` centres them however many there are. Somebody
+	   with a single link gets it centred under their name, not tucked against
+	   the left edge.
+
+	   A four-column grid was tried first and is wrong: the name spans all four
+	   tracks and therefore SIZES them, so the links end up parked in quarter
+	   columns rather than centred as a group. */
 	display: flex;
-	flex-direction: column;
-	align-items: center;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-content: flex-start;
 	text-align: center;
 	padding: 32px 18px 28px;
 	background: #FBF8F1;
@@ -134,6 +150,8 @@
 	margin-right: 0;
 }
 .wcblr-attendees #tix-attendees .tix-attendee-list .tix-attendee-name {
+	/* The declaration the card's whole layout hangs off. See the li above. */
+	flex: 0 0 100%;
 	margin-top: 20px;
 	font-family: "Fraunces", Georgia, serif;
 	font-size: 19px;
@@ -154,6 +172,88 @@
 .wcblr-attendees #tix-attendees .tix-attendee-list .tix-last {
 	font: inherit;
 	color: inherit;
+}
+
+/* ---- Profile links ------------------------------------------------------- */
+/* These only exist if the shortcode is called with `questions="..."` naming
+   registration questions that exist on THIS year's form. CampTix matches them
+   by title, so the titles in the shortcode and the titles in Tickets ->
+   Questions have to agree exactly or nothing renders. It emits, per link:
+
+     <a class="tix-field tix-attendee-twitter" href="...">@handle</a>
+     <a class="tix-field tix-attendee-url tix-wordpress-org-profile" href>...</a>
+     <a class="tix-field tix-attendee-url tix-linkedin" href>...</a>
+     <a class="tix-field tix-attendee-url tix-your-website" href>...</a>
+
+   The trailing class is the question's slug, so it changes if the question is
+   renamed. The generic `.tix-attendee-url` rule below is the fallback that
+   keeps an unrecognised one looking deliberate rather than broken.
+
+   ---- Why these are letter marks and not logos ----
+   The 2025 site did this with real brand PNGs:
+   `background-image: url(.../linkedin-svgrepo-com.png)` plus `color:
+   transparent` to hide the link text. That works there because the 2025 page
+   carries 68KB of INLINE <style> and never touches Remote CSS.
+
+   We cannot copy it. The Remote CSS sanitizer strips the VALUE off every
+   background-image and leaves the property behind: `background-image:` with
+   nothing after it appears 24 times in the stylesheet the live site serves
+   right now. Copying 2025 would give us crimson squares with invisible text
+   inside them, which is exactly the documented `.i-*` icon failure.
+
+   `content` survives (40 uses served), so the mark is a short mono label drawn
+   on a pseudo-element. It costs no image, no upload and no request, and a
+   two-letter mono glyph in a bordered chip suits a site built out of code
+   comments better than four borrowed brand logos would. */
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-field {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	width: 32px;
+	height: 32px;
+	margin: 18px 4px 0;
+	border: 1.5px solid #e2dcd0;
+	border-radius: 10px;
+	background-color: #F2ECE0;
+	text-decoration: none;
+	/* The link text is the raw handle or URL, which runs to 40 characters and
+	   cannot be trimmed in CSS. Zeroing it hides it from the chip while leaving
+	   it as the link's accessible name, so a screen reader still announces
+	   where the link goes. */
+	font-size: 0;
+	line-height: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-field::before {
+	content: "\2197";
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 11px;
+	font-weight: 700;
+	line-height: 1;
+	letter-spacing: 0;
+	color: #7a6757;
+	transition: color 0.15s ease;
+}
+
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-attendee-twitter::before { content: "X"; }
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-wordpress-org-profile::before { content: "wp"; }
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-linkedin::before { content: "in"; }
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-your-website::before { content: "\2197"; }
+
+/* A hover lift is wrong on the card, which goes nowhere, and right here, where
+   every one of these is a real link. */
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-field:hover,
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-field:focus-visible {
+	border-color: #C8344B;
+	background-color: #FBF8F1;
+}
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-field:hover::before,
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-field:focus-visible::before {
+	color: #C8344B;
 }
 
 /* The shortcode prints a `<br class="tix-clear">` after the list to clear its
