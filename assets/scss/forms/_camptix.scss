@@ -1799,111 +1799,90 @@ main:has(.tix-order-summary) .wcblr-tix-back {
    floor, and spends the crop on the palm fronds instead, which are the part
    nobody is looking at. Checked by cutting all three candidates and looking at
    them, not by picking a number. */
-/* ---- The poster: picture beside its details, not above them --------------
-   This ran as a 3.2:1 band with the four facts in a strip underneath, and the
-   strip could not fit. At the content's 1,100px, four equal columns give each
-   fact 260px, and 52px of that is its own padding, so a value had 208px at 18px
-   Fraunces: about twenty characters. Every one of the four is longer than that,
-   so ALL FOUR wrapped, and they wrapped mid-phrase: "Sat & Sun, 21-22 /
-   November 2026", "St. Joseph's Boys' High / School, Museum Road", "Two tracks,
-   plus a / Contributor Day". A spec strip whose every line breaks in the wrong
-   place reads as squeezed however it is typeset, and no amount of type
-   adjustment fixes it: the four values need about 1,345px of single-line width
-   between them and the row has 1,040.
+/* ---- The shot: proof, inside the copy column ----------------------------
+   This was a poster band under the row: a wide illustration joined to a
+   four-fact panel, the two sharing an edge. Two things were wrong with it and
+   only one of them was the picture.
 
-   The widths are not negotiable and the facts are not droppable. Merging the
-   two venue rows would fix the arithmetic and is explicitly ruled out further
-   down this file: Saturday and Sunday are different places and only Sunday's is
-   settled, and one "Venue" row would read as the whole event and contradict
-   `pages/attending.html`.
+   The picture. It was a flat vector scene of a registration desk, and it was
+   the only flat vector artwork on the site: the other illustration in this
+   campaign is painted, textured, with the Vidhana Soudha behind it. Two
+   illustrations in two different hands, 1,200px apart, on the page whose job is
+   to look like a real event worth 600 rupees. It has been replaced by the
+   archive photograph of the WordCamp Bengaluru 2024 group shot, which is in the
+   media library already, needs no upload and no prompt, and does the one thing
+   no illustration can: prove that a few hundred people actually turn up.
 
-   So the strip stops being a strip. The facts move BESIDE the picture as a
-   single column, where each one gets around 410px on one line, and the two
-   halves become a poster with its details printed down the side. 58/42 is
-   arithmetic rather than taste: 42% of 1,100 leaves the Sunday venue, the
-   longest of the four at 42 characters, about 50px of slack.
+   The hole. The copy column ran eyebrow, heading, lead, hint and stopped, while
+   the column beside it ran the ticket card plus the counterfoil and kept going
+   for another 100px. Top-aligned, that is a hundred pixels of nothing in the
+   lower left of the landing section, which is the first thing anybody sees.
 
-   It also fixes the picture. At 3.2:1 the band was a letterbox whose top third
-   was empty cream, and the illustration is a wide scene of four figures across
-   the bottom. Given a column instead of a band it keeps its own height and
-   crops from the empty part.
+   The picture is fixed by replacing it. The hole is NOT fixed by moving the
+   picture into the copy column, and that was tried first: `flex: 1` on the
+   figure so it absorbs whatever height the ticket card leaves over. Measured on
+   the live page, the copy column runs 353px and the ticket card plus its
+   counterfoil 395px, so there are 42 pixels of slack and no picture fits in 42
+   pixels. What actually happened was the inverse of the bug: the copy column
+   went to 794px against the card's 395, and the hole moved from under the prose
+   to under the ticket. `flex-grow` distributes SURPLUS height, and a column
+   whose height is its own content has none.
 
-   The two halves share one edge: the image drops its right border and its right
-   corners, the facts panel drops its left border and takes the right corners.
-   Same join the counterfoil and the registration footer use. */
-.wcblr-guide .wcblr-tix-poster {
-	display: grid;
-	grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
-	align-items: stretch;
-	/* `!important` because the group carries `margin-top: 0` as an inline block
-	   attribute, and an inline style beats a class however specific. Without it
-	   this computed to 0 and the poster sat 16px under the counterfoil, close
-	   enough that the two read as one stacked object with a seam. Measured, not
-	   guessed: `getComputedStyle(poster).marginTop === "0px"` on the live page.
+   So the hole is 42px, which is a paragraph's worth of air and not a fault, and
+   the picture stays full width where it belongs. That is also the better place
+   for it on its own merits: this is a photograph of roughly four hundred people
+   and at 590px in a column you cannot make out a single face. At the full 1,100
+   you can find yourself in it, which is the entire reason a tickets page runs a
+   crowd shot. */
 
-	   The old rule put the 44px on `.wcblr-tix-art`, which had no inline margin
-	   of its own and so never hit this. Moving the spacing to the wrapper moved
-	   it onto a block that does. */
+/* 2:1, not the 3.2:1 band the illustration used and not the source's own 3:2.
+   3.2 is a letterbox that takes the back rows' heads off; 3:2 at 1,100px is a
+   733px-tall block that pushes the facts strip off the bottom of the screen.
+   At 2:1 the crop keeps 1,280 of the source's 1,707 rows, leaving 427 rows of
+   travel to place the window with.
+
+   `70%`, and it was chosen by cutting all three candidates out of the file and
+   looking at them rather than by picking a number. At 42% the crowd is pressed
+   into the bottom half of the band under a third of a frame of tree canopy. At
+   100% the front row loses its feet and the bottom of the band is empty paving.
+   70% fills the frame with people, head to foot, and keeps just enough of the
+   greenery for the picture to read as somewhere rather than as a wall of
+   faces. */
+.wcblr-tix-shot {
 	margin: 44px 0 0 !important;
-	/* The facts column sets the row height and the picture fills it. Four facts
-	   come to about 310px, but a fact that wraps or a fifth one added later
-	   would grow it, and the floor stops the picture collapsing if one is ever
-	   removed. */
-	min-height: 300px;
 }
 
-/* The figure has to pass the grid row's height through to the `img`, or
-   `height: 100%` below resolves against `auto` and does nothing. */
-.wcblr-tix-art {
-	height: 100%;
-	margin: 0 !important;
-}
-.wcblr-tix-art img {
+.wcblr-tix-shot img {
 	display: block;
 	width: 100%;
-	/* Filling the row rather than holding a ratio. The height is whatever the
-	   facts column needs, and `cover` spends the difference on the crop. */
-	height: 100%;
+	aspect-ratio: 2 / 1;
 	object-fit: cover;
-	object-position: center 62%;
-	/* The radius the red note promised and this file never delivered: the note
-	   told whoever inserted the image that the class carried "the ratio, the
-	   radius and the hide-on-later-screens behaviour", and only two of those
-	   three were ever written. Square corners on the one illustration in a
-	   column of 16px-rounded cards.
-
-	   The hairline is the same job the `#e0a5261f` border does on the ticket
-	   illustration further down: this artwork's own ground is cream, within a
-	   few points of the page's #F2ECE0, so with no edge it does not read as a
-	   placed object, it reads as a hole in the page. #dad5cd rather than the
-	   turmeric, because every card around it is bordered #dad5cd. */
-	/* Left half of the poster: no right edge and no right corners, because the
-	   facts panel is the same object and closes it. */
+	object-position: center 70%;
 	border: 1.5px solid #dad5cd;
-	border-right: 0;
-	border-radius: 16px 0 0 16px;
+	border-radius: 16px;
 }
 
-/* Stacked below the columns breakpoint. Two columns at 700px would give the
-   facts about 290px, which is where the wrapping this whole section exists to
-   fix comes straight back, and the picture would be a 400px-wide sliver beside
-   it. So the poster goes back to picture-over-details, the join rotates through
-   ninety degrees with it, and the image takes a ratio again because it no
-   longer has a facts column to borrow its height from. */
+/* The year, and it is not optional. This is a 2024 photograph on a page selling
+   2026 tickets, which is normal for an event site and dishonest without a date
+   on it. */
+.wcblr-tix-shot figcaption {
+	margin: 10px 2px 0 !important;
+	font-size: 13px;
+	line-height: 1.45;
+	color: #7a6757;
+}
+
+/* On a phone a 2:1 band is 190px tall and four hundred people in it are a
+   texture. Squarer, so the faces survive the width. */
 @media (max-width: 781px) {
-	.wcblr-guide .wcblr-tix-poster {
-		grid-template-columns: minmax(0, 1fr);
-		min-height: 0;
+	.wcblr-tix-shot {
+		margin-top: 32px !important;
 	}
-	.wcblr-tix-art { height: auto; }
-	.wcblr-tix-art img {
-		height: auto;
-		aspect-ratio: 2 / 1;
-		border-right: 1.5px solid #dad5cd;
-		border-bottom: 0;
-		border-radius: 16px 16px 0 0;
+	.wcblr-tix-shot img {
+		aspect-ratio: 4 / 3;
 	}
 }
+
 
 /* ---- The essentials, as the illustration's footer -----------------------
    This page took money without ever saying what for. Before this strip the
@@ -1923,40 +1902,43 @@ main:has(.tix-order-summary) .wcblr-tix-back {
    its details printed down the side. That also puts the facts inside the object
    the eye is already on, rather than below the point where the eye has left.
 
-   ONE COLUMN, and that is the fix, not a preference. Four across gave each fact
-   208px of text and every one of the four values is longer than that, so all
-   four wrapped mid-phrase. Stacked in a 42% column each gets about 410px and
-   every one of them fits on a single line. See the poster block above for the
-   arithmetic.
+   FOUR ACROSS, and the arithmetic that once ruled it out has changed. The old
+   values were 25 to 42 characters ("St. Joseph's Boys' High School, Museum
+   Road", "Two tracks, plus a Contributor Day") and at four to a 1,100px row
+   every one of them wrapped mid-phrase, which is why this became a single
+   column beside the picture. The values are shorter now, none over 20
+   characters, because the day names moved up into the LABELS: `SUN 22 / MAIN
+   EVENT` over `SJBHS, Museum Road` says what `SUNDAY VENUE` over `St. Joseph's
+   Boys' High School, Museum Road` said, in half the width. A label is 11px mono
+   and has room the 18px serif value does not.
 
-   `space-between` so the four spread down whatever height the picture and the
-   panel settle on, rather than bunching at the top with the difference left as
-   a gap under the last one.
+   At four across each cell gets about 239px and the longest value sets to
+   roughly 150px, so there is real slack rather than the 50px the column had.
 
    Four facts, and the venue is TWO of them on purpose. `pages/attending.html`
-   carries SATURDAY VENUE and SUNDAY VENUE separately because they are
-   different places and only Sunday's is settled. A single "Venue" row would
-   have read as the whole event and contradicted the sibling page, which is the
-   kind of thing nobody notices until someone turns up at the wrong address.
-   Merging them would also have fixed the width arithmetic, which is exactly why
-   it is worth writing down that it is not on the table.
+   carries Saturday and Sunday separately because they are different places and
+   only Sunday's is settled. A single "Venue" row would read as the whole event
+   and contradict the sibling page, which is the kind of thing nobody notices
+   until somebody turns up at the wrong address. Shortening the values is not
+   merging them: both days are still here, still separate, still saying which
+   one is settled.
+
+   Full width and under the row, so it reads as the billing block along the
+   bottom of a poster rather than as a panel bolted to a picture. It closes the
+   landing section on the four things somebody needs before they click.
 
    A grid rather than a `wp:columns`, so it needs no render-time layout class
    and looks the same in the editor, in preview.py and on the front end. */
 .wcblr-guide .wcblr-tix-essentials {
 	display: grid;
-	grid-template-columns: minmax(0, 1fr);
-	align-content: space-between;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	align-items: start;
 	gap: 0;
-	/* 24px left, matching the stub and the counterfoil above it: see the
-	   counterfoil block on why the three panels in this column share a gutter.
-	   It also buys the facts 16px more measure than the 32px this started at,
-	   and the longest of them clears its line by about 50px. */
-	padding: 28px 24px 30px;
+	margin: 28px 0 0 !important;
+	padding: 26px 30px 28px;
 	background: #FBF8F1;
 	border: 1.5px solid #dad5cd;
-	border-left: 0;
-	border-radius: 0 16px 16px 0;
+	border-radius: 16px;
 }
 
 /* Core's flow layout emits a `wp-container-*` blockGap rule for the group and
@@ -1972,20 +1954,32 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 
 /* Hairlines BETWEEN the facts. Four label/value pairs with nothing separating
    them read as a list; ruled apart they read as a spec sheet. They run
-   horizontally now that the facts are a column, and only between: a rule above
-   the first or below the last is an underline on the panel's own padding.
+   vertically now that the facts are a row, and only between: a rule before the
+   first or after the last is an underline on the panel's own padding.
 
-   `:not(:first-child)` is safe here in a way it was not when this was a
-   four-across grid that reflowed to two columns and then one, and a left rule
-   on a cell that had become the start of a row hung off nothing. A single
-   column has one arrangement at every width. */
+   `nth-child(n + 2)` rather than `:not(:first-child)` because this grid
+   reflows. At four across every cell but the first wants a left rule; at two
+   across cells 3 and 4 start a new row and a left rule on cell 3 would hang off
+   nothing, so the breakpoints below re-state which children get one. That is
+   the trap the single-column version was written to avoid, and it comes back
+   the moment the strip has more than one arrangement. */
+/* 18px, not 24. At 24 each cell keeps only 212px of the 260 it is given, and
+   both `SJBHS, Museum Road` and the `SAT 21 / CONTRIBUTOR DAY` label broke onto
+   a second line. Measured off the render, not estimated: 18px buys back 24px a
+   cell and both set on one line with room to spare. */
 .wcblr-guide .wcblr-tix-fact {
-	padding: 0;
+	padding: 0 18px;
 }
-.wcblr-guide .wcblr-tix-fact:not(:first-child) {
-	margin-top: 20px;
-	padding-top: 20px;
-	border-top: 1px solid #e6e0d6;
+.wcblr-guide .wcblr-tix-fact:nth-child(n + 2) {
+	border-left: 1px solid #e6e0d6;
+}
+/* The outer two sit against the panel's own padding, so they give up the inset
+   that keeps the middle pair off their rules. */
+.wcblr-guide .wcblr-tix-fact:first-child {
+	padding-left: 0;
+}
+.wcblr-guide .wcblr-tix-fact:last-child {
+	padding-right: 0;
 }
 
 /* The hierarchy was upside down. The label was espresso and bold and the value
@@ -2009,7 +2003,10 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 .wcblr-guide .wcblr-tix-fact > p:last-child {
 	font-family: Fraunces, Georgia, serif !important;
 	color: #2a1d14 !important;
-	font-size: 18px !important;
+	/* 17px, down from the 18px this used in a 410px column. Four across is a
+	   tighter measure and the strip reads better set one notch smaller than it
+	   does with the longest value breaking. */
+	font-size: 17px !important;
 	font-weight: 500 !important;
 	line-height: 1.35 !important;
 	letter-spacing: -0.005em !important;
@@ -2096,20 +2093,51 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	border-radius: 50%;
 }
 
-/* Stacked. The panel is the poster's bottom half rather than its right half, so
-   the join rotates with the picture above it and the facts go full width, where
-   they have more room than they ever had beside the illustration. The column and
-   its horizontal rules are unchanged: one arrangement at every width was the
-   point of going to one column. */
-@media (max-width: 781px) {
+/* Two across. Four cells in a 700px panel gives each 160px, and the Sunday
+   venue needs about 150 before its map glyph, so four survives to roughly 900px
+   and not below it.
+
+   Every rule has to be restated, not adjusted. At two across the cells that
+   start a row are 1 and 3, so 3 loses its left rule and gains a top one, and
+   the pair on the second row need the space that the first row's cells take
+   from the panel padding. Getting this wrong is invisible in the markup and
+   obvious on a tablet: a vertical hairline hanging off the left edge of a cell
+   that is the first thing on its line. */
+@media (max-width: 900px) {
 	.wcblr-guide .wcblr-tix-essentials {
-		border-left: 1.5px solid #dad5cd;
-		border-radius: 0 0 16px 16px;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		row-gap: 22px;
+	}
+	.wcblr-guide .wcblr-tix-fact:nth-child(odd) {
+		border-left: 0;
+		padding-left: 0;
+	}
+	.wcblr-guide .wcblr-tix-fact:nth-child(even) {
+		padding-right: 0;
+	}
+	.wcblr-guide .wcblr-tix-fact:nth-child(n + 3) {
+		padding-top: 22px;
+		border-top: 1px solid #e6e0d6;
 	}
 }
-@media (max-width: 520px) {
-	.wcblr-guide .wcblr-tix-essentials { padding: 24px 22px 26px; }
-	.wcblr-guide .wcblr-tix-fact:not(:first-child) { margin-top: 18px; padding-top: 18px; }
+
+/* One across, and the rules turn back through ninety degrees to where this
+   strip started: horizontal, between, none above the first. */
+@media (max-width: 560px) {
+	.wcblr-guide .wcblr-tix-essentials {
+		grid-template-columns: minmax(0, 1fr);
+		row-gap: 0;
+		padding: 24px 22px 26px;
+	}
+	.wcblr-guide .wcblr-tix-fact {
+		padding: 0;
+	}
+	.wcblr-guide .wcblr-tix-fact:nth-child(n + 2) {
+		margin-top: 18px;
+		padding-top: 18px;
+		border-left: 0;
+		border-top: 1px solid #e6e0d6;
+	}
 }
 
 
