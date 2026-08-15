@@ -1738,15 +1738,18 @@ main:has(.tix-attendee-form) .wcblr-tix-back,
 main:has(.tix-order-summary) .wcblr-tix-back {
 	display: block;
 }
+/* No underline, for the reason set out on `.wcblr-tix-jump`: this link already
+   carries a `&larr;` in its own text, so it is marked without one, and it sits
+   directly above the checkout card's top edge where a second short rule read as
+   part of the card rather than as a link. */
 .wcblr-tix-back a {
 	font-family: "JetBrains Mono", ui-monospace, monospace;
 	font-size: 13px;
 	letter-spacing: 0.5px;
 	text-decoration: none;
-	border-bottom: 1px solid rgba(42, 29, 20, 0.25);
-	padding-bottom: 2px;
+	transition: color 0.15s ease;
 }
-.wcblr-tix-back a:hover { border-bottom-color: #C8344B; }
+.wcblr-tix-back a:hover { color: #C8344B !important; }
 
 /* "Pick your ticket and quantity, then register" is an instruction for one
    screen and stale on every screen after it, so it is hidden unless the
@@ -2016,15 +2019,50 @@ main:has(.tix-order-summary) .wcblr-tix-back {
    school's name the loudest thing in a row of four equal facts, and a venue is
    a fact, not a call to action. Espresso with a hairline under it: still
    obviously a link, no longer the only red on a cream poster. */
+/* The worst of the three underlines, because the anchor covers only part of its
+   own value: `<a>St. Joseph's Boys' High School</a>, Museum Road`. A rule under
+   the first two thirds of a line, sitting 20px above the panel's next divider,
+   read as a hairline somebody had drawn in the wrong place.
+
+   Extending the anchor over the whole value would have been worse, not better:
+   then it is a full-width rule 20px above a full-width rule.
+
+   So the mark is a glyph. `\2197` is the north-east arrow this project already
+   uses for an outbound link in `content/_attendees.scss`, and it is literally
+   true here: the venue name opens Google Maps in a new tab. Turmeric, so it
+   reads as a mark rather than as punctuation in the school's name, and it lifts
+   on hover in the direction it points.
+
+   The anchor in `tickets.html` was widened to cover ", Museum Road" as well, so
+   the glyph lands at the END of the value rather than in the middle of it. A
+   `::after` can only attach to the element it is on, and with the anchor
+   stopping at "High School" the arrow sat between the school and its road and
+   read as punctuation inside the address. The wider anchor is also the better
+   link: the whole fact is now the target, and the map search it points at names
+   the road anyway. */
 .wcblr-guide .wcblr-tix-fact > p:last-child a {
 	color: inherit;
 	text-decoration: none;
-	border-bottom: 1px solid rgba(42, 29, 20, 0.28);
-	transition: color 0.15s ease, border-color 0.15s ease;
+	transition: color 0.15s ease;
 }
+.wcblr-guide .wcblr-tix-fact > p:last-child a::after {
+	content: "\2197";
+	display: inline-block;
+	margin-left: 5px;
+	font-size: 0.68em;
+	vertical-align: 0.28em;
+	color: #a8760f;
+	transition: transform 0.18s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+/* The underline comes back on hover, where it is one line on its own rather
+   than one line among six, and where it confirms what the pointer is over. */
 .wcblr-guide .wcblr-tix-fact > p:last-child a:hover {
 	color: #C8344B;
-	border-bottom-color: #C8344B;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+.wcblr-guide .wcblr-tix-fact > p:last-child a:hover::after {
+	transform: translate(2px, -2px);
 }
 
 /* A fact that is not a fact yet. "Announced closer to the date" was set in the
@@ -2302,7 +2340,26 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	border-radius: 0 0 14px 14px;
 }
 
-/* The way from a ticket to what is in it. Espresso, not the theme's link
+/* NO UNDERLINE, and the rule it replaces is why.
+
+   This column stacks a lot of horizontal lines in very little height: the
+   counterfoil's own fold, the four dividers in the facts panel, the perforation
+   in the stub. Adding a `border-bottom` to each link put a second short line
+   about 20px above a long one in two places, and the pair read as a rendering
+   fault rather than as a link.
+
+   The jump link's was worse than that. The anchor is `inline-flex` so it could
+   hold the arrow, which means the border ran under the TEXT AND THE ARROW AND
+   THE GAP BETWEEN THEM, ending in a stub of rule under a glyph. It looked
+   broken because, as an underline, it was.
+
+   The rule this section now follows: an underline is for a link inside running
+   prose, where there is nothing else to mark it. A link that stands on its own
+   line gets a glyph instead, and the glyph moves on hover. That leaves exactly
+   one underline in the section, in the terms sentence, which is the one place
+   an underline belongs.
+
+   The way from a ticket to what is in it. Espresso, not the theme's link
    colour: the one red on this column is the Register button forty pixels above,
    and a second red directly under it would read as a second action. */
 .wcblr-guide .wcblr-tix-jump a {
@@ -2318,20 +2375,23 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	align-items: baseline;
 	gap: 8px;
 	text-decoration: none;
-	border-bottom: 1px solid rgba(42, 29, 20, 0.28);
-	padding-bottom: 2px;
 	font-weight: 500;
-	transition: color 0.15s ease, border-color 0.15s ease;
+	transition: color 0.15s ease;
 }
 /* The arrow is drawn rather than typed so it cannot end up in the page copy,
-   where it would be read out by a screen reader as part of the link text. */
+   where it would be read out by a screen reader as part of the link text. It is
+   also the whole affordance now that the underline is gone, so it moves on
+   hover: a mark that answers is a mark that reads as pressable. */
 .wcblr-guide .wcblr-tix-jump a::after {
 	content: "\2192";
 	font-size: 0.95em;
+	transition: transform 0.18s cubic-bezier(0.2, 0.6, 0.2, 1);
 }
 .wcblr-guide .wcblr-tix-jump a:hover {
 	color: #C8344B !important;
-	border-bottom-color: #C8344B;
+}
+.wcblr-guide .wcblr-tix-jump a:hover::after {
+	transform: translateX(4px);
 }
 
 /* The terms, at the moment of choosing. "Not refundable" belongs in front of
@@ -2343,10 +2403,25 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	padding-top: 16px;
 	border-top: 1px solid #e6e0d6;
 }
+/* THE ONE UNDERLINE IN THE SECTION, and it keeps it because it is the only link
+   here sitting inside a sentence. There is no room for a glyph mid-clause and
+   nothing else marks it, so this is the case underlines exist for.
+
+   Espresso rather than `inherit`. Underlined grey inside grey prose is a link
+   you find by hovering; a step darker than the sentence around it is a link you
+   can see. 3px of offset because the terms run at 13px with descenders in
+   "questions", and at the 2px this started on the rule cut through them. */
 .wcblr-guide .wcblr-tix-terms a {
-	color: inherit;
+	color: #2a1d14;
 	text-decoration: underline;
-	text-underline-offset: 2px;
+	text-underline-offset: 3px;
+	/* Unbroken, or it is not one underline, it is two fragments. The panel is
+	   about 414px and the sentence ends on this link, so left to wrap it broke
+	   as "More in / ticket questions" with a rule under each half, which is what
+	   made an ordinary prose link look like the others. At 13px the phrase is
+	   roughly 150px, so it moves to its own line whole and cannot overflow even
+	   at the panel's narrowest. */
+	white-space: nowrap;
 	transition: color 0.15s ease;
 }
 .wcblr-guide .wcblr-tix-terms a:hover {
