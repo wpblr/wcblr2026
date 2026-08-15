@@ -1,0 +1,245 @@
+/* ---- Home page motion ---------------------------------------------------
+   Everything here is scoped to `body.home`, which WordPress puts on the front
+   page, so no other page changes by a frame. Two of these blocks touch shared
+   components (`.wcblr-cell`, `.wcblr-live`, the header CTA) and scoping is what
+   makes that safe to try on one page first.
+
+   The rules this file obeys, all of them from `content/_motion.scss`:
+
+     - transform and opacity only, so nothing here can reflow the page or
+       contribute a pixel of layout shift
+     - `animation-timeline` does not survive the sanitiser, so load is the only
+       trigger available and it is spent above the fold
+     - hover behind `(hover: hover) and (pointer: fine)`, so a tap does not
+       leave a card stuck in its hover state
+     - movement behind `prefers-reduced-motion`; colour is not
+
+   The site already has one hover idiom: a small `translateY` lift, 0.15s to
+   0.25s, on `.wcblr-logo`, the news cards and the ticket stub. Everything below
+   is that same lift applied where it was missing, rather than a second
+   vocabulary. What varies is the colour it lifts into, and only where the
+   element already owns a colour.                                            */
+
+/* ---- 1. Load: the last beat is the primary action -----------------------
+   The hero already runs a six-step ladder in `sections/_hero-intro.scss`, from
+   the kicker at 0.05s to the stamp at 0.95s. This adds one beat after it: the
+   header's ticket button, at 1.05s, once everything else has settled. It is
+   the punctuation pattern the motion file describes, landing on something
+   small after the page is still.
+
+   TRANSFORM ONLY, and that is the whole point of not reusing `wcblr-pop`.
+   That keyframe starts at `opacity: 0`, which is correct for a decorative
+   stamp and wrong here: with `both` fill the button would be invisible for the
+   first 1.05 seconds of every home page load, and if any part of this were
+   ever stripped it would stay invisible. The primary action on the site is not
+   something to risk on an animation surviving. A scale with no opacity means
+   the worst case is a button that does not move. */
+@keyframes wcblr-home-cta {
+	from {
+		transform: scale(0.86);
+	}
+	to {
+		transform: none;
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	body.home .wcblr-header .wcblr-tix-btn .wp-block-button__link {
+		animation: wcblr-home-cta 0.5s 1.05s cubic-bezier(0.34, 1.56, 0.64, 1)
+			both;
+	}
+}
+
+/* ---- 2. The statistic cells --------------------------------------------
+   `.wcblr-cell` had no hover at all, which left four of the most looked-at
+   objects on the page inert while the news cards and sponsor logos beside them
+   answered the pointer.
+
+   The lift is the site's. The colour is the interesting part: each cell already
+   owns one, in its number, and on hover the border takes that colour instead of
+   a generic accent, so the response tells you which cell you are on rather than
+   just that you are on one. No new palette values: they were read off the live
+   page, not off the markup.
+
+   Cell four is the exception and it is deliberate. Its number is the bright
+   gold #e0a526, which is 1.9:1 on the cell fill: fine for a 60px numeral and
+   invisible as a 1px line. It takes the deep gold #a8760f instead, which is the
+   pairing the rest of the site already uses, bright gold as a fill and deep
+   gold as a line. Matching it exactly would have meant a hover you cannot
+   see. */
+body.home .wcblr-stats .wcblr-cell {
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	body.home .wcblr-stats .wcblr-cell {
+		transition:
+			border-color 0.2s ease,
+			box-shadow 0.2s ease,
+			transform 0.2s cubic-bezier(0.2, 0.6, 0.2, 1);
+	}
+}
+
+@media (hover: hover) and (pointer: fine) {
+	body.home .wcblr-stats .wcblr-cell:hover {
+		box-shadow: 0 6px 20px rgba(42, 29, 20, 0.09);
+	}
+
+	/* nth-child on the COLUMN, not the cell: the cell is an only child of its
+	   column, so `:nth-child` on the cell itself is always 1. */
+	body.home
+		.wcblr-stats
+		.wp-block-column:nth-child(1)
+		.wcblr-cell:hover {
+		border-color: #c8344b;
+	}
+
+	body.home
+		.wcblr-stats
+		.wp-block-column:nth-child(2)
+		.wcblr-cell:hover {
+		border-color: #1d8b6e;
+	}
+
+	body.home
+		.wcblr-stats
+		.wp-block-column:nth-child(3)
+		.wcblr-cell:hover {
+		border-color: #a8760f;
+	}
+
+	body.home
+		.wcblr-stats
+		.wp-block-column:nth-child(4)
+		.wcblr-cell:hover {
+		border-color: #a8760f;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		body.home .wcblr-stats .wcblr-cell:hover {
+			transform: translateY(-4px);
+		}
+	}
+}
+
+/* ---- 3. The Get Involved cards -----------------------------------------
+   `.wcblr-live` already carries the gold border, the tint and the pulsing dot
+   that mean "this call is open". What it never had was a response to the
+   pointer, so a card that advertises itself as live sat still when you reached
+   for it.
+
+   Both the live cards and the one plain card lift, because they are one row and
+   a row where three of four move is a row that looks broken. The live ones keep
+   their gold edge; the plain one warms from the hairline to the same espresso
+   the outline buttons use, so the row stays legible as three-open-one-not. */
+/* The row carries no class of its own, so it is found by what is inside it.
+   `:has(.wcblr-live)` has no whitespace between its parentheses, which matters:
+   `gulp-clean-css` strips spaces inside `:has()`, so a descendant combinator in
+   there minifies into a compound selector that silently matches nothing. Only a
+   single class is safe without checking the built file. */
+body.home .wp-block-columns:has(.wcblr-live) > .wp-block-column {
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	body.home .wp-block-columns:has(.wcblr-live) > .wp-block-column {
+		transition:
+			border-color 0.2s ease,
+			box-shadow 0.2s ease,
+			transform 0.2s cubic-bezier(0.2, 0.6, 0.2, 1);
+	}
+}
+
+@media (hover: hover) and (pointer: fine) {
+	body.home .wp-block-columns:has(.wcblr-live) > .wp-block-column:hover {
+		box-shadow: 0 6px 20px rgba(42, 29, 20, 0.1);
+	}
+
+	/* Only the card that is not live. The three that are keep their gold edge,
+	   because that edge is what says the call is open and a hover must not
+	   overwrite a status. */
+	body.home
+		.wp-block-columns:has(.wcblr-live)
+		> .wp-block-column:not(.wcblr-live):hover {
+		border-color: #b9ab97;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		body.home
+			.wp-block-columns:has(.wcblr-live)
+			> .wp-block-column:hover {
+			transform: translateY(-4px);
+		}
+	}
+}
+
+/* ---- 4. The buttons -----------------------------------------------------
+   `Get Directions` and `Learn more about BLR` are the two solid buttons in the
+   body of this page and neither answered the pointer. They take the header
+   pair's treatment so a button behaves the same wherever it appears: a halo in
+   the button's own colour, a 2px lift, and a press that settles it back down.
+
+   The halo is espresso at low alpha rather than each button's own colour, and
+   that is the opposite of the choice made in the header. There the two buttons
+   are known, fixed and adjacent, so a crimson glow and a green one read as a
+   pair. Here the selector catches every button in the page body, crimson and
+   gold today and whatever gets added later, and a shared colour glow would be
+   wrong under half of them. A neutral shadow is right under all of them. */
+body.home main .wp-element-button {
+	transition:
+		box-shadow 0.18s ease,
+		background-color 0.18s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	body.home main .wp-element-button:hover {
+		box-shadow: 0 6px 18px rgba(42, 29, 20, 0.18);
+	}
+
+	/* The selector above catches all five buttons in the page body, and two of
+	   them are inside the hero stub, on espresso. An espresso shadow under a
+	   button on an espresso panel is invisible at best; `sections/_ticket-stub`
+	   already gives those two their own states, written for a dark ground, and
+	   this file is imported after it, so the halo has to be handed back
+	   explicitly rather than just not set. */
+	body.home main .wcblr-stub .wp-element-button:hover {
+		box-shadow: none;
+	}
+
+	body.home main .wcblr-stub__buy .wp-element-button:hover {
+		box-shadow: 0 0 0 2px rgba(242, 236, 224, 0.45);
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	body.home main .wp-element-button {
+		transition:
+			box-shadow 0.18s ease,
+			background-color 0.18s ease,
+			transform 0.18s cubic-bezier(0.2, 0.6, 0.2, 1);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		body.home main .wp-element-button:hover {
+			transform: translateY(-2px);
+		}
+
+		body.home main .wp-element-button:active {
+			transform: translateY(0);
+			transition-duration: 0.05s;
+		}
+	}
+
+	/* No lift to settle back from on touch, so the press is its own gesture.
+	   Same split as the header CTAs. */
+	@media (hover: none) {
+		body.home main .wp-element-button:active {
+			transform: scale(0.97);
+			transition-duration: 0.06s;
+		}
+	}
+}
