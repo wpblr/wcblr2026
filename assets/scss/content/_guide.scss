@@ -35,6 +35,26 @@
 	.wcblr-post.wcblr-guide .wcblr-sec h2 { font-size: 34px !important; }
 }
 
+/* 1b. The one block that cannot supply its own top margin.
+   `margin: 0 !important` above is not optional: `_post-page.scss` forces
+   `margin: 46px 0 14px` and only an `!important` beats it. The cost is that a
+   section head's `margin-bottom` block attribute is discarded, so on this
+   layout the space under a heading is always paid for by the NEXT block's
+   `margin-top` instead. Every section here does that: a lead paragraph carries
+   22px, a card row carries 28px.
+
+   `wp:accordion` is the exception. Core gives it no spacing panel, so its
+   `margin-top` cannot be set from the editor at all, and a `.wcblr-sec` group
+   with `blockGap: 0` zeroes the flow gap as well. The result on the tickets
+   page was a 46px heading sitting flush on the first question, measured at
+   exactly 0px apart.
+
+   28px, which is what the card rows under "Good to know" and "What your ticket
+   gets you" already use, so the three head-to-cards gaps on that page match. */
+.wcblr-guide .wcblr-sec > h2 + .wp-block-accordion {
+	margin-top: 28px;
+}
+
 /* 2. Measure. Prose ran the full wide container at roughly 145 characters a
    line against a comfortable 60 to 75. Only running text is capped; cards,
    photos, rows and the FAQ keep the full width, so a structured block reads as

@@ -656,10 +656,27 @@ main:has(#tix) .wcblr-page-head {
    Unfloat it and keep the tab metaphor in the house idiom: a mono label with a
    crimson underline when selected, which still works if a second payment
    method is ever enabled, where a plain label would not. */
+/* AN ACTION BAR, not two things stacked at the left margin. Unfloating it was
+   only half the job: the payment label and the Checkout button then sat one
+   above the other hard against the left edge of a 1,100px card, with the whole
+   right two thirds of the closing row empty. On the screen where somebody
+   commits to paying, the commit control had less presence than a field label.
+
+   So the row becomes what it is: the method on the left, the button on the
+   right, one line, aligned to the card's own edges. `space-between` rather than
+   a margin on the button, because the day a second payment method is enabled
+   the tabs simply grow into the space instead of pushing the button off. It
+   wraps on narrow screens and the two stack again, which is the layout this
+   started as and the right one at that width. */
 #tix .tix-submit {
 	float: none;
 	width: auto;
 	text-align: left;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 18px 32px;
 	/* The last thing above this is usually the advisory's grey panel, and at
 	   32px the rule sat close enough under it to read as the panel's own
 	   underline rather than as the start of the checkout block. */
@@ -667,10 +684,17 @@ main:has(#tix) .wcblr-page-head {
 	padding-top: 28px;
 	border-top: 1.5px solid #ddd9d2;
 }
+/* CampTix closes the block with `<br class="tix-clear">` to clear its own
+   floats. There are no floats left, and inside a flex row a `<br>` is not a
+   line break, it is an empty flex item that opens a third column. */
+#tix .tix-submit br.tix-clear { display: none; }
+/* The screen-reader-only fieldset for the method list, which CampTix keeps in
+   the DOM and hides with this class. Same reason: an empty flex item. */
+#tix .tix-submit > .tix-hidden { display: none; }
 #tix .tix-payment-method {
 	float: none;
 	width: auto;
-	margin-bottom: 20px;
+	margin-bottom: 0;
 }
 #tix .tix-payment-tab {
 	float: none;
@@ -691,6 +715,10 @@ main:has(#tix) .wcblr-page-head {
 	color: #2a1d14;
 	border-bottom-color: #C8344B;
 }
+/* The 22px above separates one tab from the next. On the last one it would add
+   to the flex row's own gap and push the Checkout button in off the card edge
+   it is meant to sit on. With one method enabled, that is every tab. */
+#tix .tix-payment-tab:last-child { margin-right: 0; }
 
 /* Espresso, like every other form submit on the site. The one crimson button
    on this page is Register, on the stub. */
@@ -713,10 +741,15 @@ main:has(#tix) .wcblr-page-head {
    text-transform: uppercase }`, which is (1,2,0) and beats the rule above.
    Match its specificity rather than reaching for !important. */
 #tix .tix-submit .tix-checkout-button {
-	padding: 14px 34px;
+	/* Bigger than every other submit on the site, and it should be: this is the
+	   last control before money moves, and it now sits alone at the right end of
+	   a 1,100px bar where a 15px button read as a form field. */
+	padding: 16px 42px;
+	font-size: 16px;
 	text-transform: none;
 	width: auto;
 	margin: 0;
+	flex: none;
 }
 
 /* CampTix's notices. It prints them into `#tix-errors` / `#tix-notices` /
@@ -1415,8 +1448,19 @@ main:has(#tix) .wcblr-page-head {
 
 .wcblr-tix-head,
 .wcblr-tix-steps,
-.wcblr-tix-assure {
+.wcblr-tix-assure,
+.wcblr-tix-manage {
 	display: none;
+}
+/* The manage screen's own header. It cannot share `.wcblr-tix-head`: that one
+   says "// registration" over the event name and is followed by a three-step
+   progress bar, and none of that is true here. Somebody arriving on this screen
+   has already paid and is coming back to change something. It reuses the head's
+   TITLE and META classes, so the two screens are typeset identically without
+   pretending to be the same screen. */
+main:has(.tix-ticket-form) .wcblr-tix-manage {
+	display: block;
+	margin-bottom: 0;
 }
 main:has(.tix-attendee-form) .wcblr-tix-head,
 main:has(.tix-order-summary) .wcblr-tix-head {
@@ -1549,6 +1593,39 @@ main:has(.tix-order-summary) #tix {
 	margin-bottom: 0;
 	border-bottom: 0;
 	border-radius: 16px 16px 0 0;
+}
+
+/* ---- The card and its footer were never the same width ------------------
+   The join above only works if the two boxes line up, and they did not. The
+   footer came out 100px narrower than the card and inset 50px on each side, so
+   the "one object" this file spends forty lines building rendered as a card
+   with a smaller slab tucked under it, which is exactly the "out of place" the
+   footer was written to fix. Measured on the live checkout screen at 1440:
+   `#tix` 1200px at x=669, `.wcblr-tix-assure` 1100px at x=719.
+
+   The cause is in `templates/pages.html`, and it is one attribute.
+   `wp:post-content` carries `"align":"full"`, and its parent group is
+   `has-global-padding`, so core hands the alignfull child `margin-left` and
+   `margin-right` of -50px to break it back out through that padding. Every
+   other block in the template, the eyebrow, the title, the steps, the back
+   link and the footer, is unaligned and therefore sits at 1100. The card was
+   the only thing on the screen wider than the screen's own column.
+
+   Cancelling those two margins is the whole fix: `#tix` is a plain block div
+   with no width of its own, so the content element drops to 1100 and the card
+   follows it, and the card, its header and its footer finally share one edge.
+
+   NOT scoped with `main:has(#tix)`, deliberately. The ticket-SELECTION screen
+   also carries `#tix`, and there the post content is the real tickets page: its
+   `alignfull` cream wrapper does the full-bleed work, so narrowing post-content
+   by 100px would leave that band 50px short of the viewport on both sides. The
+   three screens named here are the ones where CampTix has replaced the whole of
+   `.entry-content` with `#tix` alone, verified in the live DOM on each. */
+main:has(.tix-attendee-form) .wp-block-post-content,
+main:has(.tix-order-summary) .wp-block-post-content,
+main:has(.tix-ticket-form) .wp-block-post-content {
+	margin-left: 0;
+	margin-right: 0;
 }
 .wcblr-tix-assure-label {
 	font-size: 10.5px;
@@ -1792,10 +1869,66 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 .wcblr-guide .wcblr-tix-fact > p:first-child {
 	color: #a8760f !important;
 }
+/* Fraunces, and this is the whole reason the strip stopped looking like a
+   footer somebody forgot to style. The four values were set in the body sans
+   at 17px, which is the same face and nearly the same size as the paragraph
+   above the illustration, so the poster's credits read as one more line of page
+   copy that happened to be inside a box. In the serif they read as PRINTED, and
+   the object above them stops being a picture with a caption and becomes a
+   poster with its details set underneath. */
 .wcblr-guide .wcblr-tix-fact > p:last-child {
+	font-family: Fraunces, Georgia, serif !important;
 	color: #2a1d14 !important;
-	font-size: 17px !important;
+	font-size: 18px !important;
+	font-weight: 500 !important;
+	line-height: 1.35 !important;
+	letter-spacing: -0.005em !important;
+}
+
+/* The one link in the strip. In the serif at 18px the theme's crimson made the
+   school's name the loudest thing in a row of four equal facts, and a venue is
+   a fact, not a call to action. Espresso with a hairline under it: still
+   obviously a link, no longer the only red on a cream poster. */
+.wcblr-guide .wcblr-tix-fact > p:last-child a {
+	color: inherit;
+	text-decoration: none;
+	border-bottom: 1px solid rgba(42, 29, 20, 0.28);
+	transition: color 0.15s ease, border-color 0.15s ease;
+}
+.wcblr-guide .wcblr-tix-fact > p:last-child a:hover {
+	color: #C8344B;
+	border-bottom-color: #C8344B;
+}
+
+/* A fact that is not a fact yet. "Announced closer to the date" was set in the
+   same espresso serif as the date and the school, so a value whose whole
+   content is "we do not know" carried exactly as much weight as the two that
+   are settled, and the strip claimed four confirmed things when it has three.
+
+   The hollow ring is the same mark `wcblr-tier-soon-note` puts on the tier that
+   is not on sale: on this page a small empty circle already means "pending",
+   and a filled one would read as done. Muted with it, so the eye takes the
+   three real facts first and finds the gap afterwards, which is the true
+   reading order. */
+.wcblr-guide .wcblr-tix-fact > p.wcblr-tix-fact-soon {
+	position: relative;
+	padding-left: 18px;
+	font-family: "Hanken Grotesk", sans-serif !important;
+	font-size: 15px !important;
+	font-weight: 400 !important;
 	line-height: 1.45 !important;
+	letter-spacing: normal !important;
+	color: #9c8d7c !important;
+}
+.wcblr-guide .wcblr-tix-fact > p.wcblr-tix-fact-soon::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0.46em;
+	width: 9px;
+	height: 9px;
+	border: 1.5px solid #b3a595;
+	border-radius: 50%;
 }
 
 @media (max-width: 900px) {
@@ -1814,6 +1947,79 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	}
 }
 
+
+/* ---- The six things a ticket gets you -----------------------------------
+   These are the PAYOFF of the page, and they were rendering as the quietest
+   thing on it. Six pale boxes, each with a 44px muted chip, a 17px sans-bold
+   line and two lines of grey.
+
+   The specific failure was not that they were plain, it was that they were
+   INDISTINGUISHABLE from the four "Good to know" cards 300px below: same fill,
+   same hairline, same radius, same chip, same sans-bold title, same grey body.
+   One block is what you are buying and the other is a set of caveats about
+   refunds and check-in, and the page gave them identical clothes. Whatever else
+   changed here, the two families had to stop matching.
+
+   So the perks take the serif and the gold and the good-to-know notes keep the
+   sans and the neutral chip. Three moves, no new markup beyond the two hooks:
+
+     1. The title goes to Fraunces. It is the one typographic promotion
+        available, and on a page whose headings are all Fraunces it reads as
+        "this is a heading" rather than "this is a bold label".
+     2. The chip goes up to 48px and to real turmeric. `content/_cfs-icons.scss`
+        sets `background: rgb(168 118 15 / 12%) !important` on every chip on the
+        site, so this has to answer in kind; specificity settles it, three
+        classes to one.
+     3. A hairline runs from the chip to the card's right edge, at the chip's
+        own centre line. It is the smallest device that gives a card a
+        COMPOSITION instead of a stack, and this page is already built out of
+        rules: the perforation, the counterfoil fold, the dividers in the
+        essentials strip.
+
+   `right: 24px` and `top: 48px` are the card's inline padding (24px) plus half
+   the chip. Both are block attributes on `pages/tickets.html`; change the
+   padding there and these follow. */
+.wcblr-guide .wcblr-perk {
+	position: relative;
+}
+.wcblr-guide .wcblr-perk::after {
+	content: "";
+	position: absolute;
+	top: 48px;
+	left: 88px;
+	right: 24px;
+	height: 1px;
+	background: #eadfc6;
+}
+.wcblr-guide .wcblr-perk .wcblr-chip {
+	width: 48px;
+	height: 48px;
+	border-radius: 14px;
+	background: rgba(224, 165, 38, 0.20) !important;
+	margin-bottom: 16px;
+}
+.wcblr-guide .wcblr-perk .wcblr-chip img {
+	width: 22px;
+}
+.wcblr-guide .wcblr-perk > p:first-of-type {
+	font-family: Fraunces, Georgia, serif !important;
+	font-size: 19px !important;
+	font-weight: 500 !important;
+	line-height: 1.25 !important;
+	letter-spacing: -0.005em !important;
+	margin-bottom: 8px !important;
+}
+.wcblr-guide .wcblr-perk > p:last-of-type {
+	font-size: 14.5px !important;
+	line-height: 1.6 !important;
+}
+
+/* The rule is drawn against a 48px chip, so it has to move with it. Below the
+   columns breakpoint the cards go full width and the chip keeps its size, so
+   only the right edge changes; the padding does not. */
+@media (max-width: 781px) {
+	.wcblr-guide .wcblr-perk > p:first-of-type { font-size: 18px !important; }
+}
 
 /* ---- One tier on sale, not two ------------------------------------------
    Friend of WC BLR is off the page until it goes on sale, which leaves the
@@ -1921,58 +2127,89 @@ main:has(.tix-order-summary) .wcblr-tix-back {
    live in the card after all. It was not used here because whether it escapes
    could not be checked without the plugin source, and a page that takes money
    is the wrong place to find out by shipping. */
-.wcblr-guide .wcblr-tix-jump {
+/* THE COUNTERFOIL. Both of these used to be loose paragraphs on bare cream
+   under the espresso stub: a mono label reading "WHAT YOU GET" with a single
+   underlined "Early Bird" beside it, and below that a crimson note opening
+   "Note:". Three things were wrong with that and only one of them was spacing.
+
+   A label with exactly one value under it is not a label, it is a broken
+   two-column table; with one tier on sale the jump line had degenerated into
+   naming the only ticket there is. It now says what it does, in a sentence, and
+   points at the section that answers it.
+
+   The note was set in #C8344B. This file's own comment two versions ago said
+   the terms should be "quiet: this is a condition of sale, not a warning, and
+   setting it in red would make buying a ticket feel risky when it is not", and
+   then the markup set it in red anyway. Red text directly under a payment
+   button reads as a validation error. It is muted now, which is what was always
+   intended.
+
+   And neither of them belonged to anything. Every other block in this section
+   is a surface with an edge; two paragraphs floating under a dark card read as
+   the card's leftovers. So they join into the ticket's counterfoil: the same
+   394px, the same 14px corner radius, tucked 16px up UNDER the stub so the two
+   read as one object torn along the middle.
+
+   The overlap works without a z-index because `#tix` is `position: relative`
+   (section 5) and this group is not: a positioned element paints above a static
+   one whatever the source order, so the stub's rounded bottom edge stays on top
+   of the counterfoil's square top edge. Do not add `position` here.
+
+   The wording of the refund sentence is the FAQ's own, "We are not able to
+   refund tickets.", and so is the registration footer's. Three places, one
+   sentence, so no two can drift into saying slightly different things about
+   money. */
+.wcblr-guide .wcblr-tix-note {
 	max-width: 394px;
-	margin: 14px auto 0 !important;
-	display: flex;
-	flex-wrap: wrap;
-	align-items: baseline;
-	gap: 4px 9px;
-	line-height: 1.5;
+	margin: -16px auto 0;
+	padding: 30px 22px 20px;
+	background: #FBF8F1;
+	border: 1.5px solid #dad5cd;
+	border-top: 0;
+	border-radius: 0 0 14px 14px;
 }
-.wcblr-guide .wcblr-tix-jump-label,
-.wcblr-guide .wcblr-tix-jump-sep {
-	color: #9c8d7c;
-}
-.wcblr-guide .wcblr-tix-jump-label {
-	font-size: 10.5px;
-	font-weight: 500;
-	letter-spacing: 0.14em;
-	text-transform: uppercase;
-}
-/* Underlined at rest, not on hover. This is a jump inside the page rather than
-   a call to action, so it should read as available without competing with the
-   crimson Register button a few pixels above it. */
+
+/* The way from a ticket to what is in it. Espresso, not the theme's link
+   colour: the one red on this column is the Register button forty pixels above,
+   and a second red directly under it would read as a second action. */
 .wcblr-guide .wcblr-tix-jump a {
+	/* Set here as well as on the block. `wp:post-content` in
+	   `templates/pages.html` carries `elements.link.color.text: accent-1`, which
+	   core compiles to a `.wp-elements-<hash> a` rule, and the paragraph's own
+	   link colour compiles to a second rule at exactly the same specificity, so
+	   which of the two wins comes down to the order core happens to print them
+	   in. Measured on the live page: the page-level rule won and the link came
+	   out crimson. Two classes beat one and settle it. */
+	color: #2a1d14;
+	display: inline-flex;
+	align-items: baseline;
+	gap: 8px;
 	text-decoration: none;
-	border-bottom: 1px solid rgba(42, 29, 20, 0.3);
-	padding-bottom: 1px;
+	border-bottom: 1px solid rgba(42, 29, 20, 0.28);
+	padding-bottom: 2px;
+	font-weight: 500;
 	transition: color 0.15s ease, border-color 0.15s ease;
+}
+/* The arrow is drawn rather than typed so it cannot end up in the page copy,
+   where it would be read out by a screen reader as part of the link text. */
+.wcblr-guide .wcblr-tix-jump a::after {
+	content: "\2192";
+	font-size: 0.95em;
 }
 .wcblr-guide .wcblr-tix-jump a:hover {
 	color: #C8344B !important;
 	border-bottom-color: #C8344B;
 }
 
-/* The terms, at the moment of choosing.
-   "Not refundable" belongs in front of somebody while they are deciding, not
-   only in an accordion further down the page that many readers never open. It
-   sits under the jump line, sized to the card like it, and quiet: this is a
-   condition of sale, not a warning, and setting it in red would make buying a
-   ticket feel risky when it is not.
-
-   The wording is the FAQ's own sentence, "We are not able to refund tickets.",
-   and so is the registration footer's. Three places, one sentence, so no two
-   can drift into saying slightly different things about money. */
+/* The terms, at the moment of choosing. "Not refundable" belongs in front of
+   somebody while they are deciding, not only in an accordion further down the
+   page that many readers never open. The rule above it is the counterfoil's own
+   fold: small print sits under a fold, not under a heading. */
 .wcblr-guide .wcblr-tix-terms {
-	max-width: 394px;
-	margin: 12px auto 0 !important;
+	margin-top: 16px !important;
+	padding-top: 16px;
+	border-top: 1px solid #e6e0d6;
 }
-/* The link inherits the crimson rather than taking the theme's link colour,
-   which would put a second red on the same line and read as two different
-   kinds of thing. It carries an underline instead, which is what marks it as
-   the clickable part, and goes espresso on hover so the whole note stops being
-   one flat block of red. */
 .wcblr-guide .wcblr-tix-terms a {
 	color: inherit;
 	text-decoration: underline;
@@ -1980,12 +2217,223 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	transition: color 0.15s ease;
 }
 .wcblr-guide .wcblr-tix-terms a:hover {
+	color: #C8344B;
+}
+
+/* ---- 9. "Your tickets": the access-token screen -------------------------
+   `form_access_tickets()`, camptix.php 5725. It is the screen the confirmation
+   email links to, so it is the one an attendee comes back to weeks later, and
+   until now it was the only screen in the flow with nothing done to it: a bare
+   three-column table sitting in the form card, under a page that had had its
+   own header hidden by `main:has(#tix) .wcblr-page-head`. No title, no event
+   name, no date, no indication of what the page was for.
+
+   `.tix-ticket-form` is unique to this function. Checked against the plugin
+   source rather than assumed: it is the only occurrence of that class in
+   camptix.php, where every other screen uses `tix_tickets_table` with a second
+   class. So everything below can key on it and cannot reach another screen.
+
+   The DOM it gives us, read off the live page and not inferred, is three cells
+   with NO classes on any of them:
+
+     td 1   <strong>Name</strong><br>Ticket type
+     td 2   Purchase date
+     td 3   Status:&nbsp;Confirmed<br><a>Edit information</a>
+
+   On WordCamp.org that third cell is filtered through
+   `camptix_edit_info_cell_content`, which is why the link reads "Login as
+   <user> to edit information" rather than the plugin's plain "Edit
+   information". Nothing here depends on which of the two it is.
+
+   No classes means positional selectors, which is normally a smell. It is
+   acceptable here because the cell order is written literally into the function
+   with no conditionals around it: there is no arrangement of tickets, coupons
+   or payment states that reorders these three. */
+#tix .tix-ticket-form {
+	display: block;
+	width: 100%;
+	border-collapse: collapse;
+	margin: 0;
+}
+/* Three column heads for three cells that say what they are. "Tickets Summary"
+   over a name and "Purchase Date" over a date is a header row explaining a
+   two-row table, and the third head is empty, which is what made this read as a
+   database dump. The date keeps a label; it is the one value that could be
+   mistaken for something else. */
+#tix .tix-ticket-form thead { display: none; }
+#tix .tix-ticket-form tbody { display: block; }
+
+/* One ticket, one row: identity and its date on the left, state and the action
+   on the right. Same two-column grid as the order summary and the stub, so a
+   person who bought a ticket and then came back to this screen is looking at
+   the same object laid out the same way. */
+#tix .tix-ticket-form tbody tr {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: center;
+	column-gap: 28px;
+	row-gap: 4px;
+	padding: 22px 0;
+	border: 0;
+	border-bottom: 1px solid #e6e0d6;
+}
+#tix .tix-ticket-form tbody tr:first-child { padding-top: 0; }
+#tix .tix-ticket-form tbody tr:last-child { border-bottom: 0; padding-bottom: 0; }
+#tix .tix-ticket-form td {
+	border: 0;
+	padding: 0;
+	text-align: left;
+	vertical-align: top;
+}
+/* Every break in this table separates two things that are now laid out by the
+   grid or by a block child, so a `<br>` can only add a stray empty line. */
+#tix .tix-ticket-form br { display: none; }
+
+/* Cell 1. The td carries the TICKET TYPE's styling and the `<strong>` overrides
+   it back to the serif for the name, which is the only way to reach a bare text
+   node that has no element of its own. Turmeric mono uppercase for the type,
+   because that is how a ticket tier is set everywhere else on this page. */
+#tix .tix-ticket-form td:nth-child(1) {
+	grid-area: 1 / 1;
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 11px;
+	font-weight: 500;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: #a8760f;
+}
+#tix .tix-ticket-form td:nth-child(1) strong {
+	display: block;
+	margin-bottom: 7px;
+	font-family: Fraunces, Georgia, serif;
+	font-size: 20px;
+	font-weight: 500;
+	letter-spacing: -0.01em;
+	line-height: 1.25;
+	text-transform: none;
 	color: #2a1d14;
 }
-/* "Note:" is the one word that has to be caught before the sentence is read,
-   so it is the only thing here heavier than the rest. */
-.wcblr-guide .wcblr-tix-terms strong {
-	font-weight: 700;
+
+/* Cell 2, under the name. The label is injected because the column head that
+   used to carry it is gone, and a bare date under a ticket name could be the
+   event's date rather than the day it was bought. That ambiguity is the whole
+   reason this one keeps a label when the other two do not. */
+#tix .tix-ticket-form td:nth-child(2) {
+	grid-area: 2 / 1;
+	margin-top: 4px;
+	font-size: 13.5px;
+	line-height: 1.5;
+	color: #9c8d7c;
+}
+#tix .tix-ticket-form td:nth-child(2)::before {
+	content: "Bought ";
+}
+
+/* Cell 3. Spans both left-hand rows so the state and the action sit centred
+   against the name and its date together. Right-aligned: it is the end of the
+   row and the only thing on this screen there is to press.
+
+   State and action on ONE line, not stacked. Stacked, the right-hand cluster
+   was two short items in a narrow column with 500px of empty card between them
+   and the ticket name, and a one-ticket order is the common case here, so that
+   emptiness is what the screen normally looks like. Side by side the cluster is
+   wide enough to answer the name across the row. */
+#tix .tix-ticket-form td:nth-child(3) {
+	grid-area: 1 / 2 / span 2;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px 20px;
+	text-align: right;
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 10.5px;
+	font-weight: 500;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: #7a6757;
+}
+/* The edit link is the action, so it is a control rather than a line of blue.
+   Outline and not filled: the filled espresso button on this site means
+   "submit", and nothing is being submitted from this screen. */
+#tix .tix-ticket-form td:nth-child(3) a {
+	font-family: "Hanken Grotesk", sans-serif;
+	font-size: 13.5px;
+	font-weight: 500;
+	letter-spacing: normal;
+	text-transform: none;
+	color: #2a1d14;
+	text-decoration: none;
+	background: #fff;
+	border: 1.5px solid rgba(42, 29, 20, 0.22);
+	border-radius: 8px;
+	padding: 9px 16px;
+	white-space: nowrap;
+	transition: border-color 0.15s, color 0.15s;
+}
+#tix .tix-ticket-form td:nth-child(3) a:hover {
+	border-color: #C8344B;
+	color: #C8344B;
+}
+
+/* CampTix appends its own prose under the table: the global-sponsors thank-you,
+   the Foundation donation line, and, on a refundable event, "Change of plans?
+   ... request a refund." They are `#tix > p` here rather than `#tix form > p`,
+   because this screen has no form at all, so the rule in section 1 never
+   reached them and they arrived at the card's own 15.5px in full espresso,
+   competing with the tickets above them. They are footnotes.
+
+   `:has(> .tix-ticket-form)` with a CHILD combinator. `gulp-clean-css` strips
+   the whitespace inside `:has()`, so a descendant combinator there minifies
+   into a single invalid compound selector that silently matches nothing. This
+   file documents that trap twice already; do not undo the `>`. */
+#tix:has(> .tix-ticket-form) > p {
+	font-size: 13.5px;
+	line-height: 1.65;
+	color: #9c8d7c;
+	max-width: 70ch;
+	margin: 14px 0 0;
+}
+/* The rule that separates the tickets from the footnotes belongs to the TABLE,
+   not to the first paragraph. Put on the paragraph it inherits that paragraph's
+   `max-width: 70ch` and stops two thirds of the way across the card, which
+   reads as an underline on the sponsor line rather than as the end of the
+   list. On the table it runs the full width, which is what a divider is for.
+
+   `:has(+ p)` so a ticket list with nothing after it does not end on a rule
+   with nothing under it. The `+` is punctuation and survives minification; a
+   descendant combinator inside `:has()` would not. */
+#tix .tix-ticket-form:has(+ p) {
+	padding-bottom: 26px;
+	border-bottom: 1.5px solid #ddd9d2;
+}
+#tix:has(> .tix-ticket-form) > p:first-of-type {
+	margin-top: 26px;
+}
+#tix:has(> .tix-ticket-form) > p strong { font-weight: 500; color: #7a6757; }
+#tix:has(> .tix-ticket-form) > p a { color: #7a6757; }
+
+/* Narrow. The row's right-hand cell is a nowrap button, and at the card's
+   mobile width there is no room for a name and a button on one line. */
+@media (max-width: 600px) {
+	#tix .tix-ticket-form tbody tr {
+		grid-template-columns: minmax(0, 1fr);
+		row-gap: 14px;
+	}
+	#tix .tix-ticket-form td:nth-child(3) {
+		grid-area: 3 / 1;
+		align-items: flex-start;
+		justify-content: flex-start;
+		text-align: left;
+	}
+	/* The link text is filtered per attendee on WordCamp.org and comes out as
+	   "Login as <username> to edit information", so its length is somebody
+	   else's username. `nowrap` is right on a 1,100px card and is an overflow
+	   waiting to happen on a 300px one. */
+	#tix .tix-ticket-form td:nth-child(3) a {
+		white-space: normal;
+		max-width: 100%;
+	}
 }
 
 /* Landing under the sticky header is the classic anchor bug and this page now
