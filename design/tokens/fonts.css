@@ -1,4 +1,20 @@
 /* ── WordCamp Bengaluru 2026 · Webfonts ──────────────────────────────
+   THIS SUBSTITUTION IS STALE AND WRONG. The note below says the real
+   site's fonts "were not provided". They are known and they are free:
+   wcblr2026's own stylesheet uses FRAUNCES, HANKEN GROTESK and JETBRAINS
+   MONO, and contains no Playfair Display and no Space Mono anywhere.
+   Only the body face below is right.
+
+   The Tickets Are Live trio overrides --font-display and --font-mono
+   locally to the real faces. The rest of the kit still renders in the
+   substitutes, so every other banner is off-brand against the live site.
+   Correcting it here is the proper fix and it re-typesets fifteen already
+   posted banners, so it wants its own pass with check.sh over all of them,
+   not a drive-by. Until then, read the list below as "what most banners
+   currently use", not "what the brand is".
+
+   Original note follows.
+
    SUBSTITUTION NOTE: the real site's exact licensed fonts were not
    provided, so these are the closest Google Fonts matches:
      · Playfair Display  → high-contrast display serif (the "WordCamp"

@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="../styles.css" />
 <link rel="stylesheet" href="banner.css" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400..700&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Noto+Sans+Kannada:wght@400..700&display=swap" />
 <style>
   html, body { margin: 0; background: #d8cdb8; }
 
@@ -32,6 +32,29 @@
      because the poster is the object.
      ────────────────────────────────────────────────────────────────── */
   .banner--ig { width: 1080px; height: 1350px; }
+  /* ── Type: the LIVE SITE's faces, not the kit tokens' ────────────────
+     tokens/fonts.css calls Playfair Display and Space Mono "the closest
+     Google Fonts matches" because "the real site's exact licensed fonts
+     were not provided". They were: wcblr2026's own stylesheet uses
+     Fraunces, Hanken Grotesk and JetBrains Mono, all three free, and
+     contains no Playfair and no Space Mono anywhere. So the kit has been
+     rendering every banner in a face the site does not use.
+
+     It matters beyond correctness. Playfair is THE default high-contrast
+     display serif, and cream paper plus Playfair plus a red accent is a
+     recognisable machine-made look. Fraunces is the site's actual face
+     and it is nobody's default: an old-style serif with a WONK axis that
+     swaps in angled, slightly wrong-looking alternates. WONK is on at 1
+     here, which is the one real risk on this poster. It is what stops
+     the headline reading as generic-editorial, and at 114px you can see
+     the canted terminals and the wonky "y" doing it.
+
+     Overridden per banner rather than in tokens/typography.css: that file
+     is shared, and repainting fifteen already-posted banners is not this
+     campaign's job. The kit-wide fix is flagged in README.md. */
+  .banner { --font-display: 'Fraunces', Georgia, serif;
+            --font-mono: 'JetBrains Mono', ui-monospace, monospace; }
+  .t-h, .t-date { font-optical-sizing: auto; }
   .banner { --font-kn: 'Noto Sans Kannada', sans-serif; --perf: 772px; }
 
   /* ── The ticket ─────────────────────────────────────────────────── */
@@ -74,21 +97,23 @@
   /* ── The one piece of type that has to survive a thumbnail ──────── */
   .t-h { position: relative; z-index: 2; font-family: var(--font-display);
     color: var(--wc-ink); margin: 10px 0 0; }
-  .t-h .a { display: block; font-weight: 900; font-size: 114px; line-height: 0.94;
-    letter-spacing: -0.03em; }
-  .t-h .b { display: block; font-weight: 500; font-style: italic; font-size: 178px;
-    line-height: 0.86; letter-spacing: -0.025em; color: var(--accent); margin-top: 2px; }
+  .t-h .a { display: block; font-weight: 900;
+    font-variation-settings: "opsz" 144, "SOFT" 0, "WONK" 1; font-size: 122px; line-height: 0.92;
+    letter-spacing: -0.035em; }
+  .t-h .b { display: block; font-weight: 600; font-style: italic;
+    font-variation-settings: "opsz" 144, "SOFT" 30, "WONK" 1; font-size: 246px;
+    line-height: 0.8; letter-spacing: -0.03em; color: var(--accent); margin-top: 6px; }
 
   /* The site's own sentence, not a written-for-the-poster one. It has a
      point of view, which is the thing a generated line never has. */
   .t-lead { position: relative; z-index: 2; font-family: var(--font-body); font-weight: 400;
     font-size: 27px; line-height: 1.45; color: var(--text-body);
-    max-width: 560px; margin: 30px 0 0; }
+    max-width: 545px; margin: 34px 0 0; }
 
   /* ── The printed data block, which is what a real ticket carries in
         place of three little cards with icons in them. Ruled rows, mono
         labels in a fixed column, values in the body face. ──────────── */
-  .t-data { position: relative; z-index: 2; margin-top: 54px;
+  .t-data { position: relative; z-index: 2; margin-top: 40px;
     background: rgba(248, 244, 236, 0.93); border: 1.5px solid rgba(42, 29, 20, 0.5);
     border-radius: 12px; padding: 4px 26px; }
   .t-row { display: flex; align-items: baseline; gap: 22px; padding: 16px 0;
@@ -106,13 +131,12 @@
   /* ── The stub ───────────────────────────────────────────────────── */
   .t-stub { position: relative; flex: 1; background: rgba(225, 165, 39, 0.20);
     display: flex; flex-direction: column; align-items: center;
-    justify-content: space-between; padding: 46px 0 40px; overflow: hidden; }
+    justify-content: center; padding: 46px 0 40px; overflow: hidden; }
 
-  .t-stub .mark svg { width: 46px; height: 46px; display: block; }
 
   /* Bottom to top, so it reads with the head of the ticket. */
   .t-date { writing-mode: vertical-rl; transform: rotate(180deg);
-    font-family: var(--font-display); font-weight: 900; font-size: 76px;
+    font-family: var(--font-display); font-variation-settings: "opsz" 96, "SOFT" 0, "WONK" 1; font-weight: 900; font-size: 76px;
     letter-spacing: -0.02em; line-height: 1; color: var(--wc-ink); white-space: nowrap; }
   .t-date em { font-style: normal; color: var(--accent); }
   .t-year { writing-mode: vertical-rl; transform: rotate(180deg); margin-top: 20px;
@@ -128,7 +152,11 @@
     opacity: 0.88; }
   .t-stub .sn { margin-top: 12px; font-family: var(--font-mono); font-weight: 700;
     font-size: 13px; letter-spacing: 0.16em; color: var(--text-muted); }
-  .t-stub .foot { display: flex; flex-direction: column; align-items: center; }
+  /* The stub carried a small ticket glyph above the date. Cut: the whole
+     canvas is a ticket, so a picture of a ticket on it is the same mistake
+     as the corner object this poster was rebuilt to remove. */
+  .t-stub .foot { position: absolute; left: 0; right: 0; bottom: 40px; display: flex;
+    flex-direction: column; align-items: center; }
 
   /* ── The band ───────────────────────────────────────────────────── */
   .banner .b-marquee { background: var(--wc-gold); color: var(--wc-espresso); padding: 19px 0;
@@ -184,13 +212,6 @@
     </div>
 
     <div class="t-stub">
-      <span class="mark">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#9B711E" stroke-width="1.7"
-             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z" />
-          <path d="M13 5v2" /><path d="M13 17v2" /><path d="M13 11v2" />
-        </svg>
-      </span>
 
       <div class="t-datewrap">
         <span class="t-date">21&ndash;22 Nov</span>

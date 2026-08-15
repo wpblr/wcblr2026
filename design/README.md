@@ -336,6 +336,15 @@ button says so rather than failing quietly.
   40px from the left and right edges of any new 4:5 and the grid cannot clip it.
 
 
+
+  The type is the live site's, not the kit's. `tokens/fonts.css` substitutes Playfair
+  Display and Space Mono on the grounds that the real fonts "were not provided", but
+  the theme's own stylesheet uses Fraunces, Hanken Grotesk and JetBrains Mono and no
+  Playfair or Space Mono anywhere. These three banners override the display and mono
+  families locally to match, with Fraunces' WONK axis at 1 and opsz at 144. The rest
+  of the kit is still on the substitutes and is off-brand against the site; correcting
+  the shared tokens re-typesets every posted banner, so it wants its own pass.
+
   The date appears once, on the stub, not also as a WHEN row in the body. The two days
   are separate rows because they are separate days: SJBHS is the Sunday venue, and
   Saturday is Contributor Day with its venue still unannounced. A single WHERE row
