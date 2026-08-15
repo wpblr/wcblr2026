@@ -513,8 +513,29 @@ body.home .wcblr-facts {
 	   of the photograph beside them; two rows of two read as a block the eye
 	   takes in at once, which is what a teaser section is for.
 
-	   THE ICONS ARE INLINE SVG IN THE MARKUP, in a wp:html block per item, and
-	   that is forced rather than chosen. The first version put them here as
+	   THE ICONS ARE <img> TAGS IN THE MARKUP pointing at the theme repo on
+	   GitHub raw, and that is forced rather than chosen. TWO earlier routes
+	   were both silently destroyed in transit, each by a different filter:
+
+	     1. `background-image: url("data:image/svg+xml,...")` here in the
+	        stylesheet. WordCamp.org's Remote CSS sanitiser strips every url()
+	        value, data URI or not. The served stylesheet carries the rules and
+	        contains "url(" exactly zero times.
+	     2. Inline `<svg>` in a wp:html block. WordPress kses strips svg from
+	        post content unless the user has unfiltered_html, which nobody has
+	        on this multisite. The paste succeeded, the copy changed, and the
+	        four svg elements simply were not in the saved page.
+
+	   The <img> works because kses allows img and GitHub raw serves these with
+	   `content-type: image/svg+xml`. It is the same mechanism the header's
+	   WhatsApp button already uses, which is the one icon on this site that
+	   has always rendered.
+
+	   CHECK THE LIVE PAGE, NOT THE LOCAL RENDER. Both dead routes looked
+	   perfect in a local browser. The only proof is the served HTML and the
+	   served CSS.
+
+	   The first version put them here as
 	   `background-image: url("data:image/svg+xml,...")`, copying what
 	   sections/bento-icons does. It renders perfectly in a local browser and
 	   renders NOTHING on the live site: WordCamp.org's Remote CSS sanitiser
@@ -526,7 +547,7 @@ body.home .wcblr-facts {
 	   appeared on the live site, for the same reason. Not fixed here.
 
 	   So: no url() in this stylesheet, and no background-image icon anywhere in
-	   it. If an icon is wanted, it goes in the markup. */
+	   it. If an icon is wanted, it goes in the markup, as an img. */
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	column-gap: 36px;
@@ -550,9 +571,10 @@ body.home .wcblr-fact {
 	border: 0;
 }
 
-/* The icon sits in the gutter the padding-left opens up. Sized here as well as
-   on the element so a browser that ignores the SVG's own attributes still
-   reserves the right box. */
+/* The icon sits in the gutter the padding-left opens up. It is an <img> inside
+   the label paragraph, so it is taken out of flow rather than pushing the label
+   text sideways. Sized here as well as on the element so the box is reserved
+   before the file loads and nothing reflows. */
 body.home .wcblr-fact__icon {
 	position: absolute;
 	top: 1px;
