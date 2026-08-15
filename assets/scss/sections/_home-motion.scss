@@ -513,11 +513,20 @@ body.home .wcblr-facts {
 	   of the photograph beside them; two rows of two read as a block the eye
 	   takes in at once, which is what a teaser section is for.
 
-	   The icons are the site's own Lucide set from assets/icons, inlined as
-	   data URIs the way sections/bento-icons does it, so this needs no markup
-	   for them. They are gold at full strength rather than the bento cells'
-	   0.07 wash, because there they are a background texture and here they are
-	   the thing that makes an item scannable. */
+	   THE ICONS ARE INLINE SVG IN THE MARKUP, in a wp:html block per item, and
+	   that is forced rather than chosen. The first version put them here as
+	   `background-image: url("data:image/svg+xml,...")`, copying what
+	   sections/bento-icons does. It renders perfectly in a local browser and
+	   renders NOTHING on the live site: WordCamp.org's Remote CSS sanitiser
+	   strips every url() value, data URI or not. Checked against the served
+	   stylesheet, which carries all four of these rules and contains the string
+	   "url(" exactly zero times.
+
+	   That also means the bento cell icons in sections/bento-icons have never
+	   appeared on the live site, for the same reason. Not fixed here.
+
+	   So: no url() in this stylesheet, and no background-image icon anywhere in
+	   it. If an icon is wanted, it goes in the markup. */
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	column-gap: 36px;
@@ -541,36 +550,18 @@ body.home .wcblr-fact {
 	border: 0;
 }
 
-body.home .wcblr-fact::before {
-	content: "";
+/* The icon sits in the gutter the padding-left opens up. Sized here as well as
+   on the element so a browser that ignores the SVG's own attributes still
+   reserves the right box. */
+body.home .wcblr-fact__icon {
 	position: absolute;
 	top: 1px;
 	left: 0;
 	width: 22px;
 	height: 22px;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: contain;
-}
-
-/* ORDER IS LOAD-BEARING. There is nothing in the markup naming these, so the
-   icon is matched by position: 1 what it is, 2 who it is for, 3 why this year,
-   4 what is in store. Reorder the blocks in home.html and the icons follow the
-   old order until these are changed too. */
-body.home .wcblr-fact:nth-child(1)::before {
-	background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23a8760f%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M11%2012h2a2%202%200%201%200%200-4h-3c-.6%200-1.1.2-1.4.6L3%2014%22%2F%3E%3Cpath%20d%3D%22m7%2018%201.6-1.4c.3-.4.8-.6%201.4-.6h4c1.1%200%202.1-.4%202.8-1.2l4.6-4.4a2%202%200%200%200-2.75-2.91l-4.2%203.9%22%2F%3E%3Cpath%20d%3D%22m2%2013%206%206%22%2F%3E%3C%2Fsvg%3E");
-}
-
-body.home .wcblr-fact:nth-child(2)::before {
-	background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23a8760f%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M16%2021v-2a4%204%200%200%200-4-4H6a4%204%200%200%200-4%204v2%22%2F%3E%3Cpath%20d%3D%22M16%203.128a4%204%200%200%201%200%207.744%22%2F%3E%3Cpath%20d%3D%22M22%2021v-2a4%204%200%200%200-3-3.87%22%2F%3E%3Ccircle%20cx%3D%229%22%20cy%3D%227%22%20r%3D%224%22%2F%3E%3C%2Fsvg%3E");
-}
-
-body.home .wcblr-fact:nth-child(3)::before {
-	background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23a8760f%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12%205a3%203%200%201%200-5.997.125%204%204%200%200%200-2.526%205.77%204%204%200%200%200%20.556%206.588A4%204%200%201%200%2012%2018Z%22%2F%3E%3Cpath%20d%3D%22M9%2013a4.5%204.5%200%200%200%203-4%22%2F%3E%3Cpath%20d%3D%22M6.003%205.125A3%203%200%200%200%206.401%206.5%22%2F%3E%3Cpath%20d%3D%22M3.477%2010.896a4%204%200%200%201%20.585-.396%22%2F%3E%3Cpath%20d%3D%22M6%2018a4%204%200%200%201-1.967-.516%22%2F%3E%3Cpath%20d%3D%22M12%2013h4%22%2F%3E%3Cpath%20d%3D%22M12%2018h6a2%202%200%200%201%202%202v1%22%2F%3E%3Cpath%20d%3D%22M12%208h8%22%2F%3E%3Cpath%20d%3D%22M16%208V5a2%202%200%200%201%202-2%22%2F%3E%3Ccircle%20cx%3D%2216%22%20cy%3D%2213%22%20r%3D%22.5%22%2F%3E%3Ccircle%20cx%3D%2218%22%20cy%3D%223%22%20r%3D%22.5%22%2F%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2221%22%20r%3D%22.5%22%2F%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%228%22%20r%3D%22.5%22%2F%3E%3C%2Fsvg%3E");
-}
-
-body.home .wcblr-fact:nth-child(4)::before {
-	background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23a8760f%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12%2019v3%22%2F%3E%3Cpath%20d%3D%22M19%2010v2a7%207%200%200%201-14%200v-2%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%222%22%20width%3D%226%22%20height%3D%2213%22%20rx%3D%223%22%2F%3E%3C%2Fsvg%3E");
+	display: block;
+	transform-origin: 50% 50%;
+	transition: transform 0.26s cubic-bezier(0.34, 1.4, 0.64, 1);
 }
 
 body.home .wcblr-fact__label {
@@ -612,5 +603,23 @@ body.home .wcblr-fact__body {
 	body.home .wcblr-fact:hover .wcblr-fact__label,
 	body.home .wcblr-fact:hover .wcblr-fact__body {
 		color: #2a1d14 !important;
+	}
+
+	/* The icon zooms, on the same curve and duration as the header and footer
+	   lockups in layout/hover-states, so every mark on the site answers a
+	   pointer the same way. 1.15 rather than the lockup's 1.1 because this one
+	   is 22px against the lockup's 56, and the same ratio reads as less
+	   movement on a smaller object. Stroke SVG, so it cannot soften the way a
+	   raster can. */
+	body.home .wcblr-fact:hover .wcblr-fact__icon {
+		transform: scale(1.15);
+	}
+}
+
+/* Nothing moves for a reader who asked for less motion; the colour shift above
+   is outside this query and still carries the hover. */
+@media (prefers-reduced-motion: reduce) {
+	body.home .wcblr-fact__icon {
+		transition: none;
 	}
 }
