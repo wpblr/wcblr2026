@@ -21,7 +21,7 @@
  *
  *   B. Pages with no opaque wrapper: about, contact, news, organizers,
  *      sponsors. Their top-level group carries no background at all, so the
- *      cream comes from `body`. These hang off `.entry-content` instead.
+ *      cream comes from `body`. These hang off `main` instead.
  *
  * RULE B APPLIES TO EVERY PAGE, and it used to be a hand-written slug list.
  * That list lasted less than a day. It was built by reading the page files in
@@ -46,7 +46,7 @@
  *   would land on top of the article text rather than behind it. This is the
  *   same pairing `.wcblr-hero` already uses for the front-page ghost.
  *
- *   Rule B does the same thing one level further out, on `.entry-content`.
+ *   Rule B does the same thing one level further out, on `main`.
  *   The first attempt put it at `z-index: -1` on `.wp-site-blocks` and rendered
  *   nothing at all. See the note above rule B.
  *
@@ -60,9 +60,11 @@
  *   - `.wcblr-post` contains the rotated turmeric stamp, which is meant to hang
  *     off the edge of things.
  *
- *   The hero can clip because its ghost hangs 40px past the right edge. These
- *   sit fully inside the box instead. That is also what keeps them from
- *   starting a horizontal scrollbar on a narrow window.
+ *   These hang 48px past the right edge, the way the hero's does, so the
+ *   numerals read as a margin device rather than as something sitting on the
+ *   copy. Safe without any clipping of our own, because `body` already carries
+ *   `overflow-x: clip`, the one form that does not break `position: sticky`.
+ *   Do not swap that for `overflow-x: hidden`.
  */
 
 /* Faint. The alpha matches where the footer ghost settled rather than the
@@ -72,8 +74,8 @@
 @mixin wcblr-ghost-26 {
 	content: "26";
 	position: absolute;
-	top: 96px;
-	right: 28px;
+	top: 28px;
+	right: -48px;
 	font-family: "Fraunces", Georgia, serif;
 	font-weight: 600;
 	font-size: clamp(150px, 21vw, 320px);
@@ -102,8 +104,16 @@
 
 /* ── B. Every page ───────────────────────────────────────────────────────── */
 /*
- * This hangs off `.entry-content`, the post-content wrapper, and NOT off
- * `.wp-site-blocks`. Two reasons, the first found the hard way:
+ * This hangs off `main`, and NOT off `.entry-content` or `.wp-site-blocks`.
+ * Three reasons, all found the hard way:
+ *
+ *   `.entry-content` is the CONSTRAINED text column, not the page. Anchored
+ *   there, `right` measures from the right edge of that column rather than
+ *   from the window, so on a full-width text page like code-of-conduct the
+ *   numerals landed about 160px inside the measure and sat squarely on the
+ *   paragraphs. `main` is `alignfull`, so it spans the window and `right`
+ *   means what it looks like it means. It paints its own background too,
+ *   which is what lets the ghost sit above it.
  *
  *   `.wp-site-blocks::before { z-index: -1 }` renders nothing. A negative
  *   z-index child paints below the in-flow blocks of its stacking context,
@@ -111,7 +121,7 @@
  *   cream. The ghost was drawn, and then the body background was painted on
  *   top of it. Verified in a headless render before it shipped.
  *
- *   `.entry-content` also excludes the header, which matters: the header is
+ *   `main` also excludes the header, which matters: the header is
  *   `position: sticky`, and the z-index pattern below sets `position: relative`
  *   on its container's children. Applied to `.wp-site-blocks` that would have
  *   overwritten `sticky` with `relative` and unstuck the header site-wide.
@@ -119,7 +129,7 @@
  * So it is the same shape as rule A, one level further out.
  */
 body:not(.home) {
-	.entry-content {
+	main {
 		position: relative;
 
 		&::before {
@@ -140,9 +150,9 @@ body:not(.home) {
    beside it, and the same alpha reads much heavier. */
 @media (max-width: 767px) {
 	.wcblr-post::before,
-	body:not(.home) .entry-content::before {
-		top: 64px;
-		right: 8px;
+	body:not(.home) main::before {
+		top: 20px;
+		right: -30px;
 		font-size: clamp(110px, 34vw, 190px);
 		-webkit-text-stroke-color: rgba(42, 29, 20, 0.09);
 	}
@@ -164,7 +174,7 @@ body:not(.home) {
  */
 @media (prefers-reduced-motion: no-preference) {
 	.wcblr-post::before,
-	body:not(.home) .entry-content::before {
+	body:not(.home) main::before {
 		animation: wcblr-hero-ghost 1.4s 0.25s ease-out both;
 	}
 }
