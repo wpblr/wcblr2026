@@ -243,3 +243,164 @@ body.home main .wp-element-button {
 		}
 	}
 }
+
+/* ---- 5. Photographs zoom, cards lift, logos do neither -------------------
+   One rule for the whole page, so the response tells you what kind of thing
+   you are pointing at:
+
+     a photograph   zooms inside its own frame
+     a card         lifts
+     a logo         lifts, and does NOT zoom
+
+   The last one is the only part that needs defending. A logo is a fixed
+   artwork with its own margins, and scaling it inside a card reads as the logo
+   being wrong rather than as the card responding. Sponsors also have the least
+   say over how their mark is shown, which is a good reason to be conservative
+   with it. */
+
+/* ---- The about photograph -----------------------------------------------
+   The one full-height image in the body. It is a `core/cover`, which already
+   clips at `overflow: clip` with a 14px radius, so the zoom needs nothing added
+   to hold it in: the frame stays exactly where it is and only the picture
+   inside it moves.
+
+   0.5s, not the 0.2s the cards use. A card lifting is a small object
+   acknowledging the pointer and wants to be quick; a 543x737 photograph
+   scaling is a large one, and at 0.2s a large move reads as a jolt. */
+body.home .wcblr-about__image .wp-block-cover__image-background {
+	transition: transform 0.5s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	@media (prefers-reduced-motion: no-preference) {
+		body.home
+			.wcblr-about__image
+			.wp-block-cover:hover
+			.wp-block-cover__image-background {
+			transform: scale(1.06);
+		}
+	}
+}
+
+/* ---- The news cards -----------------------------------------------------
+   `.wcblr-blog-grid` had no hover at all. `sections/_news-cards.scss` does have
+   a lift, but it belongs to a different component that this page does not use,
+   which is why the cards here sat still while the ones on other pages moved.
+
+   The figure has to clip before the image can zoom. Core leaves it
+   `overflow: visible` and puts the 14px radius on the `img` instead, so a
+   scaled picture would spill past the corners it appears to have. The radius
+   moves to the frame and the frame clips. */
+body.home .wcblr-blog-grid figure.wp-block-post-featured-image {
+	overflow: hidden;
+	border-radius: 14px;
+}
+
+body.home .wcblr-blog-grid figure.wp-block-post-featured-image img {
+	transition: transform 0.5s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+body.home .wcblr-blog-grid li.wp-block-post {
+	transition: box-shadow 0.2s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	body.home .wcblr-blog-grid li.wp-block-post {
+		transition:
+			box-shadow 0.2s ease,
+			transform 0.2s cubic-bezier(0.2, 0.6, 0.2, 1);
+	}
+}
+
+@media (hover: hover) and (pointer: fine) {
+	body.home .wcblr-blog-grid li.wp-block-post:hover {
+		box-shadow: 0 8px 24px rgba(42, 29, 20, 0.1);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		body.home .wcblr-blog-grid li.wp-block-post:hover {
+			transform: translateY(-4px);
+		}
+
+		body.home
+			.wcblr-blog-grid
+			li.wp-block-post:hover
+			figure.wp-block-post-featured-image
+			img {
+			transform: scale(1.05);
+		}
+	}
+}
+
+/* ---- The sponsor logos --------------------------------------------------
+   `.wcblr-logo` in `sections/_sponsors-teaser.scss` has carried a lift for a
+   long time and matches nothing on this page: the home page row is a query
+   loop of sponsor posts, so the class is never applied. Measured, not assumed:
+   `.wcblr-sponsors-row .wcblr-logo` returns zero elements on the live page.
+
+   The card is the `.wp-block-group` inside each post, which already has the
+   2px #ddd9d2 edge. It warms to the deep gold, which is the colour the site
+   uses for a sponsor everywhere else. */
+body.home .wcblr-sponsors-row li.wp-block-post > .wp-block-group {
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	body.home .wcblr-sponsors-row li.wp-block-post > .wp-block-group {
+		transition:
+			border-color 0.2s ease,
+			box-shadow 0.2s ease,
+			transform 0.2s cubic-bezier(0.2, 0.6, 0.2, 1);
+	}
+}
+
+@media (hover: hover) and (pointer: fine) {
+	body.home .wcblr-sponsors-row li.wp-block-post > .wp-block-group:hover {
+		border-color: #a8760f;
+		box-shadow: 0 6px 18px rgba(42, 29, 20, 0.08);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		body.home .wcblr-sponsors-row li.wp-block-post > .wp-block-group:hover {
+			transform: translateY(-3px);
+		}
+	}
+}
+
+/* ---- The venue map ------------------------------------------------------
+   "Where we're gathering" is a heading, three hairline info rows, a button and
+   the map. The button already answers through the button rule above, and the
+   rows deliberately do not: they are DATE, ADDRESS and GETTING THERE, none of
+   them a link, and putting a hover on text that cannot be clicked advertises
+   an affordance the page does not have. The map is the thing in that section
+   you can actually act on, so it is the thing that responds.
+
+   2px, not the cards' 4. The embed is 504px tall, and a big object moving as
+   far as a small one reads as the page shifting under the pointer rather than
+   as the object acknowledging it. */
+body.home main div.googlemaps {
+	transition: box-shadow 0.2s ease;
+	border-radius: 14px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	body.home main div.googlemaps {
+		transition:
+			box-shadow 0.2s ease,
+			transform 0.2s cubic-bezier(0.2, 0.6, 0.2, 1);
+	}
+}
+
+@media (hover: hover) and (pointer: fine) {
+	body.home main div.googlemaps:hover {
+		box-shadow: 0 8px 26px rgba(42, 29, 20, 0.12);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		body.home main div.googlemaps:hover {
+			transform: translateY(-2px);
+		}
+	}
+}
