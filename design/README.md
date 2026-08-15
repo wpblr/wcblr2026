@@ -315,4 +315,33 @@ button says so rather than failing quietly.
   inside its own track: as a separate flex item it lands far from its own mark and
   the row stops reading as one thing.
 
+- **Tickets Are Live** (1080×1080), **Tickets Are Live - Instagram** (1080×1350)
+  and **Tickets Are Live - Featured** (1200×630), for the Early Bird launch at
+  `bengaluru.wordcamp.org/2026/tickets`. Early Bird opened Fri 14 Aug 2026 and ends
+  Thu 17 Sep, or when the batch sells out.
+
+  The object is a roll of tickets, fanned, the face card stubbed gold. Every other
+  object in the kit is a single thing you hold, and none of them can show
+  depletion, which is this campaign's whole argument: Early Bird is a fixed batch
+  and it goes down. A stack says that without printing a count, which matters
+  because the real count lives in CampTix and would be stale the moment the PNG
+  was exported. No price appears anywhere on the set, for the same reason.
+
+  This is the first campaign cut in three sizes. **Instagram's profile grid is 3:4,
+  and it crops a 1080×1080 post to 74.6% of its width, 137px off each side.** That
+  is wider than the kit's 72px gutter, so it takes the first letter of the headline
+  with it. A 1080×1350 loses only 34px a side, which lands inside the gutter and
+  touches no ink. Post the 4:5 to Instagram; the square is still correct for
+  LinkedIn, X and WhatsApp, none of which crop it. Keep every piece of ink at least
+  40px from the left and right edges of any new 4:5 and the grid cannot clip it.
+
+  Watch out when editing: the gold stamp sits at the left of the foot strip, not
+  the right where the rest of the set puts it, because the last leg is the gold one
+  and a gold stamp on a gold fill loses its dashed edge. On the featured, the
+  engraving sits at `left: 322px` and the lead is cut to one sentence, because at
+  the set's usual placement the copy runs under the castle and goes unreadable. On
+  the 4:5 the object moves out of the corner into the middle of the poster, or the
+  extra 270px pools into a void, and its caption comes off because it now sits over
+  inked buildings.
+
 - **Community Poll** (1080×1080), a ballot asking where your WordPress time goes.

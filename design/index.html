@@ -56,6 +56,7 @@
     border-bottom: 1.5px solid var(--border-paper); }
   .shot.sq   { aspect-ratio: 1 / 1; }
   .shot.wide { aspect-ratio: 1200 / 630; }
+  .shot.tall { aspect-ratio: 1080 / 1350; }
   .shot iframe { position: absolute; top: 0; left: 0; border: 0;
     transform-origin: top left; pointer-events: none; }
 
@@ -68,6 +69,7 @@
   .fmt { border-radius: var(--radius-pill); padding: 5px 11px; line-height: 1; color: var(--wc-espresso); }
   .fmt--sq { background: var(--wc-gold); }
   .fmt--wide { background: var(--wc-paper-lo); border: 1px solid var(--border-paper); }
+  .fmt--tall { background: var(--wc-crimson); color: var(--wc-on-dark); }
   .note { font-size: 15px; line-height: 1.5; color: var(--text-body); flex: 1; }
   .actions { display: flex; align-items: center; gap: 10px; }
   .open { font-family: var(--font-body); font-weight: 700; font-size: 15px;
@@ -437,6 +439,72 @@
             mark is the one thing in the grid that survives thumbnail size.</span>
           <div class="actions">
             <a class="open" href="banners/Bengalurus WordPress Story - Featured.html">Open</a>
+            <button class="dl" type="button" data-dl>Download PNG</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="set">
+    <div class="set-head">
+      <div>
+        <span class="set-kick">// early_bird</span>
+        <h2 class="set-name">Tickets Are Live</h2>
+      </div>
+      <p class="set-note">The Early Bird launch. The object is a roll of tickets, fanned, with the
+        face card stubbed gold: the one shape in the set that can say "a fixed batch, going down"
+        without printing a number nobody has verified. Three sizes, not two &mdash; the 4:5 exists
+        because Instagram's profile grid crops a square poster to pieces.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="shot sq">
+          <iframe src="banners/Tickets Are Live.html" width="1080" height="1080" scrolling="no" title="Tickets Are Live"></iframe>
+        </div>
+        <div class="meta">
+          <span class="nm">Tickets Are Live</span>
+          <span class="dims"><span class="fmt fmt--sq">Square</span>1080 &times; 1080</span>
+          <span class="note">LinkedIn, X and WhatsApp. Fine as a post everywhere; do <b>not</b> use it
+            as the Instagram feed image, because the profile grid takes 137px off each side of a
+            square and cuts the headline's first letter off.</span>
+          <div class="actions">
+            <a class="open" href="banners/Tickets Are Live.html">Open</a>
+            <button class="dl" type="button" data-dl>Download PNG</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="shot tall">
+          <iframe src="banners/Tickets Are Live - Instagram.html" width="1080" height="1350" scrolling="no" title="Tickets Are Live &mdash; Instagram"></iframe>
+        </div>
+        <div class="meta">
+          <span class="nm">Tickets Are Live &mdash; Instagram</span>
+          <span class="dims"><span class="fmt fmt--tall">4:5</span>1080 &times; 1350</span>
+          <span class="note">The Instagram feed post. At 4:5 the profile grid's 3:4 tile crops only
+            34px a side, which lands inside the gutter and touches no ink. The roll drops into the
+            middle here rather than sitting in the corner, because the extra 270px pools into a void
+            otherwise.</span>
+          <div class="actions">
+            <a class="open" href="banners/Tickets Are Live - Instagram.html">Open</a>
+            <button class="dl" type="button" data-dl>Download PNG</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="shot wide">
+          <iframe src="banners/Tickets Are Live - Featured.html" width="1200" height="630" scrolling="no" title="Tickets Are Live &mdash; Featured"></iframe>
+        </div>
+        <div class="meta">
+          <span class="nm">Tickets Are Live &mdash; Featured</span>
+          <span class="dims"><span class="fmt fmt--wide">Featured</span>1200 &times; 630</span>
+          <span class="note">The featured image on the tickets page and the share card. Lead trimmed
+            to one line and the object caption dropped, both because 630 tall leaves no room.</span>
+          <div class="actions">
+            <a class="open" href="banners/Tickets Are Live - Featured.html">Open</a>
             <button class="dl" type="button" data-dl>Download PNG</button>
           </div>
         </div>
