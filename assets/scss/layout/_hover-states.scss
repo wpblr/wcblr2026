@@ -1,0 +1,190 @@
+/* ---- Hover and focus states, header and footer nav ----------------------- */
+/*
+ * Lives in its own partial rather than in layout/header and layout/footer,
+ * because it is one behaviour that has to look identical in both places and it
+ * was drifting when it was two. The header's flyout panel already had a hover
+ * (a tinted row plus crimson label) and the footer's links had none at all, so
+ * the same link changed appearance depending on which end of the page it sat
+ * in. Anything added here should be added for both ends at once.
+ *
+ * NOT TOUCHED, because they already have considered states of their own:
+ *   - the two header CTAs, layout/header "Hover, focus and press"
+ *   - the footer social row, layout/footer "Social icons"
+ *   - the flyout panel rows, layout/header "Nav submenu (desktop dropdown)"
+ * Piling a second gesture onto those would give one element two hover
+ * behaviours fighting each other.
+ *
+ * THE UNDERLINE IS A BACKGROUND GRADIENT, NOT A PSEUDO-ELEMENT.
+ * `::before` and `::after` on these `<li>`s are both already spoken for: the
+ * open-call dot is `li.wcblr-nav-cta::before` in the header and `::after` in
+ * the footer, and the header's comment records that putting it on the link
+ * instead drew it twice, once for the label and once for the submenu chevron.
+ * A background image collides with none of that, needs no extra element, and
+ * cannot be double-drawn.
+ *
+ * `background-origin: content-box` is what makes it sit against the text
+ * rather than the bottom of the padding box. The flyout rows carry 11px of
+ * vertical padding, so a `left bottom` gradient without it would draw the
+ * underline 11px clear of the word it belongs to.
+ *
+ * Gated the way the rest of this stylesheet gates hover, and for the same two
+ * reasons: `(hover: hover) and (pointer: fine)` so a tap on a phone does not
+ * leave a link stuck underlined, and `prefers-reduced-motion` around the
+ * movement only. The colour change is NOT inside the reduced-motion query. A
+ * reader who asked for less motion still gets the full hover affordance, just
+ * without the wipe: the underline appears at full width instead of growing.
+ *
+ * `:focus-visible` gets the same treatment as `:hover` throughout, so the
+ * keyboard path and the mouse path show the same thing. It is deliberately
+ * `:focus-visible` and not `:focus`, or clicking a link would leave it
+ * underlined after the pointer had gone.
+ */
+
+$wcblr-hover-ink: #c8344b; /* the header flyout's existing hover colour */
+$wcblr-hover-ease: cubic-bezier(0.2, 0.6, 0.2, 1); /* the footer social row's */
+
+@mixin wcblr-link-wipe {
+	background-image: linear-gradient($wcblr-hover-ink, $wcblr-hover-ink);
+	background-repeat: no-repeat;
+	background-origin: content-box;
+	background-position: 0 100%;
+	background-size: 100% 1.5px;
+}
+
+.wcblr-header,
+.wcblr-footer {
+	.wp-block-navigation-item__content {
+		/* No underline until asked for. Sizing the gradient to 0 width rather
+		   than hiding it means there is one property to animate and nothing to
+		   reveal, so it cannot flash at full width on a slow first paint. */
+		@include wcblr-link-wipe;
+		background-size: 0 1.5px;
+		transition: color 0.18s ease;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.wp-block-navigation-item__content {
+			transition:
+				color 0.18s ease,
+				background-size 0.3s $wcblr-hover-ease;
+		}
+	}
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.wcblr-header .wp-block-navigation-item__content:hover,
+	.wcblr-footer .wp-block-navigation-item__content:hover {
+		color: $wcblr-hover-ink !important;
+		background-size: 100% 1.5px;
+	}
+}
+
+.wcblr-header .wp-block-navigation-item__content:focus-visible,
+.wcblr-footer .wp-block-navigation-item__content:focus-visible {
+	color: $wcblr-hover-ink !important;
+	background-size: 100% 1.5px;
+}
+
+/* ---- The open-call links keep their own colour --------------------------- */
+/*
+ * A link carrying the gold dot is gold on purpose, and turning it crimson on
+ * hover would say the state had changed rather than that the pointer was over
+ * it. It gets a gold underline instead, so it still answers the hover without
+ * giving up what the colour means.
+ */
+.wcblr-header,
+.wcblr-footer {
+	li.wcblr-nav-cta > .wp-block-navigation-item__content {
+		background-image: linear-gradient(#a8760f, #a8760f);
+	}
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.wcblr-header li.wcblr-nav-cta > .wp-block-navigation-item__content:hover,
+	.wcblr-footer li.wcblr-nav-cta > .wp-block-navigation-item__content:hover {
+		color: #a8760f !important;
+	}
+}
+
+.wcblr-header li.wcblr-nav-cta > .wp-block-navigation-item__content:focus-visible,
+.wcblr-footer li.wcblr-nav-cta > .wp-block-navigation-item__content:focus-visible {
+	color: #a8760f !important;
+}
+
+/* ---- The flyout panel keeps its tinted row ------------------------------- */
+/*
+ * layout/header already gives these a background tint and a crimson label, and
+ * that is the right gesture inside a panel: the row is the hit area, so the
+ * whole row should respond. The wipe is suppressed there rather than allowed to
+ * run underneath it.
+ */
+.wcblr-header .wp-block-navigation__submenu-container .wp-block-navigation-item__content {
+	background-image: none;
+}
+
+/* ---- The lockup ---------------------------------------------------------- */
+/*
+ * Both ends of the site carry the same lockup, so it answers the pointer the
+ * same way in both. The seal lifts a little and the wordmark warms to crimson.
+ *
+ * The lift is on the MARK alone, not the whole lockup. Moving the lockup moves
+ * the hairline rule and the Kannada line with it, which reads as the header
+ * itself twitching rather than as a control responding.
+ *
+ * `will-change` is deliberately absent. It would promote two layers on every
+ * page for a 2px move that happens rarely, and the browser handles a transform
+ * this small without help.
+ */
+.wcblr-header .wcblr-site-logo,
+.wcblr-footer .wcblr-footer-lockup {
+	.wp-block-site-logo img {
+		transition: transform 0.28s $wcblr-hover-ease;
+	}
+
+	.wp-block-site-title a {
+		transition: color 0.18s ease;
+	}
+}
+
+@media (hover: hover) and (pointer: fine) {
+	@media (prefers-reduced-motion: no-preference) {
+		.wcblr-header .wcblr-site-logo:hover .wp-block-site-logo img,
+		.wcblr-footer .wcblr-footer-lockup:hover .wp-block-site-logo img {
+			transform: translateY(-2px) rotate(-4deg);
+		}
+	}
+
+	.wcblr-header .wcblr-site-logo:hover .wp-block-site-title a,
+	.wcblr-footer .wcblr-footer-lockup:hover .wp-block-site-title a {
+		color: $wcblr-hover-ink !important;
+	}
+}
+
+/* ---- The legal line's links ---------------------------------------------- */
+/* Small print, so it gets the underline and the colour but no movement. */
+.wcblr-footer-legal a {
+	@include wcblr-link-wipe;
+	background-size: 0 1px;
+	transition: color 0.18s ease;
+	text-decoration: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-footer-legal a {
+		transition:
+			color 0.18s ease,
+			background-size 0.3s $wcblr-hover-ease;
+	}
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.wcblr-footer-legal a:hover {
+		color: $wcblr-hover-ink;
+		background-size: 100% 1px;
+	}
+}
+
+.wcblr-footer-legal a:focus-visible {
+	color: $wcblr-hover-ink;
+	background-size: 100% 1px;
+}
