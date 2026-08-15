@@ -436,24 +436,26 @@ body.home main div.googlemaps {
    times their area: at the same numbers a mural this size reads as the page
    heaving rather than as one object responding.
 
-   `overflow: hidden` on the banner is a GUARD, not a fix, and the distinction
-   is worth recording because the first version of this comment got it wrong.
-   The prediction was that scaling a full-bleed image would push past the
-   viewport edges and give the document a horizontal scrollbar. That did not
-   reproduce: measured at 2552px, 1280px and 390px, with the clip and without
-   it, `documentElement.scrollWidth` never exceeded the viewport. The reason is
-   that `alignfull` here is inset by the root padding rather than being truly
-   edge to edge, so the banner is 1,165px in a 1,280px window and the extra
-   29px a side has room to land in.
+   THERE IS NO CLIP ON THE BANNER, and that is the correction of two mistakes
+   in a row rather than a decision made once.
 
-   It stays anyway, because a scaling image inside a box that does not clip is
-   one layout change away from being that bug, and the clip costs nothing:
-   the artwork carries transparent margin on all four sides, and in the risen
-   state the 22px that gets cut off the top is margin, not ink. */
-body.home .wcblr-hero-banner {
-	overflow: hidden;
-}
+   The first version added `overflow: hidden` to stop a predicted horizontal
+   scrollbar. That never reproduced: measured at 2552px, 1280px and 390px, with
+   the clip and without, `documentElement.scrollWidth` never exceeded the
+   viewport, because `alignfull` here is inset by the root padding rather than
+   being truly edge to edge.
 
+   The second version kept it as a guard anyway, on the reasoning that the 22px
+   it trims off the top is transparent margin rather than ink. That was wrong,
+   and it is the kind of wrong you only see by looking: the sun disc behind the
+   buildings runs right up to the top edge of the artwork, so the clip sliced
+   its arc flat every time the mural rose. A guard that damages the thing it
+   guards is not a guard.
+
+   So the mural grows unclipped. It has the room: at the risen height its top
+   sits clear of the hero copy above it, checked at the widths above. If a clip
+   is ever needed here again, the scale has to come down with it, because any
+   upward growth inside a clipping box cuts that sun. */
 body.home .wcblr-hero-banner .wcblr-skyline img {
 	transition: transform 0.7s cubic-bezier(0.2, 0.6, 0.2, 1);
 }
