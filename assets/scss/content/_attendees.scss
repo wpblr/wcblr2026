@@ -1,0 +1,146 @@
+/* ---- Attendee roster ----------------------------------------------------- */
+/* The /attendees/ page is one CampTix shortcode, `[camptix_attendees]`, and the
+   markup it emits is fixed and not ours to change:
+
+     #tix-attendees > ul.tix-attendee-list.tix-columns-4 > li
+                       > img.avatar + div.tix-field.tix-attendee-name
+
+   So unlike the /organizers/ grid next door, which is generated block markup and
+   can carry whatever classes it likes, everything here has to be done from the
+   stylesheet against selectors CampTix picked in 2011.
+
+   Scoped under .wcblr-attendees, the class on the wp:group that wraps the
+   shortcode, for the reason in page-craft: a rule written for one page must not
+   reach a page composed before it existed. The registration form, which shares
+   the #tix ancestor and is styled in forms/_camptix.scss, is not inside this
+   wrapper and is untouched by any of it. */
+
+/* ---- Undoing camptix.css ------------------------------------------------- */
+/* The plugin lays the list out with floats and a FIXED `height: 80px` on the
+   item (camptix.css:71). The height is the one that actually hurts: it is what
+   makes a card of any other shape overflow its own box, and no amount of
+   padding on the li will show until it is gone.
+
+   Specificity is deliberate, not decorative. camptix.css carries
+   `#tix-attendees .tix-columns-4 li` at (1,1,1); adding .tix-attendee-list here
+   makes these (1,2,1) so they win outright rather than on load order, which is
+   not something we control: Remote CSS and the plugin stylesheet are printed by
+   different parts of WordPress. */
+.wcblr-attendees #tix-attendees .tix-attendee-list {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 20px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* The li becomes the house card: same #FBF8F1 on 1.5px #dad5cd at radius 16 as
+   the organizer cards, the FAQ rows and every other surface on the site. There
+   is deliberately no hover lift. An organizer card is a link to a profile and
+   earns one; an attendee card goes nowhere, and a surface that rises under the
+   pointer while refusing the click is worse than one that sits still. */
+.wcblr-attendees #tix-attendees .tix-attendee-list li {
+	float: none;
+	width: auto;
+	height: auto;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	padding: 26px 18px 24px;
+	background: #FBF8F1;
+	border: 1.5px solid #dad5cd;
+	border-radius: 16px;
+}
+
+/* ---- The avatar ---------------------------------------------------------- */
+/* Gravatar, keyed on the ticket email, so a good half of these will be the
+   default silhouette and the frame has to look composed either way. 84px is the
+   size at which a real photograph still reads as a face and the silhouette does
+   not become the loudest thing in the row.
+
+   The shortcode is called with size="192" so the file arrives at 2x and stays
+   crisp; the default 96 is soft on any modern screen at this size. object-fit
+   is here because Gravatar honours `s=` as a square but a custom avatar filter
+   need not, and one non-square file would otherwise stretch.
+
+   `float: none` undoes camptix.css:84, which floats the image left and pairs it
+   with a 70px left margin on the name. Both have to go together: dropping one
+   leaves the name hanging in space where the floated image used to be. */
+.wcblr-attendees #tix-attendees .tix-attendee-list .avatar {
+	float: none;
+	display: block;
+	width: 84px;
+	height: 84px;
+	margin: 0;
+	border-radius: 50%;
+	border: 1.5px solid #dad5cd;
+	object-fit: cover;
+}
+
+/* ---- The name ------------------------------------------------------------ */
+/* Fraunces, because the organizer cards put their names in it too (their name
+   is an h2, which takes the theme heading font) and the two pages sit next to
+   each other under People in the nav. Matching the family is most of what makes
+   them read as one section of the site.
+
+   `margin-left: 0` is the other half of the float undo above. */
+.wcblr-attendees #tix-attendees .tix-attendee-list .tix-field {
+	margin-left: 0;
+	margin-right: 0;
+}
+.wcblr-attendees #tix-attendees .tix-attendee-list .tix-attendee-name {
+	margin-top: 16px;
+	font-family: "Fraunces", Georgia, serif;
+	font-size: 17px;
+	font-weight: 500;
+	line-height: 1.3;
+	color: #2a1d14;
+	/* A long single-token name has nowhere to break inside a 210px card and
+	   would otherwise push a scrollbar onto the page. */
+	overflow-wrap: break-word;
+	word-break: break-word;
+}
+
+/* Each half of the name is its own span, and they are inline, so the browser
+   breaks between them on its own. Nothing to do but make sure neither is
+   styled differently from the other: CampTix ships .tix-first and .tix-last
+   as separate hooks and it would be easy to end up with a two-tone name. */
+.wcblr-attendees #tix-attendees .tix-attendee-list .tix-first,
+.wcblr-attendees #tix-attendees .tix-attendee-list .tix-last {
+	font: inherit;
+	color: inherit;
+}
+
+/* The shortcode prints a `<br class="tix-clear">` after the list to clear its
+   own floats. There are no floats left, so it is 0 tall and harmless, but it
+   still counts as a child and puts a line box under the grid. */
+.wcblr-attendees .tix-clear {
+	display: none;
+}
+
+/* ---- Responsive ---------------------------------------------------------- */
+/* Four across down to 900px, then three, then two. It does not go to one: an
+   avatar and a name is a narrow thing, and a single column of 84px circles down
+   a phone is a very long page saying very little. Two of them is still legible
+   at 320px, where each card is about 140px wide. */
+@media (max-width: 900px) {
+	.wcblr-attendees #tix-attendees .tix-attendee-list {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+}
+@media (max-width: 600px) {
+	.wcblr-attendees #tix-attendees .tix-attendee-list {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 14px;
+	}
+	.wcblr-attendees #tix-attendees .tix-attendee-list li {
+		padding: 22px 12px 20px;
+	}
+	.wcblr-attendees #tix-attendees .tix-attendee-list .avatar {
+		width: 72px;
+		height: 72px;
+	}
+}
