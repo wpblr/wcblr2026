@@ -1,5 +1,5 @@
 <!-- Banner · 1080×1080 · Tickets Are Live
-     Square social · the canvas is the ticket -->
+     Square social · the canvas is the attendee badge -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,161 +18,101 @@
      side, which is wider than this banner's gutter and takes the "T" off
      the headline. The 1080×1350 sibling is the Instagram one.
 
-     THE ARCHITECTURE IS NOT THE REST OF THE KIT'S, deliberately. Every
-     other banner is masthead rule, kicker row, headline, lead, an object
-     in the top-right corner, a strip along the foot, gold marquee. Built
-     that way this one read as the template with the words swapped, which
-     is the exact failure the README warns about, and the object ended up
-     a small picture of a ticket floating on a poster about tickets.
+     THE CANVAS IS THE ATTENDEE BADGE. Not a poster with a badge on it,
+     and not the perforated ticket this replaced: a ticket has a tear-off
+     stub and a tinted column down one side, and that column turned the
+     right third of the poster into a near-empty strip carrying a date
+     and a serial. A badge is portrait, which is the shape of the canvas,
+     and it is the thing an attendee actually ends up holding.
 
-     So the canvas IS the ticket. Full bleed, perforated down the right at
-     772px, body on the left, stub on the right. There is no corner object
-     because the poster is the object.
+     A real WordCamp badge is a lanyard slot, a band across the head with
+     the event on it, a big blank where a name goes, the role, and the
+     details in small print at the foot. That is the layout below, in
+     that order. The blank is the point: buying a ticket is how your name
+     gets printed on one.
      ────────────────────────────────────────────────────────────────── */
   
-  /* ── Type: the LIVE SITE's faces, not the kit tokens' ────────────────
-     tokens/fonts.css calls Playfair Display and Space Mono "the closest
-     Google Fonts matches" because "the real site's exact licensed fonts
-     were not provided". They were: wcblr2026's own stylesheet uses
-     Fraunces, Hanken Grotesk and JetBrains Mono, all three free, and
-     contains no Playfair and no Space Mono anywhere. So the kit has been
-     rendering every banner in a face the site does not use.
-
-     It matters beyond correctness. Playfair is THE default high-contrast
-     display serif, and cream paper plus Playfair plus a red accent is a
-     recognisable machine-made look. Fraunces is the site's actual face
-     and it is nobody's default: an old-style serif with a WONK axis that
-     swaps in angled, slightly wrong-looking alternates. WONK is on at 1
-     here, which is the one real risk on this poster. It is what stops
-     the headline reading as generic-editorial, and at 114px you can see
-     the canted terminals and the wonky "y" doing it.
-
-     Overridden per banner rather than in tokens/typography.css: that file
-     is shared, and repainting fifteen already-posted banners is not this
-     campaign's job. The kit-wide fix is flagged in README.md. */
-  .banner { --font-display: 'Fraunces', Georgia, serif;
+  .banner { --font-kn: 'Noto Sans Kannada', sans-serif;
+            --font-display: 'Fraunces', Georgia, serif;
             --font-mono: 'JetBrains Mono', ui-monospace, monospace; }
-  .t-h, .t-date { font-optical-sizing: auto; }
-  .banner { --font-kn: 'Noto Sans Kannada', sans-serif; --perf: 764px; }
 
-  /* ── The ticket ─────────────────────────────────────────────────── */
-  .t { position: absolute; inset: 0 0 62px 0; z-index: 2; display: flex; }
+  /* ── The lanyard ────────────────────────────────────────────────── */
+  .g-cord { position: absolute; top: 0; left: 50%; transform: translateX(-50%); z-index: 2; }
+  .g-cord path { fill: none; stroke: var(--wc-gold-deep); stroke-width: 11; opacity: 0.45; }
+  .g-slot { position: absolute; top: 54px; left: 50%; transform: translateX(-50%);
+    width: 150px; height: 24px; border-radius: 12px; background: var(--wc-paper);
+    border: 2px solid rgba(42, 29, 20, 0.45); z-index: 3; }
 
-  .t-body { position: relative; width: var(--perf); flex: none; overflow: hidden;
-    padding: 50px 56px 0; display: flex; flex-direction: column; }
+  /* ── The head band. Gold, ruled top and bottom in espresso, the same
+        treatment as the marquee at the foot, so the badge is bracketed
+        the way a printed one is. It is gold and not espresso because the
+        kit gives its one dark surface to the press credential. ─────── */
+  .g-band { position: absolute; top: 108px; left: 0; right: 0; z-index: 3;
+    background: var(--wc-gold); border-top: 2px solid var(--wc-espresso);
+    border-bottom: 2px solid var(--wc-espresso); padding: 15px 56px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .g-band .kn { font-family: var(--font-kn); font-size: 22px; line-height: 1.35;
+    color: var(--wc-espresso); }
+  .g-band .yr { font-family: var(--font-mono); font-weight: 700; font-size: 14px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--wc-espresso); white-space: nowrap; }
 
-  /* The engraving is clipped dead at the perforation by .t-body's own
-     overflow, which is the whole reason it sits inside the panel rather
-     than on the canvas. A ticket's printed artwork stops at the tear. */
-  .t-body .b-skyline { position: absolute; left: -118px; right: auto; bottom: -4px;
-    width: 940px; z-index: 0; opacity: 0.9; }
+  /* ── The face of the badge ──────────────────────────────────────── */
+  .g-face { position: absolute; top: 196px; left: 0; right: 0; bottom: 62px;
+    z-index: 2; padding: 32px 56px 0; display: flex; flex-direction: column; overflow: hidden; }
+  .g-face .b-skyline { position: absolute; left: -104px; right: auto; bottom: -4px;
+    width: 800px; z-index: 0; opacity: 0.9; }
 
-  /* The perforation: a dashed rule, punched at both ends. The punches are
-     drawn in the sunk paper tone rather than the page colour, because the
-     ticket is full bleed and there is no "outside" for a notch to show. */
-  .t-perf { position: absolute; top: 0; bottom: 62px; left: var(--perf); width: 0;
-    border-left: 2.5px dashed rgba(42, 29, 20, 0.42); z-index: 4; }
-  .t-punch { position: absolute; left: var(--perf); width: 30px; height: 30px;
-    margin-left: -15px; border-radius: 50%; background: #E0D6C2; z-index: 5; }
-  .t-punch.top { top: -15px; }
-  .t-punch.bot { bottom: 47px; }
+  .g-kick { position: relative; z-index: 2; font-family: var(--font-mono); font-weight: 700;
+    font-size: 17px; letter-spacing: 0.02em; color: var(--accent); }
 
-  /* ── Head of the ticket ─────────────────────────────────────────── */
-  .t-head { position: relative; z-index: 2; display: flex; align-items: baseline;
-    justify-content: space-between; gap: 20px;
-    padding-bottom: 15px; border-bottom: 2px solid var(--wc-espresso); }
-  .t-head .kn { font-family: var(--font-kn); font-size: 24px; line-height: 1.4; color: var(--wc-gold-deep); }
-  .t-head .tag { font-family: var(--font-mono); font-weight: 700; font-size: 14px;
-    letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-muted);
-    border-left: 1px solid var(--border-paper); padding-left: 15px; margin-left: 15px; }
-  .t-head .no { font-family: var(--font-mono); font-weight: 700; font-size: 14px;
-    letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-muted); }
+  .g-h { position: relative; z-index: 2; font-family: var(--font-display);
+    color: var(--wc-ink); margin: 10px 0 0; font-optical-sizing: auto; }
+  .g-h .a { display: block; font-weight: 900; font-size: 88px; line-height: 0.92;
+    letter-spacing: -0.035em; font-variation-settings: "opsz" 144, "SOFT" 0, "WONK" 1; }
+  .g-h .b { display: block; font-weight: 600; font-style: italic; font-size: 158px;
+    line-height: 0.8; letter-spacing: -0.03em; color: var(--accent); margin-top: 4px;
+    font-variation-settings: "opsz" 144, "SOFT" 30, "WONK" 1; }
 
-  .t-kick { position: relative; z-index: 2; margin-top: 26px;
-    font-family: var(--font-mono); font-weight: 700; font-size: 17px;
-    letter-spacing: 0.02em; color: var(--accent); }
+  /* ── The name plate. The one thing a badge is for. ──────────────── */
+  .g-plate { position: relative; z-index: 2; margin-top: 24px;
+    background: rgba(248, 244, 236, 0.94); border: 2px solid rgba(42, 29, 20, 0.5);
+    border-radius: 14px; padding: 18px 24px 20px; }
+  .g-plate .role { display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    font-family: var(--font-mono); font-weight: 700; font-size: 13px;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); }
+  .g-plate .role b { color: var(--accent); font-weight: 700; }
+  .g-plate .blank { margin-top: 12px; height: 34px;
+    border-bottom: 2px dashed rgba(42, 29, 20, 0.4); }
+  .g-plate .hint { display: block; margin-top: 9px; font-family: var(--font-body);
+    font-size: 16px; color: var(--text-muted); }
 
-  /* ── The one piece of type that has to survive a thumbnail ──────── */
-  .t-h { position: relative; z-index: 2; font-family: var(--font-display);
-    color: var(--wc-ink); margin: 10px 0 0; }
-  .t-h .a { display: block; font-weight: 900;
-    font-variation-settings: "opsz" 144, "SOFT" 0, "WONK" 1; font-size: 104px; line-height: 0.92;
-    letter-spacing: -0.035em; }
-  .t-h .b { display: block; font-weight: 600; font-style: italic;
-    font-variation-settings: "opsz" 144, "SOFT" 30, "WONK" 1; font-size: 202px;
-    line-height: 0.8; letter-spacing: -0.03em; color: var(--accent); margin-top: 6px; }
-
-  /* The site's own sentence, not a written-for-the-poster one. It has a
-     point of view, which is the thing a generated line never has. */
-  .t-lead { position: relative; z-index: 2; font-family: var(--font-body); font-weight: 400;
-    font-size: 24px; line-height: 1.45; color: var(--text-body);
-    max-width: 566px; margin: 28px 0 0; }
-
-  /* ── The printed data block, which is what a real ticket carries in
-        place of three little cards with icons in them. Ruled rows, mono
-        labels in a fixed column, values in the body face. ──────────── */
-  .t-data { position: relative; z-index: 2; margin-top: 30px;
-    background: rgba(248, 244, 236, 0.93); border: 1.5px solid rgba(42, 29, 20, 0.5);
-    border-radius: 12px; padding: 2px 22px; }
-  .t-row { display: flex; align-items: baseline; gap: 20px; padding: 13px 0;
-    border-bottom: 1px dashed rgba(42, 29, 20, 0.26); }
-  .t-row:last-child { border-bottom: none; }
-  .t-row .k { flex: none; width: 84px; font-family: var(--font-mono); font-weight: 700;
-    font-size: 13px; letter-spacing: var(--ls-label); text-transform: uppercase;
-    color: var(--text-muted); }
-  .t-row .v { font-family: var(--font-body); font-weight: 600; font-size: 22px;
-    line-height: 1.2; color: var(--wc-ink); }
-  .t-row .v em { font-style: normal; color: var(--accent); }
-  /* The name field. A WordCamp badge has your name on it, and the tickets
-     page says in as many words that you can correct the name on a ticket
-     or pass it on, so this is a real field and not a flourish. It rhymes
-     with the speaker pass's "Your talk here." on purpose: that one is a
-     big italic line with a pen icon, this one is a ruled field in a data
-     block, and the two objects are cousins. */
-  .t-row--name .v { flex: 1; }
-  .t-row--name .blank { display: block; height: 22px;
-    border-bottom: 2px dashed rgba(42, 29, 20, 0.38); }
-  .t-row .v small { display: block; font-weight: 400; font-size: 16px; color: var(--text-muted);
-    margin-top: 4px; }
-
-  /* ── The stub ───────────────────────────────────────────────────── */
-  .t-stub { position: relative; flex: 1; background: rgba(225, 165, 39, 0.20);
-    display: flex; flex-direction: column; align-items: center;
-    justify-content: center; padding: 38px 0 34px; overflow: hidden; }
+  /* ── The price. Stated, not sold. It is 200 rupees between the two
+        tiers, and dressing that up as a countdown would be the poster
+        lying about its own offer. The page's "priced low on purpose"
+        line finally has a number to stand on. ─────────────────────── */
+  .g-money { position: relative; z-index: 2; margin-top: 20px;
+    display: flex; align-items: flex-end; gap: 24px; }
+  .g-money .amt { font-family: var(--font-display); font-weight: 900; font-size: 80px;
+    line-height: 0.82; letter-spacing: -0.035em; color: var(--wc-ink);
+    font-optical-sizing: auto; font-variation-settings: "opsz" 144, "SOFT" 0, "WONK" 1; }
+  .g-money .col { padding-bottom: 7px; }
+  .g-money .t { display: block; font-family: var(--font-body); font-weight: 600;
+    font-size: 21px; line-height: 1.25; color: var(--wc-ink); }
+  .g-money .s { display: block; margin-top: 4px; font-family: var(--font-body);
+    font-size: 17px; line-height: 1.3; color: var(--text-muted); }
 
 
-  /* Bottom to top, so it reads with the head of the ticket. */
-  .t-date { writing-mode: vertical-rl; transform: rotate(180deg);
-    font-family: var(--font-display); font-variation-settings: "opsz" 96, "SOFT" 0, "WONK" 1; font-weight: 900; font-size: 62px;
-    letter-spacing: -0.02em; line-height: 1; color: var(--wc-ink); white-space: nowrap; }
-  .t-date em { font-style: normal; color: var(--accent); }
-  .t-year { writing-mode: vertical-rl; transform: rotate(180deg); margin-top: 20px;
-    font-family: var(--font-mono); font-weight: 700; font-size: 16px;
-    letter-spacing: 0.24em; text-transform: uppercase; color: var(--text-muted); white-space: nowrap; }
-  .t-datewrap { display: flex; align-items: center; }
+  /* ── The foot print, as small as it is on a real badge ──────────── */
+  .g-fine { position: relative; z-index: 2; margin-top: auto; margin-bottom: 20px;
+    display: flex; gap: 44px;
+    background: rgba(248, 244, 236, 0.93); border: 1.5px solid rgba(42, 29, 20, 0.42);
+    border-radius: 12px; padding: 15px 22px 17px; }
+  .g-fine div { display: flex; flex-direction: column; gap: 5px; }
+  .g-fine .k { font-family: var(--font-mono); font-weight: 700; font-size: 12px;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); }
+  .g-fine .v { font-family: var(--font-body); font-weight: 600; font-size: 18px;
+    color: var(--wc-ink); }
 
-  .t-stub .sn { margin-top: 0; font-family: var(--font-mono); font-weight: 700;
-    font-size: 13px; letter-spacing: 0.16em; color: var(--text-muted); }
-  /* The tag. WCBLR does not issue barcoded tickets, it hangs a tag round
-     your neck, so the stub is punched for a lanyard rather than printed
-     with a code. The slot is filled with the flat page colour, not a
-     tint, because a hole shows what is behind the tag and behind it is
-     the paper. The cord is two strokes crossing above the slot and
-     stopping at its mid height, so the slot's own fill hides their ends
-     and they read as threaded through rather than trailing past it. */
-  .t-slot { position: absolute; left: 50%; transform: translateX(-50%);
-    width: 84px; height: 20px; border-radius: 10px; background: var(--wc-paper);
-    border: 1.5px solid rgba(42, 29, 20, 0.42); z-index: 3; }
-  .t-cord { position: absolute; left: 50%; top: 0; transform: translateX(-50%); z-index: 2; }
-  .t-cord path { fill: none; stroke: var(--wc-gold-deep); stroke-width: 5; opacity: 0.55; }
-
-  /* The stub carried a small ticket glyph above the date. Cut: the whole
-     canvas is a ticket, so a picture of a ticket on it is the same mistake
-     as the corner object this poster was rebuilt to remove. */
-  .t-stub .foot { position: absolute; left: 0; right: 0; bottom: 34px; display: flex;
-    flex-direction: column; align-items: center; }
-
-  /* ── The band ───────────────────────────────────────────────────── */
   .banner .b-marquee { background: var(--wc-gold); color: var(--wc-espresso); padding: 17px 0;
     border-top: 2px solid var(--wc-espresso);
     font-family: var(--font-mono); font-weight: 700; font-size: 20px; letter-spacing: 0.08em;
@@ -183,72 +123,53 @@
 <body>
 <div class="banner wc-grain" data-download-name="WCBLR-2026-Tickets-Are-Live">
 
-  <div class="t">
-    <div class="t-body">
-      <img class="b-skyline" src="../assets/illustrations/hero-banner.png" alt="Bengaluru city banner" />
+  <svg class="g-cord" width="420" height="66" viewBox="0 0 420 66" aria-hidden="true">
+    <path d="M96 0 L204 66" />
+    <path d="M324 0 L216 66" />
+  </svg>
+  <span class="g-slot"></span>
 
-      <div class="t-head">
-        <span>
-          <span class="kn">ವರ್ಡ್‌ಕ್ಯಾಂಪ್ ಬೆಂಗಳೂರು</span>
-          <span class="tag">#WCBLR</span>
-        </span>
-      </div>
+  <div class="g-band">
+    <span class="kn">ವರ್ಡ್‌ಕ್ಯಾಂಪ್ ಬೆಂಗಳೂರು</span>
+    <span class="yr">#WCBLR &middot; 21&ndash;22 Nov 2026</span>
+  </div>
 
-      <span class="t-kick">// admit_one</span>
+  <div class="g-face">
+    <img class="b-skyline" src="../assets/illustrations/hero-banner.png" alt="Bengaluru city banner" />
 
-      <h1 class="t-h">
-        <span class="a">Tickets are</span>
-        <span class="b">live.</span>
-      </h1>
+    <span class="g-kick">// early_bird</span>
 
-      <p class="t-lead">
-        Priced low on purpose, because this is a community event and not a conference business.
-      </p>
+    <h1 class="g-h">
+      <span class="a">Tickets are</span>
+      <span class="b">live.</span>
+    </h1>
 
-      <div class="t-data">
-        <div class="t-row t-row--name">
-          <span class="k">Name</span>
-          <span class="v"><span class="blank"></span></span>
-        </div>
-        <div class="t-row">
-          <span class="k">Tier</span>
-          <span class="v"><em>Early Bird</em>, on sale now
-            <small>A fixed batch. Ends 17 Sep, or when it runs out.</small></span>
-        </div>
-        <div class="t-row">
-          <span class="k">Sat 21</span>
-          <span class="v">Contributor Day
-            <small>Venue announced soon</small></span>
-        </div>
-        <div class="t-row">
-          <span class="k">Sun 22</span>
-          <span class="v">Main event
-            <small>SJBHS, Museum Road</small></span>
-        </div>
-      </div>
+    <div class="g-plate">
+      <span class="role"><span>Attendee</span><b>Admit one</b></span>
+      <div class="blank"></div>
+      <span class="hint">Your name goes here. That is what buying one gets you.</span>
     </div>
 
-    <div class="t-stub">
-      <svg class="t-cord" width="118" height="54" viewBox="0 0 118 54" aria-hidden="true">
-        <path d="M33.0 0 L70.0 44" />
-        <path d="M85.0 0 L48.0 44" />
-      </svg>
-      <span class="t-slot" style="top: 34px;"></span>
+    <div class="g-money">
+      <span class="amt">&#8377;600</span>
+      <span class="col">
+        <span class="t">Early Bird, until 17 Sep</span>
+        <span class="s">&#8377;800 after that. Both cover the full weekend.</span>
+      </span>
+    </div>
 
-      <div class="t-datewrap">
-        <span class="t-date">21&ndash;22 Nov</span>
-        <span class="t-year">2026 &middot; Covers both days</span>
+
+    <div class="g-fine">
+      <div>
+        <span class="k">Sat 21</span>
+        <span class="v">Contributor Day, venue soon</span>
       </div>
-
-      <div class="foot">
-        <span class="sn">No. 0001</span>
+      <div>
+        <span class="k">Sun 22</span>
+        <span class="v">Main event, SJBHS Museum Road</span>
       </div>
     </div>
   </div>
-
-  <div class="t-perf"></div>
-  <div class="t-punch top"></div>
-  <div class="t-punch bot"></div>
 
   <div class="b-marquee">
     <div class="seg">

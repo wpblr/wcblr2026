@@ -317,53 +317,31 @@ button says so rather than failing quietly.
 
 - **Tickets Are Live** (1080×1080), **Tickets Are Live - Instagram** (1080×1350)
   and **Tickets Are Live - Featured** (1200×630), for the Early Bird launch at
-  `bengaluru.wordcamp.org/2026/tickets`. Early Bird opened Fri 14 Aug 2026 and ends
-  Thu 17 Sep, or when the batch sells out.
+  `bengaluru.wordcamp.org/2026/tickets`.
 
-  The canvas is the ticket: full bleed, perforated down the right, body on the left,
-  stub on the right, punched at both ends of the tear. There is no object in the
-  top-right corner because the poster is the object. The first version of this pair
-  followed the kit's usual spine and put a small drawing of a ticket in the corner of
-  a poster about tickets, which read as the template with the words swapped. When the
-  subject of a banner is a physical object, consider making the canvas that object.
+  The canvas is the attendee badge: lanyard slot with the cord running off the top
+  edge, a gold band across the head, a big blank where a name goes, the role, and the
+  details in small print at the foot. The blank is the poster's whole argument, since
+  buying a ticket is how your name gets printed on one. Two earlier versions are worth
+  knowing about: the kit's usual spine with a ticket drawn in the corner, which read as
+  a template with the words swapped, and the canvas as a perforated ticket, whose
+  tear-off stub turned the right third of every canvas into a near-empty column.
 
-  This is also the first campaign cut in three sizes. **Instagram's profile grid is
-  3:4, and it crops a 1080×1080 post to 74.6% of its width, 137px off each side.**
-  That is wider than the kit's 72px gutter, so it takes the first letter of the
-  headline with it. A 1080×1350 loses only 34px a side, which lands inside the gutter
-  and touches no ink. Post the 4:5 to Instagram; the square is still correct for
-  LinkedIn, X and WhatsApp, none of which crop it. Keep every piece of ink at least
-  40px from the left and right edges of any new 4:5 and the grid cannot clip it.
+  Early Bird is ₹600, regular ₹800 from 18 Sep. That is ₹200, so the set carries no
+  countdown and no "going fast" language; the number is there to support the tickets
+  page's own "priced low on purpose" line, which needs one.
 
+  The type is the live site's. `tokens/fonts.css` substitutes Playfair Display and
+  Space Mono on the grounds the real fonts "were not provided", but the theme's own
+  stylesheet uses Fraunces, Hanken Grotesk and JetBrains Mono and no Playfair or Space
+  Mono anywhere. These three override display and mono locally, Fraunces with WONK at 1
+  and opsz at 144. The rest of the kit is still on the substitutes.
 
-
-  The type is the live site's, not the kit's. `tokens/fonts.css` substitutes Playfair
-  Display and Space Mono on the grounds that the real fonts "were not provided", but
-  the theme's own stylesheet uses Fraunces, Hanken Grotesk and JetBrains Mono and no
-  Playfair or Space Mono anywhere. These three banners override the display and mono
-  families locally to match, with Fraunces' WONK axis at 1 and opsz at 144. The rest
-  of the kit is still on the substitutes and is off-brand against the site; correcting
-  the shared tokens re-typesets every posted banner, so it wants its own pass.
-
-
-  The stub is a tag, not a barcoded receipt: WCBLR hands out a lanyard tag and a card,
-  so the stub is punched for a lanyard, with the cord stopping at the slot's mid height
-  so the slot's fill hides its ends. The data block is the card and opens with the name
-  field, which is a real field: the tickets page says you can correct the name on a
-  ticket or pass it on.
-
-  The date appears once, on the stub, not also as a WHEN row in the body. The two days
-  are separate rows because they are separate days: SJBHS is the Sunday venue, and
-  Saturday is Contributor Day with its venue still unannounced. A single WHERE row
-  saying SJBHS was wrong. These rows mirror the tickets page's own essentials block, so
-  re-read that block before editing them.
-
-  Watch out when editing: the engraving lives inside the body panel and is clipped by
-  its `overflow: hidden` so it stops at the perforation, which is deliberate. The
-  punches are drawn in the sunk paper tone, not the page colour, because a full-bleed
-  ticket has no outside for a notch to show through. The perforation and the bottom
-  punch stop above the gold marquee, or the tear crosses the band and the object stops
-  reading. The featured body is two columns rather than a stack, because stacked it
-  leaves the engraving a 70px sliver on a 630px canvas.
+  Watch out when editing: the lanyard cord must end at the slot's mid height or the
+  straps cross below it and print a dark chevron under the hole; the slot is filled
+  with flat paper because a hole shows the page behind; the head band is gold, not
+  espresso, since the one dark surface belongs to the press credential; the foot print
+  needs its own parchment plate or it vanishes into the engraving; and the featured has
+  no lanyard, because a landscape badge on a cord is a badge lying down.
 
 - **Community Poll** (1080×1080), a ballot asking where your WordPress time goes.
