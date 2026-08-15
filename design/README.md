@@ -327,9 +327,12 @@ button says so rather than failing quietly.
   a template with the words swapped, and the canvas as a perforated ticket, whose
   tear-off stub turned the right third of every canvas into a near-empty column.
 
-  Early Bird is ₹600, regular ₹800 from 18 Sep. That is ₹200, so the set carries no
-  countdown and no "going fast" language; the number is there to support the tickets
-  page's own "priced low on purpose" line, which needs one.
+  Early Bird is ₹600 and regular is ₹800. That is ₹200, so the set carries no countdown
+  and no "going fast" language. It says "first come first served" and deliberately not a
+  date: the cutoff is 17 Sep or sold out, whichever lands first, and printing the date
+  promises the later of the two, which is wrong every day in between and goes stale on an
+  asset nobody re-renders. Do not put the date back. The number is there to support the
+  tickets page's own "priced low on purpose" line, which needs one.
 
   The type is the live site's. `tokens/fonts.css` substitutes Playfair Display and
   Space Mono on the grounds the real fonts "were not provided", but the theme's own
