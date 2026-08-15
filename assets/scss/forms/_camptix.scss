@@ -1535,13 +1535,81 @@ main:has(.tix-order-summary) .wcblr-tix-assure {
 	display: grid;
 }
 
-/* ---- The header ---------------------------------------------------------- */
+/* ---- The header ----------------------------------------------------------
+   The title is the event name, and it stays the event name: the post title and
+   the "Last updated" line are hidden on every `tix_action` screen, so without
+   it the largest thing on a payment screen would be CampTix's own "Order
+   Summary". But the site masthead says "WordCamp Bengaluru 2026" about 100px
+   above it, so the name alone at 38px is a bigger copy of something already on
+   screen, and under it was a single run-on sentence carrying two unrelated
+   facts and wrapping onto a second line.
+
+   So the name stops being a heading with a sentence under it and becomes the
+   head of a document: a rule under the title, then the facts as labelled rows.
+   That is the same label-over-value idiom the tickets page uses for its
+   essentials strip and its ticket stub, so the screen somebody lands on after
+   clicking Register is typeset like the screen they clicked it from.        */
 .wcblr-tix-head {
 	margin-bottom: 0;
 }
 .wcblr-tix-head-title {
 	font-family: Fraunces, Georgia, serif;
 	color: #2a1d14;
+}
+
+/* Two columns from four sibling paragraphs. `max-content` sizes the label
+   column to the longer of the two labels and leaves the rest to the values, so
+   nothing has to be measured or hard-coded, and a third row can be added by
+   pasting two more paragraphs.
+
+   The rule belongs to the title above it, not to the rows: it is what turns a
+   heading into a masthead. Same #ddd9d2 hairline the rest of the site uses. */
+.wcblr-tix-head-facts {
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	gap: 9px 22px;
+	margin-top: 16px;
+	padding-top: 16px;
+	border-top: 1px solid #ddd9d2;
+}
+
+/* Core's flow layout emits a `wp-container-*` blockGap rule for each child and
+   it outranks a plain class. The spacing here is the grid's. */
+.wcblr-tix-head-facts > * {
+	margin: 0 !important;
+}
+
+.wcblr-tix-head-fact-label {
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 1.32px;
+	text-transform: uppercase;
+	color: #a8760f;
+	/* The label is 11px against a 16px value, so it needs nudging onto the
+	   value's cap height rather than sitting on the row's top edge. */
+	line-height: 24px;
+}
+
+.wcblr-tix-head-fact-value {
+	font-size: 16px;
+	line-height: 24px;
+	color: #2a1d14;
+}
+
+/* Stacked, `max-content` on a 340px screen would give the venue what is left of
+   the row after "MAIN EVENT" and break it over three lines. Label over value
+   instead, which is how the same facts set on a phone everywhere else. */
+@media (max-width: 560px) {
+	.wcblr-tix-head-facts {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 2px;
+	}
+	.wcblr-tix-head-fact-label {
+		line-height: 18px;
+	}
+	.wcblr-tix-head-fact-label:nth-child(n + 3) {
+		margin-top: 12px !important;
+	}
 }
 
 /* ---- The steps -----------------------------------------------------------
