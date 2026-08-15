@@ -1958,19 +1958,15 @@ main:has(.tix-order-summary) .wcblr-tix-back {
    you can find yourself in it, which is the entire reason a tickets page runs a
    crowd shot. */
 
-/* 2:1, not the 3.2:1 band the illustration used and not the source's own 3:2.
-   3.2 is a letterbox that takes the back rows' heads off; 3:2 at 1,100px is a
-   733px-tall block that pushes the facts strip off the bottom of the screen.
-   At 2:1 the crop keeps 1,280 of the source's 1,707 rows, leaving 427 rows of
-   travel to place the window with.
+/* 2:1, and the source is 1600x772, which is 2.07:1. That is deliberate: the
+   picture is chosen to fit the band rather than the band tuned to crop the
+   picture. `cover` takes 28px off each side and nothing off the top or bottom,
+   so there is no vertical window to place and `object-position` has nothing to
+   do. It stays at the default.
 
-   `70%`, and it was chosen by cutting all three candidates out of the file and
-   looking at them rather than by picking a number. At 42% the crowd is pressed
-   into the bottom half of the band under a third of a frame of tree canopy. At
-   100% the front row loses its feet and the bottom of the band is empty paving.
-   70% fills the frame with people, head to foot, and keeps just enough of the
-   greenery for the picture to read as somewhere rather than as a wall of
-   faces. */
+   An earlier build ran the 2023 courtyard photograph here at `center 70%`, with
+   a long note about which rows of it the window kept. All of that went with the
+   photograph; see the shot block below for why it was the wrong picture. */
 .wcblr-tix-shot {
 	margin: 44px 0 0 !important;
 }
@@ -1980,7 +1976,6 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	width: 100%;
 	aspect-ratio: 2 / 1;
 	object-fit: cover;
-	object-position: center 70%;
 	border: 1.5px solid #dad5cd;
 	border-radius: 16px;
 }
@@ -1995,14 +1990,18 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	color: #7a6757;
 }
 
-/* On a phone a 2:1 band is 190px tall and four hundred people in it are a
-   texture. Squarer, so the faces survive the width. */
+/* No ratio at all on a phone, which is the opposite of what this said while the
+   3:2 courtyard photograph was here. That one was squarer than the band, so
+   4:3 on mobile CROPPED LESS. This one is a 2.07:1 panorama of a stage, so 4:3
+   would throw away a third of its width and take the people at both ends of the
+   row with it. Native is 188px tall at 390px wide, which is short, but a
+   panorama is short and everyone in it stays in it. */
 @media (max-width: 781px) {
 	.wcblr-tix-shot {
 		margin-top: 32px !important;
 	}
 	.wcblr-tix-shot img {
-		aspect-ratio: 4 / 3;
+		aspect-ratio: auto;
 	}
 }
 
