@@ -501,68 +501,96 @@ body.home .wcblr-hero-banner .wcblr-skyline img {
    the five full-width hairlines could not do, and four of them do not build a
    ladder because they never reach the next item. */
 body.home .wcblr-facts {
+	/* ONE OBJECT, NOT FOUR.
+	   These were four label/rule/paragraph blocks stacked with 30px of air
+	   between them, each label carrying its own 28px gold stub. The stubs were
+	   meant to anchor an item rather than separate two, and four of them read as
+	   scattered tick marks with nothing holding the set together, which is what
+	   made the column feel both plain and slightly odd next to the framed
+	   photograph opposite. The copy also sat on bare cream, which is the one
+	   thing the page's own prose audit says a run of body text should not do.
+
+	   It is a two-column ruled list now. The label column is a spine the four
+	   rows hang off, which is what ties them together, so the stubs are gone,
+	   and the dashed rules separate rather than anchor, which is the job that
+	   actually needed doing here.
+
+	   NO SURFACE, and that was a real decision. A lifted card was tried and
+	   rendered; it works, but the by_the_numbers row directly below is already
+	   four cards, so it put two card blocks back to back, and boxing the list
+	   pulls its left edge off the headline and the lead above it and narrows
+	   the measure enough to push every answer onto an extra line. Flat keeps
+	   one left edge running down the whole column.
+
+	   NOT a vertical rule between the columns either. Horizontal rules plus a
+	   vertical one is a spreadsheet, which is the note layout/footer already
+	   carries about its own columns. */
 	display: grid;
-	row-gap: 30px;
-	margin-top: 4px;
+	row-gap: 0;
+	margin-top: 22px;
 }
 
 body.home .wcblr-fact > * {
 	margin: 0 !important;
 }
 
-/* The label carries the rule, so the two can never drift apart. */
-body.home .wcblr-fact__label {
-	position: relative;
-	padding-bottom: 11px;
-	color: #a8760f !important;
+/* Label left, answer right. 128px holds "WHAT'S IN STORE", the longest of the
+   four, on one line at 11px/1.32px tracking. Check that before editing a label:
+   a wrapped label breaks the baseline alignment the whole list depends on. */
+body.home .wcblr-fact {
+	display: grid;
+	grid-template-columns: 128px 1fr;
+	column-gap: 24px;
+	align-items: baseline;
+	padding: 19px 0;
+	border-bottom: 1px dashed rgba(42, 29, 20, 0.16);
 }
 
+body.home .wcblr-fact:last-child {
+	border-bottom: none;
+}
+
+body.home .wcblr-fact__label {
+	color: #a8760f !important;
+	padding-bottom: 0;
+	transition: color 0.2s ease;
+}
+
+/* The stub is gone with the layout that needed it. */
 body.home .wcblr-fact__label::after {
-	content: "";
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	width: 28px;
-	height: 2px;
-	background: #a8760f;
-	transition:
-		width 0.28s cubic-bezier(0.2, 0.6, 0.2, 1),
-		background-color 0.2s ease;
+	content: none;
 }
 
 /* 17px and #453729, against 16px and #7a6757. The size is what stops it
    reading as a caption and the colour is what stops it reading as an aside;
-   #453729 is 9.4:1 on the page cream where the old brown was 4.6. */
+   #453729 is 9.4:1 on the page cream where the old brown was 4.6. It clears
+   that on #fcfaf6 too, which is lighter than the cream it was measured on. */
 body.home .wcblr-fact__body {
 	font-size: 17px !important;
 	line-height: 1.6 !important;
 	color: #453729 !important;
-	margin-top: 9px !important;
+	margin-top: 0 !important;
 	transition: color 0.2s ease;
 }
 
-body.home .wcblr-fact__label {
-	transition: color 0.2s ease;
+/* Stacked under 700px. The answers run three lines at that width, and a 128px
+   label column beside a 3-line paragraph leaves the label stranded at the top
+   of a tall empty cell. */
+@media (max-width: 700px) {
+	body.home .wcblr-fact {
+		grid-template-columns: 1fr;
+		row-gap: 7px;
+		padding: 17px 0;
+	}
 }
 
 @media (hover: hover) and (pointer: fine) {
-	/* The rule draws itself out to twice its length. It is the one moving part
-	   and it moves along its own axis, so nothing reflows and nothing else on
-	   the item has to shift to make room: `width` on an absolutely positioned
-	   2px bar cannot push a single character. */
-	body.home .wcblr-fact:hover .wcblr-fact__label::after {
-		width: 56px;
-		background: #2a1d14;
-	}
-
-	/* Darker, not brighter. Gold on cream is 3.4:1, which is why the design
-	   system only allows it on small mono labels; espresso is 12:1. The moment
-	   a reader is looking straight at the label is the moment it should be
-	   easiest to read. */
-	body.home .wcblr-fact:hover .wcblr-fact__label {
-		color: #2a1d14 !important;
-	}
-
+	/* The row was the hover target before and stays it, but the response is a
+	   colour shift alone now. Gold on the page cream is 3.4:1, which the design
+	   system only allows on small mono labels; espresso is 12:1, so the moment
+	   a reader is looking straight at a row is the moment it is easiest to
+	   read. Darker, not brighter. */
+	body.home .wcblr-fact:hover .wcblr-fact__label,
 	body.home .wcblr-fact:hover .wcblr-fact__body {
 		color: #2a1d14 !important;
 	}
