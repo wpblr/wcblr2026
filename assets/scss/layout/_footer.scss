@@ -26,7 +26,12 @@ footer {
 		font-size: clamp(160px, 26vw, 360px);
 		line-height: 0.8;
 		color: transparent;
-		-webkit-text-stroke: 1.5px rgba(42, 29, 20, 0.06);
+		/* Back to 0.05, below where it started. It was pushed to 0.09 on the
+		   argument that 0.06 reads as a smudge rather than a device, and that
+		   was the wrong call: at 9 it competes with the legal line sitting on
+		   top of it instead of staying under it. A watermark you notice is not
+		   a watermark. */
+		-webkit-text-stroke: 1.5px rgba(42, 29, 20, 0.05);
 		z-index: 0;
 		pointer-events: none;
 		user-select: none;
@@ -40,6 +45,10 @@ footer {
 			left: initial !important;
 			bottom: 8px !important;
 			right: 0 !important;
+			/* Fainter again on a phone. Stacked, the columns run full width
+			   and the numerals land directly behind the legal line rather than
+			   beside a column, so the same alpha reads heavier here. */
+			-webkit-text-stroke-color: rgba(42, 29, 20, 0.035) !important;
 		}
 	}
 
@@ -80,20 +89,113 @@ footer {
 		}
 	}
 
-	/* ---- Social icons -------------------------------------------------- */
-	/* The is-style-logos-only variant draws each glyph in currentColor, which
-	   would otherwise inherit the near-black body colour and sit heavier than
-	   every link around it. Tone them to the muted footer text and let them
-	   take the site red on hover, same as the nav links do.
-	   Core already animates a scale on hover, so only colour is touched here. */
+	/* ---- The lockup, same object as the header's ------------------------
+	   The footer had its own arrangement: a 40px mark, 19px title, and no rule
+	   between them, against the header's 56/20 with one. Two lockups for one
+	   brand, 3,000px apart. It is the header's now at 48px, which is the size
+	   that suits a footer without restating the masthead, and it carries the
+	   same #ddd9d2 hairline, so the site has ONE lockup that appears twice. */
+	.wcblr-footer-lockup {
+		align-items: stretch;
+	}
+
+	.wcblr-footer-lockup > .wp-block-group {
+		padding-left: 13px;
+		border-left: 1px solid #ddd9d2;
+	}
+
+	.wcblr-footer-lockup .wp-block-site-logo,
+	.wcblr-footer-lockup .wp-block-site-logo a,
+	.wcblr-footer-lockup .wp-block-site-logo img {
+		display: flex;
+		align-items: center;
+		margin: 0;
+	}
+
+	/* ---- Identity, then navigation --------------------------------------
+	   The brand block was column one of four, which said it was one more list
+	   among three. It is not: it is who this is, and the other three are where
+	   to go. One vertical rule after it draws that division, and it is the same
+	   device as the rule inside the lockup and the one under the checkout
+	   heading, so the site separates things one way rather than three.
+
+	   One rule, not three. A rule between every column turns a footer into a
+	   spreadsheet; the only division that carries meaning is this one. */
+	@media (min-width: 782px) {
+		.wcblr-footer-brand {
+			padding-right: 40px;
+			border-right: 1px solid #e0d9cc;
+		}
+	}
+
+	/* ---- The legal line -------------------------------------------------
+	   It sat 42px below the columns with nothing holding it, so it read as a
+	   line that had drifted off the bottom. A hairline above makes it the
+	   footer's own footer. */
+	.wcblr-footer-legal {
+		padding-top: 22px;
+		border-top: 1px solid #e0d9cc;
+	}
+
+	/* ---- Social icons ---------------------------------------------------
+	   In their own colours. These were a uniform #7a6757, which is correct for
+	   a row of text links and wrong for a row of logos: a logo's colour IS how
+	   it is recognised, and four identical brown glyphs make the reader stop
+	   and identify each one. Same reasoning as the WhatsApp button in the
+	   header.
+
+	   `is-style-logos-only` draws each glyph in `currentColor`, so this is a
+	   colour per service and nothing else.
+
+	   The four values are LIFTED FROM `content/_guide.scss`, which already
+	   brand-colours the same four for the `wcblr-follow` row. They were picked
+	   there and they stay there: two sets of "the WhatsApp green" for one site
+	   is how a palette starts drifting. If these ever change, change both. All
+	   four clear 3:1 on the footer's #f3eee2, which is the floor for a
+	   meaningful icon. */
 	.wcblr-social .wp-block-social-link,
 	.wcblr-social .wp-block-social-link-anchor {
 		color: #7a6757 !important;
-		transition: color 0.15s;
+		transition:
+			color 0.18s ease,
+			transform 0.18s cubic-bezier(0.2, 0.6, 0.2, 1);
 	}
 
-	.wcblr-social .wp-block-social-link:hover,
-	.wcblr-social .wp-block-social-link:hover .wp-block-social-link-anchor {
-		color: #c8344b !important;
+	.wcblr-social .wp-social-link-meetup,
+	.wcblr-social .wp-social-link-meetup .wp-block-social-link-anchor {
+		color: #ed1c40 !important;
+	}
+
+	.wcblr-social .wp-social-link-linkedin,
+	.wcblr-social .wp-social-link-linkedin .wp-block-social-link-anchor {
+		color: #0a66c2 !important;
+	}
+
+	.wcblr-social .wp-social-link-x,
+	.wcblr-social .wp-social-link-x .wp-block-social-link-anchor {
+		color: #000000 !important;
+	}
+
+	.wcblr-social .wp-social-link-instagram,
+	.wcblr-social .wp-social-link-instagram .wp-block-social-link-anchor {
+		color: #e4405f !important;
+	}
+
+	/* The old hover turned every glyph crimson, which would now throw away the
+	   colour that was the point of the change. They lift instead, so the
+	   response is motion rather than a repaint. Gated, so a tap on a phone does
+	   not leave one sitting raised. */
+	@media (hover: hover) and (pointer: fine) {
+		@media (prefers-reduced-motion: no-preference) {
+			.wcblr-social .wp-block-social-link:hover {
+				transform: translateY(-3px);
+			}
+		}
+	}
+
+	.wcblr-social .wp-block-social-link:focus-within {
+		outline: 2px solid #2a1d14;
+		outline-offset: 3px;
+		border-radius: 50%;
 	}
 }
