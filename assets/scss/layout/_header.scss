@@ -304,6 +304,60 @@
 		text-decoration: none !important;
 	}
 
+	/* ---- The lockup -----------------------------------------------------
+	   The mark went from 40px to 56px because at 40 the seal is a detailed
+	   circular badge with "#WCBLR" lettering inside it, and that lettering was
+	   illegible mush: a busy mark needs size or it reads as noise beside the
+	   wordmark.
+
+	   With the size came a rule between the mark and the type. Without it the
+	   two are just an image sitting next to some words; with it they are a
+	   masthead. It is the same device and the same #ddd9d2 hairline that turns
+	   the checkout screen's heading into a masthead in `forms/_camptix.scss`,
+	   so the site now has one lockup idiom rather than two arrangements. */
+	.wcblr-site-logo > .wp-block-group {
+		padding-left: 14px;
+		border-left: 1px solid #ddd9d2;
+	}
+
+	/* The mark is 56x42 and the two lines of type come to about 40, so they
+	   are already within a couple of pixels. Stretching rather than centring
+	   makes the rule span the whole lockup instead of floating inside it. */
+	.wcblr-site-logo {
+		align-items: stretch;
+	}
+
+	.wcblr-site-logo .wp-block-site-logo,
+	.wcblr-site-logo .wp-block-site-logo a,
+	.wcblr-site-logo .wp-block-site-logo img {
+		display: flex;
+		align-items: center;
+		margin: 0;
+	}
+
+	/* THE GAP, and it has to be reserved rather than left over. The row is
+	   `justify-content: space-between`, so the space between the lockup and the
+	   nav is whatever is left after both are laid out: measured on the live
+	   header it was 54px, and growing the mark by 16px took it straight to 29,
+	   which is what "the links are too close to the logo" is. Space-between
+	   gives the gap away first.
+
+	   A right padding on the lockup is space that belongs to the lockup, so it
+	   cannot be redistributed. 48px is the floor; anything left over still
+	   lands between the two and makes it wider, never narrower. */
+	.wcblr-site-logo {
+		box-sizing: border-box;
+	}
+
+	/* Only while the header is a single row. Below 1,039px it becomes a column
+	   and the lockup has nothing beside it to hold off, so 48px there is just
+	   a phone losing 48px of a 380px row. */
+	@media (min-width: 1040px) {
+		.wcblr-site-logo {
+			padding-right: 48px;
+		}
+	}
+
 	.wp-block-buttons .wp-block-button .wp-block-button__link {
 		word-break: keep-all !important;
 	}
@@ -327,9 +381,11 @@
 	   of this traffic is, so hiding it takes the primary action off the screen
 	   for the majority of readers. The secondary one still goes. */
 	@media (max-width: 480px) {
-		.wcblr-wa-btn {
-			display: none !important;
-		}
+		/* The community button used to be hidden here too, back when it was a
+		   236px labelled control competing with the ticket CTA for a 380px
+		   row. As a 42px glyph it costs almost nothing and it is the one link
+		   on this site people are most likely to want from a phone, so it
+		   stays. */
 
 		/* The safety valve. The header row is `nowrap` everywhere else, so if
 		   the lockup, the hamburger and the button do not fit on one line they
@@ -426,22 +482,42 @@
 		flex: none;
 	}
 
-	/* The glyph is an <img> in the header markup, pointing at
-	   assets/icons/whatsapp-dark.svg in this repo, because that is the only
-	   thing that works here: WordCamp's Remote CSS sanitiser strips url() out
-	   of every declaration it passes, data URIs included. That is also why the
-	   background-image rules in content/cfs-icons never paint anything, and
-	   why those blocks carry their own <img> too.
+	/* ---- The community button ------------------------------------------
+	   WhatsApp green, and glyph only. Both of those are the same decision.
 
-	   `-dark` and that is not a detail. The original whatsapp.svg is
-	   `fill="#ffffff"`, which was correct while the button was a red fill and
-	   is invisible on an outlined one. Demoting the button without swapping
-	   the file leaves a button that looks like it has a rendering fault. */
+	   The green is the point: this is the one control on the site that leads
+	   somewhere people already know, and the brand colour is what makes it
+	   recognisable at a glance in a way "Join WhatsApp Community" in the site's
+	   own palette never was. #128C7E rather than the brighter #25D366, because
+	   the glyph is white and white on #25D366 is about 2.4:1, under the 3:1
+	   that a meaningful icon needs. #128C7E is the same brand family and takes
+	   white to roughly 4.5:1.
+
+	   Glyph only, because the header ran out of room. Measured: lockup 333 +
+	   nav 441 + a labelled pair 378 is 1,152 in a row that caps at 1,200, and
+	   the 48px the lockup now reserves leaves nothing between the nav and the
+	   buttons. Dropping the label takes the button from 236px to about 42 and
+	   the whole problem with it, so there is no longer any width at which
+	   something has to be hidden.
+
+	   It is not a loss of meaning. The accessible name is on the img's `alt`,
+	   which lives inside the button block's own `text` attribute and so
+	   survives validation, and the same link is spelled out in full in the
+	   footer of every page.
+
+	   The glyph is an <img> rather than a background, because WordCamp's
+	   Remote CSS sanitiser strips url() out of every declaration it passes,
+	   data URIs included. It is back to the white `whatsapp.svg`: the espresso
+	   `-dark` variant was for the outlined version this replaces. */
 	.wcblr-wa-btn .wp-block-button__link {
 		display: inline-flex;
 		align-items: center;
-		gap: 8px;
+		justify-content: center;
 		white-space: nowrap;
+	}
+
+	.wcblr-wa-btn .wp-block-button__link img {
+		display: block;
 	}
 
 	.wcblr-tix-btn .wp-block-button__link {
@@ -480,17 +556,13 @@
 			box-shadow: 0 4px 14px rgba(200, 52, 75, 0.32);
 		}
 
-		/* Secondary. The cream-page convention is to fill espresso and flip
-		   the text to cream, and it cannot be used here: the glyph is an
-		   `<img>` of whatsapp-dark.svg at `fill="#2a1d14"`, and CSS cannot
-		   swap an img's source, so an espresso fill would swallow it exactly
-		   the way the white one vanished on the outline. The button firms up
-		   instead. The border goes to full espresso and the fill takes a 5 per
-		   cent wash of it, which is a clear response and keeps every part of
-		   the button legible. */
+		/* Secondary. The same halo as the primary, in its own colour, so the
+		   two answer the pointer in one language and only the hue says which
+		   is which. A green wash would be invisible under a green button and
+		   darkening the fill would take the white glyph's contrast down with
+		   it, so the response goes outside the button rather than inside. */
 		.wcblr-wa-btn .wp-block-button__link:hover {
-			background-color: rgba(42, 29, 20, 0.05) !important;
-			border-color: #2a1d14 !important;
+			box-shadow: 0 4px 14px rgba(18, 140, 126, 0.36);
 		}
 	}
 
@@ -499,8 +571,7 @@
 	}
 
 	.wcblr-wa-btn .wp-block-button__link:focus-visible {
-		background-color: rgba(42, 29, 20, 0.05) !important;
-		border-color: #2a1d14 !important;
+		box-shadow: 0 4px 14px rgba(18, 140, 126, 0.36);
 	}
 
 	/* One ring for both, drawn outside the button so it never sits on the
@@ -569,33 +640,13 @@
 		}
 	}
 
-	/* The second button costs 142px (132 plus the 10px gap) and there is not
-	   always 142px to spend. Measured on the live header rather than estimated:
-	   logo 309 + nav 441 + both buttons 378 = 1,128px of content, in a row that
-	   caps at 1,200 with 50px of root padding each side. So the pair fits while
-	   `viewport - 100 >= 1,128`, which is about 1,250px, and below that the row
-	   overflows because `wcblr-header_right` is `flex-wrap: nowrap` and nothing
-	   can wrap.
+	/* There is no width at which either button has to be hidden any more, and
+	   the rule that used to do it has gone with the label. It hid the
+	   community button between 1,040px and 1,300px, which was the window where
+	   a labelled 236px button plus the enlarged lockup overflowed a 1,200px
+	   row. At 42px it fits everywhere the header is a single row, and below
+	   1,039px the header is a column and has the width back regardless. */
 
-	   Only that band needs fixing. At 1,039px the rule above already turns the
-	   header into a column, and once the logo has its own line the nav and the
-	   buttons have the full width again. So this is a window, not a ceiling:
-	   between the point where the column layout takes over and the point where
-	   both buttons fit on one line, the SECONDARY button steps aside. The
-	   ticket button never does. It is the reason the pair exists, and the
-	   community link is still in the footer of every page and in the home hero.
-
-	   Dropped outright rather than collapsed to its glyph, which was the first
-	   attempt: hiding the label with `font-size: 0` leaves a control whose only
-	   remaining content is an `alt=""` image, so it has no accessible name at
-	   all, and `core/button` has no `aria-label` attribute to give it one back
-	   without failing block validation. A button nobody can name is worse than
-	   a button that is not there. */
-	@media (min-width: 1040px) and (max-width: 1250px) {
-		.wcblr-wa-btn {
-			display: none;
-		}
-	}
 }
 
 /* The two beats still take about 1.5s, the same speed they always did. What
