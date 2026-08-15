@@ -256,6 +256,35 @@
 	color: #C8344B;
 }
 
+/* ---- Fallback: a question that came back as plain text, not a link -------- */
+/* Everything above assumes CampTix renders these questions as anchors, which is
+   what it does on the 2025 site. Whether it does depends on the question's TYPE
+   in Tickets -> Questions, and a plain text field yields a <div> instead, which
+   none of the chip rules match. Left alone that prints a raw 40-character URL
+   across the card at the browser's default size.
+
+   So the div form gets a quiet treatment of its own: small, muted, mono,
+   truncated. It is not as good as a chip and it is not meant to be. It is the
+   difference between a card that looks a bit plain and a card that is broken,
+   and it costs four declarations.
+
+   text-overflow is the one property here with no precedent in the served CSS,
+   so treat the ellipsis as a bonus. The containment is done by overflow and
+   white-space, which are both proven; without it the text is cut rather than
+   dotted, and nothing overflows either way. */
+.wcblr-attendees #tix-attendees .tix-attendee-list div.tix-field:not(.tix-attendee-name) {
+	flex: 0 0 100%;
+	max-width: 100%;
+	margin-top: 10px;
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 12px;
+	line-height: 1.4;
+	color: #7a6757;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 /* The shortcode prints a `<br class="tix-clear">` after the list to clear its
    own floats. There are no floats left, so it is 0 tall and harmless, but it
    still counts as a child and puts a line box under the grid. */
