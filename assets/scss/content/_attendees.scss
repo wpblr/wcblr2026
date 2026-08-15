@@ -29,17 +29,28 @@
 .wcblr-attendees #tix-attendees .tix-attendee-list {
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: 20px;
+	gap: 24px;
 	margin: 0;
 	padding: 0;
 	list-style: none;
 }
 
-/* The li becomes the house card: same #FBF8F1 on 1.5px #dad5cd at radius 16 as
-   the organizer cards, the FAQ rows and every other surface on the site. There
-   is deliberately no hover lift. An organizer card is a link to a profile and
-   earns one; an attendee card goes nowhere, and a surface that rises under the
-   pointer while refusing the click is worse than one that sits still. */
+/* The li becomes the house card: same #FBF8F1 on 1.5px #dad5cd as the organizer
+   cards, the FAQ rows and every other surface on the site.
+
+   This card holds a face and a name and nothing else, so all of the generosity
+   has to go into those two things: the photograph is the largest it can be
+   without the row turning into a poster, and the padding is deliberately looser
+   than the organizer card's, which is carrying a bio and a social row in the
+   same width. Somebody paid to be on this page. It should not read as a table.
+
+   The radius is 18 rather than the house 16, a deliberate half-step: at 104px
+   the avatar is nearly as wide as the card, and 16 made the corners look tight
+   around it. Everything else on the site keeps 16.
+
+   There is deliberately no hover lift. An organizer card is a link to a profile
+   and earns one; an attendee card goes nowhere, and a surface that rises under
+   the pointer while refusing the click is worse than one that sits still. */
 .wcblr-attendees #tix-attendees .tix-attendee-list li {
 	float: none;
 	width: auto;
@@ -49,17 +60,44 @@
 	flex-direction: column;
 	align-items: center;
 	text-align: center;
-	padding: 26px 18px 24px;
+	padding: 32px 18px 28px;
 	background: #FBF8F1;
 	border: 1.5px solid #dad5cd;
-	border-radius: 16px;
+	border-radius: 18px;
+	/* Barely there, and doing one job: lifting #FBF8F1 off #F2ECE0, which are
+	   four points apart. The border was carrying that separation alone, which
+	   is the exact fault the full-bleed band redesign was reverted for. */
+	box-shadow: 0 1px 3px rgba(42, 29, 20, 0.045);
 }
 
 /* ---- The avatar ---------------------------------------------------------- */
-/* Gravatar, keyed on the ticket email, so a good half of these will be the
-   default silhouette and the frame has to look composed either way. 84px is the
-   size at which a real photograph still reads as a face and the silhouette does
-   not become the loudest thing in the row.
+/* This is the whole card, so it gets the whole budget: 104px, which is a face
+   you can actually recognise rather than a thumbnail beside a name.
+
+   It is framed rather than merely round, and the frame is built out of the
+   image's own box because the shortcode's <img> is the only node we get: the
+   PADDING holds a 3px moat of card colour around the photograph, the BORDER
+   draws the hairline outside that moat, and the box-shadow drops the whole
+   thing a few pixels off the card. So the photo reads as mounted on the card
+   rather than punched out of it.
+
+   The obvious way to write this is one element with a two-value box-shadow,
+   `0 0 0 1.5px #dad5cd, 0 5px 14px rgba(...)`. It was written that way first
+   and then rewritten, because there is not one comma-separated box-shadow list
+   anywhere else in this stylesheet, so nothing proves the Remote CSS sanitizer
+   keeps the form. Every property used here does appear in the CSS the live site
+   actually serves: box-sizing 6 times, box-shadow 14, background-color and
+   border throughout. Do not "simplify" this back into a shadow list without
+   checking the served file first.
+
+   padding + background-color is what makes the moat, so the background colour
+   has to track the card's. If the card ever stops being #FBF8F1 this turns into
+   a visible ring of the wrong colour.
+
+   Gravatar, keyed on the ticket email, so a good share of these will be the
+   default silhouette and the frame has to look composed either way. At 104 the
+   silhouette is bigger too, but it is a flat pale grey shape and the framing
+   treats it exactly like a photograph, so a row mixing the two stays even.
 
    The shortcode is called with size="192" so the file arrives at 2x and stays
    crisp; the default 96 is soft on any modern screen at this size. object-fit
@@ -72,11 +110,15 @@
 .wcblr-attendees #tix-attendees .tix-attendee-list .avatar {
 	float: none;
 	display: block;
-	width: 84px;
-	height: 84px;
+	box-sizing: border-box;
+	width: 104px;
+	height: 104px;
 	margin: 0;
-	border-radius: 50%;
+	padding: 3px;
+	background-color: #FBF8F1;
 	border: 1.5px solid #dad5cd;
+	border-radius: 50%;
+	box-shadow: 0 5px 14px rgba(42, 29, 20, 0.11);
 	object-fit: cover;
 }
 
@@ -92,11 +134,11 @@
 	margin-right: 0;
 }
 .wcblr-attendees #tix-attendees .tix-attendee-list .tix-attendee-name {
-	margin-top: 16px;
+	margin-top: 20px;
 	font-family: "Fraunces", Georgia, serif;
-	font-size: 17px;
+	font-size: 19px;
 	font-weight: 500;
-	line-height: 1.3;
+	line-height: 1.35;
 	color: #2a1d14;
 	/* A long single-token name has nowhere to break inside a 210px card and
 	   would otherwise push a scrollbar onto the page. */
@@ -137,10 +179,17 @@
 		gap: 14px;
 	}
 	.wcblr-attendees #tix-attendees .tix-attendee-list li {
-		padding: 22px 12px 20px;
+		padding: 26px 12px 22px;
 	}
+	/* Two cards across a 320px screen is about 140px each, so the frame comes
+	   down with it. The shadow does not: it is what keeps the photo reading as
+	   mounted rather than pasted on, and it costs nothing at this size. */
 	.wcblr-attendees #tix-attendees .tix-attendee-list .avatar {
-		width: 72px;
-		height: 72px;
+		width: 82px;
+		height: 82px;
+	}
+	.wcblr-attendees #tix-attendees .tix-attendee-list .tix-attendee-name {
+		margin-top: 16px;
+		font-size: 17px;
 	}
 }
