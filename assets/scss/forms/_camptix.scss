@@ -812,8 +812,23 @@ main:has(#tix) .wcblr-page-head {
 	border: 0;
 	border-radius: 0;
 	padding: 0 !important;
-	max-width: 394px;
-	margin: 28px auto 0;
+	/* THE CARD FILLS ITS COLUMN. It used to be capped at 394px and centred with
+	   `margin: 28px auto 0`, which floated it 24px inside its own column on both
+	   sides. That was invisible while the section was one row, and became the
+	   thing that made the section look unresolved once the poster landed
+	   underneath it: measured at 1440, the card ran 1401 to 1795 while the facts
+	   panel below ran 1357 to 1819, so the two objects in the same column shared
+	   neither edge, and six near-vertical lines fell within 90px of each other.
+	   Filling the column gives the section two edges instead of six, and puts
+	   the ticket directly above the details it is a ticket for.
+
+	   The 394px cap was never about this screen looking right at 394px. Its
+	   comment explains it as a guard against the REGISTRATION card rendering at
+	   484px in the same 42% column, and that guard moved to section 6 long ago:
+	   `.wcblr-tix-row` is `display: block` unless the selection table is in it,
+	   so the registration card is full width and never sees this column. */
+	max-width: none;
+	margin: 28px 0 0;
 
 	br { display: none; }
 
@@ -1420,6 +1435,41 @@ main:has(#tix) .wcblr-page-head {
 .wcblr-tix-row:has(#{$tix-select-table}) > .wp-block-column + .wp-block-column {
 	margin-top: 0;
 }
+/* THE GUTTER IS PADDING, NOT A GAP, and that is what lets the section line up.
+   The row used to carry `blockGap.left: 48px`, which core takes out of the
+   1,100px BEFORE splitting it, so the columns came to 610 and 442 while the
+   poster underneath, with no gap, split the same 1,100 into 638 and 462. Two
+   rows both nominally 58/42 and neither edge shared.
+
+   With the gap at 0 both rows split identically and the column boundary at
+   638px runs unbroken from the eyebrow to the bottom of the facts panel. The
+   air between the copy and the ticket card is now the copy column's own right
+   padding, which takes space from inside the left column instead of from
+   between them, so it cannot move the boundary.
+
+   Scoped to the two-up state. Below the columns breakpoint, and on every screen
+   after selection, the row is `display: block` and a 48px right padding on a
+   full-width column is just a ragged right margin on the prose. */
+.wcblr-tix-row:has(#{$tix-select-table}) > .wp-block-column:first-child {
+	/* `border-box` FIRST, and it is not optional. `.wp-block-column` computes as
+	   `content-box`, so `flex-basis: 58%` is 638px of CONTENT and a 48px right
+	   padding makes the column 686px. The two columns then ask for 1,148px of a
+	   1,100px row, flex shrinks both, and the boundary lands at 658/442 instead
+	   of 638/462: measured on the live page, 20px adrift of the poster's split,
+	   which is the exact misalignment this padding was added to remove. */
+	box-sizing: border-box;
+	padding-right: 48px;
+}
+/* Core stacks `wp:columns` at 781px by forcing `flex-basis: 100%`, and the
+   `:has()` above is still true when it does, so the gutter would survive as a
+   48px right margin on a full-width column: the copy would stop short of the
+   right edge while the card under it did not. There is nothing to sit beside
+   any more, so there is nothing to hold off. */
+@media (max-width: 781px) {
+	.wcblr-tix-row:has(#{$tix-select-table}) > .wp-block-column:first-child {
+		padding-right: 0;
+	}
+}
 
 /* ---- 8. The furniture around the registration screen --------------------
    The registration screen had nothing on it but the form. Not "a bit empty":
@@ -1782,7 +1832,16 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	display: grid;
 	grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
 	align-items: stretch;
-	margin: 44px 0 0;
+	/* `!important` because the group carries `margin-top: 0` as an inline block
+	   attribute, and an inline style beats a class however specific. Without it
+	   this computed to 0 and the poster sat 16px under the counterfoil, close
+	   enough that the two read as one stacked object with a seam. Measured, not
+	   guessed: `getComputedStyle(poster).marginTop === "0px"` on the live page.
+
+	   The old rule put the 44px on `.wcblr-tix-art`, which had no inline margin
+	   of its own and so never hit this. Moving the spacing to the wrapper moved
+	   it onto a block that does. */
+	margin: 44px 0 0 !important;
 	/* The facts column sets the row height and the picture fills it. Four facts
 	   come to about 310px, but a fact that wraps or a fifth one added later
 	   would grow it, and the floor stops the picture collapsing if one is ever
@@ -1886,7 +1945,11 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	grid-template-columns: minmax(0, 1fr);
 	align-content: space-between;
 	gap: 0;
-	padding: 28px 32px 30px;
+	/* 24px left, matching the stub and the counterfoil above it: see the
+	   counterfoil block on why the three panels in this column share a gutter.
+	   It also buys the facts 16px more measure than the 32px this started at,
+	   and the longest of them clears its line by about 50px. */
+	padding: 28px 24px 30px;
 	background: #FBF8F1;
 	border: 1.5px solid #dad5cd;
 	border-left: 0;
@@ -2224,9 +2287,15 @@ main:has(.tix-order-summary) .wcblr-tix-back {
    sentence, so no two can drift into saying slightly different things about
    money. */
 .wcblr-guide .wcblr-tix-note {
-	max-width: 394px;
-	margin: -16px auto 0;
-	padding: 30px 22px 20px;
+	/* Sized by the column, like the stub above it. Both used to carry a 394px
+	   cap and auto margins; see section 5 for why that went. */
+	margin: -16px 0 0;
+	/* 24px, which is the stub's own card padding. The right-hand column now
+	   stacks three panels down one edge, and they were gutted at 24, 22 and
+	   32px: close enough to look like a mistake rather than a rhythm. One
+	   gutter, so a label in the facts panel sits directly under the rail on the
+	   ticket name above it. */
+	padding: 30px 24px 20px;
 	background: #FBF8F1;
 	border: 1.5px solid #dad5cd;
 	border-top: 0;
