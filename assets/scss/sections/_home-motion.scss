@@ -404,3 +404,64 @@ body.home main div.googlemaps {
 		}
 	}
 }
+
+/* ---- 6. The hero mural --------------------------------------------------
+   The skyline is a different kind of object from everything above and needed a
+   different answer, arrived at by measuring it rather than by reaching for the
+   zoom used on the photographs.
+
+   What it is: cutout artwork on a transparent ground, not a photograph in a
+   frame, so there is no frame to zoom inside. It is `alignfull` and 1,600px
+   wide, it is almost certainly the LCP element, and it is NOT a link.
+
+   That last point is why this is deliberately quiet. The venue info rows above
+   get no hover because a hover on text that cannot be clicked advertises a
+   click that does not exist. A full-bleed mural is the opposite case: nobody
+   expects to click the scenery, so a response there reads as atmosphere rather
+   than as an affordance. It gets no shadow, no lift of its own box and no
+   cursor change, so it never pretends to be a button.
+
+   THE MOVE: the city grows upward out of its own ground line.
+
+   `translateY(-11px) scale(1.035)`, which is one transform and no
+   `transform-origin`. That property is NOT in the served stylesheet and has
+   never been deployed here, so it is unverified against the sanitiser; the
+   translate does the same job with a property that is proven. Measured on the
+   live page: bottom edge drift 0px, top rises 23px, the banner's own box does
+   not move at all. The ground line staying put is the whole effect. A skyline
+   that grows from its base reads as the city coming closer; the same scale
+   about the centre just makes a picture bigger.
+
+   1.035 and 0.7s. The photographs use 1.05 at 0.5s, and this is roughly six
+   times their area: at the same numbers a mural this size reads as the page
+   heaving rather than as one object responding.
+
+   `overflow: hidden` on the banner is a GUARD, not a fix, and the distinction
+   is worth recording because the first version of this comment got it wrong.
+   The prediction was that scaling a full-bleed image would push past the
+   viewport edges and give the document a horizontal scrollbar. That did not
+   reproduce: measured at 2552px, 1280px and 390px, with the clip and without
+   it, `documentElement.scrollWidth` never exceeded the viewport. The reason is
+   that `alignfull` here is inset by the root padding rather than being truly
+   edge to edge, so the banner is 1,165px in a 1,280px window and the extra
+   29px a side has room to land in.
+
+   It stays anyway, because a scaling image inside a box that does not clip is
+   one layout change away from being that bug, and the clip costs nothing:
+   the artwork carries transparent margin on all four sides, and in the risen
+   state the 22px that gets cut off the top is margin, not ink. */
+body.home .wcblr-hero-banner {
+	overflow: hidden;
+}
+
+body.home .wcblr-hero-banner .wcblr-skyline img {
+	transition: transform 0.7s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	@media (prefers-reduced-motion: no-preference) {
+		body.home .wcblr-hero-banner:hover .wcblr-skyline img {
+			transform: translateY(-11px) scale(1.035);
+		}
+	}
+}
