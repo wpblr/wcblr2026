@@ -123,6 +123,15 @@
   .t-row .v { font-family: var(--font-body); font-weight: 600; font-size: 22px;
     line-height: 1.2; color: var(--wc-ink); }
   .t-row .v em { font-style: normal; color: var(--accent); }
+  /* The name field. A WordCamp badge has your name on it, and the tickets
+     page says in as many words that you can correct the name on a ticket
+     or pass it on, so this is a real field and not a flourish. It rhymes
+     with the speaker pass's "Your talk here." on purpose: that one is a
+     big italic line with a pen icon, this one is a ruled field in a data
+     block, and the two objects are cousins. */
+  .t-row--name .v { flex: 1; }
+  .t-row--name .blank { display: block; height: 22px;
+    border-bottom: 2px dashed rgba(42, 29, 20, 0.38); }
   .t-row .v small { display: block; font-weight: 400; font-size: 16px; color: var(--text-muted);
     margin-top: 4px; }
 
@@ -142,14 +151,21 @@
     letter-spacing: 0.24em; text-transform: uppercase; color: var(--text-muted); white-space: nowrap; }
   .t-datewrap { display: flex; align-items: center; }
 
-  /* A barcode, because a ticket has one. Drawn, not decorative: uneven
-     bars from a repeating gradient pair so it does not read as a hatch. */
-  .t-code { width: 132px; height: 68px; background:
-      repeating-linear-gradient(90deg, var(--wc-espresso) 0 3px, transparent 3px 7px),
-      repeating-linear-gradient(90deg, var(--wc-espresso) 0 6px, transparent 6px 17px);
-    opacity: 0.88; }
-  .t-stub .sn { margin-top: 12px; font-family: var(--font-mono); font-weight: 700;
+  .t-stub .sn { margin-top: 0; font-family: var(--font-mono); font-weight: 700;
     font-size: 13px; letter-spacing: 0.16em; color: var(--text-muted); }
+  /* The tag. WCBLR does not issue barcoded tickets, it hangs a tag round
+     your neck, so the stub is punched for a lanyard rather than printed
+     with a code. The slot is filled with the flat page colour, not a
+     tint, because a hole shows what is behind the tag and behind it is
+     the paper. The cord is two strokes crossing above the slot and
+     stopping at its mid height, so the slot's own fill hides their ends
+     and they read as threaded through rather than trailing past it. */
+  .t-slot { position: absolute; left: 50%; transform: translateX(-50%);
+    width: 84px; height: 20px; border-radius: 10px; background: var(--wc-paper);
+    border: 1.5px solid rgba(42, 29, 20, 0.42); z-index: 3; }
+  .t-cord { position: absolute; left: 50%; top: 0; transform: translateX(-50%); z-index: 2; }
+  .t-cord path { fill: none; stroke: var(--wc-gold-deep); stroke-width: 5; opacity: 0.55; }
+
   /* The stub carried a small ticket glyph above the date. Cut: the whole
      canvas is a ticket, so a picture of a ticket on it is the same mistake
      as the corner object this poster was rebuilt to remove. */
@@ -176,7 +192,6 @@
           <span class="kn">ವರ್ಡ್‌ಕ್ಯಾಂಪ್ ಬೆಂಗಳೂರು</span>
           <span class="tag">#WCBLR</span>
         </span>
-        <span class="no">No. 0001</span>
       </div>
 
       <span class="t-kick">// admit_one</span>
@@ -191,6 +206,10 @@
       </p>
 
       <div class="t-data">
+        <div class="t-row t-row--name">
+          <span class="k">Name</span>
+          <span class="v"><span class="blank"></span></span>
+        </div>
         <div class="t-row">
           <span class="k">Tier</span>
           <span class="v"><em>Early Bird</em>, on sale now
@@ -210,6 +229,11 @@
     </div>
 
     <div class="t-stub">
+      <svg class="t-cord" width="118" height="54" viewBox="0 0 118 54" aria-hidden="true">
+        <path d="M33.0 0 L70.0 44" />
+        <path d="M85.0 0 L48.0 44" />
+      </svg>
+      <span class="t-slot" style="top: 34px;"></span>
 
       <div class="t-datewrap">
         <span class="t-date">21&ndash;22 Nov</span>
@@ -217,8 +241,7 @@
       </div>
 
       <div class="foot">
-        <div class="t-code"></div>
-        <span class="sn">WCBLR26</span>
+        <span class="sn">No. 0001</span>
       </div>
     </div>
   </div>

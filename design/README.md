@@ -345,6 +345,13 @@ button says so rather than failing quietly.
   of the kit is still on the substitutes and is off-brand against the site; correcting
   the shared tokens re-typesets every posted banner, so it wants its own pass.
 
+
+  The stub is a tag, not a barcoded receipt: WCBLR hands out a lanyard tag and a card,
+  so the stub is punched for a lanyard, with the cord stopping at the slot's mid height
+  so the slot's fill hides its ends. The data block is the card and opens with the name
+  field, which is a real field: the tickets page says you can correct the name on a
+  ticket or pass it on.
+
   The date appears once, on the stub, not also as a WHEN row in the body. The two days
   are separate rows because they are separate days: SJBHS is the Sunday venue, and
   Saturday is Contributor Day with its venue still unannounced. A single WHERE row
