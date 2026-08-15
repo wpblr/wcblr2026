@@ -335,6 +335,13 @@ button says so rather than failing quietly.
   LinkedIn, X and WhatsApp, none of which crop it. Keep every piece of ink at least
   40px from the left and right edges of any new 4:5 and the grid cannot clip it.
 
+
+  The date appears once, on the stub, not also as a WHEN row in the body. The two days
+  are separate rows because they are separate days: SJBHS is the Sunday venue, and
+  Saturday is Contributor Day with its venue still unannounced. A single WHERE row
+  saying SJBHS was wrong. These rows mirror the tickets page's own essentials block, so
+  re-read that block before editing them.
+
   Watch out when editing: the engraving lives inside the body panel and is clipped by
   its `overflow: hidden` so it stops at the perforation, which is deliberate. The
   punches are drawn in the sunk paper tone, not the page colour, because a full-bleed
