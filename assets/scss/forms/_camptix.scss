@@ -1311,27 +1311,25 @@ main:has(#tix) .wcblr-page-head {
 	   It also sits about 600px down, at or below the fold on a laptop, so it
 	   gets the slow lift rather than a rise: transform only, nothing to fade
 	   in for a reader who is already past it. */
-	#{$tix-page} .wcblr-sec:first-child > .wcblr-tix-art {
+	/* The POSTER, not the picture. The illustration used to be a direct child of
+	   the section; it is now half of a `wcblr-tix-poster` grid with the facts
+	   panel as its other half, and animating only the picture would have slid it
+	   out from under the details printed beside it. Retargeting the wrapper
+	   moves the whole object as one. */
+	#{$tix-page} .wcblr-sec:first-child > .wcblr-tix-poster {
 		animation: wcblr-lift 0.9s 0.36s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 	}
 
-	/* The facts close the opening, so they arrive after both columns have
-	   started and still finish before the stamp springs at 0.95s. `rise-sm`,
-	   not `rise`: four items on one line lifting 14px each is jitter, which is
-	   this file's own rule for dense repeated things.
+	/* The four facts used to stagger in on their own, 0.34s with a 0.05s step,
+	   which was right while they were a strip UNDER the picture: two separate
+	   objects, so the picture could lift and the facts could then arrive on it.
 
-	   0.34s with a 0.05s step, so the fourth fact finishes at 0.94s and the
-	   stamp still springs into a page that has stopped moving. At 0.42/0.06 the
-	   last one was landing at 1.05s, a tenth of a second INTO the spring, which
-	   is exactly the ordering `_motion.scss` says not to break. */
-	#{$tix-page} .wcblr-sec:first-child .wcblr-tix-fact {
-		animation: wcblr-rise-sm 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-	}
-	@for $i from 1 through 4 {
-		#{$tix-page} .wcblr-sec:first-child .wcblr-tix-fact:nth-child(#{$i}) {
-			animation-delay: 0.34s + 0.05s * ($i - 1);
-		}
-	}
+	   They are inside the poster now. Animating them as well translates them a
+	   second time while the wrapper's own 0.9s lift is still playing, which is
+	   the compounding trap `content/_motion.scss` documents, and it would show
+	   here more than most places: the facts would visibly drift against the
+	   picture edge they are supposed to be printed against. The poster moves as
+	   one object, which is what it now is. */
 }
 
 /* ---- 7c. Everything below the fold, on interaction ----------------------
@@ -1748,11 +1746,62 @@ main:has(.tix-order-summary) .wcblr-tix-back {
    floor, and spends the crop on the palm fronds instead, which are the part
    nobody is looking at. Checked by cutting all three candidates and looking at
    them, not by picking a number. */
+/* ---- The poster: picture beside its details, not above them --------------
+   This ran as a 3.2:1 band with the four facts in a strip underneath, and the
+   strip could not fit. At the content's 1,100px, four equal columns give each
+   fact 260px, and 52px of that is its own padding, so a value had 208px at 18px
+   Fraunces: about twenty characters. Every one of the four is longer than that,
+   so ALL FOUR wrapped, and they wrapped mid-phrase: "Sat & Sun, 21-22 /
+   November 2026", "St. Joseph's Boys' High / School, Museum Road", "Two tracks,
+   plus a / Contributor Day". A spec strip whose every line breaks in the wrong
+   place reads as squeezed however it is typeset, and no amount of type
+   adjustment fixes it: the four values need about 1,345px of single-line width
+   between them and the row has 1,040.
+
+   The widths are not negotiable and the facts are not droppable. Merging the
+   two venue rows would fix the arithmetic and is explicitly ruled out further
+   down this file: Saturday and Sunday are different places and only Sunday's is
+   settled, and one "Venue" row would read as the whole event and contradict
+   `pages/attending.html`.
+
+   So the strip stops being a strip. The facts move BESIDE the picture as a
+   single column, where each one gets around 410px on one line, and the two
+   halves become a poster with its details printed down the side. 58/42 is
+   arithmetic rather than taste: 42% of 1,100 leaves the Sunday venue, the
+   longest of the four at 42 characters, about 50px of slack.
+
+   It also fixes the picture. At 3.2:1 the band was a letterbox whose top third
+   was empty cream, and the illustration is a wide scene of four figures across
+   the bottom. Given a column instead of a band it keeps its own height and
+   crops from the empty part.
+
+   The two halves share one edge: the image drops its right border and its right
+   corners, the facts panel drops its left border and takes the right corners.
+   Same join the counterfoil and the registration footer use. */
+.wcblr-guide .wcblr-tix-poster {
+	display: grid;
+	grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
+	align-items: stretch;
+	margin: 44px 0 0;
+	/* The facts column sets the row height and the picture fills it. Four facts
+	   come to about 310px, but a fact that wraps or a fifth one added later
+	   would grow it, and the floor stops the picture collapsing if one is ever
+	   removed. */
+	min-height: 300px;
+}
+
+/* The figure has to pass the grid row's height through to the `img`, or
+   `height: 100%` below resolves against `auto` and does nothing. */
+.wcblr-tix-art {
+	height: 100%;
+	margin: 0 !important;
+}
 .wcblr-tix-art img {
 	display: block;
 	width: 100%;
-	height: auto;
-	aspect-ratio: 3.2 / 1;
+	/* Filling the row rather than holding a ratio. The height is whatever the
+	   facts column needs, and `cover` spends the difference on the crop. */
+	height: 100%;
 	object-fit: cover;
 	object-position: center 62%;
 	/* The radius the red note promised and this file never delivered: the note
@@ -1766,31 +1815,32 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	   few points of the page's #F2ECE0, so with no edge it does not read as a
 	   placed object, it reads as a hole in the page. #dad5cd rather than the
 	   turmeric, because every card around it is bordered #dad5cd. */
-	/* Top corners only, and no bottom edge: the facts strip below is the same
-	   object and closes it. See the essentials block. */
+	/* Left half of the poster: no right edge and no right corners, because the
+	   facts panel is the same object and closes it. */
 	border: 1.5px solid #dad5cd;
-	border-bottom: 0;
-	border-radius: 16px 16px 0 0;
+	border-right: 0;
+	border-radius: 16px 0 0 16px;
 }
 
-/* 3.2:1 is a ratio for a band 1,200px wide. On a 390px phone the same ratio
-   is 107px tall and the four figures are about 60px each, which is a letterbox
-   strip rather than a picture. The band is the full column width on a phone
-   either way, so it can afford the height. */
+/* Stacked below the columns breakpoint. Two columns at 700px would give the
+   facts about 290px, which is where the wrapping this whole section exists to
+   fix comes straight back, and the picture would be a 400px-wide sliver beside
+   it. So the poster goes back to picture-over-details, the join rotates through
+   ninety degrees with it, and the image takes a ratio again because it no
+   longer has a facts column to borrow its height from. */
 @media (max-width: 781px) {
-	.wcblr-tix-art img { aspect-ratio: 2 / 1; }
-}
-
-/* The band needs its own air, and it has none of its own.
-   The image block was inserted through the editor's + button, so it carries no
-   spacing attributes at all, and core's figure margin is not enough: the ticket
-   card is vertically centred in the row and hangs below the copy column, so
-   with only the default margin the card's bottom edge and the band's top edge
-   came within about eight pixels of each other and read as one stacked object.
-   Set here rather than on the block so it cannot be lost the next time the page
-   is pasted back from WordPress. */
-.wcblr-guide .wcblr-tix-art {
-	margin: 44px 0 0;
+	.wcblr-guide .wcblr-tix-poster {
+		grid-template-columns: minmax(0, 1fr);
+		min-height: 0;
+	}
+	.wcblr-tix-art { height: auto; }
+	.wcblr-tix-art img {
+		height: auto;
+		aspect-ratio: 2 / 1;
+		border-right: 1.5px solid #dad5cd;
+		border-bottom: 0;
+		border-radius: 16px 16px 0 0;
+	}
 }
 
 /* ---- The essentials, as the illustration's footer -----------------------
@@ -1805,28 +1855,42 @@ main:has(.tix-order-summary) .wcblr-tix-back {
    object to belong to; every other block in this section is a surface with an
    edge, and this one was a set of words between two lines.
 
-   So it stops being a strip and becomes the picture's footer. The illustration
-   takes the top corners and drops its bottom border, this takes the bottom
-   corners and the sides, and the two read as one poster: image above, the four
-   facts printed underneath it. That also puts the facts inside the object the
-   eye is already on, rather than below the point where the eye has left.
+   So it stops being a strip and becomes the picture's other half. It takes the
+   right corners and drops its left border, the illustration takes the left
+   corners and drops its right, and the two read as one poster: the scene, and
+   its details printed down the side. That also puts the facts inside the object
+   the eye is already on, rather than below the point where the eye has left.
+
+   ONE COLUMN, and that is the fix, not a preference. Four across gave each fact
+   208px of text and every one of the four values is longer than that, so all
+   four wrapped mid-phrase. Stacked in a 42% column each gets about 410px and
+   every one of them fits on a single line. See the poster block above for the
+   arithmetic.
+
+   `space-between` so the four spread down whatever height the picture and the
+   panel settle on, rather than bunching at the top with the difference left as
+   a gap under the last one.
 
    Four facts, and the venue is TWO of them on purpose. `pages/attending.html`
    carries SATURDAY VENUE and SUNDAY VENUE separately because they are
    different places and only Sunday's is settled. A single "Venue" row would
    have read as the whole event and contradicted the sibling page, which is the
    kind of thing nobody notices until someone turns up at the wrong address.
+   Merging them would also have fixed the width arithmetic, which is exactly why
+   it is worth writing down that it is not on the table.
 
    A grid rather than a `wp:columns`, so it needs no render-time layout class
    and looks the same in the editor, in preview.py and on the front end. */
 .wcblr-guide .wcblr-tix-essentials {
 	display: grid;
-	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: 24px 0;
-	padding: 24px 30px 26px;
+	grid-template-columns: minmax(0, 1fr);
+	align-content: space-between;
+	gap: 0;
+	padding: 28px 32px 30px;
 	background: #FBF8F1;
 	border: 1.5px solid #dad5cd;
-	border-radius: 0 0 16px 16px;
+	border-left: 0;
+	border-radius: 0 16px 16px 0;
 }
 
 /* Core's flow layout emits a `wp-container-*` blockGap rule for the group and
@@ -1840,22 +1904,22 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	margin-bottom: 6px !important;
 }
 
-/* Hairlines BETWEEN the facts. Four label/value pairs in a row with nothing
-   separating them read as a list; ruled apart they read as a spec strip. The
-   divider goes on the cell rather than in the gap so it stretches the full cell
-   height and stays put when a value wraps to two lines.
+/* Hairlines BETWEEN the facts. Four label/value pairs with nothing separating
+   them read as a list; ruled apart they read as a spec sheet. They run
+   horizontally now that the facts are a column, and only between: a rule above
+   the first or below the last is an underline on the panel's own padding.
 
-   Keyed on the row, not on `:not(:first-child)`, because the grid drops to two
-   columns and then one: at two columns the third fact starts a new row and a
-   left rule there would hang off nothing. */
+   `:not(:first-child)` is safe here in a way it was not when this was a
+   four-across grid that reflowed to two columns and then one, and a left rule
+   on a cell that had become the start of a row hung off nothing. A single
+   column has one arrangement at every width. */
 .wcblr-guide .wcblr-tix-fact {
-	padding: 0 26px;
+	padding: 0;
 }
-.wcblr-guide .wcblr-tix-fact:not(:nth-child(4n + 1)) {
-	border-left: 1px solid #e6e0d6;
-}
-.wcblr-guide .wcblr-tix-fact:nth-child(4n + 1) {
-	padding-left: 0;
+.wcblr-guide .wcblr-tix-fact:not(:first-child) {
+	margin-top: 20px;
+	padding-top: 20px;
+	border-top: 1px solid #e6e0d6;
 }
 
 /* The hierarchy was upside down. The label was espresso and bold and the value
@@ -1931,20 +1995,20 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	border-radius: 50%;
 }
 
-@media (max-width: 900px) {
-	.wcblr-guide .wcblr-tix-essentials { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-	.wcblr-guide .wcblr-tix-fact:not(:nth-child(2n + 1)) { border-left: 1px solid #e6e0d6; }
-	.wcblr-guide .wcblr-tix-fact:nth-child(2n + 1) { border-left: 0; padding-left: 0; }
+/* Stacked. The panel is the poster's bottom half rather than its right half, so
+   the join rotates with the picture above it and the facts go full width, where
+   they have more room than they ever had beside the illustration. The column and
+   its horizontal rules are unchanged: one arrangement at every width was the
+   point of going to one column. */
+@media (max-width: 781px) {
+	.wcblr-guide .wcblr-tix-essentials {
+		border-left: 1.5px solid #dad5cd;
+		border-radius: 0 0 16px 16px;
+	}
 }
 @media (max-width: 520px) {
-	.wcblr-guide .wcblr-tix-essentials { grid-template-columns: 1fr; gap: 20px; padding: 22px 20px 24px; }
-	/* One per row: a left rule on a full-width cell is a stray vertical line, so
-	   the separation goes back to being space. */
-	.wcblr-guide .wcblr-tix-fact,
-	.wcblr-guide .wcblr-tix-fact:not(:nth-child(2n + 1)) {
-		border-left: 0;
-		padding: 0;
-	}
+	.wcblr-guide .wcblr-tix-essentials { padding: 24px 22px 26px; }
+	.wcblr-guide .wcblr-tix-fact:not(:first-child) { margin-top: 18px; padding-top: 18px; }
 }
 
 
