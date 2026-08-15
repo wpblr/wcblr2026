@@ -23,15 +23,20 @@
  *      sponsors. Their top-level group carries no background at all, so the
  *      cream comes from `body`. These hang off `.entry-content` instead.
  *
- * WHY B IS A SLUG LIST AND NOT A GENERAL RULE.
- * The obvious version is "every page that is not a .wcblr-post page", which
- * needs `:has()` on the body. That is one selector for the whole site and it
- * would pick up new pages for free. It is not used because WordCamp.org
- * sanitises Remote CSS, and a selector it does not understand takes its whole
- * rule with it. The slug list cannot silently stop working. The cost is real
- * and worth saying out loud: A NEW PAGE DOES NOT GET A GHOST UNTIL ITS SLUG IS
- * ADDED BELOW, unless it uses the .wcblr-post wrapper, in which case rule A
- * already covers it.
+ * RULE B APPLIES TO EVERY PAGE, and it used to be a hand-written slug list.
+ * That list lasted less than a day. It was built by reading the page files in
+ * wordcamp/website/pages/, and code-of-conduct has no file there, so it was
+ * never in the list and shipped with no ghost. The lesson is not "add
+ * code-of-conduct", it is that a list of pages maintained by hand will always
+ * be one page behind the site.
+ *
+ * `body:not(.home)` covers everything instead, current and future. The front
+ * page is the only exclusion, because it already has a real `.wcblr-ghost`
+ * heading in its hero and would otherwise carry two.
+ *
+ * On a `.wcblr-post` page BOTH rules match. That is intended and it is not a
+ * double image: rule A's ghost sits inside the wrapper, and the wrapper's own
+ * opaque #F2ECE0 paints over rule B's. Only one is ever visible.
  *
  * Z-INDEX, which is the part that breaks if it is guessed at:
  *
@@ -95,8 +100,7 @@
 	}
 }
 
-/* ── B. Pages whose top-level group paints no background ──────────────────── */
-/* Add a slug here when a page like these is added. */
+/* ── B. Every page ───────────────────────────────────────────────────────── */
 /*
  * This hangs off `.entry-content`, the post-content wrapper, and NOT off
  * `.wp-site-blocks`. Two reasons, the first found the hard way:
@@ -114,11 +118,7 @@
  *
  * So it is the same shape as rule A, one level further out.
  */
-body.page-slug-about,
-body.page-slug-contact,
-body.page-slug-news,
-body.page-slug-organizers,
-body.page-slug-sponsors {
+body:not(.home) {
 	.entry-content {
 		position: relative;
 
@@ -140,11 +140,7 @@ body.page-slug-sponsors {
    beside it, and the same alpha reads much heavier. */
 @media (max-width: 767px) {
 	.wcblr-post::before,
-	body.page-slug-about .entry-content::before,
-	body.page-slug-contact .entry-content::before,
-	body.page-slug-news .entry-content::before,
-	body.page-slug-organizers .entry-content::before,
-	body.page-slug-sponsors .entry-content::before {
+	body:not(.home) .entry-content::before {
 		top: 64px;
 		right: 8px;
 		font-size: clamp(110px, 34vw, 190px);
@@ -168,11 +164,7 @@ body.page-slug-sponsors {
  */
 @media (prefers-reduced-motion: no-preference) {
 	.wcblr-post::before,
-	body.page-slug-about .entry-content::before,
-	body.page-slug-contact .entry-content::before,
-	body.page-slug-news .entry-content::before,
-	body.page-slug-organizers .entry-content::before,
-	body.page-slug-sponsors .entry-content::before {
+	body:not(.home) .entry-content::before {
 		animation: wcblr-hero-ghost 1.4s 0.25s ease-out both;
 	}
 }
