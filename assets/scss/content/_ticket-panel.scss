@@ -1,0 +1,236 @@
+/* ---- The ticket panel ----------------------------------------------------
+   The tickets page used to enumerate what you get as six identical cream
+   cards, immediately followed by four more identical cream cards in the next
+   section. Ten instances of one shape, four points of tone apart from the page
+   behind them, is the thing that read as "monotonous and AI-generated": the
+   page had no tonal rhythm and no hierarchy, because every container was the
+   same container.
+
+   This replaces both grids with ONE object, and it is the only bold surface in
+   the body. The device is not invented: the site's own hero already carries a
+   ticket stub (`sections/_ticket-stub.scss`) with a dashed perforation, a notch
+   punched out of the seam and a gold stamp, and the page's own illustration
+   (wcblr-ticket.png) draws a ticket with a gold tear-off, a dashed perforation
+   and a notch. Drawing the section as that same object is the page agreeing
+   with its own picture rather than decorating around it.
+
+   Anatomy, matching a real ticket:
+
+       +----------------------------+ - - +-----------+
+       |                            |     |           |
+       |  body: what you get        |  ^  |   stub    |
+       |  dark, #2a1d14             |  |  |   the     |
+       |                            | perf|   image   |
+       +----------------------------+ - - +-----------+
+                                       notch at both ends
+
+   Markup it expects, on a two-column `wp:columns`:
+
+       .wcblr-tix-ticket
+         > .wp-block-column.wcblr-tix-ticket-body   (width 62%)
+         > .wp-block-column.wcblr-tix-ticket-stub   (width 38%)
+
+   The columns carry their own background, radius and padding as block style
+   attributes, per the house rule that this file holds only what blocks cannot
+   express. What lives here: the seam, the notches, the two-column list, the
+   image fill, and the mobile re-orientation.                                */
+
+.wcblr-tix-ticket {
+	/* The notches hang 11px outside the seam, so nothing may clip them. Core
+	   puts no overflow on `wp-block-columns`, but `.wcblr-sec` panels elsewhere
+	   do, so state it rather than inherit it. */
+	overflow: visible !important;
+	/* blockGap 0 in the block attrs butts the two halves together; without this
+	   the seam is a gap showing page cream, not a perforation. */
+	align-items: stretch;
+}
+
+/* Both halves are content-box by default (a `.wp-block-column` computes as
+   content-box, which is what threw the register row's 58/42 split off by 20px
+   once already). Padding plus a percentage width therefore overflows the row
+   and flex shrinks BOTH halves, moving the seam. Border-box first, always. */
+.wcblr-tix-ticket > .wp-block-column {
+	box-sizing: border-box;
+}
+
+/* ---- The seam ------------------------------------------------------------
+   A dashed left border on the stub, not a background-image: the WordCamp
+   Remote CSS sanitizer strips the VALUE off `background-image` and leaves a
+   bare `background-image:`, so a repeating-linear-gradient perforation would
+   compile, upload, and silently render nothing. `border: dashed` survives, and
+   is already proven in production by the home page's stub.
+
+   Both halves are the same espresso. The first build put the page's swag
+   illustration in the stub instead, and it failed for the exact reason the
+   illustration was flagged in the first place: the file has a cream background
+   baked into it, four points off the page cream, so its outer edge is
+   invisible and the right half of the ticket dissolved into the page. A ticket
+   with one edge is not a ticket. Drawing the stub rather than photographing it
+   also means the panel needs no image at all, which is the honest fix: the
+   section above already carries a WordCamp illustration in the same hand, and
+   a second one 1,200px down the page was the thing that read as decoration. */
+.wcblr-tix-ticket-stub {
+	position: relative;
+	border-left: 2px dashed #6b5744;
+	/* Stays visible: this element owns the notches, which hang outside it. */
+	overflow: visible;
+	border-radius: 0 16px 16px 0;
+}
+
+/* The stub's face is centred on its own height rather than sitting at the top,
+   because it is a caption for the panel beside it, not a second column of
+   content competing with the list. */
+.wcblr-tix-ticket-stub {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+/* The notches. Page cream, so they read as holes punched clean through the
+   ticket rather than as two dots drawn on it. 22px wide sitting at left:-11px
+   centres each one on the 2px seam, the same arithmetic the home stub uses. */
+.wcblr-tix-ticket-stub::before,
+.wcblr-tix-ticket-stub::after {
+	content: "";
+	position: absolute;
+	z-index: 2;
+	width: 22px;
+	height: 22px;
+	left: -12px;
+	background: #f2ece0;
+	border-radius: 50%;
+}
+
+.wcblr-tix-ticket-stub::before {
+	top: -11px;
+}
+
+.wcblr-tix-ticket-stub::after {
+	bottom: -11px;
+}
+
+/* ---- The body ------------------------------------------------------------ */
+
+.wcblr-tix-ticket-body {
+	border-radius: 16px 0 0 16px;
+}
+
+/* Seven short items down one column is a list that has to be scanned twice.
+   Two columns puts the whole of what you get inside one glance, which is the
+   only job this panel has. `columns` is a plain layout property and survives
+   the sanitizer; it is not a grid, so the items flow and rebalance on their
+   own as the panel narrows. */
+.wcblr-tix-ticket-body .wcblr-tix-ticket-list {
+	columns: 2;
+	column-gap: 32px;
+	margin: 0 !important;
+	padding: 0;
+	list-style: none;
+}
+
+.wcblr-tix-ticket-body .wcblr-tix-ticket-list li {
+	position: relative;
+	/* `break-inside` keeps a two-line item from splitting across the column
+	   break, which is what makes a `columns` list look broken. */
+	break-inside: avoid;
+	padding-left: 26px;
+	margin: 0 0 13px;
+	list-style: none;
+}
+
+.wcblr-tix-ticket-body .wcblr-tix-ticket-list li:last-child {
+	margin-bottom: 0;
+}
+
+/* A tick, drawn rather than shipped as an icon file: seven `<img>` requests for
+   seven identical glyphs is a lot of markup for one repeated mark, and the mark
+   carries no meaning the words do not already carry. Gold on espresso is the
+   one place bright gold is legible (it is unusable as text on cream, 1.86:1),
+   and it is the accent the illustration beside it already uses. */
+.wcblr-tix-ticket-body .wcblr-tix-ticket-list li::before {
+	content: "";
+	position: absolute;
+	left: 2px;
+	top: 6px;
+	width: 6px;
+	height: 11px;
+	border: solid #e0a526;
+	border-width: 0 2px 2px 0;
+	transform: rotate(45deg);
+}
+
+/* ---- Mobile --------------------------------------------------------------
+   Core stacks `wp-block-columns` below 782px. The seam has to turn with them:
+   a dashed line down the left of a full-width block is a stray vertical rule,
+   and the notches would sit in the middle of nothing.                       */
+@media (max-width: 781px) {
+	.wcblr-tix-ticket-stub {
+		border-left: 0;
+		border-top: 2px dashed #6b5744;
+		border-radius: 0 0 16px 16px;
+	}
+
+	/* Punched at the two ends of the horizontal seam instead. */
+	.wcblr-tix-ticket-stub::before,
+	.wcblr-tix-ticket-stub::after {
+		top: -12px;
+		bottom: auto;
+	}
+
+	.wcblr-tix-ticket-stub::before {
+		left: -11px;
+	}
+
+	.wcblr-tix-ticket-stub::after {
+		left: auto;
+		right: -11px;
+	}
+
+	.wcblr-tix-ticket-body {
+		border-radius: 16px 16px 0 0;
+	}
+
+	/* Two columns of ticks in a 320px panel is two words per line. */
+	.wcblr-tix-ticket-body .wcblr-tix-ticket-list {
+		columns: 1;
+	}
+}
+
+/* ---- The weekend pair ----------------------------------------------------
+   Two days that are genuinely not the same day: Saturday is Contributor Day,
+   free with the ticket but separately registered and capped; Sunday is the
+   main event the ticket is actually sold for. The old page drew these as two
+   identical cards in a four-card grid, which said they were interchangeable.
+
+   They keep the house card chrome, and the difference is carried by the edge:
+   Sunday takes the gold border the Early Bird tier card already uses for "this
+   is the thing on sale", Saturday stays on the standard hairline. Colour is
+   never the only signal — each card states its own date and status in text. */
+
+.wcblr-tix-day {
+	position: relative;
+}
+
+/* The date sits in the corner like the date on a ticket, in the mono face the
+   site uses for every label of this kind. */
+.wcblr-tix-day .wcblr-tix-day-date {
+	display: inline-block;
+}
+
+/* A hairline between the day's headline and its detail, inset to the text
+   rather than run to the card edge, so it reads as part of the block of copy
+   instead of as a divider between two things. */
+.wcblr-tix-day .wcblr-tix-day-note {
+	position: relative;
+	padding-top: 16px;
+}
+
+.wcblr-tix-day .wcblr-tix-day-note::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 44px;
+	height: 1px;
+	background: #cfc7ba;
+}
