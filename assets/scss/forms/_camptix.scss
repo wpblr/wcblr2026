@@ -237,8 +237,27 @@ main:has(#tix) .wcblr-page-head {
    Below it, the row simply grows and both inputs stay on one line.
 
    Only the two fields where it changes what you would type. */
+/* The same treatment, extended to the four profile questions. Keyed on the
+   QUESTION POST ID, which is what CampTix stamps onto the row
+   (`'tix-row-question-' . $question->ID`), verified against the live form:
+   1940 WordPress.org Profile, 1941 X/Twitter Handle, 1942 LinkedIn, 1943 Your
+   Website. Built-in questions use a slug instead (`tix-row-question-privacy`),
+   custom ones use the id.
+
+   Keying on the id rather than the title is the whole point of doing this as a
+   hint rather than by renaming the questions: an id survives a rename, and the
+   `questions="..."` attribute on [camptix_attendees] matches on the title's
+   slug, so renaming a question to explain it would risk silently unhooking the
+   field from the attendees page. A hint changes nothing but the hint.
+
+   These ids only change if a question is deleted and recreated. If a chip ever
+   loses its hint, that is what happened; read the new id off the form. */
 #tix .tix-attendee-form tr.tix-row-first-name > td.tix-right::after,
-#tix .tix-attendee-form tr.tix-row-email > td.tix-right::after {
+#tix .tix-attendee-form tr.tix-row-email > td.tix-right::after,
+#tix .tix-attendee-form tr.tix-row-question-1940 > td.tix-right::after,
+#tix .tix-attendee-form tr.tix-row-question-1941 > td.tix-right::after,
+#tix .tix-attendee-form tr.tix-row-question-1942 > td.tix-right::after,
+#tix .tix-attendee-form tr.tix-row-question-1943 > td.tix-right::after {
 	display: block;
 	margin-top: 8px;
 	font-family: "Hanken Grotesk", sans-serif;
@@ -254,6 +273,27 @@ main:has(#tix) .wcblr-page-head {
 }
 #tix .tix-attendee-form tr.tix-row-email > td.tix-right::after {
 	content: "Your ticket and receipt are sent here";
+}
+
+/* The three url questions render as <input type="url">, so the browser already
+   refuses a bare username. The hint is here to stop people reaching that
+   generic "Please enter a URL" bounce in the first place, by saying up front
+   what shape the field wants. One line shared by all three: they are adjacent
+   on the form and three different sentences would read as noise. */
+#tix .tix-attendee-form tr.tix-row-question-1940 > td.tix-right::after,
+#tix .tix-attendee-form tr.tix-row-question-1942 > td.tix-right::after,
+#tix .tix-attendee-form tr.tix-row-question-1943 > td.tix-right::after {
+	content: "The full link, starting with https://";
+}
+
+/* The one that actually needed this. The twitter question is NOT a url input,
+   it is `type="text"` with no validation of any kind, and CampTix builds the
+   href by appending the stored value to twitter.com. The first person to use
+   the field pasted a full x.com address into it, which produces a broken link
+   on a public page. Nothing but this line stands between the next person and
+   the same mistake. */
+#tix .tix-attendee-form tr.tix-row-question-1941 > td.tix-right::after {
+	content: "Username only, without the @ or a link";
 }
 #tix .tix-required-star { color: #C8344B; }
 
