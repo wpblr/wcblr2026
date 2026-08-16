@@ -284,13 +284,33 @@
 	letter-spacing: -0.02em;
 }
 
-/* X: black squircle, white glyph. */
+/* X: black squircle, and the REAL mark rather than a letter X.
+
+   The probe came back and `clip-path: polygon()` survives the sanitiser
+   intact, which is what makes this possible. The X logo is the one mark on
+   this page made entirely of straight edges: core's own SVG for it is twelve
+   points and not a single curve, so a polygon is not an approximation of that
+   logo, it IS that logo. The percentages below are core's path coordinates
+   (viewBox 0 0 24 24, ink from x 3.5 to 21.113) divided by 24, traced command
+   by command off the served markup rather than eyeballed.
+
+   The one thing dropped is the path's second subpath, a small notch where the
+   two strokes cross. `polygon()` takes a single ring, and at 14px that detail
+   is under half a pixel. */
 .wcblr-attendees #tix-attendees .tix-attendee-list a.tix-attendee-twitter {
 	background-color: #000000;
 	border-radius: 7px;
 }
 .wcblr-attendees #tix-attendees .tix-attendee-list a.tix-attendee-twitter::before {
-	content: "X";
+	content: "";
+	width: 18px;
+	height: 18px;
+	background-color: #ffffff;
+	clip-path: polygon(
+		58.26% 44.26%, 85.58% 12.50%, 79.11% 12.50%, 55.39% 40.08%,
+		36.44% 12.50%, 14.58% 12.50%, 43.23% 54.20%, 14.58% 87.50%,
+		21.06% 87.50%, 46.11% 58.38%, 66.12% 87.50%, 87.97% 87.50%
+	);
 }
 
 /* WordPress: the badge is a circle, and the blue is #3858e9 from the current

@@ -44,10 +44,29 @@
    save, which answers the question without a guess and without shipping a rule
    that breaks the page if it is stripped halfway.
 
-   Once the answer is known: use it, then delete this block. */
-.wcblr-probe-clip     { clip-path: polygon(0 0, 100% 0, 50% 100%); }
-.wcblr-probe-radial   { background-image: radial-gradient(#000, #fff); }
-.wcblr-probe-conic    { background-image: conic-gradient(#000, #fff); }
+   ROUND 1, ANSWERED. All three came back intact in the served stylesheet:
+   `clip-path: polygon()`, `radial-gradient` and `conic-gradient` survive. The
+   X mark in content/_attendees.scss is a real logo because of that result: it
+   is core's own twelve-point path, and the path has no curves in it.
+
+   ROUND 2, OPEN. polygon() takes a single ring, so it cannot draw LinkedIn
+   (4 subpaths: the tile, the i stem, the i dot, the n) or WordPress (5, one of
+   them a ring), and both carry curves. Two things would fix that outright, and
+   each is exactly the kind of assumption that has already cost this site three
+   icon attempts, so neither is worth guessing at:
+
+     · `content: url(data:...)`. The note in _attendees.scss says this is dead,
+       but the only case ever TESTED is background-image. If content survives a
+       url, every one of these becomes the real SVG and all the drawing goes
+       away.
+     · `clip-path: path()`. Takes SVG path data verbatim, curves included. Still
+       one ring, so it fixes fidelity but not subpaths.
+
+   Same rules as round 1: class names that appear in no markup, so they render
+   nothing and cannot break a page if they are stripped halfway. */
+.wcblr-probe-content-url  { content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E"); }
+.wcblr-probe-clip-path-fn { clip-path: path("M0 0L10 0L10 10Z"); }
+.wcblr-probe-border-image { border-image-source: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E"); }
 
 $wcblr-social-brands: (
 	"linkedin":  #0a66c2,
