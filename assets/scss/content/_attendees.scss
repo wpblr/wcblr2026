@@ -239,21 +239,118 @@
 	transition: color 0.15s ease;
 }
 
-.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-attendee-twitter::before { content: "X"; }
-.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-wordpress-org-profile::before { content: "wp"; }
-.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-linkedin::before { content: "in"; }
+/* ---- The marks ----------------------------------------------------------
+   These are the real logos to the extent this page can carry one, and the
+   limit is worth stating because it is not a design preference.
+
+   CampTix owns this DOM, so no <img> can be added to it. The Remote CSS
+   sanitiser empties the value of every url(), so background-image, mask-image
+   and content: url() are all dead here; that is the documented failure that
+   left 24 `.i-*` icons painting nothing. What DOES survive, checked against
+   the served stylesheet rather than assumed, is background-image with a
+   GRADIENT value: three linear-gradients are in the local build and the same
+   three come back in the served CSS, values intact. Colour, border-radius and
+   `content` all survive too.
+
+   So the chip itself becomes the logo tile. LinkedIn really is white "in" on a
+   blue rounded square and X really is a white X on a black one, so for those
+   two this is the mark, not a substitute for it. WordPress is a white W in a
+   blue circle, which is the badge shape and the brand blue but a plain W where
+   the real glyph is a drawn one: as close as a font-driven mark gets without
+   an image. `tix-your-website` is left alone on purpose. It is "some website",
+   it has no logo and no brand, so it keeps the neutral chip and the arrow. */
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-linkedin,
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-attendee-twitter,
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-wordpress-org-profile {
+	border-color: transparent;
+}
+
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-linkedin::before,
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-attendee-twitter::before,
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-wordpress-org-profile::before {
+	color: #ffffff;
+	font-size: 13px;
+	font-weight: 700;
+}
+
+/* LinkedIn: #0a66c2, rounded square. The real mark's corner is about 22% of
+   its side, which on this 32px chip is 7px. */
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-linkedin {
+	background-color: #0a66c2;
+	border-radius: 7px;
+}
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-linkedin::before {
+	content: "in";
+	letter-spacing: -0.02em;
+}
+
+/* X: black squircle, white glyph. */
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-attendee-twitter {
+	background-color: #000000;
+	border-radius: 7px;
+}
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-attendee-twitter::before {
+	content: "X";
+}
+
+/* WordPress: the badge is a circle, and the blue is #3858e9 from the current
+   WordPress.org design system, matching the social rows in
+   content/_social-brand.scss. Two sets of "the WordPress blue" for one site is
+   how a palette starts drifting. */
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-wordpress-org-profile {
+	background-color: #3858e9;
+	border-radius: 50%;
+}
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-wordpress-org-profile::before {
+	content: "W";
+}
+
 .wcblr-attendees #tix-attendees .tix-attendee-list a.tix-your-website::before { content: "\2197"; }
 
-/* A hover lift is wrong on the card, which goes nowhere, and right here, where
-   every one of these is a real link. */
-.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-field:hover,
-.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-field:focus-visible {
+/* ---- Hover ---------------------------------------------------------------
+   A hover lift is wrong on the card, which goes nowhere, and right here, where
+   every one of these is a real link.
+
+   The old hover turned the border and the glyph crimson. That is still right
+   for the neutral website chip and quite wrong for the three brand tiles,
+   where it would repaint the logo colour that is the whole point of them. The
+   tiles lift instead, on the same curve the footer's social row uses. */
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-your-website:hover,
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-your-website:focus-visible {
 	border-color: #C8344B;
 	background-color: #FBF8F1;
 }
-.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-field:hover::before,
-.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-field:focus-visible::before {
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-your-website:hover::before,
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-your-website:focus-visible::before {
 	color: #C8344B;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	@media (prefers-reduced-motion: no-preference) {
+		.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-linkedin,
+		.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-attendee-twitter,
+		.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-wordpress-org-profile {
+			transition:
+				border-color 0.15s ease,
+				background-color 0.15s ease,
+				transform 0.18s cubic-bezier(0.2, 0.6, 0.2, 1);
+		}
+
+		.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-linkedin:hover,
+		.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-attendee-twitter:hover,
+		.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-wordpress-org-profile:hover {
+			transform: translateY(-3px);
+		}
+	}
+}
+
+/* Focus must not rely on the lift, which is gated on a fine pointer and on
+   motion preference. A ring outside the tile works on all three fills. */
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-linkedin:focus-visible,
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-attendee-twitter:focus-visible,
+.wcblr-attendees #tix-attendees .tix-attendee-list a.tix-wordpress-org-profile:focus-visible {
+	outline: 2px solid #2a1d14;
+	outline-offset: 2px;
 }
 
 /* ---- Fallback: a question that came back as plain text, not a link -------- */
