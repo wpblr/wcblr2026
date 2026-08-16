@@ -154,15 +154,28 @@ body:not(.home) {
 }
 
 /* ── Small screens ────────────────────────────────────────────────────────── */
-/* Fainter and smaller, for the reason the footer ghost is: the columns go full
-   width when stacked, so the numerals sit directly behind body copy instead of
-   beside it, and the same alpha reads much heavier. */
+/* Gone, not shrunk.
+
+   This block used to keep the ghost and make it smaller and fainter, on the
+   reasoning that stacked columns put the numerals behind body copy where the
+   same alpha reads heavier. That reasoning was right and the fix was not
+   enough. The device it hangs off is the MARGIN: `right: -48px` works because
+   on a wide screen there is a margin for it to hang into, and the numerals
+   read as sitting beside the measure. A phone has no margin. At 375px the
+   shrunk version still draws about 147px of glyph and still runs off the right
+   edge, so what a reader actually sees is a large numeral chopped through the
+   middle by the screen. That is not a watermark, it is a rendering fault.
+
+   `body` carries `overflow-x: clip`, so it never caused a scrollbar and never
+   showed up as a bug in any measurement. It only shows up by looking at it.
+
+   Hidden below 767px, which is where this element's own mobile handling
+   already started, and it is the same call the gutter botanicals make in
+   layout/_ornaments.scss: a margin ornament with no margin to sit in is not a
+   smaller ornament, it is the wrong ornament. */
 @media (max-width: 767px) {
 	body:not(.home) main::before {
-		top: 20px;
-		right: -30px;
-		font-size: clamp(110px, 34vw, 190px);
-		-webkit-text-stroke-color: rgba(42, 29, 20, 0.09);
+		display: none;
 	}
 }
 
