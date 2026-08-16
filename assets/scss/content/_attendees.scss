@@ -407,6 +407,29 @@
 	}
 }
 @media (max-width: 600px) {
+	/* Two per row, always. At 375px a card is 150px wide and its content box is
+	   126px, while four 32px chips plus their margins need 160px, so a person
+	   with all four links wrapped 3 + 1 and left an orphan under a gap. The
+	   obvious fix is to shrink the chips until four fit, and that is wrong:
+	   they are already 32px against WCAG 2.2's 24px minimum target, and four
+	   across 126px would put them near 22px. Widening them to half the card
+	   instead keeps the tap target, turns 4 into a tidy 2x2, and 3 into 2 + 1.
+	   The box is invisible either way, since these carry no fill or border now,
+	   so only the 24px mark shows and it stays centred in its half.
+
+	   SCOPED WITH :has() TO CARDS THAT ACTUALLY HAVE FOUR. Applied to every
+	   card it fixes the four-link case and breaks the three-link one, which fit
+	   on a single row before and would be pushed to 2 + 1. Measured at 375px:
+	   blanket rule gives 4 links 2 rows, 3 links 2 rows; scoped gives 4 links
+	   2 rows, 3 links 1 row. `:has()` survives the sanitiser, 125 uses in the
+	   served stylesheet, and nth-of-type counts among the anchors, the name
+	   being a div. */
+	.wcblr-attendees #tix-attendees .tix-attendee-list li:has(a.tix-field:nth-of-type(4)) a.tix-field {
+		flex: 0 0 calc(50% - 8px);
+		width: auto;
+		min-width: 32px;
+	}
+
 	.wcblr-attendees #tix-attendees .tix-attendee-list {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: 14px;
