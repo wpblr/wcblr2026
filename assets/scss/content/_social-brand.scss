@@ -24,49 +24,20 @@
    All five clear 3:1 on both the footer's #f3eee2 and the card cream #FBF8F1,
    which is the floor for an icon carrying meaning. ────────────────────────── */
 
-/* ── Capability probe ────────────────────────────────────────────────────────
-   Not dead code, and not to be deleted without reading this.
+/* ── What the sanitiser allows, settled ──────────────────────────────────────
+   Two rounds of probing, checked against the served stylesheet rather than
+   assumed, so nobody has to guess at this again:
 
-   The attendee chips can only ever be as good as the drawing primitives the
-   Remote CSS sanitiser lets through, and we know exactly one thing for
-   certain: it strips the value of every `url()`, and it does NOT strip a
-   `linear-gradient` value (three are in the build, three come back served,
-   intact). Everything else is unknown because this stylesheet has never used
-   it, so there is nothing to check the served copy against.
+     SURVIVES   clip-path: polygon()   clip-path: path()
+                linear-gradient   radial-gradient   conic-gradient
+     STRIPPED   url() in every property tested: background-image,
+                content, border-image-source
 
-   That matters because it is the difference between a letterform in a brand
-   tile and the real drawn logo. `clip-path: polygon()` alone would give the X
-   mark exactly, since that logo is entirely straight edges.
-
-   These three declarations hang off class names that appear in no markup on
-   the site, so they render nothing and cost about 150 bytes. Their only job is
-   to come back, or not, in the served stylesheet after the next Remote CSS
-   save, which answers the question without a guess and without shipping a rule
-   that breaks the page if it is stripped halfway.
-
-   ROUND 1, ANSWERED. All three came back intact in the served stylesheet:
-   `clip-path: polygon()`, `radial-gradient` and `conic-gradient` survive. The
-   X mark in content/_attendees.scss is a real logo because of that result: it
-   is core's own twelve-point path, and the path has no curves in it.
-
-   ROUND 2, OPEN. polygon() takes a single ring, so it cannot draw LinkedIn
-   (4 subpaths: the tile, the i stem, the i dot, the n) or WordPress (5, one of
-   them a ring), and both carry curves. Two things would fix that outright, and
-   each is exactly the kind of assumption that has already cost this site three
-   icon attempts, so neither is worth guessing at:
-
-     · `content: url(data:...)`. The note in _attendees.scss says this is dead,
-       but the only case ever TESTED is background-image. If content survives a
-       url, every one of these becomes the real SVG and all the drawing goes
-       away.
-     · `clip-path: path()`. Takes SVG path data verbatim, curves included. Still
-       one ring, so it fixes fidelity but not subpaths.
-
-   Same rules as round 1: class names that appear in no markup, so they render
-   nothing and cannot break a page if they are stripped halfway. */
-.wcblr-probe-content-url  { content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E"); }
-.wcblr-probe-clip-path-fn { clip-path: path("M0 0L10 0L10 10Z"); }
-.wcblr-probe-border-image { border-image-source: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E"); }
+   `clip-path: path()` is the one that mattered. It takes SVG path data
+   verbatim, curves and multiple subpaths included, which is what lets the
+   attendee chips in content/_attendees.scss carry the real logos instead of
+   letterforms standing in for trademarks. The probe rules are gone now that
+   they have answered; this note is what they were for. */
 
 $wcblr-social-brands: (
 	"linkedin":  #0a66c2,
