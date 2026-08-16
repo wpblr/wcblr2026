@@ -44,17 +44,31 @@ $wcblr-social-brands: (
 	"x":         #000000,
 	"instagram": #e4405f,
 	"meetup":    #ed1c40,
-	/* WordPress core's OWN value for this icon: the block library ships
-	   `.wp-social-link-wordpress { background-color: #3499cd }`. Taken from
-	   there rather than from wordpress.org's site palette, whose --blueberry-1
-	   is #3858e9, so the mark and its colour come from the same place: core
-	   ships both the path and this hex. The classic #21759b is a third
-	   WordPress blue and is not the one used for the social icon.
+	/* WhatsApp's dark green, which is also exactly what the header's WhatsApp
+	   button already uses. Core ships #25d366 for this service and it is the
+	   right colour on a white page, but it measures 1.71:1 on the footer cream
+	   and 1.87:1 on the cards, so it would have been the one glyph in the row
+	   nobody could see. This is 3.57:1 and 3.90:1. */
+	"whatsapp":  #128c7e,
+	/* The classic WordPress blue, and it is here on contrast rather than on
+	   preference. There are three: core's block library paints this icon
+	   #3499cd, wordpress.org's site palette calls #3858e9 --blueberry-1, and
+	   this is the logo blue. Measured against the two backgrounds these have to
+	   work on, the footer's #f3eee2 and the card #FBF8F1:
 
-	   LinkedIn above is the exception and is deliberate: #0a66c2 is LinkedIn's
-	   own published brand blue, where core carries a near-identical #0d66c2.
-	   Where a brand publishes its value, that wins over core's copy of it. */
-	"wordpress": #3499cd,
+	     #3499cd   2.75:1  FAIL     3.01:1  bare pass
+	     #21759b   4.44:1  PASS     4.85:1  PASS
+	     #3858e9   4.85:1  PASS     5.29:1  PASS
+
+	   Core's own value is the one that fails the 3:1 floor this row is held to.
+	   It is chosen for a white admin screen, and this is cream. #21759b is a
+	   genuine WordPress blue, it clears both, and it sits closer to this
+	   palette than the vivid alternative.
+
+	   LinkedIn above is a deliberate exception of the same kind: #0a66c2 is
+	   LinkedIn's own published brand blue where core carries a near-identical
+	   #0d66c2. Where a brand publishes its value, that beats core's copy. */
+	"wordpress": #21759b,
 );
 
 $wcblr-social-rows:
