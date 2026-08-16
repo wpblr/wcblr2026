@@ -229,6 +229,40 @@
 	.wcblr-motion .wcblr-sec:first-child .wcblr-statrow:nth-of-type(2) .wcblr-statchip { animation-delay: 0.73s; }
 	.wcblr-motion .wcblr-sec:first-child .wcblr-statrow:nth-of-type(3) .wcblr-statchip { animation-delay: 0.8s; }
 	.wcblr-motion .wcblr-sec:first-child .wcblr-statrow:nth-of-type(4) .wcblr-statchip { animation-delay: 0.87s; }
+
+	/* ---- The roll call ------------------------------------------------------
+	   The attendee grid, and the same argument as the face wall above: on a page
+	   whose entire subject is "here are the people", a wall arriving as one
+	   block is one object moving, and arriving in sequence is a roll call. It is
+	   the one beat on this page worth spending.
+
+	   `rise-sm`, per this file's rule for dense repeated items. Sixteen circles
+	   at 14px is jitter; 7px is a sweep.
+
+	   ONLY THE FIRST EIGHT. This list is 400 people long, and the policy at the
+	   top of this file is that nothing animates where nobody can see it. Eight
+	   is two rows of the desktop grid, which is what sits at or above the fold
+	   once the hero has taken its ~600px; everything from the ninth on is
+	   scrolled to minutes later and simply appears, with no animation attached
+	   at all rather than one that finished unwatched. Writing the ladder to 400
+	   would also put 400 rules in a stylesheet that has to survive a sanitiser.
+
+	   A four-column grid makes the nth-child ladder read left-to-right along row
+	   one and then row two, which is the order the names are read in anyway.
+
+	   Step is 0.04s from a 0.34s base, so the eighth card starts at 0.62s and
+	   lands at 1.12s. The stamp springs at 0.95s and finishes at 1.4s, so it
+	   still gets the last word, which is the whole point of it. Widen the step
+	   and that ordering breaks silently. */
+	.wcblr-motion .wcblr-attendees #tix-attendees .tix-attendee-list li:nth-child(-n + 8) {
+		animation: wcblr-rise-sm 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	}
+
+	@for $i from 1 through 8 {
+		.wcblr-motion .wcblr-attendees #tix-attendees .tix-attendee-list li:nth-child(#{$i}) {
+			animation-delay: 0.34s + 0.04s * ($i - 1);
+		}
+	}
 }
 
 /* ---- 2. Everything below, on interaction -------------------------------- */
