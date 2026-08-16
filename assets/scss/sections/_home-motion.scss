@@ -550,8 +550,13 @@ body.home .wcblr-facts {
 	   it. If an icon is wanted, it goes in the markup, as an img. */
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	column-gap: 36px;
-	row-gap: 32px;
+
+	/* 18px, matching the bento row above, not the 36/32 the bare items needed.
+	   Unboxed text needs a wide gutter to read as separate items; boxed text
+	   already has a border doing that, and the same wide gutter then reads as
+	   four cards drifting apart. */
+	column-gap: 18px;
+	row-gap: 18px;
 	margin-top: 30px;
 }
 
@@ -559,26 +564,32 @@ body.home .wcblr-fact > * {
 	margin: 0 !important;
 }
 
-/* The icon sits in a LEFT GUTTER, not above the label on its own line.
-   The block carries inline `padding-top:0;padding-bottom:0` from the editor,
-   so a padding-top here is overridden and the icon lands on top of the label.
-   padding-left is not in that inline style, so the gutter needs no !important
-   and nothing has to fight the markup. */
+/* Each item is now a CARD, in the same language as the bento cells below it
+   and the Get Involved cards further down: 1.5px #dad5cd, 16px radius, #FBF8F1.
+   That styling is all block attributes, per the rule at the top of main.scss,
+   so nothing about the box is set here.
+
+   The icon still sits in a LEFT GUTTER rather than on its own line above the
+   label. The gutter used to be this file's `padding-left: 36px`, which worked
+   only because padding-left happened to be absent from the block's inline
+   style. A card has inline padding on all four sides, so that trick is dead:
+   the markup now carries `padding-left: 58px`, which is the card's own 22px
+   plus the same 36px gutter. Nothing here has to fight it, and there is still
+   no !important. */
 body.home .wcblr-fact {
 	position: relative;
 	display: block;
-	padding: 0 0 0 36px;
-	border: 0;
+	transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
-/* The icon sits in the gutter the padding-left opens up. It is an <img> inside
-   the label paragraph, so it is taken out of flow rather than pushing the label
-   text sideways. Sized here as well as on the element so the box is reserved
-   before the file loads and nothing reflows. */
+/* Positioned against the card's padding box rather than its content box, so
+   these two values track the 22px in the markup: change one, change both.
+   Sized here as well as on the element so the box is reserved before the file
+   arrives from GitHub raw and nothing reflows. */
 body.home .wcblr-fact__icon {
 	position: absolute;
-	top: 1px;
-	left: 0;
+	top: 24px;
+	left: 22px;
 	width: 22px;
 	height: 22px;
 	display: block;
@@ -625,6 +636,13 @@ body.home .wcblr-fact__body {
 	body.home .wcblr-fact:hover .wcblr-fact__label,
 	body.home .wcblr-fact:hover .wcblr-fact__body {
 		color: #2a1d14 !important;
+	}
+
+	/* The card answers too, now that there is one. Border only: the fill is
+	   already #FBF8F1, so there is no lighter paper tone to lift it to without
+	   going to flat white, which is not in the palette. */
+	body.home .wcblr-fact:hover {
+		border-color: #e0a526 !important;
 	}
 
 	/* The icon zooms, on the same curve and duration as the header and footer

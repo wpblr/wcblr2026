@@ -80,10 +80,17 @@
 .wcblr-about__image {
 	position: relative;
 
-	@media (max-width: 480px) {
-		img,
-		.wp-block-cover {
-			min-height: 275px !important;
+	/* The photo was a cover block with `min-height: 741px`, which forced a
+	   1024x683 landscape group shot into a tall portrait box and cropped most
+	   of it away, and drove the whole About section to 1464px tall against a
+	   text column roughly half that. It is a plain image block now, cropped by
+	   `aspect-ratio: 4/5` + `object-fit: cover` from the block attributes, so
+	   the crop is deliberate and the section height follows the copy.
+	   The old rule here also targeted `.wp-block-cover`, which no longer
+	   exists in this markup. */
+	@media (max-width: 780px) {
+		.wcblr-about__photo img {
+			aspect-ratio: 3 / 2;
 		}
 	}
 }
