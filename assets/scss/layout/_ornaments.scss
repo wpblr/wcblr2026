@@ -49,9 +49,18 @@
 
 .wcblr-orn {
 	position: absolute;
-	bottom: -40px;                    /* crop at the section edge, as drawn */
+	bottom: 0;
 	z-index: 1;
 	margin: 0;
+
+	/* Never taller than the section it hangs in. The sprigs render 625px tall
+	   at full width and some sections are far shorter than that: the newsletter
+	   band is about 426px, so 200px of branch was being clipped, and because
+	   the art is cropped at its canvas edge the part that got cut was the bare
+	   stem. That reads as an amputation against the footer rule, not as a
+	   branch continuing off the page. Capping the height scales the whole
+	   branch down to fit instead, so nothing is ever sliced. */
+	max-height: 100%;
 	pointer-events: none;
 	user-select: none;
 
@@ -86,6 +95,15 @@
 	display: block;
 	width: 100%;
 	height: auto;
+
+	/* `contain` is what makes the height cap above scale rather than crop. The
+	   image keeps its aspect and letterboxes horizontally inside the figure, so
+	   `object-position` pins it to the outer edge. `left` is correct for both
+	   sides: the right-hand variants are mirrored by a transform on the figure,
+	   which flips the image's own left to the screen's right. */
+	max-height: 100%;
+	object-fit: contain;
+	object-position: left bottom;
 }
 
 /* ── Horizontal placement ────────────────────────────────────────────────────
@@ -110,12 +128,6 @@
 	transform: scaleX(-1);
 }
 
-.wcblr-orn--ol,
-.wcblr-orn--or {
-	/* Not clipped by the parent, so it is anchored flush instead of bled. */
-	bottom: 0;
-}
-
 .wcblr-orn--ol { right: calc(100% + 24px); }
 
 .wcblr-orn--or {
@@ -130,13 +142,10 @@
    the WordCamp Asia page does. Used to break up a run of ornaments so four
    benga sprigs down one page do not read as the same stamp four times. */
 .wcblr-orn--top {
-	top: -40px;
+	top: 0;
 	bottom: auto;
 	transform: scaleY(-1);
 }
-
-.wcblr-orn--ol.wcblr-orn--top,
-.wcblr-orn--or.wcblr-orn--top { top: 0; }
 
 /* Mirrored on both axes when a right-hand ornament also hangs. Must come after
    both the `--r` / `--or` and the `--top` rules or one transform wins alone. */
