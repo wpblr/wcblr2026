@@ -1,0 +1,131 @@
+/* ── Section ornaments ───────────────────────────────────────────────────────
+   The gutter botanicals and the rangoli threshold flourish. Bengaluru's answer
+   to the palm frond and Peranakan tile band on the WordCamp Asia Penang site:
+   a benga sprig (Pterocarpus marsupium, the tree the city is probably named
+   after), a Tabebuia rosea branch (the March pink), and a chukki rangoli
+   flourish (the dotted floor art drawn on a doorstep, which is what a section
+   threshold is).
+
+   WHY THESE ARE <img> AND NOT BACKGROUNDS
+   The design called for one uncoloured alpha matte per ornament, painted at
+   runtime with `mask-image` and a token, so a single file could serve both the
+   cream and the espresso sections. That is not available here. WordCamp's
+   Remote CSS sanitiser keeps the property and empties the value of every
+   `url()`, data URIs included. Verified against the served stylesheet, not
+   assumed: of the 28 `background-image` declarations in this build, 24 arrive
+   as `background-image:` and paint nothing, which is every data-URI icon we
+   ship. `mask-image` would be emptied the same way.
+
+   So colour is baked into the PNG instead, tinted from tokens/colors.css in a
+   build step, one file per colour context. This file does only what CSS can
+   still do: position, opacity, transform, and the width-gated hide. Same
+   workaround the WhatsApp glyph in layout/_header.scss already uses.
+
+   PLACEMENT RULES
+   Anchored accents, never wallpaper. Two or three per page, hung off specific
+   sections, never tiled down the side: page heights here run from 8 block
+   groups on contact to 86 on home, so a repeating strip would give short pages
+   one leaf and long pages a dozen. Nothing repeats inside one viewport.
+
+   Both botanicals are drawn entering from the bottom-left of their canvas with
+   the top and right quarter left empty, so `--r` is the same file flipped
+   rather than a second asset.
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* The host section. `:has()` survives the sanitiser (125 occurrences in the
+   served stylesheet), so the section opts in by containing an ornament rather
+   than by needing a class of its own. */
+.wp-block-group:has(> .wcblr-orn) {
+	position: relative;
+	overflow: hidden;                 /* the sprig bleeds off-canvas; contain it
+	                                     so it cannot cause a horizontal scroll */
+}
+
+.wcblr-orn {
+	position: absolute;
+	bottom: -40px;                    /* crop at the section edge, as drawn */
+	z-index: 1;
+	margin: 0;
+	pointer-events: none;
+	user-select: none;
+
+	/* Width IS the gutter, measured on the live page rather than reasoned about.
+	   The widest child of every ornament-bearing section (.wcblr-about,
+	   .wcblr-stats, the venue band) measures 1200px exactly, so the free space
+	   each side is (100vw - 1200px) / 2, less 24px so the sprig never quite
+	   touches the text. A first pass used 1100px here, taken from the theme's
+	   1000px wideSize plus padding, and it was wrong by 100px: at 1300px wide
+	   the sprig would have run under the copy. Capped at 280px so it does not
+	   become a mural on an ultrawide display. */
+	width: min(280px, calc((100vw - 1200px) / 2 - 24px));
+}
+
+/* On z-order, and why it is `1` and not `0`.
+
+   These sections nest: `.wcblr-stats` is a CHILD of `.wcblr-about`, and both
+   are `alignfull` with an opaque cream background. Both also carry an ornament,
+   so both get `position: relative` from the rule above. A positioned sibling
+   with `z-index: auto` paints in document order, and the nested section comes
+   after the ornament, so at `z-index: 0` the stats background covered all but
+   90px of the benga sprig. Measured, not guessed: the sprig reported 585px
+   visible inside its parent while showing about 90.
+
+   Raising it to 1 is only safe because the width above is bounded by the real
+   gutter, so the sprig cannot reach the content column at any viewport and has
+   nothing but background to paint over. It also gives the nicer result: the
+   gutter art runs continuously across the nested section boundary instead of
+   being sliced at it. */
+
+.wcblr-orn img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.wcblr-orn--l { left: 0; }
+
+/* The right-hand gutter is the left-hand asset mirrored. */
+.wcblr-orn--r {
+	right: 0;
+	transform: scaleX(-1);
+}
+
+/* Opacity lives here rather than in the file's alpha so it stays tunable
+   without a rebuild. Values set by rendering them against real type, not
+   picked on paper: ink at 7% was invisible on #F2ECE0 and needed 12%. */
+.wcblr-orn--ink    { opacity: .12; }
+.wcblr-orn--rose   { opacity: .10; }
+.wcblr-orn--onDark { opacity: .11; }
+
+/* Below 1400px the sections are padding-bound rather than width-bound: the
+   content is `100vw - 100px` and the only free space is the 50px of root
+   padding, which is not a gutter, it is a margin. Drop the botanicals there
+   rather than shipping a 40px sliver of a leaf. */
+@media (max-width: 1399px) {
+	.wcblr-orn { display: none; }
+}
+
+/* ── Threshold flourish ──────────────────────────────────────────────────────
+   A single centred lotus, not a full-bleed repeating band. Repeating needs
+   `background-repeat` on a `url()`, which the sanitiser removes, so the band
+   is one image. The art tapers to a point at both ends and stands alone.
+   Stays visible at every width: it is the constant that ties the pages
+   together, and unlike the botanicals it sits in the content column. */
+.wcblr-flourish {
+	/* Space below it, not above: it sits at the top of a section that already
+	   brings 96px of its own padding, and without this the lotus crowds the
+	   `// section_name` eyebrow directly beneath it. */
+	margin: 0 auto 44px;
+}
+
+.wcblr-flourish img {
+	display: block;
+	width: 100%;
+	max-width: 420px;
+	height: auto;
+	margin: 0 auto;
+}
+
+@media (max-width: 620px) {
+	.wcblr-flourish img { max-width: 260px; }
+}
