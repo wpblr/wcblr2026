@@ -1,0 +1,70 @@
+/* ── Social glyphs in their own brand colours ────────────────────────────────
+   THE SINGLE SOURCE for the service colour map. There were two copies before
+   this file: one in `layout/_footer.scss` and one in `content/_guide.scss`,
+   and the footer's own comment said "if these ever change, change both", which
+   is a note that survives exactly until someone changes one. Meanwhile the
+   other two rows on the site, the organizer cards and the roster, never got
+   the map at all and were still drawing every logo in the same muted brown.
+
+   Core's `is-style-logos-only` draws each glyph in `currentColor` and ships
+   the real brand paths inline, so the logo is already correct everywhere. All
+   that was ever missing is the colour, and this is a colour per service and
+   nothing else.
+
+   WHY THE ANCHOR IS ALWAYS TARGETED TOO: the containers each set a muted
+   default on both the `li` and the `.wp-block-social-link-anchor` inside it,
+   with !important. The glyph takes its colour from the anchor, so a rule that
+   only reaches the `li` loses. Written as a pair, the anchor selector also
+   carries one more class than the default it has to beat, so these win on
+   specificity rather than on import order.
+
+   `chain` is deliberately absent. It is the generic "a website" link, it has
+   no logo and no brand, and it keeps whatever muted tone its container sets.
+
+   All five clear 3:1 on both the footer's #f3eee2 and the card cream #FBF8F1,
+   which is the floor for an icon carrying meaning. ────────────────────────── */
+
+$wcblr-social-brands: (
+	"linkedin":  #0a66c2,
+	"x":         #000000,
+	"instagram": #e4405f,
+	"meetup":    #ed1c40,
+	/* WordPress blue, the current one from the WordPress.org design system,
+	   not the classic #21759b of the older logo lockups. */
+	"wordpress": #3858e9,
+);
+
+$wcblr-social-rows:
+	".wcblr-social",                             /* footer */
+	".wcblr-guide .wcblr-follow",                /* story post, follow row */
+	".wcblr-guide .wcblr-person-social",         /* roster cards */
+	".wcblr-org-card__social";                   /* organizers page cards */
+
+@each $service, $colour in $wcblr-social-brands {
+	@each $row in $wcblr-social-rows {
+		#{$row} .wp-social-link-#{$service},
+		#{$row} .wp-social-link-#{$service} .wp-block-social-link-anchor {
+			color: $colour !important;
+		}
+	}
+}
+
+/* The old hover on the organizer cards and the roster turned every glyph
+   crimson, which would now throw away the colour that is the point of this
+   file. They lift instead, matching the footer and the follow row, so the
+   response is motion rather than a repaint. Gated twice: a tap on a phone
+   should not leave one sitting raised, and a reader who asked for less motion
+   gets none. */
+@media (hover: hover) and (pointer: fine) {
+	@media (prefers-reduced-motion: no-preference) {
+		.wcblr-org-card__social .wp-block-social-link,
+		.wcblr-guide .wcblr-person-social .wp-block-social-link {
+			transition: transform 0.18s cubic-bezier(0.2, 0.6, 0.2, 1);
+		}
+
+		.wcblr-org-card__social .wp-block-social-link:hover,
+		.wcblr-guide .wcblr-person-social .wp-block-social-link:hover {
+			transform: translateY(-3px);
+		}
+	}
+}

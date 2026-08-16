@@ -263,10 +263,10 @@
 	transition: color 0.15s;
 }
 
-.wcblr-guide .wcblr-person-social .wp-block-social-link:hover,
-.wcblr-guide .wcblr-person-social .wp-block-social-link:hover .wp-block-social-link-anchor {
-	color: #c8344b !important;
-}
+/* The crimson hover that used to live here has moved to a lift in
+   `content/_social-brand.scss`: repainting a glyph on hover would discard the
+   brand colour that file exists to apply. The muted default above still
+   stands for `chain`, which has no brand of its own. */
 
 /* ---- Narrow ------------------------------------------------------------- */
 /* Below 782px the two columns collapse to one, so the card gets the full width

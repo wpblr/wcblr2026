@@ -161,26 +161,6 @@ footer {
 			transform 0.18s cubic-bezier(0.2, 0.6, 0.2, 1);
 	}
 
-	.wcblr-social .wp-social-link-meetup,
-	.wcblr-social .wp-social-link-meetup .wp-block-social-link-anchor {
-		color: #ed1c40 !important;
-	}
-
-	.wcblr-social .wp-social-link-linkedin,
-	.wcblr-social .wp-social-link-linkedin .wp-block-social-link-anchor {
-		color: #0a66c2 !important;
-	}
-
-	.wcblr-social .wp-social-link-x,
-	.wcblr-social .wp-social-link-x .wp-block-social-link-anchor {
-		color: #000000 !important;
-	}
-
-	.wcblr-social .wp-social-link-instagram,
-	.wcblr-social .wp-social-link-instagram .wp-block-social-link-anchor {
-		color: #e4405f !important;
-	}
-
 	/* The old hover turned every glyph crimson, which would now throw away the
 	   colour that was the point of the change. They lift instead, so the
 	   response is motion rather than a repaint. Gated, so a tap on a phone does
