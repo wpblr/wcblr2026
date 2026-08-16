@@ -119,7 +119,17 @@
    content column. Inside those, `left: 0` is the left edge of the TEXT, not of
    the page, so an ornament placed that way would sit on the copy. These push
    themselves outside the parent box instead, where `right: 100%` is by
-   definition the start of the gutter. */
+   definition the start of the gutter.
+
+   PICK THE PAIR BY MEASURED WIDTH, NOT BY THE `alignfull` CLASS. On the front
+   page an alignfull section really is the viewport: .wcblr-about measures 2537
+   of 2552. On a guide or post page it is NOT. The template wraps the entry
+   content in a box capped at 1200px, and alignfull inside that resolves to
+   1200 rather than to the window, so `--l` there lands exactly on the first
+   character of the copy. That shipped on the attendees page and put a 280px
+   sprig across the h1, the intro and the first stat. The tell is that the
+   ornament starts precisely where the text starts. Guide and post pages want
+   `--ol` / `--or` for every ornament, including the one on the page shell. */
 .wcblr-orn--l { left: 0; }
 
 /* The right-hand gutter is the left-hand asset mirrored. */
