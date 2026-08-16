@@ -37,6 +37,27 @@
 	padding: 8px 16px;
 }
 
+/* A stamp can carry a link, and on the attendees page it does. It must not
+   take the theme's crimson: crimson on the turmeric pill is 2.1:1 and the
+   stamp is 12px, so it would be both off-palette and unreadable. It keeps the
+   espresso it already has and earns its affordance from the underline instead,
+   which is also the only thing that moves on hover, since the pill is already
+   tilted and a second transform on top of the rotate reads as a wobble. */
+.wcblr-stamp a {
+	color: inherit;
+	text-decoration: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 3px;
+	text-decoration-color: rgba(42, 29, 20, 0.45);
+	transition: text-decoration-color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.wcblr-stamp a:hover {
+		text-decoration-color: #2a1d14;
+	}
+}
+
 /* Any block that a stamp should be pinned to. Named rather than reusing
    `position: relative` on the panel itself, so it is obvious in the block
    markup why the class is there. */
