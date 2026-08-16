@@ -37,6 +37,12 @@
    than by needing a class of its own. */
 .wp-block-group:has(> .wcblr-orn) {
 	position: relative;
+}
+
+/* Only the full-bleed variants get clipped. `--ol` / `--or` position themselves
+   OUTSIDE their parent's box, so `overflow: hidden` here would erase them. */
+.wp-block-group:has(> .wcblr-orn--l),
+.wp-block-group:has(> .wcblr-orn--r) {
 	overflow: hidden;                 /* the sprig bleeds off-canvas; contain it
 	                                     so it cannot cause a horizontal scroll */
 }
@@ -82,6 +88,20 @@
 	height: auto;
 }
 
+/* ── Horizontal placement ────────────────────────────────────────────────────
+   Two pairs, because the page has two kinds of section.
+
+   `--l` / `--r` are for a section that is itself `alignfull`, so its box IS the
+   viewport and the gutter is inside it: .wcblr-about, .wcblr-stats, the venue
+   band, .wcblr-newsletter.
+
+   `--ol` / `--or` are for the sections that are NOT alignfull. Get Involved,
+   the speakers block and the sponsors block all sit inside one shared
+   `alignfull` wrapper and are themselves capped at 1200px, which is exactly the
+   content column. Inside those, `left: 0` is the left edge of the TEXT, not of
+   the page, so an ornament placed that way would sit on the copy. These push
+   themselves outside the parent box instead, where `right: 100%` is by
+   definition the start of the gutter. */
 .wcblr-orn--l { left: 0; }
 
 /* The right-hand gutter is the left-hand asset mirrored. */
@@ -90,12 +110,49 @@
 	transform: scaleX(-1);
 }
 
+.wcblr-orn--ol,
+.wcblr-orn--or {
+	/* Not clipped by the parent, so it is anchored flush instead of bled. */
+	bottom: 0;
+}
+
+.wcblr-orn--ol { right: calc(100% + 24px); }
+
+.wcblr-orn--or {
+	left: calc(100% + 24px);
+	transform: scaleX(-1);
+}
+
+/* ── Vertical placement ──────────────────────────────────────────────────────
+   Default is bottom-anchored: the branch is drawn entering from the bottom-left
+   of its canvas, so it grows up out of the section edge. `--top` flips it to
+   hang down from the top instead, which is what the creeper in the top-left of
+   the WordCamp Asia page does. Used to break up a run of ornaments so four
+   benga sprigs down one page do not read as the same stamp four times. */
+.wcblr-orn--top {
+	top: -40px;
+	bottom: auto;
+	transform: scaleY(-1);
+}
+
+.wcblr-orn--ol.wcblr-orn--top,
+.wcblr-orn--or.wcblr-orn--top { top: 0; }
+
+/* Mirrored on both axes when a right-hand ornament also hangs. Must come after
+   both the `--r` / `--or` and the `--top` rules or one transform wins alone. */
+.wcblr-orn--r.wcblr-orn--top,
+.wcblr-orn--or.wcblr-orn--top {
+	transform: scale(-1, -1);
+}
+
 /* Opacity lives here rather than in the file's alpha so it stays tunable
-   without a rebuild. Values set by rendering them against real type, not
-   picked on paper: ink at 7% was invisible on #F2ECE0 and needed 12%. */
-.wcblr-orn--ink    { opacity: .12; }
-.wcblr-orn--rose   { opacity: .10; }
-.wcblr-orn--onDark { opacity: .11; }
+   without a rebuild. Values set by rendering them against real type, not picked
+   on paper. 7% ink was invisible on #F2ECE0; 12% read on a big monitor but
+   still washed out in place, so ink is 20% and the rose, which carries more
+   inherent contrast against cream, is 18%. */
+.wcblr-orn--ink    { opacity: .20; }
+.wcblr-orn--rose   { opacity: .18; }
+.wcblr-orn--onDark { opacity: .16; }
 
 /* Below 1400px the sections are padding-bound rather than width-bound: the
    content is `100vw - 100px` and the only free space is the 50px of root
@@ -126,6 +183,30 @@
 	margin: 0 auto;
 }
 
-@media (max-width: 620px) {
-	.wcblr-flourish img { max-width: 260px; }
+/* Mobile and tablet. Below 1400px the botanicals are gone, so the flourish is
+   the whole ornament system and it has to hold the page on its own. It scales
+   down rather than disappearing, and keeps a floor of 180px so it never shrinks
+   into an unreadable smudge on a 360px phone. The lotus is hairline art: below
+   about 180px the line closes up and it reads as a grey blob. */
+@media (max-width: 900px) {
+	.wcblr-flourish {
+		margin-bottom: 34px;
+	}
+
+	.wcblr-flourish img {
+		width: 62vw;
+		min-width: 180px;
+		max-width: 300px;
+	}
+}
+
+@media (max-width: 480px) {
+	.wcblr-flourish {
+		margin-bottom: 26px;
+	}
+
+	.wcblr-flourish img {
+		width: 70vw;
+		max-width: 240px;
+	}
 }
