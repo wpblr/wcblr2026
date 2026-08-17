@@ -1318,11 +1318,61 @@ main:has(#tix) .wcblr-page-head {
 	   edge was close enough to the viewport that one of them fell off it. They
 	   are now clipped by the panel, so there is nothing to fall off. */
 	@media (max-width: 600px) {
-		form { padding: 30px 18px 18px; }
+		form { padding: 26px 20px 22px; }
 		/* the bleed has to follow the card's padding or the tear stops short */
-		.tix_tickets_table tbody tr { margin: 0 -18px; padding: 0 18px; }
+		.tix_tickets_table tbody tr { margin: 0 -20px; padding: 0 20px; }
 		.tix_tickets_table tbody tr + tr { margin-top: 26px; padding-top: 26px; }
-		.tix_tickets_table tbody tr.tix-row-coupon { padding: 24px 18px 0; }
+		.tix_tickets_table tbody tr.tix-row-coupon { padding: 24px 20px 0; }
+
+		/* THE QUANTITY CONTROL TAKES ITS OWN ROW.
+
+		   Beside the price it is a 96px column plus an 18px gap out of a card
+		   that is 260px wide inside its padding on a 360px phone, which leaves
+		   146px for a price that needs 150 and a caption that needs 179. Both
+		   wrapped: "\u20b9600.0 / 0" on two lines, under a heading, on the one
+		   object on the page that is asking for money. Measured on a 360px
+		   render, not guessed, because 390 fits and 360 does not.
+
+		   On its own row the price gets the full width and the control gets to
+		   be a real control: the select fills the row, which is also the only
+		   way the chevron stays over its right edge. */
+		/* The price spans both columns, or column two stays as wide as the
+		   "19 LEFT" pill above it and the price is back in 157px. */
+		.tix_tickets_table tbody .tix-column-price {
+			grid-column: 1 / -1;
+		}
+		.tix_tickets_table tbody .tix-column-quantity {
+			grid-column: 1 / -1;
+			grid-row: 3;
+			flex-direction: row;
+			align-items: center;
+			gap: 12px;
+		}
+		.tix_tickets_table tbody .tix-column-quantity::before {
+			align-self: center;
+			flex: 0 0 auto;
+			white-space: nowrap;
+		}
+		.tix_tickets_table tbody .tix-column-quantity select {
+			flex: 1 1 auto;
+			width: 100%;
+		}
+		.tix_tickets_table tbody .tix-column-quantity::after {
+			top: 50%;
+			bottom: auto;
+			margin-top: -5px;
+		}
+
+		/* Four words at 11px with 0.12em of tracking and three-space gaps come
+		   to 309px, which is wider than the card. Same four words, tighter. */
+		form > p:has(input[type="submit"])::after {
+			/* Literal no-break spaces, not `\00a0` escapes. A CSS escape takes up
+			   to SIX hex digits, so `\00a0Filter` parses as U+00A0F followed by
+			   "ilter" and the row renders "LUNCH □ILTER COFFEE". */
+			content: "Lunch  Filter coffee  Badge  Swag";
+			font-size: 10px;
+			letter-spacing: 0.06em;
+		}
 	}
 }
 

@@ -668,6 +668,38 @@
 	.wcblr-guide .wcblr-tix-cta > .wp-block-group { max-width: none; }
 }
 
+/* ---- The phone ----------------------------------------------------------
+   Measured on a 360px render, which is where things break; 390 fits. */
+@media (max-width: 600px) {
+	/* 34px, which is what `_guide.scss` gives an h2 on a phone, breaks "How the
+	   weekend works" after two words and leaves a two-word second line. So does
+	   31. 29 holds it on one line in a 300px column, which is what a 360px
+	   phone gives after the root padding and is the narrowest screen worth
+	   building for. */
+	.wcblr-post.wcblr-tix-page.wcblr-guide .wcblr-sec h2 {
+		font-size: 29px !important;
+	}
+	.wcblr-post.wcblr-guide.wcblr-tix-page .wcblr-sec:first-child h2 {
+		font-size: 36px !important;
+	}
+
+	/* The closing band. Two buttons of different widths stacked at the left of
+	   a band read as a ragged column; full width they read as two actions. */
+	.wcblr-guide .wcblr-tix-cta h3 {
+		font-size: 30px !important;
+	}
+	.wcblr-guide .wcblr-tix-cta .wp-block-buttons {
+		width: 100%;
+	}
+	.wcblr-guide .wcblr-tix-cta .wp-block-button {
+		width: 100%;
+	}
+	.wcblr-guide .wcblr-tix-cta .wp-block-button__link {
+		display: block;
+		text-align: center;
+	}
+}
+
 /* ---- Interaction ---------------------------------------------------------
    The load ladder in `content/_motion.scss` covers the opening section and
    nothing else, by design: this page is about 8,000px and an entrance played
