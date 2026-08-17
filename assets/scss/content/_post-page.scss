@@ -29,24 +29,3 @@
 	}
 }
 
-/* Ghost "26" on all non-home pages — matches homepage hero ghost */
-body:not(.home) main {
-	position: relative;
-	overflow: visible;
-	&::before {
-		content: "26";
-		position: absolute;
-		top: 30px;
-		right: -40px;
-		font-family: Fraunces, Georgia, serif;
-		font-weight: 600;
-		font-size: clamp(220px, 34vw, 460px);
-		line-height: 0.8;
-		color: transparent;
-		-webkit-text-stroke: 1.5px rgba(42, 29, 20, 0.07);
-		pointer-events: none;
-		user-select: none;
-		z-index: 0;
-	}
-}
-

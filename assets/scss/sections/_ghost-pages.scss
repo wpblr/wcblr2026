@@ -74,14 +74,14 @@
 @mixin wcblr-ghost-26 {
 	content: "26";
 	position: absolute;
-	top: 28px;
-	right: -48px;
+	top: 30px;
+	right: -40px;
 	font-family: "Fraunces", Georgia, serif;
 	font-weight: 600;
-	font-size: clamp(150px, 21vw, 320px);
+	font-size: clamp(220px, 34vw, 460px);
 	line-height: 0.8;
 	color: transparent;
-	-webkit-text-stroke: 2px rgba(42, 29, 20, 0.13);
+	-webkit-text-stroke: 1.5px rgba(42, 29, 20, 0.07);
 	pointer-events: none;
 	user-select: none;
 }
@@ -196,5 +196,23 @@ body:not(.home) {
 @media (prefers-reduced-motion: no-preference) {
 	body:not(.home) main::before {
 		animation: wcblr-hero-ghost 1.4s 0.25s ease-out both;
+	}
+
+	/* ── Inner page hero entrance — eyebrow, h1, lead ───────────────────────── */
+	/* Mirrors the homepage hero stagger. The eyebrow and lead fade+rise;
+	   the h1 only lifts (no opacity) so it counts as painted for LCP. */
+	body:not(.home) main {
+		[class*="wcblr-eyebrow"]:first-of-type {
+			animation: wcblr-hero-rise 0.6s 0.05s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+		}
+
+		h1 {
+			animation: wcblr-hero-lift 0.7s 0.12s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+		}
+
+		.wcblr-lead,
+		.wcblr-page-lead {
+			animation: wcblr-hero-rise 0.6s 0.28s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+		}
 	}
 }
