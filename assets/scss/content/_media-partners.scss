@@ -1,23 +1,25 @@
 /* ── Media partners page ─────────────────────────────────────────────────────
-   One class, and it exists for one reason: the partner rows need a social row,
-   and every social row on this site takes its brand colours from
-   `content/_social-brand.scss` by having its selector listed in
-   `$wcblr-social-rows`. A row that is not in that list draws every glyph in the
-   same muted brown, which is the bug that file was written to end.
+   The roster on /media-partners/: one card holding five hairline-separated
+   rows, each a logo, a format label, a linked name, a description and a row of
+   social glyphs.
 
-   Why this is not `.wcblr-person-social` from `content/_roster.scss`: that one
-   is grid-positioned (`grid-column: 2; grid-row: 3`) because it lives inside the
-   `.wcblr-person` card's grid. Reusing it outside that grid places it in a grid
-   that does not exist. The colours are shared; the placement is not.
+   Three things here that blocks cannot express, and one that they could but
+   should not have to. In order down the file: the social row's brand colours,
+   the optical levelling of five logos that arrived at five different aspect
+   ratios, the list itself, and the hover.
 
-   Everything else the page needs is already in the kit: each partner is a
-   `.wcblr-panel`, and the logos are pre-normalised to one 800x300 transparent
-   canvas before upload, so no CSS sizes them. ─────────────────────────────── */
+   Why the social row is not `.wcblr-person-social` from `content/_roster.scss`:
+   the colours are shared and the placement is not. That one is grid-positioned
+   (`grid-column: 2; grid-row: 3`) because it lives inside the `.wcblr-person`
+   card's grid, so reusing it here would place it in a grid that does not exist.
+   The colour itself comes from `content/_social-brand.scss`, which is the one
+   map for the whole site; this row is in `$wcblr-social-rows` there, and a row
+   that is not in that list draws every glyph in the same muted brown. ─────── */
 
 /* ── Optical weight, which the shared canvas does not give you ───────────────
    Every partner logo ships on the same 800x300 transparent canvas, so all five
-   image boxes are identical and the column heights line up with no CSS. What a
-   shared canvas cannot equalise is how much of it each mark actually fills. The
+   image boxes are identical and the rows line up with no CSS. What a shared
+   canvas cannot equalise is how much of it each mark actually fills. The
    supplied art runs from a square badge to a 3.7:1 wordmark, and fitting each
    one to the same bounding box means the badge covers a quarter of the width
    the wordmark does. On the page that read as Prospera X at ~70px beside The WP
@@ -49,99 +51,126 @@
 .wcblr-guide .wcblr-mp-logo-wpoetstv img     { transform: scale(0.743); }
 .wcblr-guide .wcblr-mp-logo-wpsimplified img { transform: scale(0.805); }
 
-/* ── The card, and why only these cards respond to a pointer ─────────────────
-   Hover feedback is a promise that there is something to click. Each partner
-   card carries a linked name and a row of linked glyphs, so it earns one. The
-   three `// the_coverage` cards and the two `// not_a_sponsorship` cards are
-   read-only and deliberately stay still: lifting a card that goes nowhere is
-   the interface lying about itself.
+/* ── The roster is one object, not five ──────────────────────────────────────
+   It shipped as five separate house cards stacked 18px apart, and that is what
+   made the page read as assembled rather than designed: five identical rounded
+   rectangles down the screen, on a page whose other sections were also rounded
+   rectangles. Nothing was wrong with any one of them, and the set was
+   monotonous.
 
-   Specificity note: `content/_motion.scss` already lifts every `.wcblr-panel`
-   2px under the pointer, at `.wcblr-motion .wcblr-panel:hover` = (0,3,0), and
-   it is imported after this file. `.wcblr-post.wcblr-guide` puts this pair at
-   (0,4,0) so the richer lift wins on specificity rather than on import order,
-   which would silently flip if the imports were ever resorted. */
+   It is now a single card holding five rows divided by hairlines, which is what
+   a masthead or a directory actually looks like. One surface instead of five,
+   the entries read as a list rather than as five unrelated slabs, and the
+   section gains a shape no other section on the page uses.
+
+   Same tokens as `.wcblr-panel`, deliberately: this is the house card doing a
+   different job, not a second chrome. */
+.wcblr-guide .wcblr-mp-list {
+	background: #fbf8f1;
+	border: 1.5px solid #dad5cd;
+	border-radius: 16px;
+}
+
+/* The row bleeds 18px back into the list's 32px padding, so a hovered row's
+   tint runs wider than its text without reaching the card edge, and the
+   hairline sits inset from that edge rather than butting into the corner
+   radius. Vertical margins are already 0 from the block's own inline style. */
+.wcblr-guide .wcblr-mp-row {
+	margin-left: -18px;
+	margin-right: -18px;
+	padding: 26px 18px;
+	border-radius: 12px;
+}
+
+.wcblr-guide .wcblr-mp-row + .wcblr-mp-row {
+	border-top: 1px solid #e6dfd2;
+}
+
+/* Core's margin on the social `ul`, which inside a row is 17px of dead space
+   above the hairline rather than spacing between siblings in a flow. */
+.wcblr-guide .wcblr-mp-social {
+	margin-bottom: 0;
+}
+
+/* ── The measure, which nested prose escapes ─────────────────────────────────
+   `_guide.scss` caps section prose with `.wcblr-sec > p`, a direct-child
+   selector on purpose so cards and rows keep their own widths. The cost, which
+   `sections.md` warns about and which is invisible in the markup, is that any
+   paragraph nested inside a group runs the full container. Both of these were
+   doing it: the rail's copy was setting about 145 characters to the line
+   directly under a lead set at 68, and the roster's about 105. Two measures in
+   one section reads as carelessness even when nobody can name what is wrong.
+
+   68ch on the rail because it sits on open cream like section prose, 74ch in
+   the roster because it sits on a card, which is the same pair `_guide.scss`
+   uses for a panel. Scoped to this page's own classes rather than to
+   `.wcblr-timeline-item`, so the travel guide's rail is untouched. */
+.wcblr-guide .wcblr-mp-rail .wcblr-timeline-item p {
+	max-width: 68ch;
+}
+
+.wcblr-guide .wcblr-mp-row p {
+	max-width: 74ch;
+}
+
 /* ── Narrow ──────────────────────────────────────────────────────────────────
-   Below 782px the two columns collapse to one, so the logo column stops being
-   27 per cent of a row and becomes the full width of the card. Uncapped, an
-   800px canvas then draws the mark about 150px tall above three lines of copy,
-   which makes every card open with a banner. Capped, it reads as the lockup it
-   is.
+   Below 782px the two columns collapse to one, so the logo column stops being a
+   quarter of a row and becomes the full width of the card. Uncapped, an 800px
+   canvas then draws the mark about 150px tall above three lines of copy, which
+   makes every entry open with a banner. Capped, it reads as the lockup it is.
 
    Centred, and that is not a preference either. Each mark is centred inside its
    own 800x300 canvas, so flushing the canvas left leaves the ink floating a
-   canvas-width-dependent distance in from the card edge: 82px for the Prospera
-   X badge, 12px for The WP Weekly wordmark. Ragged, and it reads as a bug.
+   canvas-width-dependent distance in from the edge: 82px for the Prospera X
+   badge, 12px for The WP Weekly wordmark. Ragged, and it reads as a bug.
    Centring the canvas centres the ink, which is at least deliberate. */
 @media (max-width: 781px) {
-	.wcblr-guide .wcblr-mp-card .wcblr-mp-logo {
+	.wcblr-guide .wcblr-mp-row .wcblr-mp-logo {
 		max-width: 220px;
 		margin-left: auto;
 		margin-right: auto;
 	}
 }
 
-/* ── Two inherited bottom margins that were padding the card out ─────────────
-   Measured off the DOM rather than eyeballed: the card is 276px tall and its
-   content is 220px. The 56px difference is entirely two defaults leaking inside
-   a container that already has its own 28px padding.
-
-     .wp-block-columns   margin-bottom 38.5px   the theme's block gap, applied
-                                                to the columns block even though
-                                                it is the card's last child
-     .wcblr-mp-social    margin-bottom 17px     core's list margin on the ul
-
-   Both are correct defaults between sibling blocks in a flow and wrong inside a
-   card, where the padding is the spacing. Zeroing them takes each partner row
-   from 276px to about 220px, which is 280px off the roster. */
-.wcblr-guide .wcblr-mp-card > .wp-block-columns {
-	margin-bottom: 0;
-}
-
-.wcblr-guide .wcblr-mp-social {
-	margin-bottom: 0;
-}
-
+/* ── Hover, and why only these rows get one ──────────────────────────────────
+   Hover feedback is a promise that there is something to click. Each partner
+   row carries a linked name and a row of linked glyphs, so it earns one. The
+   three `// the_coverage` stops and the two `// not_a_sponsorship` cards are
+   read-only and deliberately stay still: moving something that goes nowhere is
+   the interface lying about itself. */
 @media (hover: hover) and (pointer: fine) {
 	/* The colour half runs for everyone, including a reader who asked for less
-	   motion: the card still answers the pointer, it just does not travel.
-
-	   Two shadow layers, not one. A single wide blur at low alpha is invisible
-	   on #F2ECE0, which is what the first attempt shipped: a 6px contact shadow
-	   under a 36px ambient one is what actually reads as lifted. The border has
-	   to travel further than it looks like it should for the same reason,
-	   #dad5cd to #b9ac97, or the change is lost against the card fill. */
-	.wcblr-post.wcblr-guide .wcblr-mp-card:hover {
-		border-color: #b9ac97 !important;
-		box-shadow: 0 2px 6px rgba(42, 29, 20, 0.06),
-			0 18px 36px rgba(42, 29, 20, 0.15);
+	   motion: the row still answers the pointer, it just does not travel. A row
+	   inside a card should not lift the way a free-standing card did anyway.
+	   What a list row does under a pointer is light up. */
+	.wcblr-post.wcblr-guide .wcblr-mp-row:hover {
+		background-color: #f4eddf;
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
-		.wcblr-post.wcblr-guide .wcblr-mp-card {
-			transition: transform 0.28s cubic-bezier(0.2, 0.6, 0.2, 1),
-				box-shadow 0.28s ease, border-color 0.28s ease;
+		.wcblr-post.wcblr-guide .wcblr-mp-row {
+			transition: background-color 0.22s ease;
 		}
 
-		.wcblr-post.wcblr-guide .wcblr-mp-card:hover {
-			transform: translateY(-4px);
-		}
-
-		/* The mark leans in a little further than the card it sits on, so the
-		   row reads as one object moving rather than two. No clipping is
-		   involved and none is needed: the logo is a transparent PNG with its
-		   own padding baked in, which is exactly why the hover zoom that was
-		   twice rejected on captioned photographs is safe here. */
-		.wcblr-post.wcblr-guide .wcblr-mp-card .wcblr-mp-logo {
+		/* The mark leans in while the row lights up, so the entry reads as one
+		   object responding rather than two. No clipping is involved and none
+		   is needed: the logo is a transparent PNG with its own padding baked
+		   in, which is exactly why the hover zoom that was twice rejected on
+		   captioned photographs is safe here. */
+		.wcblr-post.wcblr-guide .wcblr-mp-row .wcblr-mp-logo {
 			transition: transform 0.28s cubic-bezier(0.2, 0.6, 0.2, 1);
 		}
 
-		.wcblr-post.wcblr-guide .wcblr-mp-card:hover .wcblr-mp-logo {
-			transform: scale(1.045);
+		.wcblr-post.wcblr-guide .wcblr-mp-row:hover .wcblr-mp-logo {
+			transform: scale(1.05);
 		}
 	}
 }
 
+/* ── The partner social row ──────────────────────────────────────────────────
+   Layout only. Every colour in it comes from the map in `_social-brand.scss`,
+   whose selectors carry one more class than the muted default below and so win
+   on specificity rather than on import order. */
 .wcblr-guide .wcblr-mp-social {
 	display: flex;
 	flex-wrap: wrap;
@@ -153,9 +182,7 @@
 }
 
 /* The muted default, which `chain` keeps: it is the generic "a website" link
-   and has no brand of its own. Every other service is repainted by the map in
-   `_social-brand.scss`, whose selectors carry one more class than this pair and
-   so win on specificity rather than on import order. */
+   and has no brand of its own. */
 .wcblr-guide .wcblr-mp-social .wp-block-social-link,
 .wcblr-guide .wcblr-mp-social .wp-block-social-link-anchor {
 	color: #9c8d7c !important;
