@@ -69,17 +69,24 @@
 	background: #fbf8f1;
 	border: 1.5px solid #dad5cd;
 	border-radius: 16px;
+
+	/* So the first and last rows can fill the card completely and still be cut
+	   to its corner radius. Without this, a full-bleed row squares off the top
+	   two corners the moment it is hovered. */
+	overflow: hidden;
 }
 
-/* The row bleeds 18px back into the list's 32px padding, so a hovered row's
-   tint runs wider than its text without reaching the card edge, and the
-   hairline sits inset from that edge rather than butting into the corner
-   radius. Vertical margins are already 0 from the block's own inline style. */
+/* The row bleeds back over the list's whole 32px padding, so a hovered row is
+   lit edge to edge rather than as a floating bar with a 14px margin of unlit
+   card either side, which is what the first version did and what it was pulled
+   up on. The hairline now spans the full width too, which is what a divider in
+   a list is supposed to do. Vertical margins are already 0 from the block's own
+   inline style, and the list's vertical padding is 0 so the end rows meet the
+   card edge; the 26px here is the whole inset. */
 .wcblr-guide .wcblr-mp-row {
-	margin-left: -18px;
-	margin-right: -18px;
-	padding: 26px 18px;
-	border-radius: 12px;
+	margin-left: -32px;
+	margin-right: -32px;
+	padding: 26px 32px;
 }
 
 .wcblr-guide .wcblr-mp-row + .wcblr-mp-row {
@@ -175,10 +182,13 @@
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: 12px;
+	gap: 14px;
 	margin-top: 18px;
 	padding-left: 0;
-	font-size: 17px !important;
+	/* 21px, moved with the two organizer rows so the three social rows on the
+	   site stay one family. Short of the grid's 24 because a partner row can
+	   carry six glyphs in a column narrower than an organizer card. */
+	font-size: 21px !important;
 }
 
 /* The muted default, which `chain` keeps: it is the generic "a website" link
