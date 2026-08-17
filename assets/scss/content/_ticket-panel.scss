@@ -234,3 +234,451 @@
 	height: 1px;
 	background: #cfc7ba;
 }
+
+/* ==========================================================================
+   The 2026 tickets redesign layer
+   --------------------------------------------------------------------------
+   Everything below belongs to the same page and the same object language as
+   the ticket panel above: one dark surface per section, a gold edge for the
+   thing that is on sale, a dashed edge for the thing that is not, and a mono
+   label wherever a value needs naming.
+
+   Five pieces, in page order:
+
+     .wcblr-sechead     the section head, heading left and its lead right
+     .wcblr-tix-points  the three things a ticket does, under the lede
+     .wcblr-tix-typebar the labelled rule that opens the tier row
+     .wcblr-tiers       three tier cards: live, next, and not written yet
+     .wcblr-tix-day-*   the weekend pair, Saturday on paper, Sunday on espresso
+     .wcblr-faqgrid     the questions, two across, with the way to ask one
+     .wcblr-tix-cta     the closing band
+
+   All of it is scoped to `.wcblr-guide`, which only the tickets page and the
+   long-form posts carry, and none of it is reachable from a page that has not
+   opted in.                                                                */
+
+/* ---- The section head ----------------------------------------------------
+   A 46px heading on its own leaves the right half of the row empty for the
+   whole width of the page, three times over. Putting the section's lead
+   paragraph opposite it fills the row, shortens the measure to something
+   readable without the 68ch cap, and gives every section below the first the
+   same opening shape.
+
+   `align-items: baseline` and NOT `center`: the lead is three lines of 17px
+   against one line of 46px serif, and centring floats it in the middle of a
+   heading that is taller than it. Sitting on the heading's first baseline is
+   what makes the two read as one head rather than as two blocks.           */
+.wcblr-guide .wcblr-sechead {
+	align-items: baseline;
+}
+
+.wcblr-guide .wcblr-sechead > .wp-block-column > p {
+	/* The lead is already in a 38% column, so the guide's 68ch is never
+	   reached. This is the top-of-column alignment instead: a 17px line sits
+	   about 5px above a 46px cap height, and that is the difference between
+	   the two columns reading as level and reading as nearly level. */
+	margin-top: 6px !important;
+}
+
+/* Core stacks columns below 782px. The lead then follows the heading, which is
+   the order it was written in, and the 6px correction is wrong once it is no
+   longer beside anything. */
+@media (max-width: 781px) {
+	.wcblr-guide .wcblr-sechead > .wp-block-column > p {
+		margin-top: 14px !important;
+	}
+}
+
+/* ---- The three points, under the opening lede ----------------------------
+   This replaced a third paragraph of prose. The lede says what the weekend is;
+   these say what the thing you are about to buy actually does, which is a list
+   and was being written as a sentence.
+
+   The rule above them is the same hairline the facts panel uses, and it is on
+   the list rather than in the gap so it belongs to something. */
+.wcblr-guide .wcblr-tix-points {
+	list-style: none;
+	padding-left: 0;
+	border-top: 1px solid #dad5cd;
+	padding-top: 26px;
+}
+
+.wcblr-guide .wcblr-tix-points li {
+	position: relative;
+	padding-left: 26px;
+	margin-bottom: 14px;
+}
+
+.wcblr-guide .wcblr-tix-points li:last-child {
+	margin-bottom: 0;
+}
+
+/* A turmeric diamond, drawn from a rotated square rather than shipped as a
+   glyph: `content: "\25C6"` renders in whatever face the browser has for it and
+   comes out a different size in Chrome and Safari. A box is a box everywhere.
+   Same mark, same 7px, on the tier lists and the code of conduct bar below, so
+   the page has one bullet rather than four. */
+.wcblr-guide .wcblr-tix-points li::before {
+	content: "";
+	position: absolute;
+	left: 1px;
+	top: 0.52em;
+	width: 7px;
+	height: 7px;
+	background: #e0a526;
+	transform: rotate(45deg);
+}
+
+/* ---- The bar that opens the tier row -------------------------------------
+   A mono label, a rule that takes whatever width is left, and the one sentence
+   that says how the three cards relate to each other. It is the same device as
+   the eyebrow's own divider, turned on its side, and it stops the three cards
+   arriving with no introduction under a panel that has just finished talking.
+
+   `order` puts the rule between the two paragraphs. A pseudo-element on a flex
+   container is a flex ITEM, but only ::before and ::after exist and both would
+   otherwise land at an end. Declaring `display` and `gap` here rather than
+   leaving them to core's layout support is deliberate: core emits those from a
+   `wp-container-*` rule generated at render time, so anything printing the
+   saved markup without running the layout engine gets one stacked column. */
+.wcblr-guide .wcblr-tix-typebar {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.wcblr-guide .wcblr-tix-typebar::before {
+	content: "";
+	order: 2;
+	flex: 1 1 auto;
+	height: 1px;
+	background: #dad5cd;
+}
+
+.wcblr-guide .wcblr-tix-typelabel { order: 1; flex: 0 0 auto; }
+.wcblr-guide .wcblr-tix-typenote { order: 3; flex: 0 1 auto; text-align: right; }
+
+/* Below the columns breakpoint the note is longer than the space left over, so
+   the rule collapses to nothing and the two texts butt together. */
+@media (max-width: 781px) {
+	.wcblr-guide .wcblr-tix-typebar {
+		display: block;
+	}
+	.wcblr-guide .wcblr-tix-typebar::before { display: none; }
+	.wcblr-guide .wcblr-tix-typenote {
+		text-align: left;
+		margin-top: 10px !important;
+	}
+}
+
+/* ---- The tier row --------------------------------------------------------
+   Three cards now: what is on sale, what is next, and an honest note that more
+   are coming. The third card is why the row works. Two cards left the row
+   reading as a comparison of two products, and the second one was not for
+   sale, so the comparison was between a thing and a promise.
+
+   Equal height comes from the column-as-card trick, so none of the three
+   carries a `width` attribute. The button, the mono note and the watch link
+   are pushed to the bottom edge by `margin-top: auto` so the three cards agree
+   on where their last line sits whatever length their copy runs to. */
+.wcblr-guide .wcblr-tiers > .wp-block-column {
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+}
+
+.wcblr-guide .wcblr-tiers > .wp-block-column > .wp-block-buttons,
+.wcblr-guide .wcblr-tiers > .wp-block-column > .wcblr-tier-soon-note,
+.wcblr-guide .wcblr-tiers > .wp-block-column > .wcblr-tier-watch {
+	margin-top: auto !important;
+}
+
+/* The status pill. A mono label on its own line reads as a field name; the
+   same words inside a tinted pill read as a state, which is what they are. The
+   third card keeps its label bare, because "later in the year" is not a state
+   the card is IN, it is when the card stops being hypothetical. */
+.wcblr-guide .wcblr-tier-pill {
+	display: inline-block;
+	align-self: flex-start;
+	padding: 6px 12px;
+	border-radius: 30px;
+	background: rgba(224, 165, 38, 0.20);
+}
+
+.wcblr-guide .wcblr-tier-next .wcblr-tier-pill {
+	background: rgba(42, 29, 20, 0.08);
+}
+
+/* The lists. Same diamond as the three points above, in the colour of the card
+   it is in: turmeric where the tier is on sale, taupe where it is not, and a
+   hollow outline where the tier does not exist yet. The hairline over the list
+   is what separates the description from the specifics. */
+.wcblr-guide .wcblr-tier-list {
+	list-style: none;
+	padding-left: 0;
+	border-top: 1px solid rgba(42, 29, 20, 0.14);
+	padding-top: 20px;
+}
+
+.wcblr-guide .wcblr-tier-list li {
+	position: relative;
+	padding-left: 26px;
+	margin-bottom: 12px;
+}
+
+.wcblr-guide .wcblr-tier-list li:last-child { margin-bottom: 0; }
+
+.wcblr-guide .wcblr-tier-list li::before {
+	content: "";
+	position: absolute;
+	left: 1px;
+	top: 0.5em;
+	width: 7px;
+	height: 7px;
+	background: #e0a526;
+	transform: rotate(45deg);
+}
+
+.wcblr-guide .wcblr-tier-next .wcblr-tier-list li::before {
+	background: #b3a595;
+}
+
+/* Hollow, for the same reason the "announced here first" mark is hollow: a
+   filled mark reads as an item that is settled. */
+.wcblr-guide .wcblr-tier-soon .wcblr-tier-list li::before {
+	background: transparent;
+	border: 1.5px solid #b3a595;
+}
+
+/* The one card with a button gets it full width. A 200px button floating at
+   the left of a 355px card looks like it belongs to the bullet above it; edge
+   to edge it reads as the card's own action. */
+.wcblr-guide .wcblr-tier-cta,
+.wcblr-guide .wcblr-tier-cta .wp-block-button {
+	width: 100%;
+}
+
+.wcblr-guide .wcblr-tier-cta .wp-block-button__link {
+	display: block;
+	text-align: center;
+}
+
+/* The way to hear about the ones that do not exist yet. Not a button: there is
+   nothing to click through to, and a control that does nothing is worse than a
+   line of type that says where to look. */
+.wcblr-guide .wcblr-tier-watch::after {
+	content: "\2192";
+	display: inline-block;
+	margin-left: 8px;
+	transition: transform 0.2s ease;
+}
+
+/* ---- The weekend pair ----------------------------------------------------
+   The two days were drawn as two identical cream cards with different border
+   colours, which says they are the same kind of thing in two flavours. They
+   are not: one is the event the ticket is sold for and the other is a day you
+   have to sign up for separately.
+
+   So Sunday takes the espresso, the same surface as the ticket panel two
+   sections up, and Saturday stays on paper. Each keeps a coloured rule along
+   its top edge, which is the one piece of chrome they still share, and each
+   still states its own date and status in words. */
+.wcblr-guide .wcblr-tix-day-sat {
+	border-top: 4px solid #a8760f !important;
+}
+
+.wcblr-guide .wcblr-tix-day-sun {
+	border-top: 4px solid #C8344B !important;
+}
+
+/* The inset hairline over the note has to invert with the card. */
+.wcblr-guide .wcblr-tix-day-sun .wcblr-tix-day-note::before {
+	background: rgba(242, 236, 224, 0.25);
+}
+
+/* ---- The code of conduct bar --------------------------------------------- */
+.wcblr-guide .wcblr-tix-coc {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+}
+
+.wcblr-guide .wcblr-tix-coc::before {
+	content: "";
+	flex: 0 0 auto;
+	width: 9px;
+	height: 9px;
+	background: #e0a526;
+	transform: rotate(45deg);
+}
+
+/* ---- The questions, two across -------------------------------------------
+   Seven questions in one column is 900px of accordion on a page that has
+   already run 4,000. Two across halves it and puts the whole set inside one
+   screen, which is what an FAQ is for.
+
+   `display: contents` on the accordion is what makes the eighth cell possible:
+   the accordion block can only contain accordion items, so the way to ask a
+   question that is not in the list has to be a sibling. Dissolving the
+   accordion's own box promotes its items to grid items of the wrapper, and the
+   ask cell then sits in the row with them rather than under the whole grid.
+
+   `align-items: start` so an open answer grows its own cell rather than
+   stretching the closed one beside it to match. */
+.wcblr-guide .wcblr-faqgrid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px;
+	align-items: start;
+}
+
+.wcblr-guide .wcblr-faqgrid > .wp-block-accordion {
+	display: contents;
+}
+
+.wcblr-guide .wcblr-faq-ask {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	border-style: dashed !important;
+}
+
+.wcblr-guide .wcblr-faq-ask-link::after {
+	content: "\2192";
+	display: inline-block;
+	margin-left: 8px;
+	transition: transform 0.2s ease;
+}
+
+@media (max-width: 781px) {
+	.wcblr-guide .wcblr-faqgrid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+/* ---- The closing band ----------------------------------------------------
+   The page used to end on a lone outline button and a sign-off, which is the
+   weakest thing a tickets page can do with its last screen. This is the house
+   CTA band with the ghost numeral the rest of the site uses, and the numeral
+   is the reason it needs `position: relative` and nothing else.
+
+   `-webkit-text-stroke` is verified present in the served stylesheet, which is
+   how the ghost on every inner page is already drawn. The alpha is heavier
+   here than the page ghost's 0.07 because this one sits on espresso rather
+   than under body copy, and a 7% stroke on #2a1d14 is invisible. */
+.wcblr-guide .wcblr-tix-cta {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 28px;
+	overflow: hidden;
+}
+
+.wcblr-guide .wcblr-tix-cta::before {
+	content: "26";
+	position: absolute;
+	right: 22px;
+	top: 50%;
+	transform: translateY(-50%);
+	font-family: "Fraunces", Georgia, serif;
+	font-weight: 600;
+	font-size: 205px;
+	line-height: 0.8;
+	color: transparent;
+	-webkit-text-stroke: 1.5px rgba(224, 165, 38, 0.18);
+	pointer-events: none;
+}
+
+/* Both children have to sit above it. `position: relative` with no offsets is
+   the whole fix; a z-index war with a pseudo-element at auto is not needed. */
+.wcblr-guide .wcblr-tix-cta > * {
+	position: relative;
+}
+
+.wcblr-guide .wcblr-tix-cta > .wp-block-group {
+	max-width: 34ch;
+}
+
+@media (max-width: 781px) {
+	.wcblr-guide .wcblr-tix-cta::before { display: none; }
+	.wcblr-guide .wcblr-tix-cta > .wp-block-group { max-width: none; }
+}
+
+/* ---- Interaction ---------------------------------------------------------
+   The load ladder in `content/_motion.scss` covers the opening section and
+   nothing else, by design: this page is about 8,000px and an entrance played
+   at the bottom of it is played to nobody. Everything from the ticket panel
+   down is on the reader's own pointer instead, so the timing cannot be missed
+   whatever second of the visit it happens in.
+
+   `_motion.scss` already lifts `.wcblr-panel`, `.wcblr-statcard`, `.wcblr-tba`
+   and every button. None of those classes is on this page, so the surfaces it
+   actually has are named here: the three tier cards, the two day cards and the
+   seven questions. Same 2px translate, same easing and the same
+   `prefers-reduced-motion` gate, so the page reads as the same site rather
+   than as a page with its own hover vocabulary.
+
+   Transform and box-shadow only. A hover that changes a border WIDTH reflows
+   the card and moves everything under it, which is the one thing a hover state
+   must never do.                                                            */
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-motion .wcblr-guide .wcblr-tiers > .wp-block-column,
+	.wcblr-motion .wcblr-guide .wcblr-tix-day,
+	.wcblr-motion .wcblr-guide .wp-block-accordion-item,
+	.wcblr-motion .wcblr-guide .wcblr-faq-ask {
+		transition:
+			transform 0.35s cubic-bezier(0.2, 0.6, 0.2, 1),
+			box-shadow 0.35s cubic-bezier(0.2, 0.6, 0.2, 1),
+			border-color 0.35s ease;
+	}
+
+	.wcblr-motion .wcblr-guide .wcblr-tiers > .wp-block-column:hover,
+	.wcblr-motion .wcblr-guide .wcblr-tix-day:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 10px 26px rgba(42, 29, 20, 0.10);
+	}
+
+	/* The one on sale gets a warmer shadow, because it is the one carrying the
+	   action and the shadow is the only thing on the page that can say so
+	   without adding another border. */
+	.wcblr-motion .wcblr-guide .wcblr-tier-live:hover {
+		box-shadow: 0 10px 26px rgba(168, 118, 15, 0.20);
+	}
+
+	.wcblr-motion .wcblr-guide .wcblr-tier-watch:hover::after,
+	.wcblr-motion .wcblr-guide .wcblr-faq-ask:hover .wcblr-faq-ask-link::after {
+		transform: translateX(4px);
+	}
+
+	/* A question is a row, not a card, so it lifts 2px rather than 3 and takes
+	   its edge rather than a shadow. Seven cards each throwing a 26px shadow in
+	   a two-column grid is a page that flickers as the pointer crosses it. */
+	.wcblr-motion .wcblr-guide .wp-block-accordion-item:hover,
+	.wcblr-motion .wcblr-guide .wcblr-faq-ask:hover {
+		transform: translateY(-2px);
+		border-color: #a8760f !important;
+	}
+}
+
+/* The toggle mark, which is the one control on the page that has a state. Not
+   inside the reduced-motion gate: the colour change is the affordance and it
+   has to survive the query. Only the rotation is motion, and a `transition`
+   that never runs costs nothing. */
+.wcblr-guide .wp-block-accordion-heading__toggle-icon {
+	transition: transform 0.25s cubic-bezier(0.2, 0.6, 0.2, 1), color 0.2s ease;
+}
+
+.wcblr-guide .wp-block-accordion-item:hover .wp-block-accordion-heading__toggle-icon {
+	color: #a8760f;
+	transform: rotate(90deg);
+}
+
+/* Open, the plus turns to an x. Core marks the button rather than the item, so
+   this hangs off `aria-expanded` rather than off a class that may not exist. */
+.wcblr-guide .wp-block-accordion-heading__toggle[aria-expanded="true"] .wp-block-accordion-heading__toggle-icon {
+	transform: rotate(45deg);
+	color: #a8760f;
+}
