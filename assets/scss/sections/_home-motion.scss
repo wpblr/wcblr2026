@@ -501,8 +501,35 @@ body.home .wcblr-hero-banner .wcblr-skyline img {
    the five full-width hairlines could not do, and four of them do not build a
    ladder because they never reach the next item. */
 body.home .wcblr-facts {
-	/* A 2x2 GRID OF ICON-LED ITEMS, not a stack of paragraphs.
-	   This has now been three shapes. It was four label/rule/paragraph blocks
+	/* A 2x2 GRID, RULED RATHER THAN BOXED. Fourth shape, and the change from the
+	   third is only the chrome: the 2x2 arrangement that halved the height is
+	   kept exactly, the card border, the #FBF8F1 fill and the icon gutter are
+	   gone, and one hairline per cell edge does the separating instead.
+
+	   Four cards in a 2x2 inside a 56% column read as a control panel sitting
+	   under the heading. The section is a teaser for a story, not a dashboard,
+	   and the four answers are prose. Ruled items let the type be the only thing
+	   on the cream, which is what the rest of the section already does.
+
+	   THE RULES ARE DELIBERATELY NOT ALL THE SAME LENGTH. The top one belongs to
+	   the block, so it is on the container and runs the full measure. The others
+	   belong to their own item, so they are on the cell and stop at the column
+	   gap. That is what says "two columns of two" rather than "a four-row
+	   table", and it is why the gap below is 32px and not the boxed layout's 18:
+	   unboxed text needs a visible gutter or the two rules read as one broken
+	   line.
+
+	   THE ICONS WENT WITH THE CARDS. They were <img> tags in the markup rather
+	   than CSS, for reasons worth keeping written down: this stylesheet cannot
+	   carry them. WordCamp.org's Remote CSS sanitiser strips every url() value,
+	   data URI included, and WordPress kses strips inline <svg> from post
+	   content, so both of the obvious routes render nothing on the live site
+	   while looking perfect in a local browser. If an icon is ever wanted back
+	   here, it goes in the markup as an img, and it is checked on the served
+	   page rather than in a preview. */
+	border-top: 1px solid #ddd9d2;
+
+	/* This has now been four shapes. It was four label/rule/paragraph blocks
 	   with a 28px gold stub under each label, which read as scattered ticks.
 	   Then a two-column ruled list, which was tidier and still, correctly,
 	   "a bunch of text": four rows of 25 to 35 words is a wall however it is
@@ -513,94 +540,43 @@ body.home .wcblr-facts {
 	   of the photograph beside them; two rows of two read as a block the eye
 	   takes in at once, which is what a teaser section is for.
 
-	   THE ICONS ARE <img> TAGS IN THE MARKUP pointing at the theme repo on
-	   GitHub raw, and that is forced rather than chosen. TWO earlier routes
-	   were both silently destroyed in transit, each by a different filter:
-
-	     1. `background-image: url("data:image/svg+xml,...")` here in the
-	        stylesheet. WordCamp.org's Remote CSS sanitiser strips every url()
-	        value, data URI or not. The served stylesheet carries the rules and
-	        contains "url(" exactly zero times.
-	     2. Inline `<svg>` in a wp:html block. WordPress kses strips svg from
-	        post content unless the user has unfiltered_html, which nobody has
-	        on this multisite. The paste succeeded, the copy changed, and the
-	        four svg elements simply were not in the saved page.
-
-	   The <img> works because kses allows img and GitHub raw serves these with
-	   `content-type: image/svg+xml`. It is the same mechanism the header's
-	   WhatsApp button already uses, which is the one icon on this site that
-	   has always rendered.
-
-	   CHECK THE LIVE PAGE, NOT THE LOCAL RENDER. Both dead routes looked
-	   perfect in a local browser. The only proof is the served HTML and the
-	   served CSS.
-
-	   The first version put them here as
-	   `background-image: url("data:image/svg+xml,...")`, copying what
-	   sections/bento-icons does. It renders perfectly in a local browser and
-	   renders NOTHING on the live site: WordCamp.org's Remote CSS sanitiser
-	   strips every url() value, data URI or not. Checked against the served
-	   stylesheet, which carries all four of these rules and contains the string
-	   "url(" exactly zero times.
-
-	   That also means the bento cell icons in sections/bento-icons have never
-	   appeared on the live site, for the same reason. Not fixed here.
-
-	   So: no url() in this stylesheet, and no background-image icon anywhere in
-	   it. If an icon is wanted, it goes in the markup, as an img. */
+	   The boxed version of this grid, kept for the record because its numbers
+	   were tuned and this one reuses none of them: 1.5px #dad5cd, radius 16,
+	   #FBF8F1 fill, 22px padding with 58px on the left for the icon gutter,
+	   18px both gaps. */
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 
-	/* 18px, matching the bento row above, not the 36/32 the bare items needed.
-	   Unboxed text needs a wide gutter to read as separate items; boxed text
-	   already has a border doing that, and the same wide gutter then reads as
-	   four cards drifting apart. */
-	column-gap: 18px;
-	row-gap: 18px;
-	margin-top: 30px;
+	/* 32px, not the boxed layout's 18. A border already separates two cards at
+	   18px; two hairlines with 18px between them read as one rule with a nick in
+	   it. The gutter is the only thing keeping the columns apart now, so it has
+	   to be seen. Row gap is 0 because the cells' own 24px padding and their
+	   bottom rules do that job, and any row gap on top of it puts an empty band
+	   between a rule and the label under it. */
+	column-gap: 32px;
+	row-gap: 0;
+	margin-top: 34px;
 }
 
 body.home .wcblr-fact > * {
 	margin: 0 !important;
 }
 
-/* Each item is now a CARD, in the same language as the bento cells below it
-   and the Get Involved cards further down: 1.5px #dad5cd, 16px radius, #FBF8F1.
-   That styling is all block attributes, per the rule at the top of main.scss,
-   so nothing about the box is set here.
-
-   The icon still sits in a LEFT GUTTER rather than on its own line above the
-   label. The gutter used to be this file's `padding-left: 36px`, which worked
-   only because padding-left happened to be absent from the block's inline
-   style. A card has inline padding on all four sides, so that trick is dead:
-   the markup now carries `padding-left: 58px`, which is the card's own 22px
-   plus the same 36px gutter. Nothing here has to fight it, and there is still
-   no !important. */
+/* One hairline per cell, on the bottom edge, so the last row is closed off as
+   well. Same #ddd9d2 as the container's top rule and as the info rows
+   elsewhere on the site; a second grey here would be visible against the rule
+   above it. */
 body.home .wcblr-fact {
 	position: relative;
 	display: block;
-	transition: border-color 0.2s ease, background-color 0.2s ease;
-}
-
-/* Positioned against the card's padding box rather than its content box, so
-   these two values track the 22px in the markup: change one, change both.
-   Sized here as well as on the element so the box is reserved before the file
-   arrives from GitHub raw and nothing reflows. */
-body.home .wcblr-fact__icon {
-	position: absolute;
-	top: 24px;
-	left: 22px;
-	width: 22px;
-	height: 22px;
-	display: block;
-	transform-origin: 50% 50%;
-	transition: transform 0.26s cubic-bezier(0.34, 1.4, 0.64, 1);
+	border-bottom: 1px solid #ddd9d2;
+	transition: border-bottom-color 0.2s ease;
 }
 
 body.home .wcblr-fact__label {
 	color: #a8760f !important;
 	padding-bottom: 0;
-	margin-bottom: 7px !important;
+	margin-bottom: 12px !important;
 	transition: color 0.2s ease;
 }
 
@@ -624,7 +600,6 @@ body.home .wcblr-fact__body {
 @media (max-width: 600px) {
 	body.home .wcblr-facts {
 		grid-template-columns: 1fr;
-		row-gap: 26px;
 	}
 }
 
@@ -638,28 +613,214 @@ body.home .wcblr-fact__body {
 		color: #2a1d14 !important;
 	}
 
-	/* The card answers too, now that there is one. Border only: the fill is
-	   already #FBF8F1, so there is no lighter paper tone to lift it to without
-	   going to flat white, which is not in the palette. */
-	body.home .wcblr-fact:hover {
-		border-color: #e0a526 !important;
-	}
+	/* The rule warms with it. Only the item's own hairline moves, which is the
+	   whole argument for a per-cell rule over a table of full-width ones: there
+	   is a mark that belongs to the thing under the pointer.
 
-	/* The icon zooms, on the same curve and duration as the header and footer
-	   lockups in layout/hover-states, so every mark on the site answers a
-	   pointer the same way. 1.15 rather than the lockup's 1.1 because this one
-	   is 22px against the lockup's 56, and the same ratio reads as less
-	   movement on a smaller object. Stroke SVG, so it cannot soften the way a
-	   raster can. */
-	body.home .wcblr-fact:hover .wcblr-fact__icon {
-		transform: scale(1.15);
+	   The card version lifted the border to #e0a526, bright gold. That is a
+	   1.5px box drawn all the way round; a 1px line under two lines of type is
+	   a quarter of the ink, and bright gold at that weight on cream nearly
+	   disappears. #c9a35a is the same hue held darker so the rule still reads. */
+	body.home .wcblr-fact:hover {
+		border-bottom-color: #c9a35a;
 	}
 }
 
-/* Nothing moves for a reader who asked for less motion; the colour shift above
-   is outside this query and still carries the hover. */
-@media (prefers-reduced-motion: reduce) {
-	body.home .wcblr-fact__icon {
-		transition: none;
+
+/* ---- About: the two actions under the facts ------------------------------
+   A filled espresso button and a mono link, not two buttons. The section ends
+   on a choice between reading more and buying, and those are not the same
+   size of decision: one is the next paragraph of the story, the other is forty
+   quid and a calendar entry. Two buttons side by side say they are.
+
+   The button is espresso rather than crimson because the page already spends
+   its one red button in the hero, twelve hundred pixels up, on this exact
+   ticket link. A second crimson button competing with it would be the third
+   crimson thing in the section after the eyebrow and the heading's emphasis. */
+/* `display: flex` is written out rather than left to the block's own
+   `layout: flex` attribute. Core renders that attribute as a generated
+   `wp-container-core-group-is-layout-<hash>` class plus a matching rule, and
+   the hash is computed from the layout attributes at RENDER time, so nothing in
+   the pasted markup carries it and nothing in a local render reproduces it. The
+   hero's ticket stub already carries the same workaround for the same reason
+   (`.wcblr-stub__row` in the served sheet). The attribute stays in the markup so
+   the editor shows the row correctly. */
+body.home .wcblr-about-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 32px;
+}
+
+/* Core gives `.wp-block-buttons` `width: 100%`, so inside a flex row it eats
+   the line and the ticket link drops underneath the button, which is the one
+   arrangement this row exists to avoid. */
+body.home .wcblr-about-actions .wp-block-buttons {
+	width: auto;
+	flex: 0 0 auto;
+}
+
+body.home .wcblr-about-actions .wp-block-button__link:hover,
+body.home .wcblr-about-actions .wp-block-button__link:focus-visible {
+	background-color: #453729 !important;
+}
+
+/* The ticket link is a rule the text sits on, drawn with a border rather than
+   text-decoration so its distance from the baseline and its weight are both
+   ours. `underline-offset` would do the first and not the second. The arrow is
+   a character in the markup, so it moves with the text on a zoom and needs no
+   pseudo-element. */
+body.home .wcblr-ticketlink a {
+	text-decoration: none;
+	border-bottom: 1.5px solid rgba(200, 52, 75, 0.5);
+	padding-bottom: 5px;
+	transition: border-bottom-color 0.18s ease;
+}
+
+body.home .wcblr-ticketlink a:hover,
+body.home .wcblr-ticketlink a:focus-visible {
+	border-bottom-color: #c8344b;
+}
+
+
+/* ---- About: the photograph, captioned inside its own frame ---------------
+   The caption used to be a turmeric pill tilted off the top-left corner, and
+   it carried a filename. Two problems with that on this page: the pill is the
+   same object as the badge in the hero and as the flourish below, so the
+   section opened with a third tilted marker, and a filename is a label, not a
+   caption. Nothing on the page said what the photograph was of.
+
+   So the caption moved inside, under a scrim, and says what is in the picture.
+   The filename stays as the small mono mark in the opposite corner, which is
+   where the page's other code-comment marks live. `wcblr-tagpill` is untouched
+   and still in use on /about/ and on the story post; this section simply
+   stopped using it. */
+body.home .wcblr-shot {
+	position: relative;
+}
+
+/* `background`, NOT `background-image`. The WordCamp Remote CSS sanitiser
+   strips the value off `background-image` and leaves the property bare, so the
+   same gradient written the other way compiles, uploads and renders nothing.
+   Gradients in the shorthand survive; measured on the served sheet, and the
+   same trap is documented in content/_story.scss and content/_ticket-panel.scss.
+
+   62% tall because the caption runs to two lines at the narrowest column width
+   this section reaches before the columns stack, and a scrim that stops short
+   of the top of the text is worse than none. */
+body.home .wcblr-shot::after {
+	content: "";
+	position: absolute;
+	inset: auto 0 0 0;
+	height: 62%;
+	border-radius: 0 0 18px 18px;
+	background: linear-gradient(
+		to top,
+		rgba(20, 13, 8, 0.86) 0%,
+		rgba(20, 13, 8, 0.62) 38%,
+		rgba(20, 13, 8, 0) 100%
+	);
+	pointer-events: none;
+	z-index: 1;
+}
+
+body.home .wcblr-shot .wcblr-about__photo {
+	margin: 0;
+	display: block;
+}
+
+body.home .wcblr-shot__cap,
+body.home .wcblr-shot__file {
+	position: absolute;
+	z-index: 2;
+	margin: 0 !important;
+}
+
+body.home .wcblr-shot__cap {
+	left: 26px;
+	right: 26px;
+	bottom: 24px;
+	max-width: 72%;
+	text-shadow: 0 1px 12px rgba(20, 13, 8, 0.45);
+}
+
+/* Bottom-aligned with the caption's LAST line rather than with the caption
+   block, which is why it is pinned to the same 24px and not centred against
+   anything. Cream at 70% on the scrim is 5.9:1, so it is a readable filename
+   and not a watermark. */
+body.home .wcblr-shot__file {
+	right: 26px;
+	bottom: 24px;
+	text-shadow: 0 1px 10px rgba(20, 13, 8, 0.5);
+}
+
+/* Once the columns stack, the caption runs the width of the screen and the
+   filename lands on top of its last line. Two absolutely positioned things
+   sharing one baseline only works while there is slack, so below that the mark
+   goes rather than the caption: it is the one element here that carries no
+   information a reader needs. */
+@media (max-width: 780px) {
+	body.home .wcblr-shot__file {
+		display: none;
 	}
+
+	body.home .wcblr-shot__cap {
+		max-width: none;
+	}
+}
+
+
+/* ---- About: the at-a-glance panel ----------------------------------------
+   Three facts under the photograph, in the same label-left / value-right row
+   the hero's ticket stub already uses, so the page has one shape for "a short
+   factual value" rather than two.
+
+   The rows must reach the panel's own edges, which is why the panel carries no
+   horizontal padding and each row carries 26px of its own: a hairline that
+   stops 26px short at both ends reads as an underline on the value above it
+   rather than as a division of the panel. Everything else about the box is
+   block attributes, per the rule at the top of main.scss.
+
+   The row is a flex group, so its two paragraphs sit on one line and the value
+   is right-aligned by its own textAlign. The only thing this file adds is what
+   happens when they do not fit. */
+body.home .wcblr-glance {
+	overflow: hidden;
+}
+
+/* Flex written out, for the reason above the actions row. Without it the label
+   and the value are two stacked paragraphs, one of them right-aligned, which is
+   not obviously broken and is not the row this panel is for. */
+body.home .wcblr-glance__row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+/* Under about 380px of row width the label and the value stack, and a value
+   still pushed to the right edge then reads as belonging to the row below it.
+   Left-align both, keep the row, drop nothing. */
+@media (max-width: 900px) {
+	body.home .wcblr-glance__row {
+		row-gap: 6px;
+	}
+}
+
+@media (max-width: 480px) {
+	body.home .wcblr-glance__val {
+		text-align: left !important;
+	}
+}
+
+body.home .wcblr-glance__val a {
+	text-decoration: none;
+	border-bottom: 1px solid rgba(42, 29, 20, 0.28);
+	transition: border-bottom-color 0.18s ease;
+}
+
+body.home .wcblr-glance__val a:hover,
+body.home .wcblr-glance__val a:focus-visible {
+	border-bottom-color: #2a1d14;
 }
