@@ -257,6 +257,31 @@
    long-form posts carry, and none of it is reachable from a page that has not
    opted in.                                                                */
 
+/* ---- The page's own heading -----------------------------------------------
+   "Get your ticket" is the largest type on the page and the only thing on the
+   first screen that has to carry it: the post title is hidden on this page, so
+   without this the biggest words a reader meets are the same 46px as three
+   section heads further down and the screen opens with no hierarchy at all.
+
+   62px is measured off the design rather than picked: the mockup's cap height
+   is 50px against 37px on its section heads, and 46 x (50/37) is 62.
+
+   The selector needs `:first-child` to beat `_guide.scss`'s own
+   `.wcblr-post.wcblr-guide .wcblr-sec h2` at (0,3,1), and the mobile step has
+   to be restated for the same reason: that file's 34px is (0,3,1) inside its
+   own media query and would otherwise lose to this rule at every width. */
+.wcblr-post.wcblr-guide .wcblr-sec:first-child h2 {
+	font-size: 62px !important;
+	letter-spacing: -0.02em !important;
+	line-height: 1.08 !important;
+}
+
+@media (max-width: 781px) {
+	.wcblr-post.wcblr-guide .wcblr-sec:first-child h2 {
+		font-size: 40px !important;
+	}
+}
+
 /* ---- The section head ----------------------------------------------------
    A 46px heading on its own leaves the right half of the row empty for the
    whole width of the page, three times over. Putting the section's lead
@@ -681,4 +706,217 @@
 .wcblr-guide .wp-block-accordion-heading__toggle[aria-expanded="true"] .wp-block-accordion-heading__toggle-icon {
 	transform: rotate(45deg);
 	color: #a8760f;
+}
+
+/* ==========================================================================
+   Matching the design mockup, pass two
+   --------------------------------------------------------------------------
+   `wordcamp/design/pages/WCBLR-2026-Tickets-Page.png`, read at 1:1 rather than
+   eyeballed: the file is 2880px for a 1440px page, so every number below was
+   measured off it at half scale against a render of the same width.
+
+   Everything here is scoped to `wcblr-tix-page`, a class this page's wrapper
+   carries and nothing else does. That matters for the first rule especially:
+   the section divider is a site-wide device and this page is the one place the
+   design does without it.                                                   */
+
+/* ---- No divider off the eyebrow ------------------------------------------
+   `_guide.scss` hangs a hairline off every section eyebrow after the first,
+   and it is the right call on a page of running prose: it marks where one
+   argument stops. This page is four bands of chrome, each with its own edge,
+   and a rule floating in the gap between two of them is a fifth horizontal
+   line competing with the four that belong to something.
+
+   The design draws none of them. Suppressed rather than deleted, because the
+   rule is correct everywhere else on the site. */
+.wcblr-tix-page .wcblr-sec + .wcblr-sec > .wcblr-eyebrow::after {
+	display: none;
+}
+
+/* ---- The photograph carries its own caption ------------------------------
+   Set INTO the picture at the bottom left, over a gradient, with the file name
+   at the other end in mono. It sat under the frame in 12px grey, which is the
+   house treatment for a guide photo and is right when a caption is doing
+   editorial work. Here it is a label on an object, and the object is a
+   1,100px band with nothing else in it.
+
+   `background` and not `background-image`: the sanitiser keeps the shorthand
+   with a gradient in it and empties the longhand, verified against the served
+   stylesheet, which is why `_story.scss`'s rail works and an early version of
+   this did not. */
+.wcblr-tix-page .wcblr-tix-shot {
+	position: relative;
+}
+
+.wcblr-tix-page .wcblr-tix-shot figcaption {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: 0 !important;
+	padding: 60px 28px 20px;
+	font-family: "Hanken Grotesk", sans-serif !important;
+	font-size: 14px !important;
+	font-weight: 500;
+	line-height: 1.45;
+	letter-spacing: 0;
+	color: #F2ECE0 !important;
+	text-align: left;
+	border-radius: 0 0 16px 16px;
+	background: linear-gradient(to top, rgba(20, 13, 8, 0.78), rgba(20, 13, 8, 0));
+	pointer-events: none;
+}
+
+/* The file name, the same mono tag the design puts in the far corner. It is
+   decoration in the strict sense, so it is a pseudo-element rather than
+   markup: nothing a screen reader has to read out. */
+.wcblr-tix-page .wcblr-tix-shot::after {
+	content: "wcblr_2024.jpg";
+	position: absolute;
+	right: 28px;
+	bottom: 20px;
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 11px;
+	letter-spacing: 0.06em;
+	color: rgba(242, 236, 224, 0.55);
+	pointer-events: none;
+}
+
+@media (max-width: 600px) {
+	/* At 340px the caption is four lines of cream over the crowd's faces. It
+	   goes back under the frame, where it started. */
+	.wcblr-tix-page .wcblr-tix-shot figcaption {
+		position: static;
+		padding: 12px 0 0;
+		color: #7a6757 !important;
+		background: none;
+		border-radius: 0;
+	}
+	.wcblr-tix-page .wcblr-tix-shot::after { display: none; }
+}
+
+/* ---- The essentials strip ------------------------------------------------
+   The turmeric arrow on the venue is the affordance for a link that opens
+   Google Maps in a new tab, and the design does not draw it. It is not deleted:
+   it appears on hover, which is the same bargain the counterfoil's own links
+   make. A strip of four facts reads as four facts when it is still. */
+.wcblr-tix-page .wcblr-tix-fact > p:last-child a::after {
+	opacity: 0;
+	transition: opacity 0.15s ease, transform 0.18s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+.wcblr-tix-page .wcblr-tix-fact > p:last-child a:hover::after {
+	opacity: 1;
+}
+
+/* ---- The ticket panel ----------------------------------------------------
+   Two notches punched out of the seam, at the top and the bottom. The design
+   draws the perforation and nothing else, and it is right: this panel is
+   1,100px wide and 300px tall, which is a poster, not a ticket stub. The
+   notches belong to the object they were invented for, the 450px card at the
+   top of the page, where they read at the size a real tear does.
+
+   `content: none` and not `display: none`, so nothing is laid out at all. */
+.wcblr-tix-page .wcblr-tix-ticket-stub::before,
+.wcblr-tix-page .wcblr-tix-ticket-stub::after {
+	content: none;
+}
+
+/* The footnote under the list gets the fold the day cards already use: a
+   hairline across the full width of the copy, so the qualification reads as
+   small print under the list rather than as an eighth item in a lighter grey. */
+.wcblr-tix-page .wcblr-tix-ticket-body > p:last-child {
+	margin-top: 24px !important;
+	padding-top: 22px;
+	border-top: 1px solid rgba(242, 236, 224, 0.18);
+}
+
+/* ADMIT ONE sits on the stub's bottom edge, not in the middle of it. The stub
+   was centred as a block, which put its four lines in the vertical middle and
+   left equal air above the year and below the words; the design hangs the
+   identity off the top and the admission off the bottom, which is how a real
+   stub is set. */
+.wcblr-tix-page .wcblr-tix-ticket-stub {
+	justify-content: flex-start;
+}
+
+.wcblr-tix-page .wcblr-tix-ticket-stub > p:last-child {
+	margin-top: auto !important;
+	padding-top: 28px;
+}
+
+/* ---- The tier cards ------------------------------------------------------ */
+.wcblr-guide .wcblr-tier-list {
+	padding-top: 19px;
+}
+
+/* ---- The day pair -------------------------------------------------------- */
+
+/* The fold over the note runs the full width of the card. It was a 44px stub,
+   which reads as a mark; the design runs it edge to edge, which reads as a
+   fold, and that is what the same rule does inside the ticket panel above. */
+.wcblr-guide .wcblr-tix-day .wcblr-tix-day-note::before {
+	width: 100%;
+}
+
+/* The venue link on the espresso card. The design sets that sentence as one
+   colour with no underline; a gold underlined phrase in the middle of it is
+   the brightest thing on a card whose headline is meant to be. It keeps a
+   dimmed underline, so it is still visibly a link, and takes the gold only on
+   hover. */
+.wcblr-tix-page .wcblr-tix-day-sun .wcblr-tix-day-note a {
+	color: inherit !important;
+	text-decoration: underline;
+	text-decoration-color: rgba(224, 165, 38, 0.4);
+	text-underline-offset: 3px;
+	transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.wcblr-tix-page .wcblr-tix-day-sun .wcblr-tix-day-note a:hover {
+	color: #e0a526 !important;
+	text-decoration-color: #e0a526;
+}
+
+/* ---- The questions ------------------------------------------------------- */
+
+/* Rows of equal height, with the question centred in its own row. `start` left
+   a one-line question sitting in a short box beside a two-line one in a taller
+   box, and the pair read as two different components rather than as one row of
+   a grid. The cost is that an OPEN answer stretches its neighbour; that is the
+   right trade, because a reader opens one at a time and every other second of
+   the page's life is spent with all seven closed. */
+.wcblr-guide .wcblr-faqgrid {
+	align-items: stretch;
+	gap: 14px 22px;
+}
+
+.wcblr-guide .wcblr-faqgrid .wp-block-accordion-item {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+/* ---- The closing band ---------------------------------------------------- */
+.wcblr-guide .wcblr-tix-cta h3 {
+	font-size: 40px !important;
+	line-height: 1.14 !important;
+}
+
+/* 1.5px, not 2. Against a crimson button with no border at all, a 2px outline
+   on the secondary makes the quieter of the two the heavier object. */
+.wcblr-guide .wcblr-tix-cta .is-style-outline .wp-block-button__link {
+	border-width: 1.5px !important;
+}
+
+/* The hollow ring in front of "announced here first" is not in the design, and
+   with the third card carrying the dashed edge it has stopped earning its
+   place: the ring said "provisional" on a card that is now the middle of three,
+   between one that is on sale and one that is drawn dashed. The mono line says
+   it in words. */
+.wcblr-tix-page .wcblr-tier-soon-note {
+	padding-left: 0;
+}
+
+.wcblr-tix-page .wcblr-tier-soon-note::before {
+	content: none;
 }

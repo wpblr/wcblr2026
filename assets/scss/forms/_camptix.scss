@@ -838,32 +838,45 @@ main:has(#tix) .wcblr-page-head {
 		margin: 0;
 		background: #2a1d14;
 		color: #F2ECE0;
-		border-radius: 14px;
+		/* Only the TOP corners. The counterfoil below the tear is the same
+		   object now rather than a cream card tucked under it, so the bottom
+		   pair belongs to that element. See "The way from a ticket to what it
+		   is" further down. */
+		border-radius: 16px 16px 0 0;
 		/* Each ticket now carries its own 22px of panel padding, so the card
 		   only has to hold the panels off its own edge. 30px on both counts
 		   put 52px between the card edge and the ticket name. */
-		padding: 36px 24px 20px;
+		padding: 30px 30px 28px;
 		font-family: "Hanken Grotesk", sans-serif;
 	}
 
-	/* turmeric dashed corner stamp (like .wcblr-stamp) */
+	/* THE TURMERIC RAIL, down the card's leading edge.
+
+	   This slot used to hold the `add_filter( 'ticket' );` stamp, tilted five
+	   degrees off the top right corner. The stamp is a good device and it is
+	   still on the home page hero, but it was competing for the one corner that
+	   now has something to say: how many Early Bird tickets are left. A stamp
+	   and a scarcity pill 30px apart is two turmeric-and-crimson objects
+	   arguing, and the pill is the one carrying information.
+
+	   A rail instead, which is the same mark the ticket NAME used to carry at
+	   3x18px, moved out to the card's own edge where it belongs to the whole
+	   ticket rather than to one line of it. Absolutely positioned rather than a
+	   `border-left`, so none of the card's padding arithmetic or the row bleed
+	   below has to be re-derived around a 6px border.
+
+	   It stops at the tear because this element stops at the tear. A rail
+	   running the full height would say the counterfoil is part of the same
+	   half, and the whole point of a perforation is that it is not. */
 	form::before {
-		content: "add_filter( 'ticket' );";
+		content: "";
 		position: absolute;
-		top: -10px;
-		right: -12px;
-		transform: rotate(5deg);
-		white-space: nowrap;
-		z-index: 4;
-		margin: 0;
-		font-family: "JetBrains Mono", ui-monospace, monospace;
-		font-size: 12px;
-		font-weight: 500;
-		color: #2a1d14;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		width: 6px;
+		border-radius: 16px 0 0 0;
 		background: #e0a526;
-		border: 2px dashed #2a1d14;
-		border-radius: 30px;
-		padding: 8px 16px;
 	}
 
 	/* --- One ticket, one stub -------------------------------------------
@@ -924,8 +937,8 @@ main:has(#tix) .wcblr-page-head {
 		column-gap: 18px;
 		row-gap: 4px;
 		/* bleed to the card's own edges, so the tear can reach them */
-		margin: 0 -24px;
-		padding: 0 24px;
+		margin: 0 -30px;
+		padding: 0 30px;
 	}
 
 	/* The perforation, between tickets and nowhere else. Not under the last
@@ -984,9 +997,15 @@ main:has(#tix) .wcblr-page-head {
 	   between it and its own price read as wider than the gap between the two
 	   grid rows below it, so the name floated away from the thing it prices.
 	   The excerpt case barely notices the difference. */
+	/* Row one, left, with the count opposite it. It used to span both columns
+	   because the price sat under it and the quantity control beside the price;
+	   the name now shares its line with how many are left, which is the pair a
+	   reader actually weighs first. */
 	.tix_tickets_table tbody .tix-column-description {
-		grid-column: 1 / -1;
-		margin-bottom: 10px;
+		grid-column: 1;
+		grid-row: 1;
+		align-self: center;
+		margin-bottom: 20px;
 	}
 
 	/* The coupon row is an action, not a ticket. It gets the thin solid rule
@@ -1063,45 +1082,25 @@ main:has(#tix) .wcblr-page-head {
 	.tix-ticket-title {
 		display: block;
 		font-family: Fraunces, Georgia, serif;
-		font-size: 21px;
+		font-size: 30px;
 		font-weight: 500;
-		line-height: 1.2;
+		line-height: 1.12;
 		color: #f2ece0;
 	}
 
-	/* The mark. A turmeric rail at the head of each ticket name, and it is
-	   deliberately NOT an icon.
+	/* The per-title rail is gone: the card carries one now, on its own edge.
+	   Two turmeric rails 30px apart, one 3px and one 6px, read as a mistake
+	   rather than as a system. Everything in the stub used to hang off this
+	   one's text edge at 17px; that indent has gone with it, so the name, the
+	   price and its footnote all start on the card's own padding. */
 
-	   Two things rule an icon out. CampTix owns this DOM, so no `<img>` can be
-	   added; and the sanitiser keeps `background-image` as a property but
-	   empties its value, verified against the served stylesheet, so all 24 of
-	   this build's `url(data:image/svg+xml,...)` icons arrive as
-	   `background-image: ` and paint nothing. That leaves border, radius and
-	   background-colour, and a first pass tried to spend them on a drawn ticket
-	   stub: a 22x15 turmeric outline with a dashed right edge. Rendered, the
-	   dashes were invisible at that size and it read as a small empty gold box.
-	   A tiny ticket inside a card that is already a ticket, complete with
-	   perforation and notches, was redundant even when it worked.
-
-	   So the mark says "a thing starts here" and nothing more, which is the
-	   only job it has. Everything in the stub then hangs off the rail's text
-	   edge: 17px, the rail plus its margin. */
-	.tix-ticket-title::before {
-		content: "";
-		display: inline-block;
-		vertical-align: -2px;
-		width: 3px;
-		height: 18px;
-		margin-right: 14px;
-		border-radius: 2px;
-		background: #e0a526;
-	}
-
-	/* The excerpt hangs off the title's text, not off the card's edge, so it
-	   sits under the words rather than under the rail. */
+	/* The excerpt used to hang off the title's TEXT, indented 17px to clear the
+	   rail that sat in front of the name. The rail is on the card's edge now,
+	   so the indent has nothing to clear and the excerpt starts where the name
+	   does. */
 	.tix-ticket-excerpt {
 		display: block;
-		margin: 7px 0 0 17px;
+		margin: 7px 0 0;
 		font-size: 13.5px;
 		line-height: 1.5;
 		color: #a2968b;
@@ -1118,49 +1117,101 @@ main:has(#tix) .wcblr-page-head {
 	   Both are indented to 17px, which is where the rail puts the title text.
 	   Unindented, the price started 17px to the left of the name it belongs
 	   to. */
-	.tix-column-price {
+	/* The price is the biggest thing on the card and its footnote sits directly
+	   underneath, so the two read as one statement rather than as two rows of a
+	   table. 42px, which is display size: this is the number the whole page is
+	   arranged around and it was set at 24, smaller than the section headings
+	   two screens further down.
+
+	   No left indent any more. It was 17px, matching the rail that used to sit
+	   in front of the ticket name; with the rail on the card's edge there is
+	   nothing to line up with and the indent left the price adrift of its own
+	   heading. */
+	.tix_tickets_table tbody .tix-column-price {
 		grid-column: 1;
 		grid-row: 2;
-		margin-left: 17px;
 		font-family: "JetBrains Mono", monospace;
-		font-size: 24px;
+		font-size: 42px;
 		font-weight: 500;
-		line-height: 1.15;
+		line-height: 1;
+		/* CampTix prints the symbol and the figure with a non-breaking space
+		   between them, "\u20b9\u00a0600.00", and at 42px that space is a 12px hole in
+		   the middle of the one number the card exists to show. Negative
+		   word-spacing closes it without touching the markup, which is the
+		   plugin's. */
+		word-spacing: -0.62em;
 		color: #e0a526;
 	}
-	/* Uppercase and tracked, so a two-character number does not read as part of
-	   the price above it. #978f87 was the grey used everywhere on the old panel
-	   and it was the dimmest thing on the card; scarcity is worth more than
-	   that. */
-	.tix-column-remaining {
-		grid-column: 1;
-		grid-row: 3;
-		margin: 2px 0 0 17px;
-		font-family: "JetBrains Mono", monospace;
+	/* What the number buys, in the smallest type on the card. CampTix prints
+	   "\u20b9 600.00" and nothing else, so the unit has to come from CSS. It says
+	   BOTH DAYS and not MAIN EVENT: the ticket covers Saturday as well, which
+	   is the one fact this page has historically got wrong, and a caption
+	   directly under the price is the last place to reintroduce it. */
+	.tix_tickets_table tbody .tix-column-price::after {
+		content: "per person · both days";
+		display: block;
+		/* The price's own negative word-spacing is inherited, and at this size
+		   it closes the gaps between the words entirely. */
+		word-spacing: normal;
+		margin-top: 14px;
 		font-size: 11px;
 		font-weight: 500;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: #9c9188;
+	}
+
+	/* Scarcity, as a pill in the corner the stamp used to occupy. It was a line
+	   of tracked grey mono under the price, which put the two numbers on the
+	   card in a column where the smaller one read as a footnote to the larger.
+	   Opposite the ticket name it is what it actually is: a condition on the
+	   name, not a detail of the price.
+
+	   `:not(:empty)` carries the whole treatment, not only the word: CampTix
+	   leaves this cell blank on a ticket with no quantity cap, and an empty
+	   crimson pill is worse than the bare " left" this guard was added for. */
+	.tix_tickets_table tbody .tix-column-remaining {
+		grid-column: 2;
+		grid-row: 1;
+		justify-self: end;
+		align-self: center;
+		margin: 0;
+		font-family: "JetBrains Mono", monospace;
+		font-size: 11px;
+		font-weight: 700;
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
-		line-height: 1.4;
-		color: #b3a595;
+		line-height: 1;
 	}
-	/* `:not(:empty)` because CampTix leaves this cell blank on a ticket with no
-	   quantity cap, and a bare " left" under the price is worse than nothing. */
-	.tix-column-remaining:not(:empty)::after { content: " left"; }
+	.tix_tickets_table tbody .tix-column-remaining:not(:empty) {
+		padding: 7px 13px;
+		border-radius: 30px;
+		background: #C8344B;
+		color: #F2ECE0;
+	}
+	.tix_tickets_table tbody .tix-column-remaining:not(:empty)::after { content: " left"; }
 
-	/* Spans both value rows so the control sits centred against the price and
-	   its footnote together, not against one or the other. */
-	.tix-column-quantity {
+	/* The label sits OVER the control rather than beside it, and the pair spans
+	   the price and its footnote. Beside it, "QTY" and a select came to a
+	   150px-wide object on one line, which fought the 42px price for the same
+	   optical row; stacked, the control reads as a small form in the corner of
+	   a card, which is what it is. */
+	.tix_tickets_table tbody .tix-column-quantity {
 		grid-column: 2;
 		grid-row: 2 / span 2;
 		display: flex;
-		align-items: center;
-		justify-content: flex-end;
-		gap: 10px;
-		align-self: center;
+		flex-direction: column;
+		align-items: flex-end;
+		justify-content: flex-start;
+		gap: 9px;
+		align-self: start;
 	}
-	.tix-column-quantity::before {
+	.tix_tickets_table tbody .tix-column-quantity::before {
 		content: "QTY";
+		/* Left-aligned to the control below it, not right-aligned to the card.
+		   The column is only as wide as the select, so `flex-start` is the
+		   select's own left edge. */
+		align-self: flex-start;
 		font-family: "JetBrains Mono", monospace;
 		font-size: 10.5px;
 		font-weight: 500;
@@ -1168,30 +1219,85 @@ main:has(#tix) .wcblr-page-head {
 		color: #978f87;
 	}
 
-	/* quantity select = light chip */
-	.tix-column-quantity select {
+	/* A DARK chip, outlined. It was cream on espresso, which made a dropdown
+	   holding the number 1 the second brightest object on a card whose brightest
+	   thing is meant to be the price. Outlined, it reads as a control without
+	   claiming any of the card's light. */
+	.tix_tickets_table tbody .tix-column-quantity select {
+		/* `appearance: none` is not cosmetic here. A `<select>` left on its
+		   native appearance ignores `background` in Chrome, so the previous
+		   cream chip was not a choice: it was the control's default and any
+		   colour set on it was thrown away. Stripping the appearance is what
+		   makes the dark chip possible at all. */
+		appearance: none;
+		-webkit-appearance: none;
+		font-family: "Hanken Grotesk", sans-serif;
 		font-size: 15px;
-		color: #2a1d14;
-		background: #F2ECE0;
-		border: 0;
+		color: #F2ECE0;
+		background: #231a12;
+		border: 1.5px solid #6b5744;
 		border-radius: 8px;
-		padding: 9px 14px;
+		padding: 12px 34px 12px 14px;
 		width: auto;
+		min-width: 96px;
 		cursor: pointer;
 	}
-	.tix-column-quantity select:focus { box-shadow: none; border: 0; outline: 2px solid #e0a526; }
+	/* The chevron the native control took with it. It cannot be a
+	   `background-image`: the sanitiser keeps the property and empties every
+	   `url()`, data URIs included, so all 24 of this build's inline SVG icons
+	   arrive painting nothing. A glyph on the CELL, positioned over the select,
+	   is the only mark available. `::before` is already the QTY label, so this
+	   is `::after`, taken out of the flex flow by `position: absolute` rather
+	   than becoming a third item in the column. */
+	.tix_tickets_table tbody .tix-column-quantity {
+		position: relative;
+	}
+	.tix_tickets_table tbody .tix-column-quantity::after {
+		content: "\25BE";
+		position: absolute;
+		right: 14px;
+		bottom: 15px;
+		font-size: 11px;
+		line-height: 1;
+		color: #a39c92;
+		pointer-events: none;
+	}
+	.tix_tickets_table tbody .tix-column-quantity select:focus { box-shadow: none; outline: 2px solid #e0a526; }
 
 	/* --- Register -> full-width red CTA at the card bottom --- */
-	p { margin: 22px 0 0; }
+	p { margin: 26px 0 0; }
 	input[type="submit"] {
 		display: block;
 		width: 100%;
 		background: #C8344B;
 		color: #fff;
 		border-radius: 8px;
-		padding: 14px 28px;
+		padding: 17px 28px;
+		font-size: 17px;
 	}
 	input[type="submit"]:hover { background: #a12339; opacity: 1; }
+
+	/* What is in the box, under the button that buys it. Four words, the four
+	   things somebody weighing \u20b9600 actually wants named, and all four are on
+	   the "included with every ticket" list two sections down, so this repeats
+	   the page rather than adding to it.
+
+	   It has to be a `content` string: CampTix owns this DOM and no element can
+	   be added to it, and the sanitiser empties every `url()` so an icon row is
+	   not available either. Scoped with `:has()` to the paragraph that actually
+	   holds the submit, so a future CampTix release that prints another `p`
+	   inside this form cannot pick the caption up. */
+	form > p:has(input[type="submit"])::after {
+		content: "Lunch   Filter coffee   Badge   Swag";
+		display: block;
+		margin-top: 20px;
+		font-family: "JetBrains Mono", monospace;
+		font-size: 11px;
+		font-weight: 500;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: #8d8177;
+	}
 
 	/* mobile
 	   The notches stay. They used to be hidden here because they were absolute
@@ -1205,6 +1311,11 @@ main:has(#tix) .wcblr-page-head {
 		.tix_tickets_table tbody tr + tr { margin-top: 26px; padding-top: 26px; }
 		.tix_tickets_table tbody tr.tix-row-coupon { padding: 24px 18px 0; }
 	}
+}
+
+@keyframes wcblr-rail-in {
+	from { transform: scaleY(0); }
+	to { transform: scaleY(1); }
 }
 
 /* ---- 7. The opening, on load --------------------------------------------
@@ -1229,12 +1340,18 @@ main:has(#tix) .wcblr-page-head {
 	#{$tix-select} form {
 		animation: wcblr-rise 0.6s 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 	}
-	/* The badge, on the site's own beat: last, on something small, once the
-	   card has settled. `wcblr-stamp-in` ends on rotate(5deg), which is this
-	   stamp's resting tilt, so it does not flatten at the end of its entrance.
-	   Same 0.95s the home page gives `add_filter( 'coffee' );`. */
+	/* The rail draws itself down the card's edge once the card has arrived. It
+	   used to be the `add_filter( 'ticket' );` stamp running `wcblr-stamp-in`,
+	   which is a spring that lands on `rotate(5deg)`: correct for a stamp,
+	   wrong for a 6px rail, which came out as a tilted gold bar cutting across
+	   the ticket name. A rail is a line, and a line arrives by being drawn.
+
+	   `transform-origin: top` with a scaleY, so it grows down from the card's
+	   top corner rather than out of its middle, and 0.95s is the site's own
+	   beat for the last small thing to move. */
 	#{$tix-select} form::before {
-		animation: wcblr-stamp-in 0.45s 0.95s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+		animation: wcblr-rail-in 0.5s 0.85s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+		transform-origin: top;
 	}
 	/* The notches belong to the card, so they arrive with it rather than after.
 	   Retargeted when the panels came out: the notches used to hang off the
@@ -2479,19 +2596,27 @@ main:has(.tix-order-summary) .wcblr-tix-back {
    sentence, so no two can drift into saying slightly different things about
    money. */
 .wcblr-guide .wcblr-tix-note {
-	/* Sized by the column, like the stub above it. Both used to carry a 394px
-	   cap and auto margins; see section 5 for why that went. */
-	margin: -16px 0 0;
-	/* 24px, which is the stub's own card padding. The right-hand column now
-	   stacks three panels down one edge, and they were gutted at 24, 22 and
-	   32px: close enough to look like a mistake rather than a rhythm. One
-	   gutter, so a label in the facts panel sits directly under the rail on the
-	   ticket name above it. */
-	padding: 30px 24px 20px;
-	background: #FBF8F1;
-	border: 1.5px solid #dad5cd;
-	border-top: 0;
-	border-radius: 0 0 14px 14px;
+	/* THE OTHER HALF OF THE SAME TICKET, not a card tucked under one.
+
+	   It was cream, hairlined, and pulled 16px up so its square top slid behind
+	   the stub's rounded bottom. That reads as two objects overlapping, which
+	   is what it was; a perforation is not two things touching, it is one thing
+	   that tears. So the counterfoil takes the espresso, butts directly onto
+	   the card above with no negative margin at all, and the dashed tear is its
+	   own top border running the full width of the object, gold rail included.
+
+	   `#332519` and not the card's `#2a1d14`: four points of lift, which is
+	   just enough to say the tear separates two parts of one ticket rather than
+	   crossing an unbroken field. Anything more and it reads as a grey slab
+	   sitting ON the card, which is the mistake the ticket ROWS made once and
+	   the reason they carry no fill at all. */
+	margin: 0;
+	padding: 24px 30px 26px;
+	box-shadow: 0 18px 40px rgba(42, 29, 20, 0.10);
+	background: #332519;
+	border: 0;
+	border-top: 2px dashed #6b5744;
+	border-radius: 0 0 16px 16px;
 }
 
 /* NO UNDERLINE, and the rule it replaces is why.
@@ -2524,9 +2649,13 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	   which of the two wins comes down to the order core happens to print them
 	   in. Measured on the live page: the page-level rule won and the link came
 	   out crimson. Two classes beat one and settle it. */
-	color: #2a1d14;
-	display: inline-flex;
+	color: #F2ECE0;
+	/* `flex`, not `inline-flex`, so the chevron can be pushed to the card's far
+	   edge instead of trailing the words. On espresso the whole line is the
+	   affordance and a glyph sitting 6px after the text reads as punctuation. */
+	display: flex;
 	align-items: baseline;
+	justify-content: space-between;
 	gap: 8px;
 	text-decoration: none;
 	font-weight: 500;
@@ -2537,12 +2666,18 @@ main:has(.tix-order-summary) .wcblr-tix-back {
    also the whole affordance now that the underline is gone, so it moves on
    hover: a mark that answers is a mark that reads as pressable. */
 .wcblr-guide .wcblr-tix-jump a::after {
-	content: "\2192";
-	font-size: 0.95em;
+	content: "\203A";
+	font-size: 1.25em;
+	line-height: 1;
+	color: #a39c92;
 	transition: transform 0.18s cubic-bezier(0.2, 0.6, 0.2, 1);
 }
+/* Turmeric, not crimson. The one red in this column is the Register button
+   forty pixels above, and a second red under it reads as a second action. On
+   cream that argument put the hover on espresso; on espresso it puts it on the
+   gold the rail and the price already use. */
 .wcblr-guide .wcblr-tix-jump a:hover {
-	color: #C8344B !important;
+	color: #e0a526 !important;
 }
 .wcblr-guide .wcblr-tix-jump a:hover::after {
 	transform: translateX(4px);
@@ -2553,9 +2688,7 @@ main:has(.tix-order-summary) .wcblr-tix-back {
    page that many readers never open. The rule above it is the counterfoil's own
    fold: small print sits under a fold, not under a heading. */
 .wcblr-guide .wcblr-tix-terms {
-	margin-top: 16px !important;
-	padding-top: 16px;
-	border-top: 1px solid #e6e0d6;
+	margin-top: 14px !important;
 }
 /* THE ONE UNDERLINE IN THE SECTION, and it keeps it because it is the only link
    here sitting inside a sentence. There is no room for a glyph mid-clause and
@@ -2566,7 +2699,7 @@ main:has(.tix-order-summary) .wcblr-tix-back {
    can see. 3px of offset because the terms run at 13px with descenders in
    "questions", and at the 2px this started on the rule cut through them. */
 .wcblr-guide .wcblr-tix-terms a {
-	color: #2a1d14;
+	color: #e0a526;
 	text-decoration: underline;
 	text-underline-offset: 3px;
 	/* Unbroken, or it is not one underline, it is two fragments. The panel is
@@ -2579,7 +2712,7 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 	transition: color 0.15s ease;
 }
 .wcblr-guide .wcblr-tix-terms a:hover {
-	color: #C8344B;
+	color: #F2ECE0;
 }
 
 /* ---- 9. "Your tickets": the access-token screen -------------------------
