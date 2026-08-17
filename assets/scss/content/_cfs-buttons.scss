@@ -14,6 +14,22 @@
 		color 0.18s ease, box-shadow 0.18s ease;
 }
 
+/* THE RESTING STATE, and it is the same bug `wcblr-btn-onlight` was written to
+   fix, one surface over. Core's outline reset lives inside `:where()`, so it
+   computes to (0,1,0); the theme's global `background-color: var(--accent-1)`
+   lands at the same (0,1,0) later in the document and wins on source order.
+   Nothing about that depends on what is behind the button, so an
+   `is-style-outline` button on a DARK band was shipping crimson too, and the
+   hover rule below has always assumed it was transparent. Caught on the
+   media partners page, 17 August 2026, where "Get directions" rendered as a
+   solid crimson fill beside its own cream border.
+
+   This also corrects the outline button in every existing CTA band and call
+   hero, which is the point: they were all drawing the same fill. */
+.wcblr-hero-cta .is-style-outline .wp-block-button__link {
+	background-color: transparent !important;
+}
+
 /* Outline button: faint on the dark hero until you point at it, then it
    fills with cream and flips to dark text. !important because the block
    writes colour and border-colour as inline styles. */
