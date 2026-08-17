@@ -1,0 +1,179 @@
+/* ── Media partners page ─────────────────────────────────────────────────────
+   One class, and it exists for one reason: the partner rows need a social row,
+   and every social row on this site takes its brand colours from
+   `content/_social-brand.scss` by having its selector listed in
+   `$wcblr-social-rows`. A row that is not in that list draws every glyph in the
+   same muted brown, which is the bug that file was written to end.
+
+   Why this is not `.wcblr-person-social` from `content/_roster.scss`: that one
+   is grid-positioned (`grid-column: 2; grid-row: 3`) because it lives inside the
+   `.wcblr-person` card's grid. Reusing it outside that grid places it in a grid
+   that does not exist. The colours are shared; the placement is not.
+
+   Everything else the page needs is already in the kit: each partner is a
+   `.wcblr-panel`, and the logos are pre-normalised to one 800x300 transparent
+   canvas before upload, so no CSS sizes them. ─────────────────────────────── */
+
+/* ── Optical weight, which the shared canvas does not give you ───────────────
+   Every partner logo ships on the same 800x300 transparent canvas, so all five
+   image boxes are identical and the column heights line up with no CSS. What a
+   shared canvas cannot equalise is how much of it each mark actually fills. The
+   supplied art runs from a square badge to a 3.7:1 wordmark, and fitting each
+   one to the same bounding box means the badge covers a quarter of the width
+   the wordmark does. On the page that read as Prospera X at ~70px beside The WP
+   Weekly at ~230px, which looks like a mistake rather than a set.
+
+   So each mark is scaled to roughly equal AREA instead, which is how a logo
+   wall is levelled: `sqrt(target / (w * h))` against its measured ink, then
+   capped at 210 canvas px tall so a square badge does not tower over a
+   wordmark. The five factors below are computed, not eyeballed, and the numbers
+   they were computed from are in `wordcamp/photos/media-partners/README.md`.
+
+   Why this is CSS and not baked into the PNGs: the files are already uploaded
+   and referenced by media id. Re-baking them means five re-uploads and five id
+   changes in the markup for a purely visual result. If those files are ever
+   regenerated with the ink pre-levelled, delete this block rather than leaving
+   both, or the correction lands twice.
+
+   The scale sits on the `img` and the hover scale further down sits on the
+   `figure`, deliberately: two elements, so the transforms compose and the hover
+   does not have to know each partner's factor. */
+.wcblr-guide .wcblr-mp-logo img {
+	display: block;
+	transform-origin: center;
+}
+
+.wcblr-guide .wcblr-mp-logo-prospera img     { transform: scale(0.955); }
+.wcblr-guide .wcblr-mp-logo-wpweekly img     { transform: scale(0.691); }
+.wcblr-guide .wcblr-mp-logo-wpbaat img       { transform: scale(0.955); }
+.wcblr-guide .wcblr-mp-logo-wpoetstv img     { transform: scale(0.743); }
+.wcblr-guide .wcblr-mp-logo-wpsimplified img { transform: scale(0.805); }
+
+/* ── The card, and why only these cards respond to a pointer ─────────────────
+   Hover feedback is a promise that there is something to click. Each partner
+   card carries a linked name and a row of linked glyphs, so it earns one. The
+   three `// the_coverage` cards and the two `// not_a_sponsorship` cards are
+   read-only and deliberately stay still: lifting a card that goes nowhere is
+   the interface lying about itself.
+
+   Specificity note: `content/_motion.scss` already lifts every `.wcblr-panel`
+   2px under the pointer, at `.wcblr-motion .wcblr-panel:hover` = (0,3,0), and
+   it is imported after this file. `.wcblr-post.wcblr-guide` puts this pair at
+   (0,4,0) so the richer lift wins on specificity rather than on import order,
+   which would silently flip if the imports were ever resorted. */
+/* ── Narrow ──────────────────────────────────────────────────────────────────
+   Below 782px the two columns collapse to one, so the logo column stops being
+   27 per cent of a row and becomes the full width of the card. Uncapped, an
+   800px canvas then draws the mark about 150px tall above three lines of copy,
+   which makes every card open with a banner. Capped, it reads as the lockup it
+   is.
+
+   Centred, and that is not a preference either. Each mark is centred inside its
+   own 800x300 canvas, so flushing the canvas left leaves the ink floating a
+   canvas-width-dependent distance in from the card edge: 82px for the Prospera
+   X badge, 12px for The WP Weekly wordmark. Ragged, and it reads as a bug.
+   Centring the canvas centres the ink, which is at least deliberate. */
+@media (max-width: 781px) {
+	.wcblr-guide .wcblr-mp-card .wcblr-mp-logo {
+		max-width: 220px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+/* ── Two inherited bottom margins that were padding the card out ─────────────
+   Measured off the DOM rather than eyeballed: the card is 276px tall and its
+   content is 220px. The 56px difference is entirely two defaults leaking inside
+   a container that already has its own 28px padding.
+
+     .wp-block-columns   margin-bottom 38.5px   the theme's block gap, applied
+                                                to the columns block even though
+                                                it is the card's last child
+     .wcblr-mp-social    margin-bottom 17px     core's list margin on the ul
+
+   Both are correct defaults between sibling blocks in a flow and wrong inside a
+   card, where the padding is the spacing. Zeroing them takes each partner row
+   from 276px to about 220px, which is 280px off the roster. */
+.wcblr-guide .wcblr-mp-card > .wp-block-columns {
+	margin-bottom: 0;
+}
+
+.wcblr-guide .wcblr-mp-social {
+	margin-bottom: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	/* The colour half runs for everyone, including a reader who asked for less
+	   motion: the card still answers the pointer, it just does not travel.
+
+	   Two shadow layers, not one. A single wide blur at low alpha is invisible
+	   on #F2ECE0, which is what the first attempt shipped: a 6px contact shadow
+	   under a 36px ambient one is what actually reads as lifted. The border has
+	   to travel further than it looks like it should for the same reason,
+	   #dad5cd to #b9ac97, or the change is lost against the card fill. */
+	.wcblr-post.wcblr-guide .wcblr-mp-card:hover {
+		border-color: #b9ac97 !important;
+		box-shadow: 0 2px 6px rgba(42, 29, 20, 0.06),
+			0 18px 36px rgba(42, 29, 20, 0.15);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.wcblr-post.wcblr-guide .wcblr-mp-card {
+			transition: transform 0.28s cubic-bezier(0.2, 0.6, 0.2, 1),
+				box-shadow 0.28s ease, border-color 0.28s ease;
+		}
+
+		.wcblr-post.wcblr-guide .wcblr-mp-card:hover {
+			transform: translateY(-4px);
+		}
+
+		/* The mark leans in a little further than the card it sits on, so the
+		   row reads as one object moving rather than two. No clipping is
+		   involved and none is needed: the logo is a transparent PNG with its
+		   own padding baked in, which is exactly why the hover zoom that was
+		   twice rejected on captioned photographs is safe here. */
+		.wcblr-post.wcblr-guide .wcblr-mp-card .wcblr-mp-logo {
+			transition: transform 0.28s cubic-bezier(0.2, 0.6, 0.2, 1);
+		}
+
+		.wcblr-post.wcblr-guide .wcblr-mp-card:hover .wcblr-mp-logo {
+			transform: scale(1.045);
+		}
+	}
+}
+
+.wcblr-guide .wcblr-mp-social {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 12px;
+	margin-top: 18px;
+	padding-left: 0;
+	font-size: 17px !important;
+}
+
+/* The muted default, which `chain` keeps: it is the generic "a website" link
+   and has no brand of its own. Every other service is repainted by the map in
+   `_social-brand.scss`, whose selectors carry one more class than this pair and
+   so win on specificity rather than on import order. */
+.wcblr-guide .wcblr-mp-social .wp-block-social-link,
+.wcblr-guide .wcblr-mp-social .wp-block-social-link-anchor {
+	color: #9c8d7c !important;
+	transition: color 0.15s;
+}
+
+/* Lift rather than repaint on hover, matching the footer, the roster and the
+   organizer cards: a hover colour would throw away the brand colour that is the
+   whole point of the map. Gated twice, so a tap on a phone does not leave one
+   sitting raised and a reader who asked for less motion gets none. */
+@media (hover: hover) and (pointer: fine) {
+	@media (prefers-reduced-motion: no-preference) {
+		.wcblr-guide .wcblr-mp-social .wp-block-social-link {
+			transition: transform 0.18s cubic-bezier(0.2, 0.6, 0.2, 1);
+		}
+
+		.wcblr-guide .wcblr-mp-social .wp-block-social-link:hover {
+			transform: translateY(-3px);
+		}
+	}
+}
