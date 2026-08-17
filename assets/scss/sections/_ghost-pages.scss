@@ -215,4 +215,23 @@ body:not(.home) {
 			animation: wcblr-hero-rise 0.6s 0.28s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 		}
 	}
+
+	/* ── Sponsors: template has no <main>, so the rules above don't match. ──── */
+	/* Target by body class directly. Selectors intentionally broad (no `main`
+	   guard) so they hit the eyebrow in the header template part and the H1
+	   and lead in the page content group. */
+	body.page-slug-sponsors {
+		[class*="wcblr-eyebrow"] {
+			animation: wcblr-hero-rise 0.6s 0.05s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+		}
+
+		h1 {
+			animation: wcblr-hero-lift 0.7s 0.12s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+		}
+
+		.wcblr-lead,
+		.wcblr-page-lead {
+			animation: wcblr-hero-rise 0.6s 0.28s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+		}
+	}
 }
