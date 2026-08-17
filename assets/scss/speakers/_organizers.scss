@@ -131,10 +131,16 @@
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
-	gap: 10px;
+	gap: 13px;
 	padding-left: 0;
-	margin: 16px 0 0 !important;
-	font-size: 20px !important;
+	margin: 18px 0 0 !important;
+	/* 24px, up from 20. Core sizes these glyphs off font-size on the list and
+	   the row had been sitting at an in-between value to stay under the name;
+	   at card width they read as decoration rather than as links you can hit.
+	   24 is one of core's own steps and is also the minimum that gives each
+	   anchor a comfortable target. The gap goes up with it, or six of them
+	   crowd into each other on the widest cards. */
+	font-size: 24px !important;
 }
 .wcblr-org-card__social .wp-block-social-link,
 .wcblr-org-card__social .wp-block-social-link-anchor {

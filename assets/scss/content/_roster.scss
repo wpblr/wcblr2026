@@ -252,9 +252,13 @@
 	display: flex;
 	flex-wrap: wrap;
 	align-items: flex-end;
-	gap: 12px;
+	gap: 14px;
 	padding-left: 0;
-	font-size: 18px !important;
+	/* 22px, up from 18. Same call as the organizer grid one file over: the
+	   in-between value kept the row politely under the 19px name and the cost
+	   was that nobody could see it. This is still short of the grid's 24
+	   because these sit in a narrower column beside a photo. */
+	font-size: 22px !important;
 }
 
 .wcblr-guide .wcblr-person-social .wp-block-social-link,
