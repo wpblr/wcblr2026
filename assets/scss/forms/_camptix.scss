@@ -828,7 +828,9 @@ main:has(#tix) .wcblr-page-head {
 	   `.wcblr-tix-row` is `display: block` unless the selection table is in it,
 	   so the registration card is full width and never sees this column. */
 	max-width: none;
-	margin: 28px 0 0;
+	/* The design starts the card level with the top of the copy column beside
+	   it, not 28px below it. */
+	margin: 0;
 
 	br { display: none; }
 
@@ -846,7 +848,7 @@ main:has(#tix) .wcblr-page-head {
 		/* Each ticket now carries its own 22px of panel padding, so the card
 		   only has to hold the panels off its own edge. 30px on both counts
 		   put 52px between the card edge and the ticket name. */
-		padding: 30px 30px 28px;
+		padding: 30px 30px 26px;
 		font-family: "Hanken Grotesk", sans-serif;
 	}
 
@@ -904,7 +906,10 @@ main:has(#tix) .wcblr-page-head {
 	   price, and "50 left" says what "REMAINING / 50" needed two lines to say.
 	   Only the select keeps a label, because a lone `0` in a dropdown is the
 	   one value on the card that does not explain itself. */
-	.tix_tickets_table { border-collapse: collapse; width: 100%; }
+	/* The theme gives every table a bottom margin, which lands between the
+	   ticket and the Register button and put 35px there where the design has
+	   19. The button's own paragraph owns that gap. */
+	.tix_tickets_table { border-collapse: collapse; width: 100%; margin: 0; }
 	.tix_tickets_table thead { display: none; }                 /* drop native header */
 	.tix_tickets_table,
 	.tix_tickets_table tbody { display: block; width: 100%; }
@@ -935,7 +940,7 @@ main:has(#tix) .wcblr-page-head {
 		display: grid;
 		grid-template-columns: minmax(0, 1fr) auto;
 		column-gap: 18px;
-		row-gap: 4px;
+		row-gap: 20px;
 		/* bleed to the card's own edges, so the tear can reach them */
 		margin: 0 -30px;
 		padding: 0 30px;
@@ -1005,7 +1010,11 @@ main:has(#tix) .wcblr-page-head {
 		grid-column: 1;
 		grid-row: 1;
 		align-self: center;
-		margin-bottom: 20px;
+		/* The gap under the name is the grid's own `row-gap`, not a margin on
+		   this cell. A margin is inside row one, so `align-self: center` on the
+		   pill opposite centred it against the name AND its margin and dropped
+		   it 13px below the name it qualifies. */
+		margin-bottom: 0;
 	}
 
 	/* The coupon row is an action, not a ticket. It gets the thin solid rule
@@ -1082,7 +1091,7 @@ main:has(#tix) .wcblr-page-head {
 	.tix-ticket-title {
 		display: block;
 		font-family: Fraunces, Georgia, serif;
-		font-size: 30px;
+		font-size: 27px;
 		font-weight: 500;
 		line-height: 1.12;
 		color: #f2ece0;
@@ -1198,7 +1207,11 @@ main:has(#tix) .wcblr-page-head {
 	   a card, which is what it is. */
 	.tix_tickets_table tbody .tix-column-quantity {
 		grid-column: 2;
-		grid-row: 2 / span 2;
+		/* Row 2, not `2 / span 2`. The price's footnote is a `::after` INSIDE
+		   the price cell, so there is no third row to span, and asking for one
+		   opened an implicit empty row whose `row-gap` added 20px of nothing
+		   between the ticket and the Register button. */
+		grid-row: 2;
 		display: flex;
 		flex-direction: column;
 		align-items: flex-end;
@@ -1237,7 +1250,7 @@ main:has(#tix) .wcblr-page-head {
 		background: #231a12;
 		border: 1.5px solid #6b5744;
 		border-radius: 8px;
-		padding: 12px 34px 12px 14px;
+		padding: 10px 34px 10px 14px;
 		width: auto;
 		min-width: 96px;
 		cursor: pointer;
@@ -1265,7 +1278,7 @@ main:has(#tix) .wcblr-page-head {
 	.tix_tickets_table tbody .tix-column-quantity select:focus { box-shadow: none; outline: 2px solid #e0a526; }
 
 	/* --- Register -> full-width red CTA at the card bottom --- */
-	p { margin: 26px 0 0; }
+	p { margin: 16px 0 0; }
 	input[type="submit"] {
 		display: block;
 		width: 100%;
@@ -1290,7 +1303,7 @@ main:has(#tix) .wcblr-page-head {
 	form > p:has(input[type="submit"])::after {
 		content: "Lunch   Filter coffee   Badge   Swag";
 		display: block;
-		margin-top: 20px;
+		margin-top: 18px;
 		font-family: "JetBrains Mono", monospace;
 		font-size: 11px;
 		font-weight: 500;
@@ -1465,64 +1478,20 @@ main:has(#tix) .wcblr-page-head {
 }
 
 /* ---- 7c. Everything below the fold, on interaction ----------------------
-   The page is about 6,000px long. `content/_motion.scss` is explicit that a
-   load ladder run past the first screen plays to an empty room, so nothing
-   below the register row animates until the reader does something.
+   MOVED to `content/_ticket-panel.scss`, which is where the rest of this
+   page's interaction layer lives now.
 
-   Scoped to this page rather than written against `.wp-block-column`, and that
-   is deliberate: eight posts and pages carry `wcblr-motion`, and most of them
-   build cards the same way, so a rule on the bare class would have quietly
-   restyled seven published pages to fix one. */
-@media (prefers-reduced-motion: no-preference) {
+   The card and question hovers were here, scoped to `$tix-page`, which
+   resolves to `:has(the selection table)`. That was the wrong condition: it
+   made every hover on the page depend on CampTix still being on the ticket
+   SELECTION screen, so the tier cards and the questions went inert the moment
+   somebody clicked Register. The comment also described a page that no longer
+   exists, "the six things a ticket gets you, the four good-to-know notes",
+   both of which were deleted rounds ago.
 
-	/* Every card on the page: the two ticket tiers, the six things a ticket
-	   gets you, the four good-to-know notes, and the questions. Transform only,
-	   plus a shadow that starts fully transparent so there is something to
-	   animate FROM; `box-shadow: none` to a real shadow does not interpolate,
-	   it snaps. Nothing here changes what the page looks like at rest. */
-	#{$tix-page} .wcblr-sec .wp-block-columns > .wp-block-column.has-background,
-	#{$tix-page} .wcblr-sec .wp-block-accordion-item {
-		box-shadow: 0 0 0 0 rgba(42, 29, 20, 0);
-		transition: transform 0.3s cubic-bezier(0.2, 0.6, 0.2, 1),
-			box-shadow 0.3s cubic-bezier(0.2, 0.6, 0.2, 1);
-	}
-	#{$tix-page} .wcblr-sec .wp-block-columns > .wp-block-column.has-background:hover,
-	#{$tix-page} .wcblr-sec .wp-block-accordion-item:hover {
-		transform: translateY(-3px);
-		box-shadow: 0 16px 30px -22px rgba(42, 29, 20, 0.5);
-	}
-
-	/* The icon chip answers with the card it sits in, which is the one place
-	   the six benefit cards have anything to move. Small: 1.06 on a 44px chip
-	   is under three pixels, and the point is that the card feels alive rather
-	   than that the icon is doing something. */
-	#{$tix-page} .wcblr-sec .wcblr-chip {
-		transition: transform 0.3s cubic-bezier(0.2, 0.6, 0.2, 1);
-	}
-	#{$tix-page} .wcblr-sec .wp-block-column.has-background:hover .wcblr-chip {
-		transform: translateY(-2px) scale(1.06);
-	}
-
-	/* The question rows read as pressable before they are pressed. */
-	#{$tix-page} .wp-block-accordion-heading__toggle {
-		transition: color 0.18s ease;
-	}
-	#{$tix-page} .wp-block-accordion-item:hover .wp-block-accordion-heading__toggle {
-		color: #C8344B;
-	}
-	#{$tix-page} .wp-block-accordion-heading__toggle-icon {
-		transition: transform 0.22s cubic-bezier(0.2, 0.6, 0.2, 1);
-	}
-	/* UNVERIFIED, and safe to be wrong. The tickets page is not published, so
-	   the accordion's open-state DOM could not be read; this bets on the ARIA
-	   attribute the block has to set for a screen reader either way. If the bet
-	   is wrong the `+` simply does not turn, which is exactly where it is
-	   today. Do not build anything load-bearing on this selector until someone
-	   has looked at the rendered page. */
-	#{$tix-page} .wp-block-accordion-heading__toggle[aria-expanded="true"] .wp-block-accordion-heading__toggle-icon {
-		transform: rotate(45deg);
-	}
-}
+   Nothing was lost in the move except one rule that contradicted the design:
+   the question's text turned crimson on hover, and the design colours only
+   the `+`. */
 
 /* ---- 6. The row the shortcode sits in ----------------------------------- */
 
@@ -1575,8 +1544,17 @@ main:has(#tix) .wcblr-page-head {
 	   of 638/462: measured on the live page, 20px adrift of the poster's split,
 	   which is the exact misalignment this padding was added to remove. */
 	box-sizing: border-box;
-	padding-right: 48px;
+	/* 16.5 PER CENT, not 48px, and the unit is the point. The design sets the
+	   copy to 516px of a 1,160px content column, which is 44.5%; the column is
+	   61%, so the gutter is the 16.5% between them. Written as a percentage it
+	   holds that measure at every content width the site can be served at,
+	   and this page has been served at three (1,000 in the local render, about
+	   1,036 live, 1,160 in the design). At 48px flat the measure was 562px
+	   here and would have been 662 in the design's own width, which is a
+	   different-looking page at every breakpoint. */
+	padding-right: 16.5%;
 }
+
 /* Core stacks `wp:columns` at 781px by forcing `flex-basis: 100%`, and the
    `:has()` above is still true when it does, so the gutter would survive as a
    48px right margin on a full-width column: the copy would stop short of the
@@ -2096,7 +2074,17 @@ main:has(.tix-order-summary) .wcblr-tix-back {
 .wcblr-tix-shot img {
 	display: block;
 	width: 100%;
-	aspect-ratio: 2 / 1;
+	/* 2.17:1, measured off the design: its band is 535px at 1,160 wide. It was
+	   2:1, which is 44px taller at this width and spends the difference on the
+	   empty auditorium floor below the front row.
+
+	   The crop stays CENTRED. A first pass moved it to 32% on the strength of a
+	   comparison whose two crops were anchored 40px apart, which made the
+	   build look zoomed in when it was not: at 2.17:1 both show the same 69 per
+	   cent of the frame at the same scale. `pages/tickets-notes.md` cut four
+	   windows out of this file and compared them; 50% won, and nothing in the
+	   design contradicts it. */
+	aspect-ratio: 2.17 / 1;
 	object-fit: cover;
 	border: 1.5px solid #dad5cd;
 	border-radius: 16px;

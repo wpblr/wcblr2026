@@ -257,6 +257,37 @@
    long-form posts carry, and none of it is reachable from a page that has not
    opted in.                                                                */
 
+/* ---- The content column is 1,160px on this page --------------------------
+   Every other page on the site caps `alignwide` at 1,000px: core emits
+   `.wp-container-core-group-is-layout-… > .alignwide { max-width: 1000px }`
+   from the layout set on the page template's post-content, and that is the
+   width every published page has been composed against.
+
+   The design was drawn at 1,160, and the difference is not a detail. It is 16
+   per cent more room on every row of the page, and it is why the ticket card
+   in the mockup reads as a comfortable 450px object while the same card at
+   1,000px content is 390px and its price, its pill and its select start
+   colliding. Measured rather than eyeballed: the design's copy measure is
+   516px, which is 44.5% of 1,160 and 52 characters at 20px; at 1,000 the same
+   proportion is 445px and 45 characters, which is tight for a lede.
+
+   It resolves to 1,100 in practice, not 1,160: the `alignfull` wrapper this
+   group sits in is itself about 1,100 wide, so the declaration lifts the
+   1,000px cap and the wrapper supplies the ceiling. That is the width the rest
+   of this file's notes have always called "the 1,100px content width", and it
+   is within 5 per cent of the design, which is the difference between a page
+   that reads as the mockup and one that does not.
+
+   Scoped to this page, and `!important` because the core rule is
+   `(0,2,0)` and so is this one: a tie is settled by which stylesheet the
+   browser saw last, and Remote CSS being later is true today and not a thing
+   to build on.
+
+   The header and the footer have their own containers and do not move. */
+.wcblr-tix-page > .alignwide {
+	max-width: 1160px !important;
+}
+
 /* ---- The page's own heading -----------------------------------------------
    "Get your ticket" is the largest type on the page and the only thing on the
    first screen that has to carry it: the post title is hidden on this page, so
@@ -271,7 +302,7 @@
    to be restated for the same reason: that file's 34px is (0,3,1) inside its
    own media query and would otherwise lose to this rule at every width. */
 .wcblr-post.wcblr-guide .wcblr-sec:first-child h2 {
-	font-size: 62px !important;
+	font-size: 66px !important;
 	letter-spacing: -0.02em !important;
 	line-height: 1.08 !important;
 }
@@ -289,20 +320,21 @@
    readable without the 68ch cap, and gives every section below the first the
    same opening shape.
 
-   `align-items: baseline` and NOT `center`: the lead is three lines of 17px
-   against one line of 46px serif, and centring floats it in the middle of a
-   heading that is taller than it. Sitting on the heading's first baseline is
-   what makes the two read as one head rather than as two blocks.           */
+   `align-items: flex-end`, which is the rule the design is actually using:
+   the lead's LAST line sits on the heading's baseline, whether the lead runs
+   to two lines or four. Baseline alignment ties the two FIRST lines together,
+   which floats a three-line lead high and leaves a hole under the heading;
+   centring floats it in the middle of a heading taller than itself. Bottom
+   alignment is the only one of the three that holds as the lead changes
+   length, which it does in all three sections that use this head. */
 .wcblr-guide .wcblr-sechead {
-	align-items: baseline;
+	align-items: flex-end;
 }
 
 .wcblr-guide .wcblr-sechead > .wp-block-column > p {
-	/* The lead is already in a 38% column, so the guide's 68ch is never
-	   reached. This is the top-of-column alignment instead: a 17px line sits
-	   about 5px above a 46px cap height, and that is the difference between
-	   the two columns reading as level and reading as nearly level. */
-	margin-top: 6px !important;
+	/* Bottom-aligned by the row, so the only correction left is the difference
+	   between the heading's descent and the lead's. */
+	margin-bottom: 6px !important;
 }
 
 /* Core stacks columns below 782px. The lead then follows the heading, which is
@@ -311,6 +343,7 @@
 @media (max-width: 781px) {
 	.wcblr-guide .wcblr-sechead > .wp-block-column > p {
 		margin-top: 14px !important;
+		margin-bottom: 0 !important;
 	}
 }
 
@@ -325,12 +358,12 @@
 	list-style: none;
 	padding-left: 0;
 	border-top: 1px solid #dad5cd;
-	padding-top: 26px;
+	padding-top: 20px;
 }
 
 .wcblr-guide .wcblr-tix-points li {
 	position: relative;
-	padding-left: 26px;
+	padding-left: 20px;
 	margin-bottom: 14px;
 }
 
@@ -416,6 +449,9 @@
 .wcblr-guide .wcblr-tiers > .wp-block-column > .wcblr-tier-soon-note,
 .wcblr-guide .wcblr-tiers > .wp-block-column > .wcblr-tier-watch {
 	margin-top: auto !important;
+	/* and nothing under it: the card's own bottom padding is the gap, and a
+	   default margin on the buttons block was adding 19px on top of it. */
+	margin-bottom: 0 !important;
 }
 
 /* The status pill. A mono label on its own line reads as a field name; the
@@ -447,8 +483,8 @@
 
 .wcblr-guide .wcblr-tier-list li {
 	position: relative;
-	padding-left: 26px;
-	margin-bottom: 12px;
+	padding-left: 20px;
+	margin-bottom: 9px;
 }
 
 .wcblr-guide .wcblr-tier-list li:last-child { margin-bottom: 0; }
@@ -605,15 +641,15 @@
 .wcblr-guide .wcblr-tix-cta::before {
 	content: "26";
 	position: absolute;
-	right: 22px;
+	right: 45px;
 	top: 50%;
 	transform: translateY(-50%);
 	font-family: "Fraunces", Georgia, serif;
 	font-weight: 600;
-	font-size: 205px;
+	font-size: 165px;
 	line-height: 0.8;
 	color: transparent;
-	-webkit-text-stroke: 1.5px rgba(224, 165, 38, 0.18);
+	-webkit-text-stroke: 1.5px rgba(224, 165, 38, 0.14);
 	pointer-events: none;
 }
 
@@ -733,6 +769,13 @@
 	display: none;
 }
 
+/* And it sits closer to its heading. `_guide.scss` gives the eyebrow 24px of
+   bottom margin, which is right when it has a rule running out of it and needs
+   to clear it; with the rule gone the design closes the gap to about 8. */
+.wcblr-tix-page .wcblr-sec > .wcblr-eyebrow {
+	margin-bottom: 8px !important;
+}
+
 /* ---- The photograph carries its own caption ------------------------------
    Set INTO the picture at the bottom left, over a gradient, with the file name
    at the other end in mono. It sat under the frame in 12px grey, which is the
@@ -754,7 +797,7 @@
 	right: 0;
 	bottom: 0;
 	margin: 0 !important;
-	padding: 60px 28px 20px;
+	padding: 90px 28px 20px;
 	font-family: "Hanken Grotesk", sans-serif !important;
 	font-size: 14px !important;
 	font-weight: 500;
@@ -763,7 +806,7 @@
 	color: #F2ECE0 !important;
 	text-align: left;
 	border-radius: 0 0 16px 16px;
-	background: linear-gradient(to top, rgba(20, 13, 8, 0.78), rgba(20, 13, 8, 0));
+	background: linear-gradient(to top, rgba(18, 12, 7, 0.88), rgba(18, 12, 7, 0.5) 45%, rgba(18, 12, 7, 0));
 	pointer-events: none;
 }
 
@@ -865,16 +908,20 @@
    dimmed underline, so it is still visibly a link, and takes the gold only on
    hover. */
 .wcblr-tix-page .wcblr-tix-day-sun .wcblr-tix-day-note a {
+	/* No underline at rest. The design sets that sentence as one colour and one
+	   weight, and an underlined phrase in the middle of it is the brightest
+	   thing on a card whose headline is meant to be. The affordance arrives on
+	   hover, which is the same bargain every other standalone link in this
+	   column makes. */
 	color: inherit !important;
-	text-decoration: underline;
-	text-decoration-color: rgba(224, 165, 38, 0.4);
+	text-decoration: none;
 	text-underline-offset: 3px;
-	transition: color 0.15s ease, text-decoration-color 0.15s ease;
+	transition: color 0.15s ease;
 }
 
 .wcblr-tix-page .wcblr-tix-day-sun .wcblr-tix-day-note a:hover {
 	color: #e0a526 !important;
-	text-decoration-color: #e0a526;
+	text-decoration: underline;
 }
 
 /* ---- The questions ------------------------------------------------------- */
@@ -887,7 +934,7 @@
    the page's life is spent with all seven closed. */
 .wcblr-guide .wcblr-faqgrid {
 	align-items: stretch;
-	gap: 14px 22px;
+	gap: 19px 23px;
 }
 
 .wcblr-guide .wcblr-faqgrid .wp-block-accordion-item {
