@@ -89,6 +89,14 @@ footer {
 		}
 	}
 
+	/* ---- Tickets link — red to signal it's a live purchase action ---------- */
+	li.wcblr-nav-tickets > .wp-block-navigation-item__content {
+		color: #c8344b !important;
+	}
+	li.wcblr-nav-tickets::after {
+		background: #c8344b !important;
+	}
+
 	/* ---- The lockup, same object as the header's ------------------------
 	   The footer had its own arrangement: a 40px mark, 19px title, and no rule
 	   between them, against the header's 56/20 with one. Two lockups for one
