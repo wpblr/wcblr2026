@@ -578,12 +578,31 @@
    The distinction that makes this safe to do broadly: a column that is a CARD
    carries `has-background` or a card class, and its padding is the card's own
    inset, which must survive stacking. A column with padding and neither is
-   spacing itself against a neighbour it no longer has. Checked against every
-   guide page before writing it; those are the only two shapes in use.
+   spacing itself against a neighbour it no longer has.
+
+   **A CARD CAN DRAW ITS EDGE INSTEAD OF ITS FILL, and two on this site do.**
+   `has-background` was doing the whole job of recognising a card, so an
+   outlined card with a transparent fill fell straight through the guard and had
+   its padding stripped on every phone. It shipped that way on the tickets
+   page's third tier card: a dashed box with its heading, its rule and its
+   bullets all sitting hard against the border, and it is invisible above 781px
+   because the rule does not apply there.
+
+   So the not-list carries the card classes that paint no fill as well.
+   `wcblr-tier-soon` is the one that exists today, the tier that is not written
+   yet. (`wcblr-tba`, the deliberately-empty dashed block, has the same shape
+   and is NOT in the list because it sits on a `wp:group` rather than a
+   `wp:column`, so this selector never reaches it.)
+
+   **Anything added later that is a card without a background belongs in this
+   list**, or it will look correct on a desktop and broken on a phone. The
+   media-partners page hit this and patched it from the other end, with a rule
+   putting 24px back on its own card classes; either fix works, but the guard
+   is the one place a reader looks.
 
    781px, not the 600 above, because that is where core stacks columns. */
 @media (max-width: 781px) {
-	.wcblr-guide .wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell) {
+	.wcblr-guide .wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell):not(.wcblr-tier-soon) {
 		padding-left: 0 !important;
 		padding-right: 0 !important;
 	}
