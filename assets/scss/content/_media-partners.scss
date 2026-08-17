@@ -1,339 +1,477 @@
 /* ── Media partners page ─────────────────────────────────────────────────────
-   The roster on /media-partners/: one card holding five hairline-separated
-   rows, each a logo, a format label, a linked name, a description and a row of
-   social glyphs.
+   Built to `wordcamp/design/pages/WCBLR-2026-Media-Partners-Page.png`.
 
-   Three things here that blocks cannot express, and one that they could but
-   should not have to. In order down the file: the social row's brand colours,
-   the optical levelling of five logos that arrived at five different aspect
-   ratios, the list itself, and the hover.
+   Everything here is scoped under `.wcblr-mp`, a class this page's wrapper
+   carries and nothing else does, so none of it can reach another page.
 
-   Why the social row is not `.wcblr-person-social` from `content/_roster.scss`:
-   the colours are shared and the placement is not. That one is grid-positioned
-   (`grid-column: 2; grid-row: 3`) because it lives inside the `.wcblr-person`
-   card's grid, so reusing it here would place it in a grid that does not exist.
-   The colour itself comes from `content/_social-brand.scss`, which is the one
-   map for the whole site; this row is in `$wcblr-social-rows` there, and a row
-   that is not in that list draws every glyph in the same muted brown. ─────── */
+   Palette note, because the mock and the site disagree and it is deliberate:
+   the mock is exported a few points lighter throughout (page #f7f3ea against
+   the site's #F2ECE0, dark #241a12 against #2a1d14). That reads as an export
+   profile shift rather than a palette change, and the site's header and footer
+   are painted with the real tokens, so the page keeps the real tokens or it
+   would not match its own chrome. The one colour taken from the mock as drawn
+   is the rose on dark: #C8344B shifted the same way would be #cd3b55, nowhere
+   near the #e97b8a in the file, so that one is a real decision about crimson
+   being too dark to read on espresso. ───────────────────────────────────── */
 
-/* ── Optical weight, which the shared canvas does not give you ───────────────
-   Every partner logo ships on the same 800x300 transparent canvas, so all five
-   image boxes are identical and the rows line up with no CSS. What a shared
-   canvas cannot equalise is how much of it each mark actually fills. The
-   supplied art runs from a square badge to a 3.7:1 wordmark, and fitting each
-   one to the same bounding box means the badge covers a quarter of the width
-   the wordmark does. On the page that read as Prospera X at ~70px beside The WP
-   Weekly at ~230px, which looks like a mistake rather than a set.
-
-   So each mark is scaled to roughly equal AREA instead, which is how a logo
-   wall is levelled: `sqrt(target / (w * h))` against its measured ink, then
-   capped at 210 canvas px tall so a square badge does not tower over a
-   wordmark. The five factors below are computed, not eyeballed, and the numbers
-   they were computed from are in `wordcamp/photos/media-partners/README.md`.
-
-   Why this is CSS and not baked into the PNGs: the files are already uploaded
-   and referenced by media id. Re-baking them means five re-uploads and five id
-   changes in the markup for a purely visual result. If those files are ever
-   regenerated with the ink pre-levelled, delete this block rather than leaving
-   both, or the correction lands twice.
-
-   The scale sits on the `img` and the hover scale further down sits on the
-   `figure`, deliberately: two elements, so the transforms compose and the hover
-   does not have to know each partner's factor. */
-.wcblr-guide .wcblr-mp-logo img {
-	display: block;
-	transform-origin: center;
+/* ── Section head: heading left, standfirst right, rule under both ───────────
+   The mock's organising device. It gives every section a wide two-part opening
+   instead of a stacked heading-then-paragraph, and the rule ties the pair
+   together so the standfirst reads as part of the header rather than as loose
+   copy floating to the right of it. */
+.wcblr-mp .wcblr-mp-sechead {
+	padding-bottom: 22px;
+	border-bottom: 1px solid #ded5c4;
 }
 
-.wcblr-guide .wcblr-mp-logo-prospera img     { transform: scale(0.955); }
-.wcblr-guide .wcblr-mp-logo-wpweekly img     { transform: scale(0.691); }
-.wcblr-guide .wcblr-mp-logo-wpbaat img       { transform: scale(0.955); }
-.wcblr-guide .wcblr-mp-logo-wpoetstv img     { transform: scale(0.743); }
-.wcblr-guide .wcblr-mp-logo-wpsimplified img { transform: scale(0.805); }
+.wcblr-mp .wcblr-mp-lead {
+	display: flex;
+	align-items: flex-end;
+}
 
-/* ── The roster is one object, not five ──────────────────────────────────────
-   It shipped as five separate house cards stacked 18px apart, and that is what
-   made the page read as assembled rather than designed: five identical rounded
-   rectangles down the screen, on a page whose other sections were also rounded
-   rectangles. Nothing was wrong with any one of them, and the set was
-   monotonous.
+@media (max-width: 781px) {
+	.wcblr-mp .wcblr-mp-sechead .wcblr-mp-lead {
+		padding-top: 4px;
+	}
+}
 
-   It is now a single card holding five rows divided by hairlines, which is what
-   a masthead or a directory actually looks like. One surface instead of five,
-   the entries read as a list rather than as five unrelated slabs, and the
-   section gains a shape no other section on the page uses.
+/* ── Hero, and the facts panel beside it ─────────────────────────────────────
+   Three rows of label / value / note in a hairline box. It carries the dates
+   that used to sit in a pinned stamp, where they were decoration; here they are
+   the second thing on the page. */
+.wcblr-mp .wcblr-mp-facts {
+	border: 1px solid #4a3a2e;
+	border-radius: 14px;
+}
 
-   Same tokens as `.wcblr-panel`, deliberately: this is the house card doing a
-   different job, not a second chrome. */
-.wcblr-guide .wcblr-mp-list {
+@media (max-width: 781px) {
+	.wcblr-mp .wcblr-mp-factscol {
+		margin-top: 8px;
+	}
+}
+
+/* ── The roster card ─────────────────────────────────────────────────────────
+   Columns carry the card so every card in a row stretches to the tallest, which
+   is the only reliable way to get equal heights when the copy is uneven. */
+.wcblr-mp .wcblr-mp-card {
 	background: #fbf8f1;
-	border: 1.5px solid #dad5cd;
-	border-radius: 16px;
+	border: 1px solid #e2d9c8;
+	border-radius: 14px;
+}
 
-	/* So the first and last rows can fill the card completely and still be cut
-	   to its corner radius. Without this, a full-bleed row squares off the top
-	   two corners the moment it is hovered. */
+/* The logo sits on white, not on the card cream. Every mark was supplied on a
+   transparent canvas and several were drawn for a white page; on cream the
+   darker ones go muddy and the ones with near-white counters lose their
+   shapes. A white plate is also what the mock draws. */
+.wcblr-mp .wcblr-mp-tile {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	max-width: 152px;
+	height: 132px;
+	padding: 14px;
+	background: #ffffff;
+	border: 1px solid #e7dfd0;
+	border-radius: 11px;
 	overflow: hidden;
 }
 
-/* The row bleeds back over the list's whole 32px padding, so a hovered row is
-   lit edge to edge rather than as a floating bar with a 14px margin of unlit
-   card either side, which is what the first version did and what it was pulled
-   up on. The hairline now spans the full width too, which is what a divider in
-   a list is supposed to do. Vertical margins are already 0 from the block's own
-   inline style, and the list's vertical padding is 0 so the end rows meet the
-   card edge; the 26px here is the whole inset. */
-.wcblr-guide .wcblr-mp-row {
-	margin-left: -32px;
-	margin-right: -32px;
-	padding: 26px 32px;
+.wcblr-mp .wcblr-mp-tile .wp-block-image {
+	margin: 0;
+	width: 100%;
 }
 
-.wcblr-guide .wcblr-mp-row + .wcblr-mp-row {
-	border-top: 1px solid #e6dfd2;
+.wcblr-mp .wcblr-mp-tagcol {
+	display: flex;
+	justify-content: flex-end;
+	align-items: flex-start;
 }
 
-/* ── The column head, which is what turns a stack into a directory ───────────
-   Two mono labels over the two halves of every row, with a rule under them. It
-   costs one strip and it changes what the object is: without it the card is
-   five things in a box, with it the card is a listing that happens to have five
-   entries in it today. That matters more the longer the list gets, which is the
-   direction this list is going. Sticky is deliberately not used: the card is
-   not tall enough to need it and a strip that detaches and floats is a bigger
-   distraction than the scroll it saves. */
-.wcblr-guide .wcblr-mp-head {
-	margin-left: -32px;
-	margin-right: -32px;
-	padding: 18px 32px 14px;
-	border-bottom: 1px solid #dad5cd;
-}
-
-/* ── The format chip ─────────────────────────────────────────────────────────
-   These were 12px labels in a rotating crimson / green / gold, which is the
-   house treatment for a card label and the wrong instinct here. Rotating three
-   accents across five entries already reads as arbitrary; across twenty it is
-   confetti, and the accents stop meaning anything anywhere else on the page.
-
-   One quiet chip instead, the same on every row: the chrome goes silent and the
-   logos carry all the colour in the list, which is the correct division of
-   labour on a page whose subject is other people's brands. */
-.wcblr-guide .wcblr-mp-tag {
+.wcblr-mp .wcblr-mp-tag {
 	display: inline-block;
-	background: #f2ece0;
+	background: #f6f1e6;
 	border: 1px solid #e2dacb;
 	border-radius: 999px;
-	padding: 4px 12px 3px;
+	padding: 5px 13px 4px;
 	line-height: 1.5;
+	white-space: nowrap;
 }
 
-/* ── The name, which should be the loudest thing in a row and was not ────────
-   It was 19px Hanken semibold, quieter than the crimson label above it, so the
-   eye met a category before it met a masthead. Now it is Fraunces at 25px: the
-   same face as every h2 on the site, so an entry reads as a headline and the
-   roster reads as a contents page. Underline only on hover, so five stacked
-   links do not draw five stacked rules. */
-/* The family has to be set on the ANCHOR, not on the paragraph, and the block's
-   own `fontFamily` attribute cannot do it. The theme ships
-   `a:where(:not(.wp-element-button)) { font-family: hanken-grotesk }`, which is
-   a declaration on the `a` itself, so it beats anything the `<p>` passes down by
-   inheritance no matter how specific the paragraph's rule is. `.has-fraunces-
-   font-family` is on the paragraph and carries `!important`, and it still lost,
-   because it was never competing. Third instance of this shape on this site
-   after the outline buttons and the social glyph colours: when the theme styles
-   the inner element, styling the wrapper is not a weaker fix, it is no fix. */
-.wcblr-guide .wcblr-mp-name,
-.wcblr-guide .wcblr-mp-name a {
+/* ── Fitting each mark to the tile ───────────────────────────────────────────
+   Every logo ships on the same 800x300 transparent canvas, which is what makes
+   the tiles line up with no CSS, and it is also the problem: each mark sits
+   inside that canvas with its own generous padding, so rendering the canvas at
+   tile width draws the ink at whatever fraction of 800 it happens to occupy.
+   Prospera X's badge is 205 of 800 and The WP Weekly's wordmark is 484, so the
+   badge came out at a third of the wordmark and both came out tiny.
+
+   The mock fits each mark to the tile, so these factors do that: each is
+   `min(100 / inkWidth, 74 / inkHeight)` in rendered px against the measured
+   ink, which lands every mark inside the same ~100x74 box however it is shaped.
+   Measured ink per file is in `wordcamp/photos/media-partners/README.md`.
+
+   Scaling up is safe: the source is 800px wide rendered at ~124, so even the
+   largest factor here is still drawing well inside the file's real resolution.
+   The tile clips, so the scaled-up transparent canvas cannot spill. If those
+   PNGs are ever re-baked with the ink pre-fitted, delete this block or the
+   correction lands twice. */
+.wcblr-mp .wcblr-mp-logo img {
+	display: block;
+	margin: 0 auto;
+	transform-origin: center;
+}
+
+.wcblr-mp .wcblr-mp-logo-prospera img     { transform: scale(2.168); }
+.wcblr-mp .wcblr-mp-logo-wpweekly img     { transform: scale(0.919); }
+.wcblr-mp .wcblr-mp-logo-wpbaat img       { transform: scale(2.168); }
+.wcblr-mp .wcblr-mp-logo-wpoetstv img     { transform: scale(1.248); }
+.wcblr-mp .wcblr-mp-logo-wpsimplified img { transform: scale(1.473); }
+
+/* ── The name ────────────────────────────────────────────────────────────────
+   Fraunces, the same face as every h2 on the site, so a card reads as a
+   headline. The family has to be set on the ANCHOR: the theme ships
+   `a:where(:not(.wp-element-button)) { font-family: hanken-grotesk }`, a
+   declaration on the `a` itself, which beats anything the paragraph passes down
+   by inheritance no matter how specific the paragraph's rule is. Third instance
+   of that shape on this site after the outline buttons and the social glyph
+   colours: when the theme styles the inner element, styling the wrapper is not
+   a weaker fix, it is no fix. */
+.wcblr-mp .wcblr-mp-name,
+.wcblr-mp .wcblr-mp-name a {
 	font-family: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif;
 }
 
-.wcblr-guide .wcblr-mp-name a {
+.wcblr-mp .wcblr-mp-name a {
 	color: inherit;
 	text-decoration: none;
 	background-image: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
-	.wcblr-guide .wcblr-mp-name a:hover,
-	.wcblr-guide .wcblr-mp-name a:focus-visible {
+	.wcblr-mp .wcblr-mp-name a:hover,
+	.wcblr-mp .wcblr-mp-name a:focus-visible {
 		text-decoration: underline;
 		text-underline-offset: 3px;
 	}
 }
 
-/* ── The divided panel, which is this page's one structural idea ─────────────
-   The roster stopped being five cards and became one card with rules in it, and
-   the same move is right here: two floating cards saying "these are two
-   different arrangements" is weaker than one object with a line down the middle,
-   because the line IS the argument. Same tokens as the roster card, so the page
-   ends up with a single device used twice rather than two treatments that nearly
-   match, which is the thing that reads as assembled.
-
-   The spine is a border on the second column rather than a pseudo-element, so
-   it collapses on its own when the columns stack. */
-.wcblr-guide .wcblr-mp-split {
-	background: #fbf8f1;
-	border: 1.5px solid #dad5cd;
-	border-radius: 16px;
-	overflow: hidden;
+/* ── The social row ──────────────────────────────────────────────────────────
+   Real brand glyphs, not the mock's text labels. Core's `is-style-logos-only`
+   ships the paths inline and draws each in `currentColor`, so the logo is
+   already right and colour is the only thing missing; that comes from the one
+   map in `content/_social-brand.scss`, which this row's selector is listed in.
+   `margin-top: auto` pins the row to the bottom of the card so the rules line
+   up across a row of cards whose copy runs to different lengths. */
+.wcblr-mp .wcblr-mp-card {
+	display: flex;
+	flex-direction: column;
 }
 
-.wcblr-guide .wcblr-mp-split > .wp-block-column + .wp-block-column {
-	border-left: 1px solid #e6dfd2;
-}
-
-/* Below 782px core stacks the columns, so the vertical spine becomes a
-   horizontal divider between them instead of a stray line down one edge. */
-@media (max-width: 781px) {
-	.wcblr-guide .wcblr-mp-split > .wp-block-column + .wp-block-column {
-		border-left: 0;
-		border-top: 1px solid #e6dfd2;
-	}
-}
-
-/* ── The open slot ───────────────────────────────────────────────────────────
-   The last row of the list is an empty one. The page has to say that the roster
-   is still growing, and a sentence saying so is a claim the reader has to take
-   on trust, where a vacant slot in the list is the thing itself: the shape of
-   the directory shows there is room. Dashed rather than solid, and unfilled,
-   borrowing the grammar `wcblr-tba` already uses elsewhere for something real
-   but not yet arranged.
-
-   The dashed rule has to beat the solid divider that every other row inherits
-   from `.wcblr-mp-row + .wcblr-mp-row`, hence the doubled class. */
-.wcblr-guide .wcblr-mp-row.wcblr-mp-open {
-	border-top: 1px dashed #c9bdaa;
-	background-image: none;
-}
-
-.wcblr-guide .wcblr-mp-row.wcblr-mp-open .wcblr-mp-name {
-	font-style: italic;
-}
-
-/* Core's margin on the social `ul`, which inside a row is 17px of dead space
-   above the hairline rather than spacing between siblings in a flow. */
-.wcblr-guide .wcblr-mp-social {
-	margin-bottom: 0;
-}
-
-/* ── The measure, which nested prose escapes ─────────────────────────────────
-   `_guide.scss` caps section prose with `.wcblr-sec > p`, a direct-child
-   selector on purpose so cards and rows keep their own widths. The cost, which
-   `sections.md` warns about and which is invisible in the markup, is that any
-   paragraph nested inside a group runs the full container. Both of these were
-   doing it: the rail's copy was setting about 145 characters to the line
-   directly under a lead set at 68, and the roster's about 105. Two measures in
-   one section reads as carelessness even when nobody can name what is wrong.
-
-   68ch on the rail because it sits on open cream like section prose, 74ch in
-   the roster because it sits on a card, which is the same pair `_guide.scss`
-   uses for a panel. Scoped to this page's own classes rather than to
-   `.wcblr-timeline-item`, so the travel guide's rail is untouched. */
-.wcblr-guide .wcblr-mp-rail .wcblr-timeline-item p {
-	max-width: 68ch;
-}
-
-.wcblr-guide .wcblr-mp-row p {
-	max-width: 74ch;
-}
-
-/* ── Narrow ──────────────────────────────────────────────────────────────────
-   Below 782px the two columns collapse to one, so the logo column stops being a
-   quarter of a row and becomes the full width of the card. Uncapped, an 800px
-   canvas then draws the mark about 150px tall above three lines of copy, which
-   makes every entry open with a banner. Capped, it reads as the lockup it is.
-
-   Centred, and that is not a preference either. Each mark is centred inside its
-   own 800x300 canvas, so flushing the canvas left leaves the ink floating a
-   canvas-width-dependent distance in from the edge: 82px for the Prospera X
-   badge, 12px for The WP Weekly wordmark. Ragged, and it reads as a bug.
-   Centring the canvas centres the ink, which is at least deliberate. */
-@media (max-width: 781px) {
-	.wcblr-guide .wcblr-mp-row .wcblr-mp-logo {
-		max-width: 220px;
-		margin-left: auto;
-		margin-right: auto;
-	}
-
-	/* The column head goes with the columns. Once the row stacks there is
-	   nothing to the right of "Outlet" for "What they publish" to head, so the
-	   strip collapses into two stacked labels captioning nothing. */
-	.wcblr-guide .wcblr-mp-head {
-		display: none;
-	}
-}
-
-/* ── Hover, and why only these rows get one ──────────────────────────────────
-   Hover feedback is a promise that there is something to click. Each partner
-   row carries a linked name and a row of linked glyphs, so it earns one. The
-   three `// the_coverage` stops and the two `// not_a_sponsorship` cards are
-   read-only and deliberately stay still: moving something that goes nowhere is
-   the interface lying about itself. */
-@media (hover: hover) and (pointer: fine) {
-	/* The colour half runs for everyone, including a reader who asked for less
-	   motion: the row still answers the pointer, it just does not travel. A row
-	   inside a card should not lift the way a free-standing card did anyway.
-	   What a list row does under a pointer is light up. */
-	.wcblr-post.wcblr-guide .wcblr-mp-row:hover {
-		background-color: #f4eddf;
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.wcblr-post.wcblr-guide .wcblr-mp-row {
-			transition: background-color 0.22s ease;
-		}
-
-		/* The mark leans in while the row lights up, so the entry reads as one
-		   object responding rather than two. No clipping is involved and none
-		   is needed: the logo is a transparent PNG with its own padding baked
-		   in, which is exactly why the hover zoom that was twice rejected on
-		   captioned photographs is safe here. */
-		.wcblr-post.wcblr-guide .wcblr-mp-row .wcblr-mp-logo {
-			transition: transform 0.28s cubic-bezier(0.2, 0.6, 0.2, 1);
-		}
-
-		.wcblr-post.wcblr-guide .wcblr-mp-row:hover .wcblr-mp-logo {
-			transform: scale(1.05);
-		}
-	}
-}
-
-/* ── The partner social row ──────────────────────────────────────────────────
-   Layout only. Every colour in it comes from the map in `_social-brand.scss`,
-   whose selectors carry one more class than the muted default below and so win
-   on specificity rather than on import order. */
-.wcblr-guide .wcblr-mp-social {
+.wcblr-mp .wcblr-mp-social {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 14px;
-	margin-top: 18px;
+	margin-top: auto;
+	margin-bottom: 0;
+	padding-top: 20px;
 	padding-left: 0;
-	/* 21px, moved with the two organizer rows so the three social rows on the
-	   site stay one family. Short of the grid's 24 because a partner row can
-	   carry six glyphs in a column narrower than an organizer card. */
+	border-top: 1px solid #e7dfd0;
 	font-size: 21px !important;
 }
 
 /* The muted default, which `chain` keeps: it is the generic "a website" link
-   and has no brand of its own. */
-.wcblr-guide .wcblr-mp-social .wp-block-social-link,
-.wcblr-guide .wcblr-mp-social .wp-block-social-link-anchor {
+   and has no brand of its own. Every other service is repainted by the map,
+   whose selectors carry one more class than this pair and so win on
+   specificity rather than on import order. */
+.wcblr-mp .wcblr-mp-social .wp-block-social-link,
+.wcblr-mp .wcblr-mp-social .wp-block-social-link-anchor {
 	color: #9c8d7c !important;
 	transition: color 0.15s;
 }
 
-/* Lift rather than repaint on hover, matching the footer, the roster and the
-   organizer cards: a hover colour would throw away the brand colour that is the
-   whole point of the map. Gated twice, so a tap on a phone does not leave one
-   sitting raised and a reader who asked for less motion gets none. */
+/* ── The open slot ───────────────────────────────────────────────────────────
+   The last card is an empty one. The page has to say the roster is still
+   growing, and a sentence saying so is a claim the reader takes on trust, where
+   a vacant slot in the grid is the thing itself.
+
+   Its number is a CSS counter, not typed. The mock says "SLOT 06"; typed, that
+   is wrong the day a sixth partner signs, and this list is expected to grow.
+   Counting the cards means it is right forever and nobody has to remember. */
+.wcblr-mp .wcblr-mp-gridrow {
+	counter-reset: none;
+}
+
+.wcblr-mp {
+	counter-reset: wcblr-slot;
+}
+
+.wcblr-mp .wcblr-mp-card {
+	counter-increment: wcblr-slot;
+}
+
+.wcblr-mp .wcblr-mp-slotno::after {
+	content: " " counter(wcblr-slot, decimal-leading-zero);
+}
+
+.wcblr-mp .wcblr-mp-card.wcblr-mp-open {
+	background: none;
+	border: 1px dashed #c4b697;
+}
+
+.wcblr-mp .wcblr-mp-openrow {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 18px;
+	margin-top: auto;
+	padding-top: 22px;
+}
+
+.wcblr-mp .wcblr-mp-openrow .wp-block-buttons {
+	margin-top: 0 !important;
+}
+
+.wcblr-mp .wcblr-mp-openrow a {
+	color: #a8760f;
+	text-decoration: none;
+}
+
 @media (hover: hover) and (pointer: fine) {
+	.wcblr-mp .wcblr-mp-openrow a:hover {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+}
+
+/* ── Coverage cards, capped by a colour ──────────────────────────────────────
+   A 3px rule across the top of each card, matching that card's kicker. It is
+   the cheapest way to make three identical boxes read as three different
+   moments, and it does it without tinting the card or the type, so the row
+   stays quiet. `overflow: hidden` so the cap follows the corner radius. */
+.wcblr-mp .wcblr-mp-covcard {
+	position: relative;
+	overflow: hidden;
+	background: #fbf8f1;
+	border: 1px solid #e2d9c8;
+	border-radius: 14px;
+}
+
+.wcblr-mp .wcblr-mp-covcard::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+}
+
+.wcblr-mp .wcblr-cap-gold::before     { background: #e0a526; }
+.wcblr-mp .wcblr-cap-crimson::before  { background: #c8344b; }
+.wcblr-mp .wcblr-cap-espresso::before { background: #6b5847; }
+
+.wcblr-mp .wcblr-mp-covkickcol {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+/* ── The two arrangements, one light and one dark ────────────────────────────
+   The contrast is carried by the surface rather than by a label, which is what
+   makes the pair readable at a glance. */
+.wcblr-mp .wcblr-mp-arr {
+	border-radius: 14px;
+}
+
+.wcblr-mp .wcblr-mp-arr-light {
+	background: #fbf8f1;
+	border: 1px solid #e2d9c8;
+}
+
+.wcblr-mp .wcblr-mp-arr-dark {
+	background: #2a1d14;
+}
+
+.wcblr-mp .wcblr-mp-chip {
+	display: inline-block;
+	border-radius: 999px;
+	padding: 6px 14px 5px;
+	line-height: 1.5;
+}
+
+.wcblr-mp .wcblr-chip-gold {
+	background: rgba(224, 165, 38, 0.12);
+	border: 1px solid rgba(168, 118, 15, 0.4);
+}
+
+.wcblr-mp .wcblr-chip-rose {
+	background: rgba(233, 123, 138, 0.1);
+	border: 1px solid rgba(233, 123, 138, 0.45);
+}
+
+/* Diamond markers rather than discs. `list-style: none` plus a `::before` is
+   the only route: the marker glyph cannot be set from the block, and
+   `background-image` is stripped by the host's sanitiser so an image bullet
+   would arrive empty. `content` survives, measured against the served
+   stylesheet rather than assumed. */
+.wcblr-mp .wcblr-mp-diamond {
+	list-style: none;
+	padding-left: 0;
+}
+
+.wcblr-mp .wcblr-mp-diamond li {
+	position: relative;
+	padding-left: 24px;
+	margin-bottom: 12px;
+}
+
+.wcblr-mp .wcblr-mp-diamond li:last-child {
+	margin-bottom: 0;
+}
+
+.wcblr-mp .wcblr-mp-diamond li::before {
+	content: "\25C6";
+	position: absolute;
+	left: 0;
+	top: -1px;
+	font-size: 11px;
+}
+
+.wcblr-mp .wcblr-mp-arr-light .wcblr-mp-diamond {
+	border-top: 1px solid #e7dfd0;
+	padding-top: 20px;
+	color: #7a6757;
+}
+
+.wcblr-mp .wcblr-mp-arr-light .wcblr-mp-diamond li::before {
+	color: #e0a526;
+}
+
+.wcblr-mp .wcblr-mp-arr-dark .wcblr-mp-diamond {
+	border-top: 1px solid #4a3a2e;
+	padding-top: 20px;
+	color: #d8d2c8;
+}
+
+.wcblr-mp .wcblr-mp-arr-dark .wcblr-mp-diamond li::before {
+	color: #e97b8a;
+}
+
+.wcblr-mp .wcblr-mp-arr-dark .wcblr-mp-diamond a {
+	color: #e97b8a;
+}
+
+/* The trailing note, marked by a dot rather than a bullet so it reads as an
+   aside to the pair above rather than a fourth item in either list. */
+.wcblr-mp .wcblr-mp-note {
+	position: relative;
+	padding-left: 22px;
+}
+
+.wcblr-mp .wcblr-mp-note::before {
+	content: "";
+	position: absolute;
+	left: 2px;
+	top: 9px;
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: #c8344b;
+}
+
+/* ── The closing band ────────────────────────────────────────────────────────
+   Its right column is separated by a rule rather than by a box, so the dates
+   read as a continuation of the band instead of a widget dropped onto it. */
+.wcblr-mp .wcblr-mp-closefacts {
+	padding-left: 40px;
+	border-left: 1px solid #4a3a2e;
+}
+
+@media (max-width: 781px) {
+	.wcblr-mp .wcblr-mp-closefacts {
+		margin-top: 10px;
+		padding-left: 0;
+		padding-top: 26px;
+		border-left: 0;
+		border-top: 1px solid #4a3a2e;
+	}
+}
+
+/* ── The rangoli divider ─────────────────────────────────────────────────────
+   Centred on the page ground with nothing behind it. The mock draws a pale
+   plate under the lotus; that plate is an artefact of the art being placed on
+   its own tile in the design file, and on the page it reads as a stray box. */
+.wcblr-mp .wcblr-mp-divider {
+	display: flex;
+	justify-content: center;
+}
+
+.wcblr-mp .wcblr-mp-divider .wcblr-flourish {
+	margin: 0;
+	background: none;
+}
+
+/* ── Card hover ──────────────────────────────────────────────────────────────
+   Only the partner cards move. Each carries a linked name and a row of linked
+   glyphs, so it earns a response; the coverage cards and the two arrangements
+   are read-only and stay still, because moving something that goes nowhere is
+   the interface lying about itself. The colour half runs for everyone and only
+   the travel sits behind `prefers-reduced-motion`. */
+@media (hover: hover) and (pointer: fine) {
+	.wcblr-mp .wcblr-mp-card:not(.wcblr-mp-open):hover {
+		border-color: #cbbda4;
+		box-shadow: 0 2px 6px rgba(42, 29, 20, 0.05),
+			0 16px 32px rgba(42, 29, 20, 0.12);
+	}
+
+	.wcblr-mp .wcblr-mp-card.wcblr-mp-open:hover {
+		border-color: #a8760f;
+	}
+
 	@media (prefers-reduced-motion: no-preference) {
-		.wcblr-guide .wcblr-mp-social .wp-block-social-link {
+		.wcblr-mp .wcblr-mp-card {
+			transition: transform 0.28s cubic-bezier(0.2, 0.6, 0.2, 1),
+				box-shadow 0.28s ease, border-color 0.28s ease;
+		}
+
+		.wcblr-mp .wcblr-mp-card:not(.wcblr-mp-open):hover {
+			transform: translateY(-4px);
+		}
+
+		/* The mark leans in a little further than the card, so the entry reads
+		   as one object moving. No clipping is involved and none is needed: the
+		   logo is a transparent PNG inside a tile with its own padding. */
+		.wcblr-mp .wcblr-mp-logo {
+			transition: transform 0.28s cubic-bezier(0.2, 0.6, 0.2, 1);
+		}
+
+		.wcblr-mp .wcblr-mp-card:hover .wcblr-mp-logo {
+			transform: scale(1.05);
+		}
+
+		.wcblr-mp .wcblr-mp-social .wp-block-social-link {
 			transition: transform 0.18s cubic-bezier(0.2, 0.6, 0.2, 1);
 		}
 
-		.wcblr-guide .wcblr-mp-social .wp-block-social-link:hover {
+		.wcblr-mp .wcblr-mp-social .wp-block-social-link:hover {
 			transform: translateY(-3px);
 		}
+	}
+}
+
+/* ── Narrow ──────────────────────────────────────────────────────────────── */
+@media (max-width: 781px) {
+	.wcblr-mp .wcblr-mp-tile {
+		max-width: 138px;
+		height: 118px;
+	}
+
+	.wcblr-mp .wcblr-mp-tagcol {
+		justify-content: flex-start;
+	}
+
+	.wcblr-mp .wcblr-mp-covkickcol {
+		justify-content: flex-start;
 	}
 }

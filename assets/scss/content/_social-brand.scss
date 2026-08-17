@@ -75,7 +75,7 @@ $wcblr-social-rows:
 	".wcblr-social",                             /* footer */
 	".wcblr-guide .wcblr-follow",                /* story post, follow row */
 	".wcblr-guide .wcblr-person-social",         /* roster cards */
-	".wcblr-guide .wcblr-mp-social",             /* media partners page */
+	".wcblr-mp .wcblr-mp-social",                 /* media partners page */
 	".wcblr-org-card__social";                   /* organizers page cards */
 
 @each $service, $colour in $wcblr-social-brands {
