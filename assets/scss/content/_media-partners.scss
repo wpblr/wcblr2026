@@ -204,13 +204,19 @@
 	font-size: 21px !important;
 }
 
-/* The muted default, which `chain` keeps: it is the generic "a website" link
-   and has no brand of its own. Every other service is repainted by the map,
-   whose selectors carry one more class than this pair and so win on
-   specificity rather than on import order. */
+/* The default, which only `chain` ends up keeping: it is the generic "a
+   website" link and has no brand of its own, so the map in
+   `content/_social-brand.scss` deliberately leaves it out. Every other service
+   is repainted from that map.
+
+   Espresso rather than the #9c8d7c the other rows use. On the footer a whole
+   row sits at that tone and reads as a set; here `chain` is the one unbranded
+   glyph in a line of brand colours, and at #9c8d7c it read as a disabled icon
+   rather than a deliberate neutral. #6b5847 is 6.3:1 on the card, so it holds
+   its own beside YouTube red without pretending to be a brand. */
 .wcblr-mp .wcblr-mp-social .wp-block-social-link,
 .wcblr-mp .wcblr-mp-social .wp-block-social-link-anchor {
-	color: #9c8d7c !important;
+	color: #6b5847 !important;
 	transition: color 0.15s;
 }
 

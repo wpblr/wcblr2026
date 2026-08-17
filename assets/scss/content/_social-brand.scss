@@ -69,6 +69,29 @@ $wcblr-social-brands: (
 	   LinkedIn's own published brand blue where core carries a near-identical
 	   #0d66c2. Where a brand publishes its value, that beats core's copy. */
 	"wordpress": #21759b,
+
+	/* ── Added for the media partners page, and they belong in the map ───────
+	   The roster surfaced three services the map had never needed before, and
+	   because a service that is not listed here keeps its container's muted
+	   default, half the glyphs on that page were drawing grey next to branded
+	   neighbours and reading as disabled.
+
+	   All three are the brand's own published value, which is the rule this
+	   file already follows for LinkedIn, and all three were measured against
+	   both surfaces these rows sit on rather than assumed:
+
+	                     #f3eee2 footer   #FBF8F1 card
+	     YouTube  #FF0000     3.45           3.77
+	     Facebook #1877F2     3.66           3.99
+	     Bluesky  #0085FF     3.13           3.41
+
+	   Every one clears the 3:1 floor an icon carrying meaning is held to, and
+	   they sit in the same band as Instagram's 3.49, so nothing here needed the
+	   correction WhatsApp and WordPress did. Bluesky is the tightest and still
+	   passes; if it ever has to move, #0a6ed1 is the same hue at 4.36. */
+	"youtube":   #ff0000,
+	"facebook":  #1877f2,
+	"bluesky":   #0085ff,
 );
 
 $wcblr-social-rows:
