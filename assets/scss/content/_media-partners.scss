@@ -93,6 +93,122 @@
 	border-top: 1px solid #e6dfd2;
 }
 
+/* ── The column head, which is what turns a stack into a directory ───────────
+   Two mono labels over the two halves of every row, with a rule under them. It
+   costs one strip and it changes what the object is: without it the card is
+   five things in a box, with it the card is a listing that happens to have five
+   entries in it today. That matters more the longer the list gets, which is the
+   direction this list is going. Sticky is deliberately not used: the card is
+   not tall enough to need it and a strip that detaches and floats is a bigger
+   distraction than the scroll it saves. */
+.wcblr-guide .wcblr-mp-head {
+	margin-left: -32px;
+	margin-right: -32px;
+	padding: 18px 32px 14px;
+	border-bottom: 1px solid #dad5cd;
+}
+
+/* ── The format chip ─────────────────────────────────────────────────────────
+   These were 12px labels in a rotating crimson / green / gold, which is the
+   house treatment for a card label and the wrong instinct here. Rotating three
+   accents across five entries already reads as arbitrary; across twenty it is
+   confetti, and the accents stop meaning anything anywhere else on the page.
+
+   One quiet chip instead, the same on every row: the chrome goes silent and the
+   logos carry all the colour in the list, which is the correct division of
+   labour on a page whose subject is other people's brands. */
+.wcblr-guide .wcblr-mp-tag {
+	display: inline-block;
+	background: #f2ece0;
+	border: 1px solid #e2dacb;
+	border-radius: 999px;
+	padding: 4px 12px 3px;
+	line-height: 1.5;
+}
+
+/* ── The name, which should be the loudest thing in a row and was not ────────
+   It was 19px Hanken semibold, quieter than the crimson label above it, so the
+   eye met a category before it met a masthead. Now it is Fraunces at 25px: the
+   same face as every h2 on the site, so an entry reads as a headline and the
+   roster reads as a contents page. Underline only on hover, so five stacked
+   links do not draw five stacked rules. */
+/* The family has to be set on the ANCHOR, not on the paragraph, and the block's
+   own `fontFamily` attribute cannot do it. The theme ships
+   `a:where(:not(.wp-element-button)) { font-family: hanken-grotesk }`, which is
+   a declaration on the `a` itself, so it beats anything the `<p>` passes down by
+   inheritance no matter how specific the paragraph's rule is. `.has-fraunces-
+   font-family` is on the paragraph and carries `!important`, and it still lost,
+   because it was never competing. Third instance of this shape on this site
+   after the outline buttons and the social glyph colours: when the theme styles
+   the inner element, styling the wrapper is not a weaker fix, it is no fix. */
+.wcblr-guide .wcblr-mp-name,
+.wcblr-guide .wcblr-mp-name a {
+	font-family: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif;
+}
+
+.wcblr-guide .wcblr-mp-name a {
+	color: inherit;
+	text-decoration: none;
+	background-image: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.wcblr-guide .wcblr-mp-name a:hover,
+	.wcblr-guide .wcblr-mp-name a:focus-visible {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+}
+
+/* ── The divided panel, which is this page's one structural idea ─────────────
+   The roster stopped being five cards and became one card with rules in it, and
+   the same move is right here: two floating cards saying "these are two
+   different arrangements" is weaker than one object with a line down the middle,
+   because the line IS the argument. Same tokens as the roster card, so the page
+   ends up with a single device used twice rather than two treatments that nearly
+   match, which is the thing that reads as assembled.
+
+   The spine is a border on the second column rather than a pseudo-element, so
+   it collapses on its own when the columns stack. */
+.wcblr-guide .wcblr-mp-split {
+	background: #fbf8f1;
+	border: 1.5px solid #dad5cd;
+	border-radius: 16px;
+	overflow: hidden;
+}
+
+.wcblr-guide .wcblr-mp-split > .wp-block-column + .wp-block-column {
+	border-left: 1px solid #e6dfd2;
+}
+
+/* Below 782px core stacks the columns, so the vertical spine becomes a
+   horizontal divider between them instead of a stray line down one edge. */
+@media (max-width: 781px) {
+	.wcblr-guide .wcblr-mp-split > .wp-block-column + .wp-block-column {
+		border-left: 0;
+		border-top: 1px solid #e6dfd2;
+	}
+}
+
+/* ── The open slot ───────────────────────────────────────────────────────────
+   The last row of the list is an empty one. The page has to say that the roster
+   is still growing, and a sentence saying so is a claim the reader has to take
+   on trust, where a vacant slot in the list is the thing itself: the shape of
+   the directory shows there is room. Dashed rather than solid, and unfilled,
+   borrowing the grammar `wcblr-tba` already uses elsewhere for something real
+   but not yet arranged.
+
+   The dashed rule has to beat the solid divider that every other row inherits
+   from `.wcblr-mp-row + .wcblr-mp-row`, hence the doubled class. */
+.wcblr-guide .wcblr-mp-row.wcblr-mp-open {
+	border-top: 1px dashed #c9bdaa;
+	background-image: none;
+}
+
+.wcblr-guide .wcblr-mp-row.wcblr-mp-open .wcblr-mp-name {
+	font-style: italic;
+}
+
 /* Core's margin on the social `ul`, which inside a row is 17px of dead space
    above the hairline rather than spacing between siblings in a flow. */
 .wcblr-guide .wcblr-mp-social {
@@ -136,6 +252,13 @@
 		max-width: 220px;
 		margin-left: auto;
 		margin-right: auto;
+	}
+
+	/* The column head goes with the columns. Once the row stacks there is
+	   nothing to the right of "Outlet" for "What they publish" to head, so the
+	   strip collapses into two stacked labels captioning nothing. */
+	.wcblr-guide .wcblr-mp-head {
+		display: none;
 	}
 }
 
