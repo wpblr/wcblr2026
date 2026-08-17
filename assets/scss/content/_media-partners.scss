@@ -156,6 +156,29 @@
 	}
 }
 
+/* ── Devanagari ──────────────────────────────────────────────────────────────
+   WPBaat's description is the text they sent, and they sent it in Hindi, which
+   is right for a Hindi podcast and worth keeping in their own script. None of
+   the three site faces carries Devanagari, so without this the paragraph falls
+   through to whatever the device happens to have and sits at a different
+   weight and size from every other card.
+
+   Named faces only, no `@font-face`: the host's sanitiser strips every `url()`
+   from Remote CSS, measured at zero surviving in the served stylesheet, so a
+   webfont cannot be added from here at all. This is the same approach
+   `sections/_hero.scss` already takes for the Kannada in the hero.
+
+   The Latin face is listed FIRST on purpose. The paragraph mixes scripts
+   ("WordPress", "YouTube", "key challenges" sit inside the Hindi), and browsers
+   resolve font-family per character, so Latin takes Hanken Grotesk and only the
+   Devanagari falls through to Noto. Listing Noto first would set the Latin
+   words in it too and the card would not match its neighbours. */
+.wcblr-mp .wcblr-mp-hi {
+	font-family: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk",
+		"Noto Sans Devanagari", "Nirmala UI", "Mangal", sans-serif;
+	line-height: 1.75 !important;
+}
+
 /* ── The social row ──────────────────────────────────────────────────────────
    Real brand glyphs, not the mock's text labels. Core's `is-style-logos-only`
    ships the paths inline and draws each in `currentColor`, so the logo is
