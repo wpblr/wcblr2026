@@ -471,7 +471,60 @@
 		justify-content: flex-start;
 	}
 
-	.wcblr-mp .wcblr-mp-covkickcol {
-		justify-content: flex-start;
+	/* ── Putting back the padding `_guide.scss` takes away ───────────────────
+	   `content/_guide.scss` carries
+
+	     .wcblr-guide .wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell)
+	       { padding-left: 0 !important; padding-right: 0 !important }
+
+	   below 782px, which is right for a column that is only a layout column:
+	   once it stacks to full width its side padding is just wasted gutter. It
+	   is wrong for a column that IS a card, and its exemption list predates
+	   this page, so every card here lost its 28px and set its copy hard against
+	   its own border. The dark sponsor card was the visible one, clipping a
+	   line of text at the edge.
+
+	   Restoring it needs `!important` to beat that rule, and 24px rather than
+	   28 because at 425px wide the card wants the extra 8px of measure more
+	   than it wants the symmetry with desktop. Scoped to this page's cards, so
+	   the general rule keeps doing its job on every layout column here.
+	   Specificity, because the first attempt at this lost silently: that guide
+	   selector counts five classes once its three `:not()`s are added up, and
+	   two `!important` declarations are settled by specificity before anything
+	   else, so `.wcblr-mp .wcblr-mp-card` at two never had a chance. These
+	   spell out six. Ugly, and deliberate: matching at five would leave the
+	   result decided by which partial `main.scss` imports last, which is not a
+	   thing a layout should depend on. */
+	.wcblr-post.wcblr-guide.wcblr-mp .wp-block-column.wcblr-mp-card:not(.wcblr-cell),
+	.wcblr-post.wcblr-guide.wcblr-mp .wp-block-column.wcblr-mp-covcard:not(.wcblr-cell),
+	.wcblr-post.wcblr-guide.wcblr-mp .wp-block-column.wcblr-mp-arr:not(.wcblr-cell) {
+		padding-left: 24px !important;
+		padding-right: 24px !important;
+	}
+
+	/* Buttons stretch instead of wrapping to their own widths. Two buttons of
+	   different lengths on separate lines read as ragged; full width, they read
+	   as a stack of choices. */
+	.wcblr-mp .wp-block-buttons {
+		/* Core supplies the gap through a layout container rule generated at
+		   render time, and that rule carries a column gap only, so wrapped
+		   buttons stack flush against each other. Declared here so the pair
+		   keeps its 12px whichever axis it ends up on. */
+		gap: 12px;
+	}
+
+	.wcblr-mp .wp-block-buttons .wp-block-button {
+		width: 100%;
+	}
+
+	.wcblr-mp .wp-block-buttons .wp-block-button__link {
+		display: block;
+		text-align: center;
+	}
+
+	/* The open slot keeps its button beside its link, since "Apply now" is
+	   short and the pair is one action with its footnote. */
+	.wcblr-mp .wcblr-mp-openrow .wp-block-button {
+		width: auto;
 	}
 }
