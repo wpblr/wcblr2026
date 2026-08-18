@@ -1,3 +1,26 @@
+/* ---- Become-a-sponsor open slot ------------------------------------------ */
+/* Full-width dashed card placed after the tier grid — same visual language as
+   the media-partners open slot but spanning the full constrained column. */
+.wcblr-sp-cta {
+	border: 1px dashed #c4b697;
+	border-radius: 14px;
+	padding: 40px 48px !important;
+}
+
+/* Button stretches full width — the CTA has one action and "Become a Sponsor"
+   is short enough that a half-width button would look under-committed. */
+.wcblr-sp-cta .wp-block-button,
+.wcblr-sp-cta .wp-block-button__link {
+	width: 100%;
+	text-align: center;
+}
+
+@media (max-width: 600px) {
+	.wcblr-sp-cta {
+		padding: 28px 24px !important;
+	}
+}
+
 /* ---- Sponsors row — query grid ------------------------------------------- */
 @media (max-width: 1023px) {
 	.wcblr-sponsors-row .wp-block-query ul {
