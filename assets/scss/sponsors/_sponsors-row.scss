@@ -1,18 +1,15 @@
 /* ---- Become-a-sponsor open slot ------------------------------------------ */
-/* Full-width dashed card placed after the tier grid — same visual language as
-   the media-partners open slot but spanning the full constrained column. */
+/* Colors taken from the dashed-amber box on the single sponsor page:
+   bg rgb(240,230,212) = #F0E6D4, border 2px dashed rgb(224,165,38) = #E0A526.
+   The block carries has-accent-3-border-color + inline border-style so the
+   dashed style is authoritative here and the border-color token is in the
+   block attribute, not in this rule. */
 .wcblr-sp-cta {
-	border: 1px dashed #c4b697;
+	background: #f0e6d4;
+	border-style: dashed !important;
+	border-width: 2px !important;
 	border-radius: 14px;
 	padding: 40px 48px !important;
-}
-
-/* Button stretches full width — the CTA has one action and "Become a Sponsor"
-   is short enough that a half-width button would look under-committed. */
-.wcblr-sp-cta .wp-block-button,
-.wcblr-sp-cta .wp-block-button__link {
-	width: 100%;
-	text-align: center;
 }
 
 @media (max-width: 600px) {
