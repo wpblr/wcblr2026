@@ -120,18 +120,26 @@ footer {
 		}
 	}
 
-	/* Four columns need about 1080px before the labels start breaking. Core
-	   holds `flex-wrap: nowrap` on a columns block from 782px up, so between
-	   those two the grid is four columns squeezed into a tablet: "Organizer/s",
-	   "WordPres/s.org", and the address running off the right edge. Measured at
-	   820px, not guessed.
+	/* Four columns need 1280px. Core holds `flex-wrap: nowrap` on a columns
+	   block from 782px up, so between those two the grid is four columns
+	   squeezed into a tablet: "Organizer/s", "WordPres/s.org", and the address
+	   running off the right edge.
+
+	   1280 is measured, and the first guess of 1080 was wrong. Probing the
+	   columns block's own scrollWidth against its clientWidth: 1020/980 at
+	   1080px, 1112/1100 at 1200, 1143/1140 at 1240, clean from 1280. The
+	   binding item is "Call for Media Partners", 16px plus the 16px dot
+	   gutter, against a third column that is (container - brand - gaps) / 3
+	   less 36px of padding. It never reached the page edge, so no screenshot
+	   showed it and nothing scrolled sideways; the column simply ran under its
+	   own rule. Probe this rather than looking at it.
 
 	   So that band gets its own shape rather than an early stack: the brand
 	   takes a full row and the three lists share the one below, which is the
 	   same division the desktop layout makes, one axis over. The first list
 	   then opens a row and must lose the left rule it inherits, or the row
 	   starts with a hanging stroke. */
-	@media (min-width: 782px) and (max-width: 1079px) {
+	@media (min-width: 782px) and (max-width: 1279px) {
 		.wcblr-footer-cols {
 			flex-wrap: wrap !important;
 		}
@@ -201,7 +209,19 @@ footer {
 	   the column starts on the same x, dotted or not.
 	   li. guards against core stamping the same className on a submenu <ul>.
 	   Reduced motion falls through to the plain static dot. */
-	.wcblr-footer-cols .wp-block-navigation-item {
+	/* ONLY the dotted items are inset, which is what the design does and what
+	   a bulleted list should do: the dot sits on the column's left edge, level
+	   with the label above it and with the undotted links, and the three call
+	   labels hang 16px off it. Measured off the comp rather than eyeballed, at
+	   2x: GET INVOLVED starts at 842.5, every dot at 842.0, Tickets at 842.0,
+	   and only the dotted labels at 856.5.
+
+	   This was padding EVERY item in all three columns, so EVENT and COMMUNITY,
+	   which have no dots at all, were inset from their own headings for no
+	   reason. On desktop the 36px column padding hid it; stacked on a phone
+	   the columns lose that padding and every link sat 16px right of its
+	   label, which just reads as a mistake. */
+	.wcblr-footer-cols li.wcblr-nav-cta {
 		position: relative;
 		padding-left: 16px;
 	}
@@ -292,6 +312,39 @@ footer {
 	@media (max-width: 1023px) {
 		.wcblr-footer-bottom {
 			row-gap: 26px;
+		}
+	}
+
+	/* The subscribe well is the only thing in this footer with a hard minimum
+	   width: the email input asks for 190px, and 190 plus the NOTIFY ME button
+	   plus the well's own padding is about 295px against the 260px a 320px
+	   phone leaves after root padding. Everything else here is text that wraps.
+
+	   Below 600px the floor comes off and the well goes full width instead, so
+	   it shrinks with the screen rather than pushing past it. Written as a
+	   guard rather than as a fix for something observed: headless Chrome on
+	   Linux clamps its layout viewport at 500px, so nothing below that can be
+	   rendered here and `@media (max-width: 480px)` never fires in the
+	   harness. This is the arithmetic, not a screenshot. */
+	@media (max-width: 600px) {
+		.wcblr-footer-sub,
+		.wcblr-footer-sub .wp-block-jetpack-subscriptions,
+		.wcblr-footer-sub form {
+			width: 100%;
+		}
+
+		/* Dropping the floor is the whole fix. `width: 100%` on top of it was
+		   tried and made things worse: the input sits inside a <p> that is not
+		   a flex item, so 100% resolved against the wrong box and pushed the
+		   well 10px wider than its own container. Let it shrink; do not tell
+		   it a size. */
+		.wcblr-footer-sub input[type="email"] {
+			min-width: 0;
+			max-width: 100%;
+		}
+
+		.wcblr-footer-sub form > * {
+			min-width: 0;
 		}
 	}
 
@@ -413,6 +466,11 @@ footer {
 		border-radius: 8px;
 		background: #ffffff;
 		padding: 4px;
+		/* The well carries 1px of border and 4px of padding a side. Under
+		   content-box a `width: 100%` on a narrow screen resolves to the
+		   container PLUS those 10px, which is exactly the 450-into-440 the
+		   probe reported. */
+		box-sizing: border-box;
 	}
 
 	form p {
