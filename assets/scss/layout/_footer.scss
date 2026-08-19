@@ -19,7 +19,12 @@ footer {
 	position: relative;
 	overflow: hidden;
 
-	> * {
+	/* Everything except the ornament, which is absolutely positioned in the
+	   gutter by layout/_ornaments.scss and must not be pulled back into flow.
+	   The same shape as `.wcblr-hero > *:not(.wcblr-ghost)`. Without the
+	   `:not()` this works only because _ornaments.scss happens to be imported
+	   after this file, which is not a thing to depend on. */
+	> *:not(.wcblr-orn) {
 		position: relative;
 		z-index: 1;
 	}
