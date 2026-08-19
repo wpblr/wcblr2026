@@ -19,90 +19,101 @@ footer {
 	position: relative;
 	overflow: hidden;
 
-	.wcblr-ghost {
-		position: absolute;
-		left: -18px;
-		bottom: -78px;
-		font-size: clamp(160px, 26vw, 360px);
-		line-height: 0.8;
-		color: transparent;
-		/* Back to 0.05, below where it started. It was pushed to 0.09 on the
-		   argument that 0.06 reads as a smudge rather than a device, and that
-		   was the wrong call: at 9 it competes with the legal line sitting on
-		   top of it instead of staying under it. A watermark you notice is not
-		   a watermark. */
-		-webkit-text-stroke: 1.5px rgba(42, 29, 20, 0.05);
-		z-index: 0;
-		pointer-events: none;
-		user-select: none;
-		white-space: nowrap;
-		margin: 0;
-	}
-
-	@media (max-width: 767px) {
-		.wcblr-ghost {
-			position: absolute !important;
-			left: initial !important;
-			bottom: 8px !important;
-			right: 0 !important;
-			/* Fainter again on a phone. Stacked, the columns run full width
-			   and the numerals land directly behind the legal line rather than
-			   beside a column, so the same alpha reads heavier here. */
-			-webkit-text-stroke-color: rgba(42, 29, 20, 0.035) !important;
-		}
-	}
-
 	> * {
 		position: relative;
 		z-index: 1;
 	}
 
-	/* ---- Highlighted footer link (open calls) -------------------------- */
-	/* The header's pulsing gold dot rather than a filled pill, so an open
-	   call looks the same wherever it appears: header nav, footer nav, and
-	   the live Get Involved cards.
-	   ::after, not ::before as in the header. These links are a vertical
-	   list, and a leading dot would push this one label 14px right of the
-	   ones above and below it, breaking the column's left edge. Trailing
-	   keeps the labels aligned and reads as a status marker, which is also
-	   how the wcblr-live cards carry it.
-	   li. guards against core stamping the same className on a submenu <ul>.
-	   Reduced motion falls through to the plain static dot. */
-	li.wcblr-nav-cta > .wp-block-navigation-item__content {
-		color: #a8760f !important;
-		font-weight: 600;
+	/* ---- The closing line ------------------------------------------------
+	   `_post-page.scss` crushes EVERY h2 on a default-template post or page to
+	   25px with `!important`, and that selector is `.single-post:not(...) h2`,
+	   which does not care that this one is in the footer. So the footer's own
+	   headline has to out-specify it: (0,3,0) here against its (0,2,1), plus
+	   `!important` on both sides. Written as a clamp rather than left to the
+	   block's inline 62px, because the inline style loses that fight outright.
+
+	   This is the same trap `content/_guide.scss` documents for section heads.
+	   Anything that ever puts an h2 in a template part hits it. */
+	.wcblr-footer-cta .wp-block-heading {
+		font-size: clamp(34px, 4.6vw, 62px) !important;
+		font-weight: 400 !important;
+		line-height: 1 !important;
+		letter-spacing: -0.025em !important;
+		margin: 0 !important;
+		font-optical-sizing: auto;
+		font-variation-settings: "opsz" 108;
 	}
 
-	li.wcblr-nav-cta::after {
-		content: "";
-		flex: 0 0 auto;
-		width: 6px;
-		height: 6px;
-		margin-left: 8px;
-		border-radius: 50%;
-		background: #a8760f;
-	}
+	/* The buttons sit against the headline's optical centre rather than the
+	   whole stack's, so the row reads as one line of type with two controls
+	   after it. `align-self` on the child, because the group's own
+	   `verticalAlignment` centres against the eyebrow too. */
+	@media (min-width: 782px) {
+		.wcblr-footer-cta {
+			align-items: flex-end;
+		}
 
-	@media (prefers-reduced-motion: no-preference) {
-		li.wcblr-nav-cta::after {
-			animation: wcblr-pulse 3.5s 1.2s ease-in-out infinite;
+		.wcblr-footer-ctas {
+			padding-bottom: 6px;
 		}
 	}
 
-	/* ---- Tickets link — red to signal it's a live purchase action ---------- */
-	li.wcblr-nav-tickets > .wp-block-navigation-item__content {
-		color: #c8344b !important;
+	/* ---- Four columns, three rules ---------------------------------------
+	   This reverses the "one rule, not three" call that stood here before, on
+	   the design's instruction. The reasoning that produced the single rule
+	   still holds where the four columns are four lists; it stops holding here
+	   because the top band now carries the footer's voice, so the grid below
+	   is reference material and a ruled grid is the right shape for that.
+	   If it ever goes back to one rule, the only change needed is dropping
+	   the `+ .wp-block-column` half of this selector. */
+	@media (min-width: 782px) {
+		.wcblr-footer-cols > .wp-block-column + .wp-block-column {
+			border-left: 1px solid #e3d9c4;
+			padding-left: 36px;
+		}
 	}
-	li.wcblr-nav-tickets::after {
-		background: #c8344b !important;
+
+	/* Four columns need about 1080px before the labels start breaking. Core
+	   holds `flex-wrap: nowrap` on a columns block from 782px up, so between
+	   those two the grid is four columns squeezed into a tablet: "Organizer/s",
+	   "WordPres/s.org", and the address running off the right edge. Measured at
+	   820px, not guessed.
+
+	   So that band gets its own shape rather than an early stack: the brand
+	   takes a full row and the three lists share the one below, which is the
+	   same division the desktop layout makes, one axis over. The first list
+	   then opens a row and must lose the left rule it inherits, or the row
+	   starts with a hanging stroke. */
+	@media (min-width: 782px) and (max-width: 1079px) {
+		.wcblr-footer-cols {
+			flex-wrap: wrap !important;
+		}
+
+		.wcblr-footer-cols > .wcblr-footer-brand {
+			flex-basis: 100% !important;
+			padding-bottom: 34px;
+			border-bottom: 1px solid #e3d9c4;
+		}
+
+		.wcblr-footer-cols > .wcblr-footer-brand + .wp-block-column {
+			border-left: 0;
+			padding-left: 0;
+		}
+	}
+
+	/* Stacked, a left border is a stripe down the side of a list rather than a
+	   division between two, so it becomes a rule above each block instead. */
+	@media (max-width: 781px) {
+		.wcblr-footer-cols > .wp-block-column + .wp-block-column {
+			border-top: 1px solid #e3d9c4;
+			padding-top: 28px;
+		}
 	}
 
 	/* ---- The lockup, same object as the header's ------------------------
-	   The footer had its own arrangement: a 40px mark, 19px title, and no rule
-	   between them, against the header's 56/20 with one. Two lockups for one
-	   brand, 3,000px apart. It is the header's now at 48px, which is the size
-	   that suits a footer without restating the masthead, and it carries the
-	   same #ddd9d2 hairline, so the site has ONE lockup that appears twice. */
+	   The header's at 48px there and 44px here, which is the size that suits a
+	   footer without restating the masthead, and it carries the same hairline,
+	   so the site has ONE lockup that appears twice. */
 	.wcblr-footer-lockup {
 		align-items: stretch;
 	}
@@ -110,6 +121,9 @@ footer {
 	.wcblr-footer-lockup > .wp-block-group {
 		padding-left: 13px;
 		border-left: 1px solid #ddd9d2;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 	}
 
 	.wcblr-footer-lockup .wp-block-site-logo,
@@ -120,47 +134,127 @@ footer {
 		margin: 0;
 	}
 
-	/* ---- Identity, then navigation --------------------------------------
-	   The brand block was column one of four, which said it was one more list
-	   among three. It is not: it is who this is, and the other three are where
-	   to go. One vertical rule after it draws that division, and it is the same
-	   device as the rule inside the lockup and the one under the checkout
-	   heading, so the site separates things one way rather than three.
+	.wcblr-footer-lockup .wp-block-site-title a {
+		text-decoration: none;
+	}
 
-	   One rule, not three. A rule between every column turns a footer into a
-	   spreadsheet; the only division that carries meaning is this one. */
-	@media (min-width: 782px) {
-		.wcblr-footer-brand {
-			padding-right: 40px;
-			border-right: 1px solid #e0d9cc;
+	/* The Kannada line needs the Kannada face; the Latin stack renders the
+	   ottu and the ZWNJ as tofu. Same rule as `.wcblr-kn` elsewhere, repeated
+	   rather than shared because this one is not a content class. */
+	.wcblr-footer-kn {
+		font-family: "Noto Sans Kannada", sans-serif;
+	}
+
+	/* ---- Highlighted footer link (open calls) -------------------------- */
+	/* A LEADING crimson dot now, not the trailing gold one, because the design
+	   puts the marker before the label and the label itself is no longer gold.
+	   The old note against a leading dot was that it pushes one label right of
+	   its neighbours and breaks the column's left edge, and that is still true,
+	   so the dot hangs in a 16px gutter the whole list shares: every label in
+	   the column starts on the same x, dotted or not.
+	   li. guards against core stamping the same className on a submenu <ul>.
+	   Reduced motion falls through to the plain static dot. */
+	.wcblr-footer-cols .wp-block-navigation-item {
+		position: relative;
+		padding-left: 16px;
+	}
+
+	li.wcblr-nav-cta::before {
+		content: "";
+		position: absolute;
+		left: 0;
+		top: 0.62em;
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: #c8344b;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		li.wcblr-nav-cta::before {
+			animation: wcblr-pulse 3.5s 1.2s ease-in-out infinite;
 		}
 	}
 
-	/* ---- The legal line -------------------------------------------------
-	   It sat 42px below the columns with nothing holding it, so it read as a
-	   line that had drifted off the bottom. A hairline above makes it the
-	   footer's own footer. */
-	.wcblr-footer-legal {
-		padding-top: 22px;
-		border-top: 1px solid #e0d9cc;
+	/* ---- The venue line -------------------------------------------------
+	   A place name that links to its own map, per the maps rule: link the
+	   place, never the word "map". It is small mono type sitting under the
+	   blurb, so the default underline reads as a mistake at that size; it gets
+	   the same wipe as everything else instead and nothing at rest. */
+	.wcblr-footer-venue a {
+		text-decoration: none;
+		background-image: linear-gradient(#7a6757, #7a6757);
+		background-repeat: no-repeat;
+		background-position: 0 100%;
+		background-size: 0 1px;
+		transition: color 0.18s ease;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.wcblr-footer-venue a {
+			transition:
+				color 0.18s ease,
+				background-size 0.3s cubic-bezier(0.2, 0.6, 0.2, 1);
+		}
+	}
+
+	.wcblr-footer-venue a:hover,
+	.wcblr-footer-venue a:focus-visible {
+		background-size: 100% 1px;
+	}
+
+	/* ---- Write to us ----------------------------------------------------
+	   Underlined at rest, because an address that is also a link should look
+	   like one without being pointed at. The hover is a crimson rule wiping
+	   across on top of the resting hairline rather than a colour swap, which
+	   is the same gesture the nav links make one column over. */
+	.wcblr-footer-mail a {
+		text-decoration: none;
+		overflow-wrap: normal;
+		word-break: normal;
+		background-image:
+			linear-gradient(#c8344b, #c8344b),
+			linear-gradient(#d8cbae, #d8cbae);
+		background-repeat: no-repeat;
+		background-position:
+			0 100%,
+			0 100%;
+		background-size:
+			0 1.5px,
+			100% 1px;
+		transition: color 0.18s ease;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.wcblr-footer-mail a {
+			transition:
+				color 0.18s ease,
+				background-size 0.32s cubic-bezier(0.2, 0.6, 0.2, 1);
+		}
+	}
+
+	.wcblr-footer-mail a:hover,
+	.wcblr-footer-mail a:focus-visible {
+		color: #c8344b;
+		background-size:
+			100% 1.5px,
+			100% 1px;
+	}
+
+	/* ---- The bottom row -------------------------------------------------- */
+	@media (max-width: 1023px) {
+		.wcblr-footer-bottom {
+			row-gap: 26px;
+		}
 	}
 
 	/* ---- Social icons ---------------------------------------------------
-	   In their own colours. These were a uniform #7a6757, which is correct for
-	   a row of text links and wrong for a row of logos: a logo's colour IS how
-	   it is recognised, and four identical brown glyphs make the reader stop
-	   and identify each one. Same reasoning as the WhatsApp button in the
-	   header.
-
-	   `is-style-logos-only` draws each glyph in `currentColor`, so this is a
-	   colour per service and nothing else.
-
-	   The four values are LIFTED FROM `content/_guide.scss`, which already
-	   brand-colours the same four for the `wcblr-follow` row. They were picked
-	   there and they stay there: two sets of "the WhatsApp green" for one site
-	   is how a palette starts drifting. If these ever change, change both. All
-	   four clear 3:1 on the footer's #f3eee2, which is the floor for a
-	   meaningful icon. */
+	   In their own colours. A logo's colour IS how it is recognised, and five
+	   identical brown glyphs make the reader stop and identify each one.
+	   `is-style-logos-only` draws each glyph in `currentColor`, so
+	   `content/_social-brand.scss` is a colour per service and nothing else;
+	   the values live there and only there. All five clear 3:1 on the footer's
+	   #f7f3ea, which is the floor for a meaningful icon. */
 	.wcblr-social .wp-block-social-link,
 	.wcblr-social .wp-block-social-link-anchor {
 		color: #7a6757 !important;
@@ -169,10 +263,9 @@ footer {
 			transform 0.18s cubic-bezier(0.2, 0.6, 0.2, 1);
 	}
 
-	/* The old hover turned every glyph crimson, which would now throw away the
-	   colour that was the point of the change. They lift instead, so the
-	   response is motion rather than a repaint. Gated, so a tap on a phone does
-	   not leave one sitting raised. */
+	/* They lift rather than repaint, so the response is motion and the brand
+	   colour set above survives it. Gated, so a tap on a phone does not leave
+	   one sitting raised. */
 	@media (hover: hover) and (pointer: fine) {
 		@media (prefers-reduced-motion: no-preference) {
 			.wcblr-social .wp-block-social-link:hover {
@@ -185,5 +278,154 @@ footer {
 		outline: 2px solid #2a1d14;
 		outline-offset: 3px;
 		border-radius: 50%;
+	}
+}
+
+/* ---- The closing CTAs fill rather than fade ------------------------------
+   `content/_cfs-buttons.scss` cross-fades a button's background-colour, which
+   is right for a pair of buttons inside a paragraph of prose. These two close
+   the site, so they get the wipe instead: the fill sweeps left to right in the
+   same 0.3s and on the same easing as the nav underline two blocks down, so
+   every hover in the footer is one gesture at three sizes.
+
+   IT HAS TO BE A GRADIENT, and that is not a stylistic choice. Remote CSS
+   strips `url()` from every property, but gradients survive intact in both
+   `background` and `background-image` — measured off the served stylesheet,
+   where the three `linear-gradient` underlines in `_hover-states.scss` are
+   present and all 24 icon data-URIs are gone. A gradient sized from 0 to 100%
+   is therefore the only fill this stylesheet can animate.
+
+   `background-size` is the animated property rather than opacity or a
+   pseudo-element: the button already has an inline `background-color` under
+   it, so the gradient paints ON the resting colour and nothing has to be
+   layered, positioned or clipped. */
+.wcblr-footer .wcblr-footer-ctas .wp-block-button__link {
+	background-image: linear-gradient(#2a1d14, #2a1d14);
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-size: 0 100%;
+	transition: color 0.2s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-footer .wcblr-footer-ctas .wp-block-button__link {
+		transition:
+			color 0.2s ease,
+			background-size 0.34s cubic-bezier(0.2, 0.6, 0.2, 1);
+	}
+}
+
+.wcblr-footer .wcblr-footer-ctas .wp-block-button__link:hover,
+.wcblr-footer .wcblr-footer-ctas .wp-block-button__link:focus-visible {
+	background-size: 100% 100%;
+	color: #f7f3ea !important;
+}
+
+/* The outline button's own hover is `background-color: #2a1d14 !important`
+   from `_cfs-buttons.scss`, which would land the whole fill on frame one and
+   there would be nothing left for the wipe to do. Suppressed here at (0,4,1)
+   against its (0,3,1), leaving the gradient to do the filling. The resting
+   `background-color: transparent !important` from the same file is what makes
+   that gradient visible against the cream, so it stays. */
+.wcblr-footer .wcblr-btn-onlight .is-style-outline .wp-block-button__link:hover,
+.wcblr-footer .wcblr-btn-onlight .is-style-outline .wp-block-button__link:focus-visible {
+	background-color: transparent !important;
+	border-color: #2a1d14 !important;
+	color: #f7f3ea !important;
+}
+
+/* ---- Notify me ----------------------------------------------------------
+   The subscribe form is server-rendered by Jetpack, so block attributes cannot
+   reach it and every value below has to be written here.
+   `forms/_jetpack-subscriptions.scss` already rounds the input/button pair;
+   this scopes the footer's own colours on top and gives the button the same
+   wipe the CTAs get, so the third control in the footer answers like the other
+   two.
+
+   SCOPED OFF `.wcblr-footer-sub`, THE WRAPPING CORE GROUP, not off the
+   `className` on the Jetpack block. A dynamic block's custom class is at the
+   mercy of its own render callback; the group's is written into the saved
+   HTML and cannot go missing.
+
+   TWO SHAPES, because the block has two. Fetched from the live home page,
+   which carries the same block: logged out it currently collapses to a bare
+   `<p><a>Subscribe</a></p>` with no form and no email field at all, and it is
+   only the full input-plus-button pair in the states where Jetpack renders
+   one. Styling just the form would have left the footer showing an unstyled
+   blue link on the exact page this was drawn for, so both are painted. */
+.wcblr-footer .wcblr-footer-sub {
+	.wp-block-jetpack-subscriptions {
+		margin: 0;
+	}
+
+	/* -- the full pair: one bordered well holding both controls -- */
+	form {
+		display: flex;
+		align-items: center;
+		border: 1px solid #d8cbae;
+		border-radius: 8px;
+		background: #ffffff;
+		padding: 4px;
+	}
+
+	form p {
+		margin: 0;
+	}
+
+	input[type="email"] {
+		border: 0 !important;
+		box-shadow: none !important;
+		background: #ffffff !important;
+		color: #2a1d14 !important;
+		font-size: 15px !important;
+		padding: 10px 14px !important;
+		min-width: 190px;
+	}
+
+	input[type="email"]:focus {
+		outline: 2px solid #2a1d14;
+		outline-offset: -1px;
+		border-radius: 6px;
+	}
+
+	/* -- the button, and the anchor the fallback uses instead of one -- */
+	button,
+	.wp-block-jetpack-subscriptions__button,
+	p > a {
+		display: inline-block;
+		border: 0 !important;
+		border-radius: 6px !important;
+		background-color: #2a1d14 !important;
+		background-image: linear-gradient(#c8344b, #c8344b);
+		background-repeat: no-repeat;
+		background-position: left center;
+		background-size: 0 100%;
+		color: #f7f3ea !important;
+		font-family: "JetBrains Mono", monospace !important;
+		font-size: 11px !important;
+		font-weight: 500 !important;
+		letter-spacing: 0.1em !important;
+		text-transform: uppercase;
+		text-decoration: none !important;
+		padding: 12px 18px !important;
+		margin: 0 !important;
+		white-space: nowrap;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		button,
+		.wp-block-jetpack-subscriptions__button,
+		p > a {
+			transition: background-size 0.34s cubic-bezier(0.2, 0.6, 0.2, 1);
+		}
+	}
+
+	button:hover,
+	button:focus-visible,
+	.wp-block-jetpack-subscriptions__button:hover,
+	.wp-block-jetpack-subscriptions__button:focus-visible,
+	p > a:hover,
+	p > a:focus-visible {
+		background-size: 100% 100%;
 	}
 }

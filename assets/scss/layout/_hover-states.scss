@@ -92,22 +92,24 @@ $wcblr-hover-ease: cubic-bezier(0.2, 0.6, 0.2, 1); /* the footer social row's */
  * it. It gets a gold underline instead, so it still answers the hover without
  * giving up what the colour means.
  */
-.wcblr-header,
-.wcblr-footer {
+/* HEADER ONLY. The footer's open-call links used to be gold too and took this
+   with it; the redesign makes them the same espresso as every other label in
+   their column, with a crimson dot doing the signalling, so they now want the
+   ordinary crimson wipe below and nothing here. Adding `.wcblr-footer` back
+   would give them a gold underline on an espresso label. */
+.wcblr-header {
 	li.wcblr-nav-cta > .wp-block-navigation-item__content {
 		background-image: linear-gradient(#a8760f, #a8760f);
 	}
 }
 
 @media (hover: hover) and (pointer: fine) {
-	.wcblr-header li.wcblr-nav-cta > .wp-block-navigation-item__content:hover,
-	.wcblr-footer li.wcblr-nav-cta > .wp-block-navigation-item__content:hover {
+	.wcblr-header li.wcblr-nav-cta > .wp-block-navigation-item__content:hover {
 		color: #a8760f !important;
 	}
 }
 
-.wcblr-header li.wcblr-nav-cta > .wp-block-navigation-item__content:focus-visible,
-.wcblr-footer li.wcblr-nav-cta > .wp-block-navigation-item__content:focus-visible {
+.wcblr-header li.wcblr-nav-cta > .wp-block-navigation-item__content:focus-visible {
 	color: #a8760f !important;
 }
 
@@ -177,16 +179,22 @@ $wcblr-hover-ease: cubic-bezier(0.2, 0.6, 0.2, 1); /* the footer social row's */
 }
 
 /* ---- The legal line's links ---------------------------------------------- */
-/* Small print, so it gets the underline and the colour but no movement. */
-.wcblr-footer-legal a {
+/* Small print, so it gets the underline and the colour but no movement.
+   It lives in the espresso strip now rather than on the cream, so the wipe is
+   turmeric: the crimson this used to use is about 2.6:1 on #241a12, and the
+   strip's own `do_action()` line already establishes gold as what lights up
+   down here. */
+.wcblr-strip-legal a {
 	@include wcblr-link-wipe;
+	/* the mixin paints the crimson; on this surface it is turmeric */
+	background-image: linear-gradient(#e0a526, #e0a526);
 	background-size: 0 1px;
 	transition: color 0.18s ease;
 	text-decoration: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-	.wcblr-footer-legal a {
+	.wcblr-strip-legal a {
 		transition:
 			color 0.18s ease,
 			background-size 0.3s $wcblr-hover-ease;
@@ -194,13 +202,13 @@ $wcblr-hover-ease: cubic-bezier(0.2, 0.6, 0.2, 1); /* the footer social row's */
 }
 
 @media (hover: hover) and (pointer: fine) {
-	.wcblr-footer-legal a:hover {
-		color: $wcblr-hover-ink;
+	.wcblr-strip-legal a:hover {
+		color: #e0a526;
 		background-size: 100% 1px;
 	}
 }
 
-.wcblr-footer-legal a:focus-visible {
-	color: $wcblr-hover-ink;
+.wcblr-strip-legal a:focus-visible {
+	color: #e0a526;
 	background-size: 100% 1px;
 }
