@@ -67,6 +67,39 @@ footer {
 		}
 	}
 
+	/* ---- The two hairlines ----------------------------------------------
+	   A `wp:separator` on this theme IGNORES its own background colour, so the
+	   footer's rules were shipping at #111111 against a #e3d9c4 attribute: a
+	   near-black stripe across a cream footer, which is what the design review
+	   caught. Measured off the live page, not reasoned about.
+
+	   Why. Gutenberg's separator stylesheet here is the short one. It ships
+	   `.wp-block-separator { border:none; border-top:2px solid }` and then
+	   `:root :where(.wp-block-separator) { border-color: currentColor;
+	   border-width: 0 0 1px 0; color: var(--wp--preset--color--accent-6) }`,
+	   and it does NOT ship core's
+	   `.has-background:not(.is-style-dots) { border-bottom: 1px solid
+	   transparent }` companion. So `has-background` never gets its border
+	   zeroed, the element's height comes entirely from that border, and what
+	   you see is a 1px accent-6 line with the background painting a zero-height
+	   box behind it. The colour attribute is not overridden; it is invisible.
+
+	   Drawn as a border rather than a background for the same reason: the box
+	   has no height of its own. The block keeps its colour attribute so the
+	   editor shows the right thing, but THIS is the value that ships. Change
+	   both together.
+
+	   The vertical column rules below need none of this. They are real borders
+	   on real columns and they were already landing at #e3d9c4 on the live
+	   page, which is the value this matches. */
+	.wp-block-separator {
+		border: 0 !important;
+		border-top: 1px solid #e3d9c4 !important;
+		height: 0;
+		background: none !important;
+		opacity: 1;
+	}
+
 	/* ---- Four columns, three rules ---------------------------------------
 	   This reverses the "one rule, not three" call that stood here before, on
 	   the design's instruction. The reasoning that produced the single rule
