@@ -33,12 +33,21 @@ footer {
 	   block's inline 62px, because the inline style loses that fight outright.
 
 	   This is the same trap `content/_guide.scss` documents for section heads.
-	   Anything that ever puts an h2 in a template part hits it. */
+	   Anything that ever puts an h2 in a template part hits it.
+
+	   40px, NOT the 62px the design comp measures. A comp has no page above it;
+	   the footer always does, and the site's own section heads are 46px. At 62
+	   the closing line came out larger than every heading on the page it was
+	   closing, so on the home page a 46px `Stay connected with WCBLR 2026` sat
+	   directly above a 62px `Come spend two days with us.` with a 2px rule
+	   between them and the footer read louder than the content. Sized under the
+	   section scale it goes back to being the last word rather than the
+	   loudest. Keep it below 46px if it is ever retuned. */
 	.wcblr-footer-cta .wp-block-heading {
-		font-size: clamp(34px, 4.6vw, 62px) !important;
+		font-size: clamp(27px, 2.9vw, 40px) !important;
 		font-weight: 400 !important;
-		line-height: 1 !important;
-		letter-spacing: -0.025em !important;
+		line-height: 1.1 !important;
+		letter-spacing: -0.015em !important;
 		margin: 0 !important;
 		font-optical-sizing: auto;
 		font-variation-settings: "opsz" 108;
