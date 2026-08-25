@@ -59,6 +59,44 @@
 	border-radius: 14px;
 }
 
+/* ── The odd card out ────────────────────────────────────────────────────────
+   An odd number of partners leaves the last row as one card beside an empty
+   column, and that card came out 529px against the 500px of every card above
+   it, so the bottom of the grid sat ragged by 29px.
+
+   The cause is `box-sizing`, not flex. Core gives every column `flex: 1 1 0`
+   and they are `content-box`, so a column's flex base size is its CONTENT box
+   and the card's 28px of side padding is added on top of whatever it grows to.
+   In a row of two cards that is symmetric and invisible: 1000 less 112 of
+   padding leaves 888, each grows 444, each ends up 500 wide. In the last row
+   only one side carries padding, so 1000 less 56 leaves 944, each grows 472,
+   and the card ends at 528 against the filler's 472.
+
+   Measured, not guessed, and two wrong fixes were measured away first:
+
+   * `flex: 1 1 0` on the filler changed nothing. The dump showed it already
+     computed to exactly that.
+   * `box-sizing: border-box` on the card changed nothing either. A border-box
+     flex base of 0 cannot go below the padding, so the card still brought 56px
+     to the division and the split stayed 529/471.
+
+   What is actually asymmetric is the box itself, so the fix is to make the
+   empty slot the same box as a card. Padding alone got it to 501/499 and the
+   last 1px was the card's border: a `flex-basis: 0` item still brings its
+   padding AND its border to the division, so the card offered 58px against the
+   filler's 56 and kept half of the difference. The transparent border is the
+   other half of the same idea, not a nudge to make a number come out: the
+   filler is a card-shaped hole, so it needs a card's whole box.
+
+   Measures 500.000/500.000 on all four rows. It holds once the gap is there
+   too: on the real page core adds a 22px column gap at render time that this
+   harness does not, and with equal bases the pair just shrinks together. */
+.wcblr-mp .wcblr-mp-gridrow > .wp-block-column:not(.wcblr-mp-card) {
+	padding-left: 28px;
+	padding-right: 28px;
+	border: 1px solid transparent;
+}
+
 /* The logo sits on white, not on the card cream. Every mark was supplied on a
    transparent canvas and several were drawn for a white page; on cream the
    darker ones go muddy and the ones with near-white counters lose their
@@ -115,7 +153,16 @@
    largest factor here is still drawing well inside the file's real resolution.
    The tile clips, so the scaled-up transparent canvas cannot spill. If those
    PNGs are ever re-baked with the ink pre-fitted, delete this block or the
-   correction lands twice. */
+   correction lands twice.
+
+   `normalise.py` now prints the factor each file needs, so a new partner is a
+   copied line rather than a measurement. Note it prints 2.170 where the first
+   five shipped 2.168, 1.253 where wpoetstv shipped 1.248, and 0.922 where
+   wpweekly shipped 0.919: the first five were rounded by hand from a slightly
+   different figure for the rendered canvas width. The gap is under half a
+   percent, well under a pixel at this size, so the shipped five are left
+   exactly as they are rather than being nudged for tidiness. Only take the
+   printed value for a logo that is NEW. */
 .wcblr-mp .wcblr-mp-logo img {
 	display: block;
 	margin: 0 auto;
@@ -123,8 +170,10 @@
 }
 
 .wcblr-mp .wcblr-mp-logo-prospera img     { transform: scale(2.168); }
+.wcblr-mp .wcblr-mp-logo-hashtagindia img { transform: scale(1.169); }
 .wcblr-mp .wcblr-mp-logo-wpweekly img     { transform: scale(0.919); }
 .wcblr-mp .wcblr-mp-logo-wpbaat img       { transform: scale(2.168); }
+.wcblr-mp .wcblr-mp-logo-wpfolks img      { transform: scale(0.922); }
 .wcblr-mp .wcblr-mp-logo-wpoetstv img     { transform: scale(1.248); }
 .wcblr-mp .wcblr-mp-logo-wpsimplified img { transform: scale(1.473); }
 
