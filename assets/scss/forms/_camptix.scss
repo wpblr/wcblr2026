@@ -1616,6 +1616,87 @@ main:has(#tix) .wcblr-page-head {
 	}
 }
 
+/* ---- 6b. Nothing on sale: the gap between batches -----------------------
+   Early Bird sold out in August 2026 and neither General nor Friend of #WCBLR
+   is open yet, so for the first time this page has a state with nothing to
+   buy. CampTix has no such state. It keeps rendering the ticket row with the
+   quantity cell reading "Sold out" and the full-width Register button under
+   it, which submits and comes back with an error. A checkout that looks live
+   and cannot complete is worse than no checkout at all.
+
+   THE SHORTCODE HAS TO STAY ON THE PAGE. Every confirmation email points its
+   edit link at `/2026/tickets/?tix_action=edit&...`, and that screen is
+   rendered by `[camptix]` and by nothing else, so deleting the shortcode would
+   silently break every name correction and every transfer, which is exactly
+   what the page promises twice in its own copy. Verified, not assumed: that
+   URL 302s to login and comes back to this page.
+
+   So the selection screen is hidden and `pages/tickets.html` carries its own
+   espresso card, `.wcblr-tix-out`, in the same slot. Both are keyed on the
+   SAME condition, so they can never both be on screen, and the condition is a
+   fact CampTix puts in the DOM itself: `<tr class="tix-ticket-1751
+   tix-sold-out">`, read out of the live markup. The coupon row is excluded
+   because it is an action rather than a ticket and is never sold out.
+
+   `#tix` is reached through `.wcblr-tix-row` rather than on its own, which is
+   what keeps this off every screen after selection: on any `tix_action` screen
+   this build replaces the whole of `.entry-content` with `#tix` alone, so the
+   row the page owns is not in the DOM there and none of this can match. Same
+   measurement section 8 rests on.
+
+   THIS UNDOES ITSELF. The day a purchasable row appears, `$tix-has-stock`
+   matches, the card goes and the checkout comes back, with no deploy and no
+   stylesheet to remember. That is the point: the alternative is a page reading
+   "sold out" over a live checkout because somebody forgot to revert a rule.
+
+   Losing `:has()` fails the way everything else in this file fails, towards
+   the form: `.wcblr-tix-out` is `display: none` at rest and only the `:has()`
+   rule turns it on, so a sanitiser that dropped these selectors would leave
+   the CampTix card exactly as it renders today.
+
+   CHILD COMBINATORS, NOT DESCENDANT ONES, and that is not a preference. The
+   build minifies with clean-css, which strips the whitespace inside `:has()`,
+   so `:has(.tix_tickets_table tbody tr)` ships as `:has(.tix_tickets_tabletbodytr)`:
+   one invalid selector that matches nothing and reports nothing. Same failure
+   the health-advisory rule hit at `:has(td.tix-left p)`, caught here by
+   reading `main.min.css` after the build rather than by trusting the SCSS.
+   `>` has no whitespace to lose. The rows really are `table > tbody > tr`, and
+   `thead` has to be excluded anyway: its header row carries neither class, so
+   a bare `tr` would report stock on a table that has none. */
+$tix-has-stock: ".tix_tickets_table>tbody>tr:not(.tix-sold-out):not(.tix-row-coupon)";
+
+.wcblr-tix-out {
+	display: none;
+}
+.wcblr-tix-row:not(:has(#{$tix-has-stock})) .wcblr-tix-out {
+	display: block;
+}
+.wcblr-tix-row:not(:has(#{$tix-has-stock})) #tix {
+	display: none;
+}
+
+/* Edge to edge, for the reason `.wcblr-tier-cta` is: a 200px button floating
+   at the left of the card reads as belonging to the line above it. This one is
+   standing in for Register, which was full width. */
+.wcblr-tix-out-cta,
+.wcblr-tix-out-cta .wp-block-button {
+	width: 100%;
+}
+.wcblr-tix-out-cta .wp-block-button__link {
+	display: block;
+	text-align: center;
+}
+
+/* On the ladder in 7b, at the step the ticket card had. The column's own
+   animation is switched off up there, so without this the one object that
+   replaced the card would be the only thing on the screen that does not
+   move. */
+@media (prefers-reduced-motion: no-preference) {
+	#{$tix-page} .wcblr-tix-out {
+		animation: wcblr-rise 0.6s 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	}
+}
+
 /* ---- 8. The furniture around the registration screen --------------------
    The registration screen had nothing on it but the form. Not "a bit empty":
    CONTEXTLESS. `main:has(#tix) .wcblr-page-head` hides the article head on
