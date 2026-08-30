@@ -1255,6 +1255,23 @@ main:has(#tix) .wcblr-page-head {
 		min-width: 96px;
 		cursor: pointer;
 	}
+	/* 16px, AND THAT IS A FUNCTIONAL NUMBER, NOT A TYPOGRAPHIC ONE. Safari on
+	   iOS zooms the whole page in when a form control smaller than 16px takes
+	   focus, and it does not zoom back out afterwards, so choosing a quantity
+	   left the reader on a page scaled up past its own edges with the Register
+	   button off screen. The one control between a phone and a paid ticket.
+
+	   Section 4 already sets this on `#tix select` at the same breakpoint. It
+	   never applied: this file's own rule above is inside `#tix:has(...)` and
+	   reaches the same element at higher specificity, so the desktop 15px won
+	   on the phone as well. Measured on the live page, where the select came
+	   back at 15px inside the 782 query. Fixed by matching the specificity
+	   rather than by reaching for `!important`. */
+	@media (max-width: 782px) {
+		.tix_tickets_table tbody .tix-column-quantity select {
+			font-size: 16px;
+		}
+	}
 	/* The chevron the native control took with it. It cannot be a
 	   `background-image`: the sanitiser keeps the property and empties every
 	   `url()`, data URIs included, so all 24 of this build's inline SVG icons
@@ -1381,6 +1398,21 @@ main:has(#tix) .wcblr-page-head {
 		.tix_tickets_table tbody tr { margin: 0 -20px; padding: 0 20px; }
 		.tix_tickets_table tbody tr + tr { margin-top: 26px; padding-top: 26px; }
 		.tix_tickets_table tbody tr.tix-row-coupon { padding: 24px 20px 0; }
+		/* "Click here to enter a coupon code" does not fit on one line in a
+		   230px card, and CampTix hard-codes `style="text-align: right"` on
+		   the cell, so it wrapped right-aligned and left the word "code" alone
+		   under it. `!important` is the only thing that reaches an inline
+		   style; the base rule three hundred lines up already asks every cell
+		   in this table for `text-align: left` and has been losing to it.
+		   Left, the two lines are a link rather than an orphan. */
+		.tix_tickets_table tbody tr.tix-row-coupon td { text-align: left !important; }
+		/* The link is the tap target and 13px mono over two lines is a thin
+		   one. Inline-block keeps the underline on the words while the padding
+		   grows the hit area past the 24px WCAG 2.2 minimum. */
+		#tix-coupon-link {
+			display: inline-block;
+			padding: 4px 0;
+		}
 
 		/* THE QUANTITY CONTROL TAKES ITS OWN ROW.
 
@@ -1394,14 +1426,79 @@ main:has(#tix) .wcblr-page-head {
 		   On its own row the price gets the full width and the control gets to
 		   be a real control: the select fills the row, which is also the only
 		   way the chevron stays over its right edge. */
+		/* THE NAME TAKES THE WHOLE ROW TOO, AND THE COUNT GOES ABOVE IT.
+
+		   The rule above solved this for the price and left the name in the
+		   same trap. Measured on the live DOM at both widths rather than
+		   reasoned about: the name shares row one with the "149 left" pill,
+		   the pill is 89px, the column gap is 18px, and the card is 230px
+		   inside its padding at 390 and 200px at 360. That leaves the name
+		   123px and 93px. "General Admission" in 27px Fraunces wants about
+		   200px, so it came out THREE lines at 390 and FOUR at 360, broken
+		   mid-word as "General Admissio / n", on the one object this page
+		   exists for.
+
+		   Shrinking the name does not reach: even at 20px it wants 150px and
+		   there are 93. So the pill takes a row of its own above the name,
+		   left-aligned, which is exactly where the tier cards two screens
+		   further down put the same fact, and the name gets its width back.
+
+		   One column, not two, because `auto` on a track nothing is placed in
+		   still resolves against the pill and leaves the gap behind it. */
+		.tix_tickets_table tbody tr {
+			grid-template-columns: minmax(0, 1fr);
+			row-gap: 16px;
+		}
+		.tix_tickets_table tbody .tix-column-remaining {
+			grid-column: 1;
+			grid-row: 1;
+			justify-self: start;
+		}
+		.tix_tickets_table tbody .tix-column-description {
+			grid-column: 1;
+			grid-row: 2;
+		}
 		/* The price spans both columns, or column two stays as wide as the
 		   "19 LEFT" pill above it and the price is back in 157px. */
 		.tix_tickets_table tbody .tix-column-price {
-			grid-column: 1 / -1;
+			grid-column: 1;
+			grid-row: 3;
+			/* 42px is display size and it is right until the card stops being
+			   wide enough to hold the number, at which point CampTix wraps it
+			   after the comma and the one figure the page exists to show is
+			   two lines tall. A smaller price beats a broken one.
+
+			   MEASURED, not estimated. "₹ 2,500.00" set in JetBrains Mono is
+			   5.357 times the font size (225.0px at 42, checked at eight sizes
+			   against the live DOM), and the card's content box is the
+			   viewport less 160: 60 of root padding, 40 of card padding, 60 of
+			   the page wrapper. So the number fits while
+
+			       5.357 · size <= vw - 160
+
+			   which is 42px down to about 385px wide, 37px at 360 and 30px at
+			   320. The 320 case is the binding one and it is why the first
+			   pass at this was wrong: 9.5vw cleared 360 and still wrapped on a
+			   320 phone by two pixels.
+
+			   `clamp(px, vw, px)` and nothing more elaborate. That exact shape
+			   appears six times in this build and arrives intact in the served
+			   stylesheet, while `calc()` inside `clamp()` has never been put
+			   through the sanitiser here. A slope with no intercept has to
+			   clear the narrowest case, so 9.3vw: 29.8px at 320 against a
+			   29.9px budget, 33.5 at 360, 36.3 at 390, and the full 42 back
+			   from 452 up. It trades a few points of display size at 390 for a
+			   price that cannot break at any width a phone actually has. */
+			font-size: clamp(24px, 9.3vw, 42px);
+			/* `row-gap` is one number for all three gaps in the stack, and the
+			   pill wants to sit tight against the name it qualifies while the
+			   price wants air. 16 + 4 gives the price 20 and leaves the pill
+			   at 16. */
+			margin-top: 4px;
 		}
 		.tix_tickets_table tbody .tix-column-quantity {
-			grid-column: 1 / -1;
-			grid-row: 3;
+			grid-column: 1;
+			grid-row: 4;
 			flex-direction: row;
 			align-items: center;
 			gap: 12px;

@@ -698,6 +698,44 @@
 		display: block;
 		text-align: center;
 	}
+
+	/* ---- The first screen ----
+	   The template's own top padding is 72px, which is a proportion of a
+	   desktop window and a fifth of a phone. Measured on the live page at 390:
+	   the header ends at 198 and the `// register` kicker starts at 365, so
+	   167px of the first 844 are empty before the page says anything, and the
+	   reader arrives at a ticket page with a third of a heading on screen.
+
+	   `main:has()` rather than a class, because the padding is on an element
+	   the page markup does not own. The same shape is already load-bearing
+	   five times in `forms/_camptix.scss` and arrives intact in the served
+	   stylesheet. No whitespace inside the parentheses, which is the thing
+	   clean-css eats.
+
+	   Only on this page. Every other page opens with a title and a date and
+	   wants the air; this one opens with a purchase.
+
+	   `!important` because the 72px is an INLINE style on `main`, written by
+	   the block template rather than by a stylesheet, and an inline style is
+	   the one thing specificity cannot outrank. Checked before reaching for
+	   it: no rule in the served CSS sets this at all, the attribute does. */
+	main:has(.wcblr-tix-page) {
+		padding-top: 26px !important;
+	}
+
+	/* ---- "Something else on your mind?" ----
+	   A `flex-wrap: nowrap` row set from the block editor, so at 390 the two
+	   halves squeezed each other and CONTACT US broke after the first word
+	   with the arrow stranded on line two. Stacked, each half gets the full
+	   width and the link becomes a row of its own to aim at. */
+	.wcblr-guide .wcblr-faq-ask {
+		flex-wrap: wrap;
+		align-items: flex-start;
+		gap: 10px;
+	}
+	.wcblr-guide .wcblr-faq-ask > p {
+		flex: 0 0 100%;
+	}
 }
 
 /* ---- Interaction ---------------------------------------------------------
