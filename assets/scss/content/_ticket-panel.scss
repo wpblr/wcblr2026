@@ -958,21 +958,43 @@
 
 /* ---- The questions ------------------------------------------------------- */
 
-/* Rows of equal height, with the question centred in its own row. `start` left
-   a one-line question sitting in a short box beside a two-line one in a taller
-   box, and the pair read as two different components rather than as one row of
-   a grid. The cost is that an OPEN answer stretches its neighbour; that is the
-   right trade, because a reader opens one at a time and every other second of
-   the page's life is spent with all seven closed. */
+/* Rows of equal height while closed, and ONLY while closed.
+
+   `stretch` bought that alignment by making every item fill its row, and the
+   cost written down here was that an open answer stretches its neighbour. That
+   trade was called the right one because the page spends most of its life with
+   all of them shut. It is not: reported off the live page, and the reader only
+   ever sees it while doing the one thing the component exists for. Opening a
+   question on the right turned the closed one on the left into a tall empty box
+   with its heading floating in the middle of it.
+
+   `start` on its own was rejected before, and for a real reason: a one-line
+   question sat in a short box beside a two-line one and the pair read as two
+   components rather than one row. But the height that differs is the TOGGLE's,
+   so that is where the floor belongs rather than on the item. Two lines of the
+   18px heading is 2 x 20.25px of line plus its own 10px/10px padding, which is
+   the 61px below, and it is what the longest question already occupies. Closed
+   cards match, an open one grows alone, and nothing centres a heading in space
+   it did not ask for.
+
+   A question long enough to run to three lines grows its own card past 61px and
+   its row-mate stays put. That is the residue of `start` and it is the smaller
+   fault: it shows on one row, at one width, rather than on every open answer. */
 .wcblr-guide .wcblr-faqgrid {
-	align-items: stretch;
+	align-items: start;
 	gap: 19px 23px;
 }
 
-.wcblr-guide .wcblr-faqgrid .wp-block-accordion-item {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+.wcblr-guide .wcblr-faqgrid .wp-block-accordion-heading__toggle {
+	min-height: 61px;
+}
+
+/* One column, so there is no neighbour to match and the floor only pads out the
+   short questions. */
+@media (max-width: 781px) {
+	.wcblr-guide .wcblr-faqgrid .wp-block-accordion-heading__toggle {
+		min-height: 0;
+	}
 }
 
 /* ---- The closing band ---------------------------------------------------- */

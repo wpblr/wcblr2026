@@ -1277,6 +1277,43 @@ main:has(#tix) .wcblr-page-head {
 	}
 	.tix_tickets_table tbody .tix-column-quantity select:focus { box-shadow: none; outline: 2px solid #e0a526; }
 
+	/* --- The sold-out row's quantity cell ---
+	   CampTix renders no <select> on a sold-out row. It leaves the words "Sold
+	   out" in the cell as a BARE TEXT NODE: no element, no class, nothing a
+	   selector can reach, so it lands wherever the flex column drops it, in body
+	   type, at a different height from the two controls above it. The chevron is
+	   the worse half. `::after` is positioned against the CELL rather than
+	   against the select, so it goes on drawing a dropdown arrow over a row that
+	   has no dropdown, printed on top of the words.
+
+	   `font-size: 0` on the cell is the only way to remove that text node. Both
+	   pseudo-elements set their own size, so the anonymous box is the only thing
+	   that collapses, and `::after` is then free to carry the words back as a
+	   chip built to the select's own box: same width, same radius, same slot,
+	   dimmed and with no chevron, which is what the row was always meant to be
+	   showing. Keyed on `tr.tix-sold-out`, the class CampTix puts there itself,
+	   so a ticket that comes back into stock takes its select back with it. */
+	tr.tix-sold-out .tix-column-quantity {
+		font-size: 0;
+	}
+
+	tr.tix-sold-out .tix-column-quantity::after {
+		content: "Sold out";
+		/* Back into the flex column, under the QTY label, where the select sits. */
+		position: static;
+		box-sizing: border-box;
+		min-width: 96px;
+		padding: 10px 14px;
+		border: 1.5px solid #4a3c2e;
+		border-radius: 8px;
+		font-family: "Hanken Grotesk", sans-serif;
+		font-size: 15px;
+		line-height: 1.4;
+		letter-spacing: 0;
+		text-align: center;
+		color: #8a8179;
+	}
+
 	/* --- Register -> full-width red CTA at the card bottom --- */
 	p { margin: 16px 0 0; }
 	input[type="submit"] {
@@ -1361,6 +1398,14 @@ main:has(#tix) .wcblr-page-head {
 			top: 50%;
 			bottom: auto;
 			margin-top: -5px;
+		}
+
+		/* The sold-out chip is a static pseudo-element rather than the select, so
+		   it does not inherit the `flex: 1 1 auto` above and would sit at its own
+		   96px beside a label the full-width control clears. Same row, same fill.
+		   (`top`/`bottom` above cannot reach it: it is `position: static`.) */
+		tr.tix-sold-out .tix-column-quantity::after {
+			flex: 1 1 auto;
 		}
 
 		/* Four words at 11px with 0.12em of tracking and three-space gaps come
@@ -2236,6 +2281,20 @@ main:has(.tix-order-summary) .wcblr-tix-back {
    is squarer than the source, so it crops the WIDTH, about 6 per cent off each
    side, and this crowd runs to both edges of the frame. Six per cent of a group
    photo is somebody's face. 260px tall at 390px wide is enough. */
+/* Inside the register row the picture is 671px wide, not 1,100, and the 2.17:1
+   band above was measured against the wide one. At column width it falls back to
+   the source's own 3:2, which crops nothing at all, gives the caption room to
+   run to two lines without climbing over the filename, and brings the column to
+   831px against the ticket stub's 912. That last number is the point: the blank
+   the picture was moved up to fill. */
+.wcblr-tix-page .wcblr-tix-row .wcblr-tix-shot {
+	margin: 34px 0 0 !important;
+}
+
+.wcblr-tix-page .wcblr-tix-row .wcblr-tix-shot img {
+	aspect-ratio: 3 / 2;
+}
+
 @media (max-width: 781px) {
 	.wcblr-tix-shot {
 		margin-top: 32px !important;
