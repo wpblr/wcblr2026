@@ -1297,6 +1297,27 @@ main:has(#tix) .wcblr-page-head {
 		font-size: 0;
 	}
 
+	/* --- Early Bird, out of the purchase form ---
+	   The batch closed on 29 August and its row cannot be bought. In a form whose
+	   only job is buying, a 600 rupee row that refuses invites one question, "why
+	   not that price", and answers none. Nothing is hidden from the reader: the
+	   TICKET TYPES cards below still carry Early Bird in full, with its SOLD OUT
+	   pill, its price and its description. Only the form drops it.
+
+	   Keyed on the ticket's own post id and NOT on `.tix-sold-out`, which is the
+	   whole point. This is a decision about one past batch, not a rule that every
+	   sold-out row should vanish: when General Admission sells out its row should
+	   stay and show the chip below it, because a form offering only the 2,500
+	   rupee ticket, with no sign that a cheaper one ever existed, reads as the
+	   price of the event. If the ticket is ever recreated the id changes, this
+	   stops matching and the row comes back, which is the safe direction to fail.
+	   Section 6b is untouched by this: its stock test already excludes every
+	   `.tix-sold-out` row, so hiding one changes nothing about when the espresso
+	   card takes over. */
+	.tix_tickets_table tbody tr.tix-ticket-1751 {
+		display: none;
+	}
+
 	tr.tix-sold-out .tix-column-quantity::after {
 		content: "Sold out";
 		/* Back into the flex column, under the QTY label, where the select sits. */
