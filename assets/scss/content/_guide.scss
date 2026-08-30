@@ -589,8 +589,10 @@
    because the rule does not apply there.
 
    So the not-list carries the card classes that paint no fill as well.
-   `wcblr-tier-soon` is the one that exists today, the tier that is not written
-   yet. (`wcblr-tba`, the deliberately-empty dashed block, has the same shape
+   `wcblr-tier-soon`, the tier that is not written yet, is in that list and is
+   currently used by no page: the tickets cards it was written for all carry a
+   background now. It stays because the next page to need a pending tier will
+   reach for it, and the exclusion is what stops that card breaking on a phone. (`wcblr-tba`, the deliberately-empty dashed block, has the same shape
    and is NOT in the list because it sits on a `wp:group` rather than a
    `wp:column`, so this selector never reaches it.)
 

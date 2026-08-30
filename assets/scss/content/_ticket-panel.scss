@@ -1021,20 +1021,3 @@
 .wcblr-tix-page .wcblr-tier-soon-note::before {
 	content: none;
 }
-
-/* Friend of #WCBLR went on sale on 31 August 2026, so the third card is no
-   longer a tier that does not exist yet. `wcblr-tier-soon` has to stay on the
-   column: it is what the 781px guard in `_guide.scss` excludes from the
-   padding strip, and a card with no background that loses that exclusion is
-   broken on a phone. So the class stays and the two marks that actually say
-   "pending" are turned back here, the dashed edge and the hollow list bullet.
-   When the next edition rebuilds this page, the card wants a class of its own
-   rather than a live tier borrowing the pending one. */
-.wcblr-tix-page .wcblr-tier-soon {
-	border-style: solid !important;
-}
-
-.wcblr-tix-page .wcblr-tier-soon .wcblr-tier-list li::before {
-	background: #e0a526;
-	border: 0;
-}
