@@ -241,6 +241,11 @@ body.home .wcblr-blog-grid figure.wp-block-post-featured-image img {
 }
 
 body.home .wcblr-blog-grid li.wp-block-post {
+	/* The hover shadow is cast by this `li`, but the visible card is the inner
+	   group and it carries a 14px radius, so a square shadow poked past the
+	   card's rounded corners. Match the radius here and the shadow hugs the
+	   corner. Same rect as the inner card, so nothing is clipped or reshaped. */
+	border-radius: 14px;
 	transition: box-shadow 0.2s ease;
 }
 
