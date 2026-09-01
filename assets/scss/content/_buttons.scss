@@ -1,0 +1,48 @@
+/* ---- One button hover for the whole site --------------------------------- */
+/*
+ * Every button answers the pointer with the same gesture the footer CTAs use:
+ * a fill wiping left to right. The mechanics and the reasons live on the mixin
+ * in base/_mixins. This file is only where it is aimed.
+ *
+ * Imported last, so the default below (a bare `.wp-block-button__link`, one
+ * class) sits at the end of the cascade and reaches every button, while the
+ * surface hooks that follow it — each carrying an extra class — win on
+ * specificity where a button sits on a dark ground and needs a light fill
+ * instead of the espresso one. The old per-surface lifts, halos and colour
+ * cross-fades are removed at their source so nothing is left to fight this.
+ *
+ * `:focus-visible` is treated exactly like `:hover`, so the keyboard path and
+ * the pointer path show the same fill; the wipe is the focus indicator, as it
+ * is in the footer, which is why no separate outline ring is reinstated here.
+ */
+
+.wp-block-button__link,
+.wp-element-button {
+	@include wcblr-btn-wipe;
+}
+
+.wp-block-button__link:hover,
+.wp-block-button__link:focus-visible,
+.wp-element-button:hover,
+.wp-element-button:focus-visible {
+	@include wcblr-btn-wipe-hover;
+}
+
+/* ---- Dark grounds take a light fill -------------------------------------- */
+/*
+ * Espresso would wipe in invisibly on a dark band, so these fill cream and flip
+ * the label dark. The extra class outranks the default above. Two grounds:
+ *   .wcblr-hero-cta  the hero and closing-CTA dark bands (content/_cfs-buttons)
+ *   .wcblr-stub      the home ticket stub's espresso panel (sections/_ticket-stub)
+ */
+.wcblr-hero-cta .wp-block-button__link,
+.wcblr-stub .wp-block-button__link {
+	@include wcblr-btn-wipe(#f2ece0);
+}
+
+.wcblr-hero-cta .wp-block-button__link:hover,
+.wcblr-hero-cta .wp-block-button__link:focus-visible,
+.wcblr-stub .wp-block-button__link:hover,
+.wcblr-stub .wp-block-button__link:focus-visible {
+	@include wcblr-btn-wipe-hover(#2a1d14);
+}

@@ -586,109 +586,18 @@
 		white-space: nowrap;
 	}
 
-	/* ---- Hover, focus and press ----------------------------------------
-	   The header sits outside `.wcblr-motion`, which is the post-content
-	   opt-in, so these two buttons had no states at all: no hover, no press,
-	   and a focus ring only from the browser default. Everything below follows
-	   the system in `content/_cfs-buttons.scss` (0.18s, `:hover` and
-	   `:focus-visible` always written as a pair) rather than inventing a
-	   second one.
-
-	   Colour and transform are separated on purpose. Colour transitions run
-	   everywhere, including for readers who have asked for less motion; only
-	   the movement is behind the reduced-motion query. */
-	.wcblr-tix-btn .wp-block-button__link,
-	.wcblr-wa-btn .wp-block-button__link {
-		transition: background-color 0.18s ease, border-color 0.18s ease,
-			color 0.18s ease, box-shadow 0.18s ease;
-	}
-
-	/* Hover is gated on a device that actually has a pointer. Without this,
-	   a tap on a phone leaves the button stuck in its hover state until you
-	   touch something else, which reads as a stuck button rather than a
-	   pressed one. `:focus-visible` stays OUTSIDE the query so a keyboard
-	   still gets the same treatment on any device. */
-	@media (hover: hover) and (pointer: fine) {
-		/* Primary. The hero pattern for a solid red button is a cream halo,
-		   which works on the dark band it was written for and is invisible
-		   here on cream. So the halo is the accent instead, at low alpha:
-		   the button gains weight rather than changing colour, and the label
-		   never moves against its own background. */
-		.wcblr-tix-btn .wp-block-button__link:hover {
-			box-shadow: 0 4px 14px rgba(200, 52, 75, 0.32);
-		}
-
-		/* Secondary. The same halo as the primary, in its own colour, so the
-		   two answer the pointer in one language and only the hue says which
-		   is which. A green wash would be invisible under a green button and
-		   darkening the fill would take the white glyph's contrast down with
-		   it, so the response goes outside the button rather than inside. */
-		.wcblr-wa-btn .wp-block-button__link:hover {
-			box-shadow: 0 4px 14px rgba(18, 140, 126, 0.36);
-		}
-	}
-
-	.wcblr-tix-btn .wp-block-button__link:focus-visible {
-		box-shadow: 0 4px 14px rgba(200, 52, 75, 0.32);
-	}
-
-	.wcblr-wa-btn .wp-block-button__link:focus-visible {
-		box-shadow: 0 4px 14px rgba(18, 140, 126, 0.36);
-	}
-
-	/* One ring for both, drawn outside the button so it never sits on the
-	   label. Espresso on cream is 12:1, so it is visible without needing to be
-	   thick, and it does not depend on the button's own colour. */
+	/* ---- Focus ring ----------------------------------------------------
+	   The hover is the site-wide wipe now (content/_buttons.scss), so the halo
+	   and lift these two used to carry are gone. A keyboard still gets an
+	   explicit ring on top of the wipe, drawn outside the button so it never
+	   sits on the label. Espresso on cream is 12:1, so it is visible without
+	   being thick, and it does not depend on the button's own colour.
+	   `:focus-visible`, not `:focus`, so a click does not leave it behind after
+	   the pointer has gone. */
 	.wcblr-tix-btn .wp-block-button__link:focus-visible,
 	.wcblr-wa-btn .wp-block-button__link:focus-visible {
 		outline: 2px solid #2a1d14;
 		outline-offset: 3px;
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.wcblr-tix-btn .wp-block-button__link,
-		.wcblr-wa-btn .wp-block-button__link {
-			transition: background-color 0.18s ease, border-color 0.18s ease,
-				color 0.18s ease, box-shadow 0.18s ease,
-				transform 0.18s cubic-bezier(0.2, 0.6, 0.2, 1);
-		}
-
-		@media (hover: hover) and (pointer: fine) {
-			.wcblr-tix-btn .wp-block-button__link:hover,
-			.wcblr-wa-btn .wp-block-button__link:hover {
-				transform: translateY(-2px);
-			}
-		}
-
-		/* The press, and it needs to be written twice, because it is not the
-		   same gesture on the two kinds of device.
-
-		   With a pointer, the button is already lifted 2px when you press it,
-		   so the press is it settling back down: `translateY(0)`, not
-		   `transform: none`, so it animates through the same transition
-		   instead of snapping. */
-		@media (hover: hover) and (pointer: fine) {
-			.wcblr-tix-btn .wp-block-button__link:active,
-			.wcblr-wa-btn .wp-block-button__link:active {
-				transform: translateY(0);
-				transition-duration: 0.05s;
-			}
-		}
-
-		/* On touch there is no hover and therefore no lift to come back from,
-		   so the desktop rule above would resolve to `translateY(0)` against a
-		   resting `translateY(0)` and a tap would produce nothing at all. A
-		   phone is where most of this traffic is and the primary CTA is the
-		   thing being tapped, so it gets a real press of its own: a small
-		   inward scale, which is the gesture people already read as "this
-		   took". Fast, because a press that lingers reads as lag. */
-		@media (hover: none) {
-			.wcblr-tix-btn .wp-block-button__link:active,
-			.wcblr-wa-btn .wp-block-button__link:active {
-				transform: scale(0.96);
-				transition-duration: 0.06s;
-			}
-		}
 	}
 
 	/* Touch targets. 10px of padding on a 17px line is a 37px control, under

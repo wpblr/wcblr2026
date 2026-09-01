@@ -727,16 +727,23 @@ main:has(#tix) .wcblr-page-head {
 	font-family: "Hanken Grotesk", sans-serif;
 	font-size: 15px;
 	font-weight: 600;
-	background: #2a1d14;
+	background-color: #2a1d14;
 	color: #F2ECE0;
 	border: 0;
 	border-radius: 8px;
 	padding: 14px 34px;
 	width: auto;
 	cursor: pointer;
-	transition: opacity 0.15s;
+	/* An `input`, so the site-wide button wipe (content/_buttons.scss) does not
+	   reach it — it is not a `.wp-block-button__link`. Include the wipe here so
+	   it answers the pointer like every other button. Espresso ground, so the
+	   fill is crimson, matching the other form submits. */
+	@include wcblr-btn-wipe(#c8344b);
 }
-#tix input[type="submit"]:hover { opacity: 0.85; }
+#tix input[type="submit"]:hover,
+#tix input[type="submit"]:focus-visible {
+	@include wcblr-btn-wipe-hover;
+}
 /* CampTix ships `#tix .tix-submit .tix-checkout-button { padding: 7px;
    text-transform: uppercase }`, which is (1,2,0) and beats the rule above.
    Match its specificity rather than reaching for !important. */

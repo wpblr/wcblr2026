@@ -184,19 +184,25 @@ input[type="checkbox"] {
 	font-family: "Hanken Grotesk", sans-serif !important;
 	font-size: 15px !important;
 	font-weight: 600 !important;
-	background: #2a1d14 !important;
+	background-color: #2a1d14 !important;
 	color: #f2ece0 !important;
 	border: none !important;
 	border-radius: 8px !important;
 	padding: 14px 34px !important;
 	min-height: initial !important;
 	cursor: pointer;
-	transition: opacity 0.15s;
 	width: auto !important;
+	/* An espresso button, so the wipe reveals crimson rather than more espresso,
+	   which would be invisible — the footer subscribe button's move. `background-
+	   color` above, not the `background` shorthand, so it does not reset the
+	   gradient the mixin sets. */
+	@include wcblr-btn-wipe(#c8344b);
 }
 .wp-block-jetpack-contact-form .wp-block-button .wp-block-button__link:hover,
-.wp-block-jetpack-contact-form .wp-block-jetpack-button .wp-block-button__link:hover {
-	opacity: 0.85;
+.wp-block-jetpack-contact-form .wp-block-button .wp-block-button__link:focus-visible,
+.wp-block-jetpack-contact-form .wp-block-jetpack-button .wp-block-button__link:hover,
+.wp-block-jetpack-contact-form .wp-block-jetpack-button .wp-block-button__link:focus-visible {
+	@include wcblr-btn-wipe-hover;
 }
 /* Inline field error */
 .contact-form__input-error {

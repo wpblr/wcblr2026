@@ -501,10 +501,6 @@ footer {
 		border: 0 !important;
 		border-radius: 6px !important;
 		background-color: #2a1d14 !important;
-		background-image: linear-gradient(#c8344b, #c8344b);
-		background-repeat: no-repeat;
-		background-position: left center;
-		background-size: 0 100%;
 		color: #f7f3ea !important;
 		font-family: "JetBrains Mono", monospace !important;
 		font-size: 11px !important;
@@ -515,14 +511,11 @@ footer {
 		padding: 12px 18px !important;
 		margin: 0 !important;
 		white-space: nowrap;
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		button,
-		.wp-block-jetpack-subscriptions__button,
-		p > a {
-			transition: background-size 0.34s cubic-bezier(0.2, 0.6, 0.2, 1);
-		}
+		/* Espresso ground, so the wipe is crimson. Shared with every button on
+		   the site now (content/_buttons.scss via base/_mixins); the `!important`
+		   the mixin carries also keeps the site-wide default espresso wipe from
+		   painting over this one. */
+		@include wcblr-btn-wipe(#c8344b);
 	}
 
 	button:hover,
@@ -531,6 +524,6 @@ footer {
 	.wp-block-jetpack-subscriptions__button:focus-visible,
 	p > a:hover,
 	p > a:focus-visible {
-		background-size: 100% 100%;
+		@include wcblr-btn-wipe-hover;
 	}
 }
