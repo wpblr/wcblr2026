@@ -1,0 +1,50 @@
+/* ---- Shared button hover: the wipe --------------------------------------- */
+/*
+ * ONE button hover for the whole site: the fill the footer CTAs already use,
+ * lifted out so every button answers the pointer the same way. A gradient is
+ * sized from zero to full width, sweeping the fill left to right on the same
+ * duration and easing as the footer's closing CTAs and its nav underline. It
+ * replaces the lifts, halos and colour cross-fades the buttons used to carry
+ * one per surface.
+ *
+ * IT HAS TO BE A GRADIENT, not a colour or a pseudo-element, and that is not a
+ * stylistic choice: the remote CSS pipeline strips `url()` from every property
+ * but leaves gradients intact, and a gradient painted on top of the button's
+ * own resting `background-color` needs nothing layered, positioned or clipped.
+ * The reasoning is recorded in full against the footer CTAs in layout/_footer.
+ *
+ * `$fill` is the colour the wipe reveals. Espresso on a light ground (the
+ * footer CTAs' choice, and the site default); pass a light fill for a button
+ * that sits on a dark band, where espresso would sweep in invisibly.
+ *
+ * Everything is `!important` because block attributes write a button's colour,
+ * background and border inline, and this has to paint over them. The rest of
+ * this stylesheet is `!important` throughout for the same reason.
+ *
+ * Movement is gated on `prefers-reduced-motion`: a reader who asked for less
+ * gets the fill at full width instead of a sweep, never no affordance at all.
+ */
+
+$wcblr-btn-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+$wcblr-btn-dur: 0.34s;
+$wcblr-btn-fill: #2a1d14; /* espresso, the footer CTAs' fill */
+$wcblr-btn-ink: #f7f3ea; /* cream label the fill reveals */
+
+@mixin wcblr-btn-wipe($fill: $wcblr-btn-fill) {
+	background-image: linear-gradient($fill, $fill) !important;
+	background-repeat: no-repeat !important;
+	background-position: left center !important;
+	background-size: 0 100% !important;
+	transition: color 0.2s ease !important;
+
+	@media (prefers-reduced-motion: no-preference) {
+		transition:
+			color 0.2s ease,
+			background-size $wcblr-btn-dur $wcblr-btn-ease !important;
+	}
+}
+
+@mixin wcblr-btn-wipe-hover($ink: $wcblr-btn-ink) {
+	background-size: 100% 100% !important;
+	color: $ink !important;
+}

@@ -11,6 +11,9 @@
    ========================================================================= */
 
 // ── Base ────────────────────────────────────────────────────────────────────
+// Mixins first: shared helpers only, emits no CSS, so it does not touch the
+// cascade the note above asks to preserve.
+@import "base/mixins";
 @import "base/root";
 
 // ── Layout — header ─────────────────────────────────────────────────────────
@@ -98,3 +101,7 @@
 // ── Pages ───────────────────────────────────────────────────────────────────
 @import "pages/404";
 @import "pages/coming-soon";
+
+// ── Buttons — one hover for all of them, last so its bare-class default sits
+//    at the end of the cascade and its surface hooks win on specificity ──────
+@import "content/buttons";

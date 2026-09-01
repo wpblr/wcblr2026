@@ -178,71 +178,11 @@ body.home .wp-block-columns:has(.wcblr-live) > .wp-block-column {
 }
 
 /* ---- 4. The buttons -----------------------------------------------------
-   `Get Directions` and `Learn more about BLR` are the two solid buttons in the
-   body of this page and neither answered the pointer. They take the header
-   pair's treatment so a button behaves the same wherever it appears: a halo in
-   the button's own colour, a 2px lift, and a press that settles it back down.
-
-   The halo is espresso at low alpha rather than each button's own colour, and
-   that is the opposite of the choice made in the header. There the two buttons
-   are known, fixed and adjacent, so a crimson glow and a green one read as a
-   pair. Here the selector catches every button in the page body, crimson and
-   gold today and whatever gets added later, and a shared colour glow would be
-   wrong under half of them. A neutral shadow is right under all of them. */
-body.home main .wp-element-button {
-	transition:
-		box-shadow 0.18s ease,
-		background-color 0.18s ease;
-}
-
-@media (hover: hover) and (pointer: fine) {
-	body.home main .wp-element-button:hover {
-		box-shadow: 0 6px 18px rgba(42, 29, 20, 0.18);
-	}
-
-	/* The selector above catches all five buttons in the page body, and two of
-	   them are inside the hero stub, on espresso. An espresso shadow under a
-	   button on an espresso panel is invisible at best; `sections/_ticket-stub`
-	   already gives those two their own states, written for a dark ground, and
-	   this file is imported after it, so the halo has to be handed back
-	   explicitly rather than just not set. */
-	body.home main .wcblr-stub .wp-element-button:hover {
-		box-shadow: none;
-	}
-
-	body.home main .wcblr-stub__buy .wp-element-button:hover {
-		box-shadow: 0 0 0 2px rgba(242, 236, 224, 0.45);
-	}
-}
-
-@media (prefers-reduced-motion: no-preference) {
-	body.home main .wp-element-button {
-		transition:
-			box-shadow 0.18s ease,
-			background-color 0.18s ease,
-			transform 0.18s cubic-bezier(0.2, 0.6, 0.2, 1);
-	}
-
-	@media (hover: hover) and (pointer: fine) {
-		body.home main .wp-element-button:hover {
-			transform: translateY(-2px);
-		}
-
-		body.home main .wp-element-button:active {
-			transform: translateY(0);
-			transition-duration: 0.05s;
-		}
-	}
-
-	/* No lift to settle back from on touch, so the press is its own gesture.
-	   Same split as the header CTAs. */
-	@media (hover: none) {
-		body.home main .wp-element-button:active {
-			transform: scale(0.97);
-			transition-duration: 0.06s;
-		}
-	}
-}
+   The buttons in this page body used to take a halo, a lift and a press here.
+   Every button on the site now shares one hover, the wipe in
+   content/_buttons.scss, so this whole layer is gone: the general buttons get
+   the espresso wipe and the two inside the hero stub get the stub's cream one,
+   both from that one file, and nothing home-specific is needed. */
 
 /* ---- 5. Photographs zoom, cards lift, logos do neither -------------------
    One rule for the whole page, so the response tells you what kind of thing
@@ -660,9 +600,19 @@ body.home .wcblr-about-actions .wp-block-buttons {
 	flex: 0 0 auto;
 }
 
+/* "Read the full story" is a solid espresso button, so the site-wide espresso
+   wipe would sweep in invisibly. Give it the crimson fill instead, the same
+   move the footer subscribe button and the form submits make. `background-color`
+   stays espresso on hover so the crimson gradient wipes over espresso, not over
+   the old lighter cross-fade this used to run. */
+body.home .wcblr-about-actions .wp-block-button__link {
+	@include wcblr-btn-wipe(#c8344b);
+}
+
 body.home .wcblr-about-actions .wp-block-button__link:hover,
 body.home .wcblr-about-actions .wp-block-button__link:focus-visible {
-	background-color: #453729 !important;
+	background-color: #2a1d14 !important;
+	@include wcblr-btn-wipe-hover;
 }
 
 /* The ticket link is a rule the text sits on, drawn with a border rather than

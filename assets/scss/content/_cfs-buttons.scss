@@ -1,85 +1,33 @@
 /* =============================================================
-   WCBLR — button hover and focus states
-   Colour, size and spacing live in the block attributes. This
-   file exists only for what blocks cannot express: :hover and
-   :focus-visible.
+   WCBLR — outline-button resting fix
+   The hover itself now lives in content/_buttons.scss, one wipe
+   for every button on the site. What stays here is the resting
+   state those wipes depend on: an outline button has to actually
+   be transparent, or the gradient has nothing to sweep over.
 
    Both hooks go on the wp:buttons wrapper:
      wcblr-hero-cta     buttons on a dark band (hero, closing CTA)
      wcblr-btn-onlight  outline buttons on the cream page
    ============================================================= */
 
-.wcblr-hero-cta .wp-block-button__link {
-	transition: background-color 0.18s ease, border-color 0.18s ease,
-		color 0.18s ease, box-shadow 0.18s ease;
-}
-
-/* THE RESTING STATE, and it is the same bug `wcblr-btn-onlight` was written to
-   fix, one surface over. Core's outline reset lives inside `:where()`, so it
-   computes to (0,1,0); the theme's global `background-color: var(--accent-1)`
-   lands at the same (0,1,0) later in the document and wins on source order.
-   Nothing about that depends on what is behind the button, so an
-   `is-style-outline` button on a DARK band was shipping crimson too, and the
-   hover rule below has always assumed it was transparent. Caught on the
-   media partners page, 17 August 2026, where "Get directions" rendered as a
-   solid crimson fill beside its own cream border.
-
-   This also corrects the outline button in every existing CTA band and call
-   hero, which is the point: they were all drawing the same fill. */
-.wcblr-hero-cta .is-style-outline .wp-block-button__link {
-	background-color: transparent !important;
-}
-
-/* Outline button: faint on the dark hero until you point at it, then it
-   fills with cream and flips to dark text. !important because the block
-   writes colour and border-colour as inline styles. */
-.wcblr-hero-cta .is-style-outline .wp-block-button__link:hover,
-.wcblr-hero-cta .is-style-outline .wp-block-button__link:focus-visible {
-	background-color: #f2ece0 !important;
-	border-color: #f2ece0 !important;
-	color: #2a1d14 !important;
-}
-
-/* Solid red button: a cream halo, so both buttons answer to the pointer. */
-.wcblr-hero-cta .wp-block-button:not(.is-style-outline) .wp-block-button__link:hover,
-.wcblr-hero-cta .wp-block-button:not(.is-style-outline) .wp-block-button__link:focus-visible {
-	box-shadow: 0 0 0 2px rgba(242, 236, 224, 0.4);
-}
-
-/* ---- Outline buttons on the cream page ---------------------------------- */
-/* The dark-band rules above would fill these cream on cream, so they get their
-   own inversion: espresso fill, cream text. */
-.wcblr-btn-onlight .wp-block-button__link {
-	transition: background-color 0.18s ease, border-color 0.18s ease,
-		color 0.18s ease;
-}
-
-/* THE RESTING STATE, and it is not decoration.
-   Core ships the outline reset as
+/* THE RESTING STATE, and it is not decoration. Core ships the outline reset as
    `:root :where(.wp-block-button.is-style-outline > .wp-block-button__link)
    { background-color: initial }`, which is specificity (0,1,0) because
    everything inside `:where()` counts as zero. The theme's global styles then
    ship `:root :where(.wp-block-button .wp-block-button__link)
    { background-color: var(--accent-1) }` at the SAME (0,1,0), later in the
-   document. Source order breaks the tie and the outline style loses.
+   document. Source order breaks the tie and the outline style loses, so an
+   `is-style-outline` button ships a crimson fill instead of a transparent one.
 
-   Measured on the live site, not inferred: an `is-style-outline` button
-   injected into /2026/sponsors/ computes to background rgb(205,38,83) with the
-   block's own inline colour rgb(42,29,20) on top of it. That is espresso text
-   on crimson, about 2.8:1, and it is the state every outline button on a cream
-   page has been shipping in.
+   Measured on the live site, not inferred: an outline button injected into
+   /2026/sponsors/ computed to background rgb(205,38,83). The wipe assumes a
+   transparent ground; without this it would sweep espresso over crimson rather
+   than over the page. Scoped to the two helper classes rather than to
+   `.is-style-outline`, so pages that never opted in do not move.
 
-   The hover rule below has always assumed a transparent resting state; without
-   this it was flipping a crimson button to an espresso one. Scoped to the
-   helper class rather than to `.is-style-outline`, so pages that never opted in
-   do not move. */
+   Caught first on the media partners page, 17 August 2026, where "Get
+   directions" rendered as a solid crimson fill beside its own cream border. */
+.wcblr-hero-cta .is-style-outline .wp-block-button__link,
 .wcblr-btn-onlight .is-style-outline .wp-block-button__link {
 	background-color: transparent !important;
-}
-
-.wcblr-btn-onlight .is-style-outline .wp-block-button__link:hover,
-.wcblr-btn-onlight .is-style-outline .wp-block-button__link:focus-visible {
-	background-color: #2a1d14 !important;
-	border-color: #2a1d14 !important;
-	color: #f2ece0 !important;
 }

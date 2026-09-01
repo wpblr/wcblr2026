@@ -297,10 +297,6 @@
 	.wcblr-motion .wcblr-statcard:hover,
 	.wcblr-motion .wcblr-tba:hover { transform: translateY(-2px); }
 
-	/* The one primary action on the page. */
-	.wcblr-motion .wp-block-button__link {
-		transition: transform 0.18s cubic-bezier(0.2, 0.6, 0.2, 1);
-	}
-	.wcblr-motion .wp-block-button__link:hover { transform: translateY(-2px); }
-	.wcblr-motion .wp-block-button__link:active { transform: none; }
+	/* Buttons used to lift here; they take the site-wide wipe now, from
+	   content/_buttons.scss, so nothing button-specific is left in this layer. */
 }
