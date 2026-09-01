@@ -6,6 +6,11 @@
 	backdrop-filter: blur(8px);
 	-webkit-backdrop-filter: blur(8px);
 
+	/* Undo Twenty Twenty-Five’s submenu item gap. */
+	.wp-block-navigation .wp-block-navigation-submenu .wp-block-navigation-item:not(:last-child) {
+		margin-bottom: 0;
+	}
+
 	/* ---- Nav submenu (desktop dropdown only) --------------------------- */
 	@media (min-width: 601px) {
 		.wp-block-navigation-item {
