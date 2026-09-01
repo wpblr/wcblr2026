@@ -12,6 +12,22 @@
 			position: relative;
 		}
 
+		/* Bridge the 12px gap between a top-level item and its flyout so the
+		   submenu doesn't close as the pointer crosses it. It lives on the <li>
+		   rather than inside the panel because the panel now clips its own
+		   overflow (see the corner note below) — a bridge inside it would be
+		   clipped away with everything else. Kept to the toggle's own width and
+		   left un-raised, so it never overlaps, or swallows a click on, the
+		   ticket button sitting just to the right of "Community". */
+		.wp-block-navigation-item.has-child::after {
+			content: "";
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			height: 14px;
+		}
+
 		.wp-block-navigation__submenu-container {
 			position: absolute !important;
 			left: 0 !important;
@@ -19,14 +35,20 @@
 			border-radius: 10px !important;
 			border: 1.5px solid rgba(42, 29, 20, 0.1) !important;
 			box-shadow: 0 8px 24px rgba(42, 29, 20, 0.1) !important;
-			overflow: visible !important;
+			/* Clip the rows to the panel's rounded shape. The translucent hover
+			   highlight is a separate box behind the border; rounding its own
+			   corners to sit "concentric" with the panel left a hairline of the
+			   cream panel showing through at the top/bottom corners, because two
+			   independently-rasterised arcs never line up to the pixel. Letting
+			   the panel clip square-cornered rows removes the second arc entirely,
+			   so the fill meets the curve cleanly. The hover bridge that used to
+			   live in here (as ::before) moved onto the parent <li> above, since
+			   this now clips its own overflow. */
+			overflow: hidden !important;
 			background: #fbf8f1 !important;
 			/* No padding: the hover highlight has to reach the panel's inner
 			   edge or it reads as a small pill floating in a bigger box rather
-			   than a menu row. The items carry their own padding instead, and
-			   the first/last ones round their outer corners to sit inside the
-			   panel's radius (overflow stays visible for the ::before hover
-			   bridge above, so the panel cannot clip them for us). */
+			   than a menu row. The items carry their own padding instead. */
 			padding: 0 !important;
 			/* 170px is a floor, not the width. The items carry
 			   `width: 100% !important`, which makes the panel's shrink-to-fit
@@ -39,16 +61,6 @@
 			   People and Community are unchanged. */
 			width: max-content !important;
 			min-width: 170px !important;
-
-			/* Bridge the 12px gap so hover isn't lost crossing it */
-			&::before {
-				content: "";
-				position: absolute;
-				top: -12px;
-				left: 0;
-				right: 0;
-				height: 12px;
-			}
 
 			/* Core makes every nav item a flex container, so the link becomes a
 			   flex item and shrinks to its own text. The panel is as wide as
@@ -74,20 +86,6 @@
 					background 0.15s,
 					color 0.15s;
 				white-space: nowrap;
-			}
-
-			/* 8.5px, not 10px: the panel's radius minus its own 1.5px border,
-			   so the highlight's corner sits concentric with the panel's. */
-			.wp-block-navigation-item:first-child
-				.wp-block-navigation-item__content {
-				border-top-left-radius: 8.5px;
-				border-top-right-radius: 8.5px;
-			}
-
-			.wp-block-navigation-item:last-child
-				.wp-block-navigation-item__content {
-				border-bottom-left-radius: 8.5px;
-				border-bottom-right-radius: 8.5px;
 			}
 
 			.wp-block-navigation-item:not(:last-child) {
