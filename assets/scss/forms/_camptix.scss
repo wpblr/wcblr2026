@@ -1073,15 +1073,22 @@ main:has(#tix) .wcblr-page-head {
 	input[type="submit"][name="tix_coupon_submit"] {
 		display: inline-block;
 		width: auto;
-		background: transparent;
+		background-color: transparent;
 		border: 1.5px solid rgba(242, 236, 224, 0.35);
 		color: #F2ECE0;
 		padding: 11px 18px;
 		font-size: 14px;
+
+		/* Cream, not the crimson the other submits take: this is the secondary
+		   control in the card and the note above is explicit that a second red
+		   button here would read as a second primary action. Cream on espresso
+		   is what "Read the FAQ" — the other secondary on this page — does. */
+		@include wcblr-btn-wipe(#f2ece0);
 	}
-	input[type="submit"][name="tix_coupon_submit"]:hover {
-		background: rgba(242, 236, 224, 0.08);
+	input[type="submit"][name="tix_coupon_submit"]:hover,
+	input[type="submit"][name="tix_coupon_submit"]:focus-visible {
 		border-color: rgba(242, 236, 224, 0.6);
+		@include wcblr-btn-wipe-hover(#2a1d14);
 	}
 	/* "Coupon Applied: NAME, 20% discount", once one is in play */
 	.tix-row-coupon strong { color: #e0a526; font-weight: 500; }
@@ -1364,13 +1371,25 @@ main:has(#tix) .wcblr-page-head {
 	input[type="submit"] {
 		display: block;
 		width: 100%;
-		background: #C8344B;
+		/* `background-color`, not the `background` shorthand: the shorthand
+		   resets `background-image` and the wipe below is a gradient. */
+		background-color: #C8344B;
 		color: #fff;
 		border-radius: 8px;
 		padding: 17px 28px;
 		font-size: 17px;
+
+		/* Crimson sitting on the card's espresso ground, so the site default
+		   espresso fill sweeps in almost invisibly — the button reads as
+		   pulsing rather than filling, which is what it was reported as. Cream
+		   instead: the same move the crimson "Get your ticket" CTA makes
+		   further down this page, on the same espresso ground. */
+		@include wcblr-btn-wipe(#f2ece0);
 	}
-	input[type="submit"]:hover { background: #a12339; opacity: 1; }
+	input[type="submit"]:hover,
+	input[type="submit"]:focus-visible {
+		@include wcblr-btn-wipe-hover(#2a1d14);
+	}
 
 	/* What is in the box, under the button that buys it. Four words, the four
 	   things somebody weighing \u20b9600 actually wants named, and all four are on

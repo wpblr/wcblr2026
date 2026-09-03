@@ -28,6 +28,52 @@
 	@include wcblr-btn-wipe-hover;
 }
 
+/* ---- A button that is already espresso cannot wipe espresso --------------- */
+/*
+ * The default fill above is espresso, and a button whose own resting colour is
+ * espresso therefore fills with the colour it already is: the wipe runs, the
+ * label shifts from white to cream, and nothing else moves. It reads as a
+ * flicker rather than a fill — reported on the tickets page as "pulses but
+ * shows the same colour", and true of every espresso button on the site.
+ *
+ * A button's colour is written by block attributes as an inline style, so no
+ * class marks these and there is nothing in the cascade to hook. The inline
+ * style itself is the hook: match the declaration WordPress serialises. That
+ * catches every espresso button already on the site and any added later,
+ * rather than needing a hand-written override each time one appears.
+ *
+ * Crimson is the fill, the same swap the other espresso-resting buttons make
+ * (footer subscribe, the contact submit, the CampTix submits) — all of which
+ * sit on a light ground, as these do.
+ *
+ * Placed above the dark-ground hooks deliberately: both are (0,2,0), so an
+ * espresso button that does sit on a dark band takes the cream fill from the
+ * rule below on source order, which is the right answer there.
+ */
+.wp-block-button__link[style*="background-color:#2a1d14"],
+.wp-block-button__link[style*="background-color: #2a1d14"],
+.wp-block-button__link[style*="background-color:#2A1D14"],
+.wp-element-button[style*="background-color:#2a1d14"],
+.wp-element-button[style*="background-color: #2a1d14"],
+.wp-element-button[style*="background-color:#2A1D14"] {
+	@include wcblr-btn-wipe(#c8344b);
+}
+
+.wp-block-button__link[style*="background-color:#2a1d14"]:hover,
+.wp-block-button__link[style*="background-color:#2a1d14"]:focus-visible,
+.wp-block-button__link[style*="background-color: #2a1d14"]:hover,
+.wp-block-button__link[style*="background-color: #2a1d14"]:focus-visible,
+.wp-block-button__link[style*="background-color:#2A1D14"]:hover,
+.wp-block-button__link[style*="background-color:#2A1D14"]:focus-visible,
+.wp-element-button[style*="background-color:#2a1d14"]:hover,
+.wp-element-button[style*="background-color:#2a1d14"]:focus-visible,
+.wp-element-button[style*="background-color: #2a1d14"]:hover,
+.wp-element-button[style*="background-color: #2a1d14"]:focus-visible,
+.wp-element-button[style*="background-color:#2A1D14"]:hover,
+.wp-element-button[style*="background-color:#2A1D14"]:focus-visible {
+	@include wcblr-btn-wipe-hover;
+}
+
 /* ---- Dark grounds take a light fill -------------------------------------- */
 /*
  * Espresso would wipe in invisibly on a dark band, so these fill cream and flip
