@@ -36,10 +36,14 @@
  * flicker rather than a fill — reported on the tickets page as "pulses but
  * shows the same colour", and true of every espresso button on the site.
  *
- * A button's colour is written by block attributes as an inline style, so no
- * class marks these and there is nothing in the cascade to hook. The inline
- * style itself is the hook: match the declaration WordPress serialises. That
- * catches every espresso button already on the site and any added later,
+ * A button's colour is written by block attributes, in one of two forms, and
+ * neither leaves a class that means "this button is dark":
+ *   - a custom colour lands as an inline style, so the serialised declaration
+ *     is the hook — `[style*="background-color:#2a1d14"]`, site espresso;
+ *   - a palette colour lands as a theme class, so the class is the hook —
+ *     `.has-contrast-background-color`, which is Twenty Twenty-Five's near
+ *     black (#111111) and just as invisible under an espresso fill.
+ * Matching both catches every dark button on the site and any added later,
  * rather than needing a hand-written override each time one appears.
  *
  * Crimson is the fill, the same swap the other espresso-resting buttons make
@@ -53,9 +57,11 @@
 .wp-block-button__link[style*="background-color:#2a1d14"],
 .wp-block-button__link[style*="background-color: #2a1d14"],
 .wp-block-button__link[style*="background-color:#2A1D14"],
+.wp-block-button__link.has-contrast-background-color,
 .wp-element-button[style*="background-color:#2a1d14"],
 .wp-element-button[style*="background-color: #2a1d14"],
-.wp-element-button[style*="background-color:#2A1D14"] {
+.wp-element-button[style*="background-color:#2A1D14"],
+.wp-element-button.has-contrast-background-color {
 	@include wcblr-btn-wipe(#c8344b);
 }
 
@@ -70,7 +76,11 @@
 .wp-element-button[style*="background-color: #2a1d14"]:hover,
 .wp-element-button[style*="background-color: #2a1d14"]:focus-visible,
 .wp-element-button[style*="background-color:#2A1D14"]:hover,
-.wp-element-button[style*="background-color:#2A1D14"]:focus-visible {
+.wp-element-button[style*="background-color:#2A1D14"]:focus-visible,
+.wp-block-button__link.has-contrast-background-color:hover,
+.wp-block-button__link.has-contrast-background-color:focus-visible,
+.wp-element-button.has-contrast-background-color:hover,
+.wp-element-button.has-contrast-background-color:focus-visible {
 	@include wcblr-btn-wipe-hover;
 }
 

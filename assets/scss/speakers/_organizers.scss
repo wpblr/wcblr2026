@@ -151,16 +151,20 @@
 .wcblr-org-card__more {
 	margin: 14px 0 0 !important;
 }
+/* The underline wipe, not an opacity fade: this is the one link on the card
+   and dimming it on hover marks it by making it harder to read. Same gesture
+   as the header nav and the footer venue link. */
 .wcblr-org-card__more a {
 	color: #cd2653;
 	text-decoration: none;
-	transition: opacity 0.15s;
+	@include wcblr-link-wipe-rest;
 }
 .wcblr-org-card__more a::after {
 	content: " \2192";
 }
-.wcblr-org-card__more a:hover {
-	opacity: 0.65;
+.wcblr-org-card__more a:hover,
+.wcblr-org-card__more a:focus-visible {
+	@include wcblr-link-wipe-hover;
 }
 
 @media (max-width: 600px) {

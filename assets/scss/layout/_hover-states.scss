@@ -43,11 +43,36 @@
 $wcblr-hover-ink: #c8344b; /* the header flyout's existing hover colour */
 $wcblr-hover-ease: cubic-bezier(0.2, 0.6, 0.2, 1); /* the footer social row's */
 
-@mixin wcblr-link-wipe {
-	background-image: linear-gradient($wcblr-hover-ink, $wcblr-hover-ink);
+@mixin wcblr-link-wipe($color: $wcblr-hover-ink) {
+	background-image: linear-gradient($color, $color);
 	background-repeat: no-repeat;
 	background-origin: content-box;
 	background-position: 0 100%;
+	background-size: 100% 1.5px;
+}
+
+/* The full resting state, for links outside the two nav bars that want this
+   same gesture — the sponsors CTA, the organizer cards' "Read profile". The
+   nav rules above spell it out inline instead, because they set it once for
+   two selectors and then override the colour per variant; these callers want
+   the whole thing in one line. Pass a colour, or let it take the crimson.
+   `currentColor` is a valid argument and is how the sponsor tiers keep their
+   own colour without naming it four times. */
+@mixin wcblr-link-wipe-rest($color: $wcblr-hover-ink) {
+	@include wcblr-link-wipe($color);
+	/* Sized to zero for the same reason as the nav: one property to animate,
+	   and nothing that can flash at full width on a slow first paint. */
+	background-size: 0 1.5px;
+	transition: color 0.18s ease;
+
+	@media (prefers-reduced-motion: no-preference) {
+		transition:
+			color 0.18s ease,
+			background-size 0.3s $wcblr-hover-ease;
+	}
+}
+
+@mixin wcblr-link-wipe-hover {
 	background-size: 100% 1.5px;
 }
 
