@@ -19,11 +19,15 @@
 .wcblr-become-sponsor a {
 	font-size: 17px;
 	font-weight: 500;
-	text-decoration: none !important;
 	color: currentColor !important;
+	@include wcblr-link-wipe-rest(currentColor);
+	text-decoration: none !important;
 }
-.wcblr-become-sponsor a:hover {
-	opacity: 0.75;
+/* The underline wipe rather than an opacity fade, matching the other links on
+   the page. `currentColor` so it picks up whichever tier colour cascades in. */
+.wcblr-become-sponsor a:hover,
+.wcblr-become-sponsor a:focus-visible {
+	@include wcblr-link-wipe-hover;
 }
 
 /* Tier colour set on the section cascades to both tier-label and CTA box */
@@ -31,13 +35,19 @@
 .t-plat .tier-label {
 	color: #2a1d14;
 }
+/* Gold and silver were #a8760f and #8c7e6f. Both are text colours — the tier
+   label's 18px/600 sits under the large-text threshold, and the CTA inside the
+   box is 17px — and both missed AA on the cream ground (3.76 and 3.72 against
+   #fbf8f1). Darkened just far enough to clear 4.5 while holding the hue: gold
+   now 5.27, silver 5.07. Silver lands on #7a6757, already the site's muted
+   prose brown, so it is one colour fewer rather than one more. */
 .t-gold .wcblr-become-sponsor,
 .t-gold .tier-label {
-	color: #a8760f;
+	color: #8a600c;
 }
 .t-silver .wcblr-become-sponsor,
 .t-silver .tier-label {
-	color: #8c7e6f;
+	color: #7a6757;
 }
 .t-comm .wcblr-become-sponsor,
 .t-comm .tier-label {

@@ -58,11 +58,17 @@
 .t-plat {
 	color: #2a1d14;
 }
+/* Gold and silver were #a8760f and #8c7e6f. Both are text colours — the tier
+   label's 18px/600 sits under the large-text threshold, and the CTA inside the
+   box is 17px — and both missed AA on the cream ground (3.76 and 3.72 against
+   #fbf8f1). Darkened just far enough to clear 4.5 while holding the hue: gold
+   now 5.27, silver 5.07. Silver lands on #7a6757, already the site's muted
+   prose brown, so it is one colour fewer rather than one more. */
 .t-gold {
-	color: #a8760f;
+	color: #8a600c;
 }
 .t-silver {
-	color: #8c7e6f;
+	color: #7a6757;
 }
 .t-comm {
 	color: #136451;
