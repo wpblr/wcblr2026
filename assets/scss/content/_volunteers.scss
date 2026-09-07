@@ -1,0 +1,192 @@
+/* ---- Call for Volunteers -------------------------------------------------
+   The four things that post's design asks for and that blocks cannot express.
+   Everything else on the page (the day pair, the ten team cards, the deal
+   columns, the five-stop strip, the form) is built from block attributes and
+   needs nothing here.
+
+   Scoped to `.wcblr-vol` on the post wrapper, which nothing else carries. The
+   post also opts into `wcblr-guide`, for the 46px `h2` that survives
+   `_post-page.scss`'s `25px !important` and for `.wcblr-sechead`, the
+   heading-left / lead-right section head the design uses in six places and
+   which `_ticket-panel.scss` already owns.                                  */
+
+/* ---- What the guide layer gives that this design does not want -----------
+   Two things, both deliberate in `_guide.scss` and both absent from the
+   mockup. Overriding them here is cheaper and safer than not opting in and
+   re-deriving the heading size, the panel and the section head. */
+
+/* The eyebrow's own hairline. Every other long-form page rules off its
+   sections with it; this one separates them with air instead, and a rule
+   running out of `// teams` on a page whose sections are already whole cards
+   reads as a second divider on top of the card edge. */
+.wcblr-vol .wcblr-sec + .wcblr-sec > .wcblr-eyebrow::after {
+	content: none;
+}
+
+/* 78px is the article gap, set for sections that are prose. This page's
+   sections are objects: a pair of cards, a grid of ten, a five-stop strip.
+   They need the extra air to read as separate objects rather than as one
+   long stack of chrome. Measured off the mockup at its own width. */
+.wcblr-vol .wcblr-sec + .wcblr-sec {
+	margin-top: 104px !important;
+}
+
+/* ---- The questions ------------------------------------------------------
+   `core/details`, so it is keyboard operable and screen-reader announced for
+   free and needs no JavaScript, which post content cannot carry anyway. The
+   native marker is a triangle on the left; the design puts a crimson `+` on
+   the right that becomes a minus when the row is open.
+
+   Same approach as `.wcblr-slot` and `.wcblr-idx` in `_guide.scss`: hide the
+   marker two ways, because `list-style: none` alone leaves the WebKit
+   pseudo-element in place, then draw the sign in `::after`. `content` is one
+   of the properties the Remote CSS sanitiser keeps, checked against the
+   served stylesheet rather than assumed. */
+.wcblr-vol .wcblr-vol-faq > summary {
+	list-style: none;
+	cursor: pointer;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 28px;
+	font-family: Fraunces, serif;
+	font-size: 21px;
+	font-weight: 500;
+	line-height: 1.3;
+	color: #2a1d14;
+}
+
+.wcblr-vol .wcblr-vol-faq > summary::-webkit-details-marker { display: none; }
+
+.wcblr-vol .wcblr-vol-faq > summary::after {
+	content: "+";
+	flex: 0 0 auto;
+	font-family: "JetBrains Mono", monospace;
+	font-size: 22px;
+	font-weight: 400;
+	line-height: 1.1;
+	color: #C8344B;
+	transition: color 0.18s ease;
+}
+
+/* U+2212, the minus sign, not a hyphen: at 22px mono a hyphen sits high and
+   short and reads as a dash rather than as the other half of the pair. */
+.wcblr-vol .wcblr-vol-faq[open] > summary::after { content: "\2212"; }
+
+.wcblr-vol .wcblr-vol-faq > summary:hover { color: #C8344B; }
+
+.wcblr-vol .wcblr-vol-faq > summary:focus-visible {
+	outline: 2px solid #C8344B;
+	outline-offset: 4px;
+	border-radius: 4px;
+}
+
+/* The open row draws a rule under its question, so the answer reads as
+   belonging to it rather than as loose copy inside a card. */
+.wcblr-vol .wcblr-vol-faq[open] > summary {
+	padding-bottom: 16px;
+	border-bottom: 1px solid #e3ded4;
+}
+
+/* ---- The diamond bullets ------------------------------------------------
+   Three lists on the page carry a small gold lozenge instead of a disc: the
+   four things a volunteer gets, and the two notes beside the form. Core has
+   no marker colour, and `::marker` takes a colour but not a shape at the size
+   this needs, so the list drops its markers and draws its own. */
+.wcblr-vol .wcblr-vol-dia {
+	list-style: none;
+	padding-left: 0;
+}
+
+.wcblr-vol .wcblr-vol-dia > li {
+	position: relative;
+	padding-left: 30px;
+}
+
+.wcblr-vol .wcblr-vol-dia > li::before {
+	content: "\25C6";
+	position: absolute;
+	left: 0;
+	top: 0.05em;
+	font-size: 13px;
+	line-height: 1.5;
+	color: #E0A526;
+}
+
+/* On cream the bright gold is 1.86:1 and unusable as text. As a 13px lozenge
+   carrying no meaning of its own it is decoration, but it still has to be
+   seen, so the light rows take the deep gold instead. */
+.wcblr-vol .wcblr-vol-dia-ink > li::before { color: #a8760f; }
+
+/* ---- The deadline band --------------------------------------------------
+   The date set as an outline behind the band's own copy, the way the mockup
+   draws it. Not an image: `url()` is emptied by the sanitiser in every
+   property tested, so anything that has to be a shape here has to be type or
+   a border.
+
+   `-webkit-text-stroke` is the only route CSS has to outlined type. If it
+   were ever stripped the fill is already transparent, so the failure is an
+   invisible watermark rather than a slab of solid gold across the copy. */
+.wcblr-vol .wcblr-vol-deadline {
+	position: relative;
+	overflow: hidden;
+}
+
+.wcblr-vol .wcblr-vol-deadline > * {
+	position: relative;
+	z-index: 1;
+}
+
+.wcblr-vol .wcblr-vol-deadline::after {
+	content: "15.10";
+	position: absolute;
+	right: 34px;
+	top: 50%;
+	transform: translateY(-50%);
+	font-family: Fraunces, serif;
+	font-size: 96px;
+	font-weight: 600;
+	line-height: 1;
+	letter-spacing: -0.02em;
+	color: transparent;
+	-webkit-text-stroke: 2px rgba(224, 165, 38, 0.42);
+	pointer-events: none;
+	z-index: 0;
+}
+
+/* The band's own copy stops short of the watermark. Without this the heading
+   runs the full width and the outline sits on top of the last three words,
+   which is what the first render did. */
+.wcblr-vol .wcblr-vol-deadline > * {
+	max-width: 72%;
+}
+
+/* Below the point where the band's own heading needs the full width, the
+   watermark is behind the words rather than beside them. */
+@media (max-width: 1000px) {
+	.wcblr-vol .wcblr-vol-deadline::after { display: none; }
+	.wcblr-vol .wcblr-vol-deadline > * { max-width: none; }
+}
+
+/* ---- The five stops between the form and the weekend --------------------
+   One strip, not five cards: the columns carry the dividers as left hairlines
+   and the wrapper carries the surface, so the row reads as a single object
+   with the last stop inked. `overflow: hidden` is what lets the dark fifth
+   column meet the wrapper's rounded corner; the wrapper holds no captioned
+   figure, so the block formatting context it starts costs nothing here. */
+.wcblr-vol .wcblr-vol-tl {
+	overflow: hidden;
+}
+
+/* Core stacks columns below 782px. A vertical hairline down the left of a
+   stacked card is a rule pointing the wrong way, so it becomes the rule
+   between one stop and the next. */
+@media (max-width: 781px) {
+	.wcblr-vol .wcblr-vol-tl .wp-block-column {
+		border-left: 0 !important;
+		border-top: 1px solid #e3ded4 !important;
+	}
+	.wcblr-vol .wcblr-vol-tl .wp-block-column:first-child {
+		border-top: 0 !important;
+	}
+}
