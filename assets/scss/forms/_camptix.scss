@@ -1233,6 +1233,45 @@ main:has(#tix) .wcblr-page-head {
 		gap: 9px;
 		align-self: start;
 	}
+
+	/* Between 782px, where the copy column and the ticket card go side by
+	   side, and about 1230px, the card's 42% share of the page is not wide
+	   enough to hold the 42px price beside the quantity control on one line.
+	   CampTix's own `overflow-wrap: break-word` (set on `#tix` in its plugin
+	   CSS) then does exactly what it is told and breaks the price mid-number
+	   ("₹2,50" / "0.00") rather than overflowing it. Verified against the
+	   rendered page at a range of widths in this band: the price needs about
+	   223px on the widest ticket (Friend of #WCBLR, ₹2,500.00) and the shared
+	   column only has 138-228px of it once the quantity control's own column
+	   is taken out.
+	   Below 782px the row is full width (the two-column block itself has
+	   stacked), and above 1230px 42% of the page is wide enough on its own,
+	   so both ends of this range already give the price the room it needs.
+	   Spanning both grid columns for the price AND the quantity control, one
+	   below the other, gives the price the row's full width instead of the
+	   half it shares with the control — the same room it already has outside
+	   this band. */
+	@media (min-width: 782px) and (max-width: 1230px) {
+		.tix_tickets_table tbody .tix-column-price {
+			grid-column: 1 / -1;
+		}
+		.tix_tickets_table tbody .tix-column-quantity {
+			grid-column: 1 / -1;
+			grid-row: 3;
+		}
+	}
+
+	/* The full-width row above fixes the wrap from 920px up, but the card is
+	   still narrower than the ₹2,500.00 price's 223px at the bottom of the
+	   band: 184px at 782px, growing to 221px by 900px. Sized down 20% the
+	   same price needs about 180px, which fits for the whole of this narrower
+	   slice. It steps back up to 42px at 920px, where the full-width row
+	   already has the room without it. */
+	@media (min-width: 782px) and (max-width: 919px) {
+		.tix_tickets_table tbody .tix-column-price {
+			font-size: 34px;
+		}
+	}
 	.tix_tickets_table tbody .tix-column-quantity::before {
 		content: "QTY";
 		/* Left-aligned to the control below it, not right-aligned to the card.
