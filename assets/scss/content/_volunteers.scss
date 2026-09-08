@@ -15,15 +15,15 @@
    mockup. Overriding them here is cheaper and safer than not opting in and
    re-deriving the heading size, the panel and the section head. */
 
-/* The eyebrow's own hairline. Every other long-form page rules off its
-   sections with it; this one separates them with air instead, and a rule
-   running out of `// teams` on a page whose sections are already whole cards
-   reads as a second divider on top of the card edge. */
-.wcblr-vol .wcblr-sec + .wcblr-sec > .wcblr-eyebrow::after {
-	content: none;
-}
+/* The eyebrow's own hairline used to be turned off here, on the argument that a
+   rule running out of `// teams` on a page whose sections are already whole
+   cards reads as a second divider on top of the card edge. Wrong in practice:
+   with 104px of air and no rule the sections stopped reading as sections, and
+   the page lost the one mark every other long-form page on this site uses to
+   say a new one has started. The override is gone and `_guide.scss` draws them
+   again. Do not put it back without looking at the page first.
 
-/* 78px is the article gap, set for sections that are prose. This page's
+   78px is the article gap, set for sections that are prose. This page's
    sections are objects: a pair of cards, a grid of ten, a five-stop strip.
    They need the extra air to read as separate objects rather than as one
    long stack of chrome. Measured off the mockup at its own width. */
