@@ -459,3 +459,50 @@
 		padding-right: 22px !important;
 	}
 }
+
+/* ---- The portrait beside `good_to_know` ---------------------------------
+   It is 928x1152, and in the 456px column this template gives it that wants
+   566px of height. The panel it sits beside is 409px tall, so the illustration
+   hung 157px below the thing it is supposed to be level with, and the whole row
+   went lopsided. Measured on the live page and reproduced with
+   `preview.py --content 1200`, which is the width a calls-template post
+   actually renders at; the harness's own default of 1000 hides this.
+
+   Fixing it in the block is not possible: a fixed `aspectRatio` would have to
+   guess the panel's height, and the panel's height is whatever its four
+   quadrants make it at the reader's width. So the column becomes a flex box,
+   the figure becomes its stretched child, and the image crops to whatever
+   height the row ends up being. `object-fit` is one of the properties the
+   Remote CSS sanitiser keeps, checked against the served stylesheet rather
+   than assumed.
+
+   `object-position: 50% 18%` rather than the default centre: the crop is
+   roughly the top two thirds of a standing figure, and centring it takes the
+   top off her head while keeping her shoes.
+
+   Only while the columns are side by side. Below 782px they stack, the row has
+   no shared height to match, and the illustration should simply be itself. */
+@media (min-width: 782px) {
+	.wcblr-vol .wcblr-vol-figcol {
+		position: relative;
+	}
+
+	/* Absolutely positioned, and that is the whole trick. A flex column stretches
+	   to the row's height, but the row's height is the tallest column's CONTENT,
+	   and while the figure is in flow the 566px illustration is that content: it
+	   sets the height it is then told to match. Taking the figure out of flow
+	   leaves the panel next door as the only thing with a height, the column
+	   stretches to it, and the figure fills what it finds. */
+	.wcblr-vol .wcblr-vol-figcol > figure {
+		position: absolute;
+		inset: 0;
+		margin: 0;
+	}
+
+	.wcblr-vol .wcblr-vol-figcol > figure > img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: 50% 18%;
+	}
+}
