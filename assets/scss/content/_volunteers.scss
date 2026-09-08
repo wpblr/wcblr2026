@@ -67,6 +67,7 @@
 	line-height: 1.1;
 	color: #C8344B;
 	transition: color 0.18s ease;
+	transform-origin: 50% 55%;
 }
 
 /* U+2212, the minus sign, not a hyphen: at 22px mono a hyphen sits high and
@@ -188,5 +189,273 @@
 	}
 	.wcblr-vol .wcblr-vol-tl .wp-block-column:first-child {
 		border-top: 0 !important;
+	}
+}
+
+/* ---- Hover: what answers the pointer, and what does not -----------------
+   The page is fourteen cards, four grid cells, five timeline stops, eight
+   question rows and five links, and before this none of them acknowledged the
+   pointer at all. Everything here follows the two gates the rest of this
+   stylesheet uses, for the reasons written out at the top of
+   `layout/_hover-states.scss`:
+
+     @media (hover: hover) and (pointer: fine)   so a tap on a phone does not
+                                                 leave a card stuck lifted
+     @media (prefers-reduced-motion: no-preference)  around MOVEMENT only
+
+   Colour and border changes sit outside the reduced-motion query on purpose. A
+   reader who asked for less motion still gets the full affordance, just without
+   the travel. Same rule the nav underline follows.
+
+   NOT given a hover, deliberately:
+     - the hero panel and the closing band. They are the page, not controls.
+     - the four hero stat columns and the deadline band. Facts, not objects.
+     - the two day cards' label/value rows. The card is the object; giving its
+       rows a second hover puts two gestures inside one hit area.
+     - buttons and the form's submit, which already take the site-wide wipe from
+       `content/_buttons.scss` and `forms/_jetpack-fields.scss`.
+
+   `box-shadow` is used here and is safe: measured against the served Remote CSS
+   on 8 September 2026 it survives 39 times out of 39. `filter` does NOT: two
+   declarations in the local build, zero served. Do not reach for
+   `filter: brightness()` on this site. */
+
+/* ---- The fourteen cards -------------------------------------------------
+   The two day cards, the ten team cards and the two ask/get cards. All of them
+   carry `border-color` INLINE from the block attribute, so the hover colour has
+   to be `!important` to reach it; the transform and the shadow are not inline
+   and need nothing. */
+.wcblr-vol .wcblr-vol-card {
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.28s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-vol .wcblr-vol-card {
+		transition:
+			transform 0.3s cubic-bezier(0.2, 0.6, 0.2, 1),
+			border-color 0.2s ease,
+			box-shadow 0.28s ease;
+	}
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.wcblr-vol .wcblr-vol-card:hover {
+		/* the resting hairline is #dad5cd; this is the same hairline with the
+		   warmth turned up, not a new colour in the palette */
+		border-color: #c0ab8c !important;
+		box-shadow: 0 8px 22px rgba(42, 29, 20, 0.09);
+	}
+
+	/* The two inked cards, day two and "what you get". Their hairline family is
+	   #3a2a1e, so warming them toward #c0ab8c would put a light rule on a dark
+	   card. Selector shape copied from `content/_buttons.scss`, which keys off
+	   the same inline background. */
+	.wcblr-vol .wcblr-vol-card[style*="background-color:#2a1d14"]:hover {
+		border-color: #6a5136 !important;
+		box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.wcblr-vol .wcblr-vol-card:hover {
+			transform: translateY(-3px);
+		}
+	}
+}
+
+/* ---- The cells inside a panel -------------------------------------------
+   The four `good_to_know` quadrants and the five timeline stops are cells in
+   one object, not objects of their own, so they tint rather than lift. Lifting
+   a cell out of the panel it is ruled into is the wrong reading, and it would
+   drag its hairlines with it. */
+.wcblr-vol .wcblr-vol-cell,
+.wcblr-vol .wcblr-vol-tl .wp-block-column {
+	transition: background-color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.wcblr-vol .wcblr-vol-cell:hover,
+	.wcblr-vol .wcblr-vol-tl .wp-block-column:not(.has-background):hover {
+		background-color: #f4eee3;
+	}
+
+	/* Stop 05 is inked, so it warms instead of tinting. Its background is
+	   inline, hence the !important that the light cells do not need. */
+	.wcblr-vol .wcblr-vol-tl .wp-block-column.has-background:hover {
+		background-color: #34241a !important;
+	}
+}
+
+/* ---- The eight questions ------------------------------------------------
+   The summary already recolours itself and its marker. What was missing is the
+   row: eight identical cards with nothing telling you which one the pointer is
+   on. The marker also grows a little, which is the only movement in this block
+   and is therefore the only part inside the reduced-motion gate. */
+.wcblr-vol .wcblr-vol-faq {
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.28s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.wcblr-vol .wcblr-vol-faq:hover {
+		border-color: #c0ab8c !important;
+		box-shadow: 0 8px 22px rgba(42, 29, 20, 0.07);
+	}
+
+	/* The only movement in this block, so the only part gated. The marker's
+	   colour transition is set with the marker itself further up and stays
+	   outside the gate, like every other colour on this page. */
+	@media (prefers-reduced-motion: no-preference) {
+		.wcblr-vol .wcblr-vol-faq > summary::after {
+			transition:
+				color 0.18s ease,
+				transform 0.22s cubic-bezier(0.34, 1.4, 0.64, 1);
+		}
+		.wcblr-vol .wcblr-vol-faq > summary:hover::after {
+			transform: scale(1.2);
+		}
+	}
+}
+
+/* ---- Links in the copy --------------------------------------------------
+   Five of them, all on light surfaces, so the site's crimson is safe: 4.89:1 on
+   the #FBF8F1 cards and 4.41:1 on the cream, the same pairing the header and
+   footer nav already ship.
+
+   The underline is restored on purpose. The theme carries
+   `a:where(:not(.wp-element-button)):hover { text-decoration: none }`, so as
+   things stand a link in post copy LOSES its only affordance under the pointer
+   and gains nothing. That is backwards, and this is the fix for it on this
+   page. `:focus-visible` gets the same treatment so the keyboard path and the
+   pointer path show the same thing.
+
+   Buttons are excluded by the `p`/`li` in the selector: a block button is an
+   `<a>` inside a `<div class="wp-block-button">`, never inside a paragraph. */
+.wcblr-vol .wcblr-sec p a,
+.wcblr-vol .wcblr-sec li a {
+	transition: color 0.18s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.wcblr-vol .wcblr-sec p a:hover,
+	.wcblr-vol .wcblr-sec li a:hover {
+		color: #C8344B;
+		text-decoration: underline;
+		text-decoration-thickness: 1.5px;
+		text-underline-offset: 3px;
+	}
+}
+
+.wcblr-vol .wcblr-sec p a:focus-visible,
+.wcblr-vol .wcblr-sec li a:focus-visible {
+	color: #C8344B;
+	text-decoration: underline;
+	text-decoration-thickness: 1.5px;
+	text-underline-offset: 3px;
+}
+
+/* ---- The command bar ----------------------------------------------------
+   `$ wp team list --format=table --pick=2` is 38 characters of mono and the bar
+   is about 34 wide on a 390px phone, so it wrapped, and it wrapped at the
+   hyphen: the line ended `--format=table -` and the next began `-pick=2`. A
+   flag broken in half reads as a typo rather than as a wrap.
+
+   A break after a hyphen is a real UAX-14 opportunity, so no `word-break` or
+   `hyphens` value prevents it. Refusing to wrap and letting the bar scroll is
+   the only fix that keeps the string intact, and it is what a code block is
+   expected to do anyway. Nothing scrolls above 782px; the bar fits with room. */
+.wcblr-vol .wcblr-vol-cmd {
+	white-space: nowrap;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+/* ---- Phone: the rules that point the wrong way once things stack --------
+   Core stacks columns below 782px. Three places on this page draw their
+   dividers as LEFT hairlines, which is correct while the columns sit side by
+   side and is a rule pointing the wrong way the moment they do not. The
+   timeline strip above already handles its own; these are the other two.
+
+   The `good_to_know` quadrants used to carry `isStackedOnMobile: false` to
+   avoid exactly this, which traded one bug for a worse one: two 26px-padded
+   cells inside a 390px viewport left about 120px of text each, so every line
+   ran to four words. They stack now, and the hairlines turn with them. */
+@media (max-width: 781px) {
+	.wcblr-vol .wcblr-vol-grid .wp-block-column {
+		border-left: 0 !important;
+		border-top: 1px solid #e3ded4 !important;
+	}
+
+	.wcblr-vol .wcblr-vol-grid > .wp-block-columns:first-child > .wp-block-column:first-child {
+		border-top: 0 !important;
+	}
+
+	/* The form's sidebar, same fault: a hairline down its left edge while it
+	   sits under the form rather than beside it. */
+	.wcblr-vol .wcblr-vol-aside {
+		border-left: 0 !important;
+		border-top: 1px solid #e3ded4 !important;
+	}
+
+	/* 104px between sections is measured for a 1100px column where the sections
+	   are wide objects with air around them. At 390px it is a third of the
+	   screen of nothing between one card and the next. */
+	.wcblr-vol .wcblr-sec + .wcblr-sec {
+		margin-top: 68px !important;
+	}
+}
+
+/* ---- Phone: two panels that carry no padding of their own ---------------
+   `_guide.scss` rule 14 gives every `.wp-block-group.has-background` 24px of
+   side padding below 600px, because the surfaces on these pages carry 28 to
+   40px inline and 40px is a fifth of a phone screen spent twice over. Right
+   almost everywhere, and wrong for exactly two groups on this page.
+
+   The `good_to_know` panel and the five-stop strip carry ZERO inline padding on
+   purpose: their cells hold it, so a cell's fill and its hairlines reach the
+   panel's own edge and the inked fifth stop meets the rounded corner. Rule 14
+   cannot tell those apart from a padded panel, so it pushes 24px in and the
+   dark stop ends up floating in a cream margin with a 24px gap under it.
+
+   Measured, not guessed: with rule 14 applied the strip sat at x=30 w=330 and
+   every stop inside it at x=55 w=280. */
+@media (max-width: 600px) {
+	/* Both sides are `!important`, so ORDER DECIDES NOTHING and specificity
+	   decides everything. Rule 14's selector is `.wcblr-guide
+	   .wp-block-group.has-background`, three class-weight units; the obvious
+	   `.wcblr-vol .wcblr-vol-grid` is two and loses silently, which is what the
+	   first version of this did. `.has-background` is on both panels already,
+	   so adding it here levels the count and the later file wins the tie. */
+	.wcblr-vol .wcblr-vol-grid.has-background,
+	.wcblr-vol .wcblr-vol-tl.has-background {
+		padding-left: 0 !important;
+		padding-right: 0 !important;
+	}
+}
+
+/* And the other half of the same fault. `_guide.scss` rule 15 strips the side
+   padding off a stacked `.wp-block-column` that carries no background, on the
+   grounds that such padding is usually a gutter pretending to be padding. In
+   these two panels it is the cell's own inset and it is the only thing holding
+   the copy off the panel edge, so it is put back. Without this the quadrant
+   text sat at 24px from the edge while the code-of-conduct row below it, a
+   group rather than a column and so untouched by rule 15, sat at 50px. */
+@media (max-width: 781px) {
+	/* Rule 15's `:not()` chain is four more class-weight units on top of its
+	   two, so this has to carry the same chain to reach it. Repeating it is
+	   ugly and it is also the honest thing: these selectors have to move
+	   together, and a reader who changes one will see the other. The stops that
+	   DO carry a background, which is the inked fifth one, were never in rule
+	   15's reach and keep their inline padding untouched. */
+	.wcblr-vol .wcblr-vol-cell.wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell):not(.wcblr-tier-soon) {
+		padding-left: 26px !important;
+		padding-right: 26px !important;
+	}
+
+	.wcblr-vol .wcblr-vol-tl .wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell):not(.wcblr-tier-soon) {
+		padding-left: 22px !important;
+		padding-right: 22px !important;
 	}
 }

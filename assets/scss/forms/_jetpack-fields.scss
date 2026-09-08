@@ -47,6 +47,27 @@ textarea.grunion-field:focus {
 	border-color: #2a1d14 !important;
 	box-shadow: 0 0 0 3px rgba(42, 29, 20, 0.08) !important;
 }
+
+/* Hover, which the fields had no answer to at all: a field looked identical
+   whether the pointer was over it or not, and only told you anything once you
+   had already clicked into it. The resting hairline is rgba(42,29,20,0.16) and
+   this is the same ink at twice the weight, so it reads as the field waking up
+   rather than as a second state competing with focus.
+
+   `:not(:focus)` so the two never fight: once a field is focused the darker
+   #2a1d14 rule above owns it, and sweeping the pointer across a focused field
+   does not lighten its border. Gated on `(hover: hover) and (pointer: fine)`
+   like the rest of this stylesheet, so a tap on a phone leaves nothing stuck.
+
+   Site-wide on purpose. Every WCBLR form is styled by this file and they should
+   not start behaving differently from one another. */
+@media (hover: hover) and (pointer: fine) {
+	input.grunion-field:not([type="radio"]):not([type="checkbox"]):hover:not(:focus),
+	textarea.grunion-field:hover:not(:focus),
+	.contact-form__select-wrapper:hover:not(:focus-within) {
+		border-color: rgba(42, 29, 20, 0.34) !important;
+	}
+}
 textarea.grunion-field {
 	field-sizing: content !important; /* auto-grow in Chrome 123+/FF 128+/Safari 18+ */
 	height: 120px !important; /* fallback: overrides rows="20" in older browsers */
