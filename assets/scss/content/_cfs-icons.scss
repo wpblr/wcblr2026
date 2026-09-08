@@ -52,3 +52,38 @@
 
 /* readable line-length for intros / notes */
 .wcblr-measure{}
+
+/* ---- "Pick your format": bottom-align the card illustration ---------------
+   Talk and Lightning's copy is two lines; Workshop's names the co-presenter
+   rule too and runs three. The illustration under the copy is the same fixed
+   height on every card, so on Workshop it starts lower and its own bottom
+   lands below the other two — three illustrations that no longer share a
+   line.
+
+   The columns row already stretches all three columns to the same height
+   (core's `is-layout-flex`), so turning the column into a flex column and
+   pushing the illustration down with `margin-top: auto` pins it to that
+   shared bottom edge regardless of how tall the copy above it runs.
+
+   Talk's illustration sits directly in the column; Lightning and Workshop's
+   sit inside an extra `is-vertical` group the editor wrapped theirs in, so
+   that inner group needs `flex: 1 1 auto` to claim the column's full height
+   before its own `margin-top: auto` has any space to push into.
+
+   Scoped by `:has()` to the one card shape on the page that puts a full-size
+   image under a text group, direct or through that extra wrapper — not to
+   `.wp-block-column` generally, which every columns block on the site is
+   built from. */
+body.post-slug-call-for-speakers .wp-block-column:has(> figure.wp-block-image.size-full),
+body.post-slug-call-for-speakers .wp-block-column:has(> .wp-block-group.is-vertical > figure.wp-block-image.size-full) {
+	display: flex;
+	flex-direction: column;
+}
+
+body.post-slug-call-for-speakers .wp-block-column > .wp-block-group.is-vertical:has(> figure.wp-block-image.size-full) {
+	flex: 1 1 auto;
+}
+
+body.post-slug-call-for-speakers .wp-block-column figure.wp-block-image.size-full {
+	margin-top: auto;
+}
