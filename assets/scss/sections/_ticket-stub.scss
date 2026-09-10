@@ -48,7 +48,7 @@
 
 	&__head { margin-top: 0 !important; }
 	&__day { margin-top: 16px !important; }
-	&__incl { margin-top: 16px !important; }
+	&__incl { margin-top: 24px !important; }
 	&__how { margin-top: 0 !important; }
 	.wp-block-separator { margin-top: 16px !important; }
 	.wcblr-perf { margin-top: 20px !important; }
@@ -235,10 +235,13 @@
 		margin: 6px 0 0 !important;
 	}
 
-	/* ---- Saturday's pill, Sunday's rule ---------------------------------
+	/* ---- Saturday's pill, Sunday's panel --------------------------------
 	   One says the day needs something the ticket cannot give, the other
 	   says it does not. They are deliberately different shapes so the pair
-	   cannot be skimmed as two of the same note.                         */
+	   cannot be skimmed as two of the same note: an outlined pill that
+	   asks for something, a soft filled block that does not. Sunday's was
+	   a crimson left rule first, which read as a pull quote or an error
+	   marker rather than as reassurance.                                 */
 	&__pill {
 		display: inline-flex;
 		align-items: center;
@@ -266,9 +269,10 @@
 	}
 
 	&__ok {
-		margin: 10px 0 0 !important;
-		padding-left: 12px;
-		border-left: 2px solid #c8344b;
+		margin: 12px 0 0 !important;
+		padding: 9px 13px;
+		background: rgba(244, 239, 230, 0.055);
+		border-radius: 9px;
 		font-family: "Hanken Grotesk", sans-serif;
 		font-size: 14.5px;
 		line-height: 1.45;
