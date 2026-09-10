@@ -1,20 +1,58 @@
-/* ---- Ticket stub --------------------------------------------------------- */
+/* ---- Ticket stub ---------------------------------------------------------
+
+   The hero's dark card, and the only place `.wcblr-stub` appears in any
+   markup on the site (pages/home.html), so everything here is scoped to it
+   and nothing else can be reached by accident.
+
+   It is a two-day ticket, and it is built like one: a printed head, one panel
+   per day either side of a solid rule, a perforation with a punched notch at
+   each edge, then the inclusions, the actions, and the small print. The two
+   days are not interchangeable and the card's whole job is to say so, so the
+   Saturday panel carries a gold "seat only by sign-up" pill and the Sunday
+   panel carries a crimson-ruled line saying there is nothing else to do.
+
+   `display: flex` is written out in full everywhere below rather than left to
+   a block's own `layout: flex` attribute. Core renders that attribute as a
+   generated `wp-container-core-group-is-layout-<hash>` class plus a matching
+   rule, and the hash is computed at RENDER time, so nothing in the pasted
+   markup carries it and no local render reproduces it. The attribute stays in
+   the markup so the editor still shows the row correctly.                  */
+
 .wcblr-stub {
 	position: relative;
 	overflow: visible !important;
 	max-width: 394px;
 	margin-left: auto;
 
-	&::before {
-		content: "";
-		position: absolute;
-		width: 22px;
-		height: 22px;
-		background: #f2ece0;
-		border-radius: 50%;
-		left: -11px;
-		top: 45%;
+	/* The printed edge of the ticket. Same 3px gold top rule the volunteer
+	   day cards use, so a card that means "this is the thing itself" is
+	   marked the same way in both places. */
+	border-top: 3px solid #e0a526;
+
+	/* ---- Vertical rhythm ------------------------------------------------
+	   Written out, and one-sided. The group's own `blockGap` renders as a
+	   generated `wp-container-…` class computed at RENDER time, so it is in
+	   neither the pasted markup nor any local render, and the whole card
+	   arrives with its spacing collapsed. Every gap is a `margin-top` and
+	   every `margin-bottom` is zero, so nothing depends on whether a flex
+	   sibling collapses its margins.                                      */
+	&__head,
+	&__day,
+	&__incl,
+	&__howlbl,
+	&__how,
+	.wp-block-separator,
+	.wp-block-buttons {
+		margin-bottom: 0 !important;
 	}
+
+	&__head { margin-top: 0 !important; }
+	&__day { margin-top: 16px !important; }
+	&__incl { margin-top: 16px !important; }
+	&__how { margin-top: 0 !important; }
+	.wp-block-separator { margin-top: 16px !important; }
+	.wcblr-perf { margin-top: 20px !important; }
+	.wp-block-buttons { margin-top: 18px !important; }
 
 	.wcblr-stamp {
 		position: absolute;
@@ -34,38 +72,315 @@
 		padding: 8px 16px;
 	}
 
-	.wcblr-perf,
+	/* ---- Rules ----------------------------------------------------------
+	   Two weights, and they mean different things. A plain separator is a
+	   hairline that divides one part of the ticket from the next. The
+	   perforation is the tear, and it gets the dashes and the notches. The
+	   old file gave every separator the dashes, which spent the tear on
+	   every divider and left the real one saying nothing.                 */
 	.wp-block-separator {
-		border-top: 1.5px dashed rgba(244, 239, 230, 0.3) !important;
-		border-bottom: 0 !important;
-		border-left: 0 !important;
-		border-right: 0 !important;
-		border-color: rgba(244, 239, 230, 0.3) !important;
-		color: rgba(244, 239, 230, 0.3) !important;
+		border: 0 !important;
+		border-top: 1px solid rgba(244, 239, 230, 0.14) !important;
 		background: transparent !important;
 		opacity: 1 !important;
 	}
 
-	&__row {
-		display: flex !important;
-		flex-direction: row !important;
-		justify-content: space-between;
+	.wcblr-perf {
+		position: relative;
+		border: 0 !important;
+		border-top: 1.5px dashed rgba(244, 239, 230, 0.32) !important;
+		background: transparent !important;
+		opacity: 1 !important;
+		overflow: visible;
+
+		/* The notches sit on the card's edge, not the rule's: the stub pads
+		   30px, so half of a 22px circle clears it at -41px. `overflow` is
+		   already visible on the stub, which is what lets them bleed out. */
+		&::before,
+		&::after {
+			content: "";
+			position: absolute;
+			top: 50%;
+			width: 22px;
+			height: 22px;
+			margin-top: -11px;
+			background: #f2ece0;
+			border-radius: 50%;
+		}
+
+		&::before { left: -41px; }
+		&::after  { right: -41px; }
+	}
+
+	/* ---- The printed head ----------------------------------------------- */
+	&__head {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
 		align-items: baseline;
+		justify-content: space-between;
+		gap: 12px;
+		font-family: "JetBrains Mono", ui-monospace, monospace;
+		font-size: 10.5px;
+		font-weight: 700;
+		letter-spacing: 1.3px;
+	}
+
+	&__brand { color: #e0a526; }
+	&__admit { color: #978f87; white-space: nowrap; }
+
+	/* ---- A day panel ----------------------------------------------------
+	   Chip left at a fixed width, everything else in a column beside it.
+	   `min-width: 0` on the body is what lets the long venue line wrap
+	   instead of pushing the chip off the card on a narrow phone.        */
+	&__day {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		align-items: flex-start;
 		gap: 16px;
 	}
 
-	&__val {
-		text-align: right;
+	&__body {
+		flex: 1 1 auto;
+		min-width: 0;
+	}
+
+	/* ---- The date chip --------------------------------------------------
+	   Saturday's is cut from the card, Sunday's from the page. Inverting the
+	   pair is the fastest way to read "these are two different days" before
+	   a single word is read, and it puts the lighter chip on the day the
+	   ticket already covers.                                             */
+	&__chip {
+		flex: 0 0 auto;
+		width: 62px;
+		border-radius: 10px;
+		padding: 9px 0 10px;
+		text-align: center;
+		line-height: 1;
+	}
+
+	&__chip-d,
+	&__chip-m {
+		font-family: "JetBrains Mono", ui-monospace, monospace;
+		font-size: 10px;
+		font-weight: 700;
+		letter-spacing: 1.2px;
+		margin: 0 !important;
+	}
+
+	&__chip-n {
+		font-family: "Fraunces", Georgia, serif;
+		font-size: 27px;
+		font-weight: 500;
+		line-height: 1.05;
+		margin: 3px 0 2px !important;
+	}
+
+	&__chip.is-dark {
+		background: #3a2a1e;
+
+		.wcblr-stub__chip-d,
+		.wcblr-stub__chip-m { color: #a39c92; }
+		.wcblr-stub__chip-n { color: #f2ece0; }
+	}
+
+	&__chip.is-light {
+		background: #f2ece0;
+
+		.wcblr-stub__chip-d,
+		.wcblr-stub__chip-m { color: #7a6757; }
+		.wcblr-stub__chip-n { color: #2a1d14; }
+	}
+
+	/* ---- The day's name, and Sunday's tag ------------------------------- */
+	&__nameline {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 10px;
+	}
+
+	/* The name never breaks mid-phrase. Left to wrap, "The conference" split
+	   over two lines and the baseline-aligned "MAIN DAY" hung off the second
+	   one, which read as a caption on the wrong word. It holds one line and
+	   the tag drops below it instead, which is the honest break. The size
+	   steps down twice below so one line stays affordable. */
+	&__name {
+		font-family: "Fraunces", Georgia, serif;
+		font-size: 24px;
+		font-weight: 500;
+		line-height: 1.15;
+		color: #f2ece0;
+		white-space: nowrap;
+		margin: 0 !important;
+	}
+
+	&__tag {
+		font-family: "JetBrains Mono", ui-monospace, monospace;
+		font-size: 10px;
+		font-weight: 700;
+		letter-spacing: 1.2px;
+		color: #e0a526;
+		white-space: nowrap;
+		margin: 0 !important;
+	}
+
+	&__meta {
+		font-family: "Hanken Grotesk", sans-serif;
+		font-size: 14.5px;
+		line-height: 1.45;
+		color: #a39c92;
+		margin: 6px 0 0 !important;
+	}
+
+	/* ---- Saturday's pill, Sunday's rule ---------------------------------
+	   One says the day needs something the ticket cannot give, the other
+	   says it does not. They are deliberately different shapes so the pair
+	   cannot be skimmed as two of the same note.                         */
+	&__pill {
+		display: inline-flex;
+		align-items: center;
+		gap: 7px;
+
+		/* The same rotated 6px square the small print below uses for its
+		   bullets, so the card has one gold mark rather than two. */
+		&::before {
+			content: "";
+			flex: 0 0 auto;
+			width: 6px;
+			height: 6px;
+			background: #e0a526;
+			transform: rotate(45deg);
+		}
+		margin: 11px 0 0 !important;
+		padding: 6px 13px;
+		border: 1px solid rgba(224, 165, 38, 0.55);
+		border-radius: 999px;
+		font-family: "JetBrains Mono", ui-monospace, monospace;
+		font-size: 10px;
+		font-weight: 700;
+		letter-spacing: 1.1px;
+		color: #e0a526;
+	}
+
+	&__ok {
+		margin: 10px 0 0 !important;
+		padding-left: 12px;
+		border-left: 2px solid #c8344b;
+		font-family: "Hanken Grotesk", sans-serif;
+		font-size: 14.5px;
+		line-height: 1.45;
+		color: #efe6d6;
+	}
+
+	/* ---- What every ticket carries -------------------------------------- */
+	&__incl {
+		font-family: "JetBrains Mono", ui-monospace, monospace;
+		font-size: 10.5px;
+		font-weight: 700;
+		letter-spacing: 1.25px;
+		line-height: 1.9;
+		color: #978f87;
+		margin: 0 !important;
+	}
+
+	/* ---- The small print ------------------------------------------------ */
+	&__howlbl {
+		font-family: "JetBrains Mono", ui-monospace, monospace;
+		font-size: 10.5px;
+		font-weight: 700;
+		letter-spacing: 1.25px;
+		color: #e0a526;
+		margin: 16px 0 10px !important;
+	}
+
+	&__how {
+		list-style: none !important;
+		padding-left: 0 !important;
+		margin: 0 !important;
+
+		li {
+			position: relative;
+			padding-left: 18px;
+			margin-bottom: 8px;
+			font-family: "Hanken Grotesk", sans-serif;
+			font-size: 13.5px;
+			line-height: 1.5;
+			color: #a39c92;
+		}
+
+		li:last-child { margin-bottom: 0; }
+
+		/* A turmeric diamond drawn from a rotated square, not a glyph:
+		   `content: "\25C6"` renders in whatever face the browser has for it
+		   and comes out a different size in Chrome and Safari. Same 6px mark
+		   the tier lists and the ticket page's points use. */
+		li::before {
+			content: "";
+			position: absolute;
+			left: 1px;
+			top: 0.5em;
+			width: 6px;
+			height: 6px;
+			background: #e0a526;
+			transform: rotate(45deg);
+		}
+
+		strong {
+			color: #f2ece0;
+			font-weight: 600;
+		}
 	}
 
 	/* Both stub buttons — the secondary "outline" CTA and the solid red buy
-	   button — take the site-wide wipe now (content/_buttons.scss). The stub is
+	   button — take the site-wide wipe (content/_buttons.scss). The stub is
 	   espresso, so the `.wcblr-stub` hook there fills them cream and flips the
-	   label dark, which is exactly what the secondary CTA used to do by hand and
-	   the same cream-on-dark move the buy button wanted. The buy button keeps an
-	   explicit focus ring on top of the wipe, for the keyboard. */
+	   label dark. The buy button keeps an explicit focus ring on top of the
+	   wipe, for the keyboard. */
 	&__buy .wp-block-button__link:focus-visible {
 		outline: 2px solid #f2ece0;
 		outline-offset: 3px;
+	}
+}
+
+/* ---- Narrow phones ---------------------------------------------------------
+   Under ~380px the chip and the day name stop fitting side by side at their
+   desktop sizes. Rather than let the name wrap to three words on three lines,
+   the chip narrows and the type steps down one notch. The row never stacks:
+   the chip beside the name IS the reading order, and breaking it turns the
+   panel back into the ledger this card replaced.                           */
+@media (max-width: 430px) {
+	.wcblr-stub__name { font-size: 21px; }
+}
+
+@media (max-width: 380px) {
+	.wcblr-stub {
+		&__day { gap: 12px; }
+		&__chip { width: 54px; padding: 8px 0 9px; }
+		&__chip-n { font-size: 23px; }
+		&__head { font-size: 9.5px; letter-spacing: 1px; }
+
+		/* Below this the nowrap name is a min-content floor wider than the
+		   screen, and the card stops shrinking and runs off the right edge.
+		   The name wraps again here, and the nameline stacks so the tag sits
+		   under it on its own line rather than hanging off the wrapped one,
+		   which is the orphan the nowrap was there to prevent. */
+		&__name { font-size: 19px; white-space: normal; }
+
+		&__nameline {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 4px;
+		}
+		&__meta { font-size: 13.5px; }
+		&__ok { font-size: 13.5px; }
+		&__incl { font-size: 9.5px; letter-spacing: 1px; }
+
+		.wcblr-perf {
+			&::before { left: -41px; }
+			&::after  { right: -41px; }
+		}
 	}
 }
