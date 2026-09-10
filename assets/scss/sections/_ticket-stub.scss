@@ -235,13 +235,17 @@
 		margin: 6px 0 0 !important;
 	}
 
-	/* ---- Saturday's pill, Sunday's panel --------------------------------
-	   One says the day needs something the ticket cannot give, the other
-	   says it does not. They are deliberately different shapes so the pair
-	   cannot be skimmed as two of the same note: an outlined pill that
-	   asks for something, a soft filled block that does not. Sunday's was
-	   a crimson left rule first, which read as a pull quote or an error
-	   marker rather than as reassurance.                                 */
+	/* ---- The state pill, one per day ------------------------------------
+	   Each day says its own entry rule in the same shape, so the panels are
+	   read as a pair and the difference is in the words rather than in the
+	   furniture. Sunday's was a crimson left rule first, then a filled
+	   block; the rule read as a pull quote or an error marker, and the
+	   block made the two days look like different kinds of thing.
+
+	   Only the colour separates them. Gold is this card's "look here", and
+	   it is spent on the one day that needs something the ticket cannot
+	   give. Sunday's is cream, the card's own text colour, because the
+	   default state should not compete for the same attention.          */
 	&__pill {
 		display: inline-flex;
 		align-items: center;
@@ -268,18 +272,18 @@
 		color: #e0a526;
 	}
 
-	&__ok {
-		margin: 12px 0 0 !important;
-		padding: 9px 13px;
-		background: rgba(244, 239, 230, 0.055);
-		border-radius: 9px;
-		font-family: "Hanken Grotesk", sans-serif;
-		font-size: 14.5px;
-		line-height: 1.45;
+	&__pill.is-ok {
+		border-color: rgba(244, 239, 230, 0.32);
 		color: #efe6d6;
+
+		&::before { background: #efe6d6; }
 	}
 
 	/* ---- What every ticket carries -------------------------------------- */
+	/* No `margin` shorthand here. The rhythm block above sets this strip's
+	   gap to the tear, and a later shorthand at the same specificity silently
+	   won and put it back to nothing. Anything in this file that takes part
+	   in the vertical rhythm sets its margins there and only there. */
 	&__incl {
 		font-family: "JetBrains Mono", ui-monospace, monospace;
 		font-size: 10.5px;
@@ -287,7 +291,6 @@
 		letter-spacing: 1.25px;
 		line-height: 1.9;
 		color: #978f87;
-		margin: 0 !important;
 	}
 
 	/* ---- The small print ------------------------------------------------ */
@@ -379,7 +382,6 @@
 			gap: 4px;
 		}
 		&__meta { font-size: 13.5px; }
-		&__ok { font-size: 13.5px; }
 		&__incl { font-size: 9.5px; letter-spacing: 1px; }
 
 		.wcblr-perf {
