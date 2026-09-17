@@ -10,8 +10,26 @@
 	display: block;
 	margin-bottom: 0;
 }
+/* The asterisk Jetpack prints inside the label of a required field. It came
+   over from the original stylesheet as `display: none`, so NO form on this
+   site marked its required fields at all: the browser refused the submit and
+   the reader was left to work out which of ten boxes it meant. Four live forms
+   were in that state, and the table leads design draws the star, so it is
+   drawn.
+
+   It is a marker, not the only signal. The control itself carries `required`
+   and Jetpack marks this span `aria-hidden`, so a screen reader hears the
+   state from the input rather than from a star, and colour is not carrying
+   meaning on its own. #C8344B on the #FBF8F1 form card is 4.89:1.
+
+   The colour is set on the span rather than inherited, because
+   `.grunion-field-label` above sets the label's own colour with `!important`
+   and the span would otherwise inherit that muted brown. */
 .grunion-label-required {
-	display: none;
+	color: #C8344B !important;
+	margin-left: 5px;
+	font-weight: 700;
+	letter-spacing: 0;
 }
 /* Field wrapper */
 .grunion-field-wrap {
