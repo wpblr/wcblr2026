@@ -30,7 +30,19 @@
 	}
 
 	/* Let the submit button span the row instead of keeping 34px of side
-	   padding in a column that is now a third narrower. */
+	   padding in a column that is now a third narrower.
+
+	   The wrapper has to be told as well, or the 100% below is 100% of
+	   Jetpack's own `.wp-block-jetpack-button { width: fit-content }` and the
+	   button stays its content width. Measured on the live volunteers form at
+	   390px: a 195px button in a 265px column, which is the state every form on
+	   the site has been shipping in since this rule was written. */
+	.wcblr-form .wp-block-jetpack-contact-form .wp-block-jetpack-button,
+	.wcblr-form .wp-block-jetpack-contact-form .wp-block-button {
+		width: 100% !important;
+		max-width: 100% !important;
+	}
+
 	.wcblr-form .wp-block-jetpack-contact-form .wp-block-button .wp-block-button__link,
 	.wcblr-form .wp-block-jetpack-contact-form .wp-block-jetpack-button .wp-block-button__link {
 		width: 100% !important;
