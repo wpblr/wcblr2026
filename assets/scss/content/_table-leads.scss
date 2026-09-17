@@ -9,6 +9,13 @@
    `_post-page.scss`'s `25px !important` and for `.wcblr-sechead`, the
    heading-left / lead-right section head that `_ticket-panel.scss` owns.
 
+   Eight classes in that post carry no rule here on purpose: `wcblr-tl-table`,
+   `wcblr-tl-ask`, `wcblr-tl-get`, `wcblr-tl-askrow`, `wcblr-tl-getrow`,
+   `wcblr-tl-cmdbar`, `wcblr-tl-cmdnote` and `wcblr-tl-essnotes`. Their look
+   comes from block attributes, which is where it belongs. They are named
+   anyway because the post is 133KB and re-pasting it to add one hook costs a
+   round trip through wp-admin, while this file ships on its own.
+
    Deliberately NOT shared with `_volunteers.scss`, which solves several of the
    same problems. That page is published and its numbers are tuned to its own
    design: widening its selectors to cover this page would put every future
@@ -163,15 +170,14 @@
 }
 
 /* ---- The objects that hold their cells flush to their own edge -----------
-   The seat plan, the quadrant grid, the ask/get panel and the five-stop strip
-   all carry the surface on the wrapper and the padding on the cells, so a
-   cell's hairlines reach the wrapper's edge and the inked fifth stop meets the
-   rounded corner. `overflow: hidden` is what lets that happen; none of them
+   The essentials card, the quadrant grid and the five-stop strip all carry the
+   surface on the wrapper and the padding on the cells, so a cell's hairlines
+   reach the wrapper's edge, the tinted notes band reaches the essentials card's
+   bottom corners, and the inked fifth stop meets the rounded corner. `overflow: hidden` is what lets that happen; none of them
    holds a captioned figure, so the block formatting context it starts costs
    nothing. */
-.wcblr-tl .wcblr-tl-plan,
+.wcblr-tl .wcblr-tl-ess,
 .wcblr-tl .wcblr-tl-grid,
-.wcblr-tl .wcblr-tl-trade,
 .wcblr-tl .wcblr-tl-tl {
 	overflow: hidden;
 }
@@ -234,18 +240,22 @@
 	}
 }
 
-/* The ten seats, the four quadrants and the five stops are cells in one
-   object, not objects of their own, so they tint rather than lift. Lifting a
-   cell out of the panel it is ruled into is the wrong reading, and it would
-   drag its hairlines with it. */
-.wcblr-tl .wcblr-tl-seat,
+/* The four essentials cells, the four quadrants and the five stops are cells in
+   one object, not objects of their own, so they tint rather than lift. Lifting a
+   cell out of the panel it is ruled into is the wrong reading, and it would drag
+   its hairlines with it.
+
+   The rows INSIDE the ask and get cards get no hover of their own, deliberately.
+   The card is the object, and a second gesture inside one hit area reads as two
+   things responding to one pointer. */
+.wcblr-tl .wcblr-tl-esscell,
 .wcblr-tl .wcblr-tl-cell,
 .wcblr-tl .wcblr-tl-tl .wp-block-column {
 	transition: background-color 0.2s ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
-	.wcblr-tl .wcblr-tl-seat:hover,
+	.wcblr-tl .wcblr-tl-esscell:hover,
 	.wcblr-tl .wcblr-tl-cell:hover,
 	.wcblr-tl .wcblr-tl-tl .wp-block-column:not(.has-background):hover {
 		background-color: #f4eee3;
@@ -327,19 +337,18 @@
    a LEFT hairline, which is correct while the columns sit side by side and is
    a rule pointing the wrong way the moment they do not. */
 @media (max-width: 781px) {
-	.wcblr-tl .wcblr-tl-plan .wp-block-column,
+	.wcblr-tl .wcblr-tl-ess > .wp-block-columns > .wp-block-column,
 	.wcblr-tl .wcblr-tl-grid .wp-block-column,
 	.wcblr-tl .wcblr-tl-tl .wp-block-column,
-	.wcblr-tl .wcblr-tl-get,
 	.wcblr-tl .wcblr-tl-aside {
 		border-left: 0 !important;
 		border-top: 1px solid #e3ded4 !important;
 	}
 
 	/* The first cell of the first row in each object opens it, so it takes no
-	   rule at all. The seat plan and the quadrant grid are groups of rows, so
-	   the first row's first column is the one to clear. */
-	.wcblr-tl .wcblr-tl-plan > .wp-block-columns:first-child > .wp-block-column:first-child,
+	   rule at all. The quadrant grid is a group of rows, so the first row's
+	   first column is the one to clear. */
+	.wcblr-tl .wcblr-tl-ess > .wp-block-columns > .wp-block-column:first-child,
 	.wcblr-tl .wcblr-tl-grid > .wp-block-columns:first-child > .wp-block-column:first-child,
 	.wcblr-tl .wcblr-tl-tl .wp-block-column:first-child {
 		border-top: 0 !important;
@@ -357,20 +366,19 @@
    `_guide.scss` rule 14 gives every `.wp-block-group.has-background` 24px of
    side padding below 600px, because the surfaces on these pages carry 28 to
    40px inline and 40px is a fifth of a phone screen spent twice over. Right
-   almost everywhere, and wrong for exactly the four objects on this page whose
+   almost everywhere, and wrong for exactly the three objects on this page whose
    cells hold the padding instead: push 24px in and the inked fifth stop ends
    up floating in a cream margin.
 
    Both sides are `!important`, so ORDER DECIDES NOTHING and specificity
    decides everything. Rule 14's selector is `.wcblr-guide
    .wp-block-group.has-background`, three class-weight units; the obvious
-   `.wcblr-tl .wcblr-tl-plan` is two and would lose silently. `.has-background`
-   is on all four already, so naming it here levels the count and the later
+   `.wcblr-tl .wcblr-tl-ess` is two and would lose silently. `.has-background`
+   is on all three already, so naming it here levels the count and the later
    file wins the tie. */
 @media (max-width: 600px) {
-	.wcblr-tl .wcblr-tl-plan.has-background,
+	.wcblr-tl .wcblr-tl-ess.has-background,
 	.wcblr-tl .wcblr-tl-grid.has-background,
-	.wcblr-tl .wcblr-tl-trade.has-background,
 	.wcblr-tl .wcblr-tl-tl.has-background {
 		padding-left: 0 !important;
 		padding-right: 0 !important;
@@ -388,10 +396,8 @@
    is also the honest thing: these selectors have to move together, and a
    reader who changes one will see the other. */
 @media (max-width: 781px) {
-	.wcblr-tl .wcblr-tl-seat.wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell):not(.wcblr-tier-soon),
-	.wcblr-tl .wcblr-tl-cell.wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell):not(.wcblr-tier-soon),
-	.wcblr-tl .wcblr-tl-ask.wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell):not(.wcblr-tier-soon),
-	.wcblr-tl .wcblr-tl-get.wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell):not(.wcblr-tier-soon) {
+	.wcblr-tl .wcblr-tl-esscell.wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell):not(.wcblr-tier-soon),
+	.wcblr-tl .wcblr-tl-cell.wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell):not(.wcblr-tier-soon) {
 		padding-left: 26px !important;
 		padding-right: 26px !important;
 	}
