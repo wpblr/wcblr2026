@@ -1,0 +1,452 @@
+/* ---- Call for Table Leads ------------------------------------------------
+   The things that post's design asks for and that blocks cannot express.
+   Everything else on the page (the four phase cards, the ten-seat plan, the
+   ask/get panel, the four quadrants, the five-stop strip, the form) is built
+   from block attributes and needs nothing here.
+
+   Scoped to `.wcblr-tl` on the post wrapper, which nothing else carries. The
+   post also opts into `wcblr-guide`, for the 46px `h2` that survives
+   `_post-page.scss`'s `25px !important` and for `.wcblr-sechead`, the
+   heading-left / lead-right section head that `_ticket-panel.scss` owns.
+
+   Deliberately NOT shared with `_volunteers.scss`, which solves several of the
+   same problems. That page is published and its numbers are tuned to its own
+   design: widening its selectors to cover this page would put every future
+   change to one call inside the blast radius of the other. The techniques are
+   the same on purpose, and each block below says which one it is copying. */
+
+/* 78px is the article gap, set for sections that are prose. This page's
+   sections are objects: a row of phase cards, a ten-seat plan, a five-stop
+   strip. They need the extra air to read as separate objects rather than as
+   one long stack of chrome. Same call, and the same value, as the volunteers
+   page. */
+.wcblr-tl .wcblr-sec + .wcblr-sec {
+	margin-top: 104px !important;
+}
+
+/* ---- The questions ------------------------------------------------------
+   `core/details`, so it is keyboard operable and screen-reader announced for
+   free and needs no JavaScript, which post content cannot carry anyway. The
+   native marker is a triangle on the left; the design puts a crimson `+` on
+   the right that becomes a minus when the row is open.
+
+   The marker is hidden two ways because `list-style: none` alone leaves the
+   WebKit pseudo-element in place. `content` survives the Remote CSS
+   sanitiser, checked against the served stylesheet rather than assumed. */
+.wcblr-tl .wcblr-tl-faq > summary {
+	list-style: none;
+	cursor: pointer;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 28px;
+	font-family: Fraunces, serif;
+	font-size: 21px;
+	font-weight: 500;
+	line-height: 1.3;
+	color: #2a1d14;
+}
+
+.wcblr-tl .wcblr-tl-faq > summary::-webkit-details-marker { display: none; }
+
+.wcblr-tl .wcblr-tl-faq > summary::after {
+	content: "+";
+	flex: 0 0 auto;
+	font-family: "JetBrains Mono", monospace;
+	font-size: 22px;
+	font-weight: 400;
+	line-height: 1.1;
+	color: #C8344B;
+	transition: color 0.18s ease;
+	transform-origin: 50% 55%;
+}
+
+/* U+2212, the minus sign, not a hyphen: at 22px mono a hyphen sits high and
+   short and reads as a dash rather than as the other half of the pair. */
+.wcblr-tl .wcblr-tl-faq[open] > summary::after { content: "\2212"; }
+
+.wcblr-tl .wcblr-tl-faq > summary:hover { color: #C8344B; }
+
+.wcblr-tl .wcblr-tl-faq > summary:focus-visible {
+	outline: 2px solid #C8344B;
+	outline-offset: 4px;
+	border-radius: 4px;
+}
+
+.wcblr-tl .wcblr-tl-faq[open] > summary {
+	padding-bottom: 16px;
+	border-bottom: 1px solid #e3ded4;
+}
+
+/* ---- The diamond bullets ------------------------------------------------
+   The three notes beside the form. Core has no marker colour, and `::marker`
+   takes a colour but not a shape at the size this needs, so the list drops its
+   markers and draws its own. On cream the bright gold is 1.86:1 and unusable,
+   so the lozenge takes the deep gold. */
+.wcblr-tl .wcblr-tl-dia {
+	list-style: none;
+	padding-left: 0;
+}
+
+.wcblr-tl .wcblr-tl-dia > li {
+	position: relative;
+	padding-left: 30px;
+}
+
+.wcblr-tl .wcblr-tl-dia > li::before {
+	content: "\25C6";
+	position: absolute;
+	left: 0;
+	top: 0.05em;
+	font-size: 13px;
+	line-height: 1.5;
+	color: #a8760f;
+}
+
+/* ---- The deadline band --------------------------------------------------
+   The date set as an outline behind the band's own copy. Not an image:
+   `url()` is emptied by the sanitiser in every property tested, so anything
+   that has to be a shape here has to be type or a border.
+
+   `-webkit-text-stroke` is the only route CSS has to outlined type. If it were
+   ever stripped the fill is already transparent, so the failure is an
+   invisible watermark rather than a slab of solid gold across the copy.
+
+   WHEN THE DEADLINE MOVES, THIS STRING MOVES WITH IT. It cannot be set from
+   the block, so it is the one fact about this page that lives in two files. */
+.wcblr-tl .wcblr-tl-deadline {
+	position: relative;
+	overflow: hidden;
+}
+
+.wcblr-tl .wcblr-tl-deadline > * {
+	position: relative;
+	z-index: 1;
+	max-width: 72%;
+}
+
+.wcblr-tl .wcblr-tl-deadline::after {
+	content: "16.10";
+	position: absolute;
+	right: 34px;
+	top: 50%;
+	transform: translateY(-50%);
+	font-family: Fraunces, serif;
+	font-size: 96px;
+	font-weight: 600;
+	line-height: 1;
+	letter-spacing: -0.02em;
+	color: transparent;
+	-webkit-text-stroke: 2px rgba(224, 165, 38, 0.42);
+	pointer-events: none;
+	z-index: 0;
+}
+
+/* Below the point where the band's own heading needs the full width, the
+   watermark would sit behind the words rather than beside them. */
+@media (max-width: 1000px) {
+	.wcblr-tl .wcblr-tl-deadline::after { display: none; }
+	.wcblr-tl .wcblr-tl-deadline > * { max-width: none; }
+}
+
+/* ---- The command bar ----------------------------------------------------
+   `$ wp contributor-day table list --status=open` is 45 characters of mono,
+   wider than a phone, and a wrap lands in the middle of the flag: the line
+   ends `--status=` and the next begins `open`. A break after a hyphen is a
+   real UAX-14 opportunity, so no `word-break` or `hyphens` value prevents it.
+   Refusing to wrap and letting the bar scroll keeps the string intact, and it
+   is what a code block is expected to do anyway. */
+.wcblr-tl .wcblr-tl-cmd {
+	white-space: nowrap;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+/* ---- The objects that hold their cells flush to their own edge -----------
+   The seat plan, the quadrant grid, the ask/get panel and the five-stop strip
+   all carry the surface on the wrapper and the padding on the cells, so a
+   cell's hairlines reach the wrapper's edge and the inked fifth stop meets the
+   rounded corner. `overflow: hidden` is what lets that happen; none of them
+   holds a captioned figure, so the block formatting context it starts costs
+   nothing. */
+.wcblr-tl .wcblr-tl-plan,
+.wcblr-tl .wcblr-tl-grid,
+.wcblr-tl .wcblr-tl-trade,
+.wcblr-tl .wcblr-tl-tl {
+	overflow: hidden;
+}
+
+/* ---- Hover: what answers the pointer, and what does not -----------------
+   Both gates, for the reasons written out at the top of
+   `layout/_hover-states.scss`:
+
+     @media (hover: hover) and (pointer: fine)       so a tap on a phone does
+                                                     not leave a card lifted
+     @media (prefers-reduced-motion: no-preference)  around MOVEMENT only
+
+   Colour and border changes sit outside the reduced-motion query on purpose. A
+   reader who asked for less motion still gets the full affordance, just
+   without the travel.
+
+   NOT given a hover, deliberately: the hero panel, the deadline band and the
+   closing band, which are the page rather than controls; the three hero stats,
+   which are facts; and every button, which already takes the site-wide wipe
+   from `content/_buttons.scss`.
+
+   `box-shadow` is safe here: measured against the served Remote CSS on 8
+   September 2026 it survives 39 times out of 39. `filter` does NOT. */
+.wcblr-tl .wcblr-tl-card {
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.28s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-tl .wcblr-tl-card {
+		transition:
+			transform 0.3s cubic-bezier(0.2, 0.6, 0.2, 1),
+			border-color 0.2s ease,
+			box-shadow 0.28s ease;
+	}
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.wcblr-tl .wcblr-tl-card:hover {
+		/* the resting hairline is #dad5cd; this is the same hairline with the
+		   warmth turned up, not a new colour in the palette */
+		border-color: #c0ab8c !important;
+		box-shadow: 0 8px 22px rgba(42, 29, 20, 0.09);
+	}
+
+	/* The inked wrap-up card. Its hairline family is #3a2a1e, so warming it
+	   toward #c0ab8c would put a light rule on a dark card. Selector shape
+	   copied from `content/_buttons.scss`, which keys off the same inline
+	   background. */
+	.wcblr-tl .wcblr-tl-card[style*="background-color:#2a1d14"]:hover {
+		border-color: #6a5136 !important;
+		box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.wcblr-tl .wcblr-tl-card:hover {
+			transform: translateY(-3px);
+		}
+	}
+}
+
+/* The ten seats, the four quadrants and the five stops are cells in one
+   object, not objects of their own, so they tint rather than lift. Lifting a
+   cell out of the panel it is ruled into is the wrong reading, and it would
+   drag its hairlines with it. */
+.wcblr-tl .wcblr-tl-seat,
+.wcblr-tl .wcblr-tl-cell,
+.wcblr-tl .wcblr-tl-tl .wp-block-column {
+	transition: background-color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.wcblr-tl .wcblr-tl-seat:hover,
+	.wcblr-tl .wcblr-tl-cell:hover,
+	.wcblr-tl .wcblr-tl-tl .wp-block-column:not(.has-background):hover {
+		background-color: #f4eee3;
+	}
+
+	/* Stop 05 is inked, so it warms instead of tinting. Its background is
+	   inline, hence the !important the light cells do not need. */
+	.wcblr-tl .wcblr-tl-tl .wp-block-column.has-background:hover {
+		background-color: #34241a !important;
+	}
+}
+
+/* ---- The ten question rows ----------------------------------------------
+   The summary already recolours itself and its marker. What is missing without
+   this is the row: ten identical cards with nothing telling you which one the
+   pointer is on. The marker also grows a little, which is the only movement in
+   this block and therefore the only part inside the reduced-motion gate. */
+.wcblr-tl .wcblr-tl-faq {
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.28s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.wcblr-tl .wcblr-tl-faq:hover {
+		border-color: #c0ab8c !important;
+		box-shadow: 0 8px 22px rgba(42, 29, 20, 0.07);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.wcblr-tl .wcblr-tl-faq > summary::after {
+			transition:
+				color 0.18s ease,
+				transform 0.22s cubic-bezier(0.34, 1.4, 0.64, 1);
+		}
+		.wcblr-tl .wcblr-tl-faq > summary:hover::after {
+			transform: scale(1.2);
+		}
+	}
+}
+
+/* ---- Links in the copy --------------------------------------------------
+   All on light surfaces, so the site's crimson is safe: 4.89:1 on the #FBF8F1
+   cards and 4.41:1 on the cream.
+
+   The underline is restored on purpose. The theme carries
+   `a:where(:not(.wp-element-button)):hover { text-decoration: none }`, so as
+   things stand a link in post copy LOSES its only affordance under the pointer
+   and gains nothing. `:focus-visible` gets the same treatment so the keyboard
+   path and the pointer path show the same thing.
+
+   Buttons are excluded by the `p`/`li` in the selector: a block button is an
+   `<a>` inside a `<div class="wp-block-button">`, never inside a paragraph. */
+.wcblr-tl .wcblr-sec p a,
+.wcblr-tl .wcblr-sec li a {
+	transition: color 0.18s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.wcblr-tl .wcblr-sec p a:hover,
+	.wcblr-tl .wcblr-sec li a:hover {
+		color: #C8344B;
+		text-decoration: underline;
+		text-decoration-thickness: 1.5px;
+		text-underline-offset: 3px;
+	}
+}
+
+.wcblr-tl .wcblr-sec p a:focus-visible,
+.wcblr-tl .wcblr-sec li a:focus-visible {
+	color: #C8344B;
+	text-decoration: underline;
+	text-decoration-thickness: 1.5px;
+	text-underline-offset: 3px;
+}
+
+/* ---- Phone: the rules that point the wrong way once things stack --------
+   Core stacks columns below 782px. Five places on this page draw a divider as
+   a LEFT hairline, which is correct while the columns sit side by side and is
+   a rule pointing the wrong way the moment they do not. */
+@media (max-width: 781px) {
+	.wcblr-tl .wcblr-tl-plan .wp-block-column,
+	.wcblr-tl .wcblr-tl-grid .wp-block-column,
+	.wcblr-tl .wcblr-tl-tl .wp-block-column,
+	.wcblr-tl .wcblr-tl-get,
+	.wcblr-tl .wcblr-tl-aside {
+		border-left: 0 !important;
+		border-top: 1px solid #e3ded4 !important;
+	}
+
+	/* The first cell of the first row in each object opens it, so it takes no
+	   rule at all. The seat plan and the quadrant grid are groups of rows, so
+	   the first row's first column is the one to clear. */
+	.wcblr-tl .wcblr-tl-plan > .wp-block-columns:first-child > .wp-block-column:first-child,
+	.wcblr-tl .wcblr-tl-grid > .wp-block-columns:first-child > .wp-block-column:first-child,
+	.wcblr-tl .wcblr-tl-tl .wp-block-column:first-child {
+		border-top: 0 !important;
+	}
+
+	/* 104px between sections is measured for a 1100px column where the sections
+	   are wide objects with air around them. At 390px it is a third of the
+	   screen of nothing between one object and the next. */
+	.wcblr-tl .wcblr-sec + .wcblr-sec {
+		margin-top: 68px !important;
+	}
+}
+
+/* ---- Phone: the four panels that carry no padding of their own ----------
+   `_guide.scss` rule 14 gives every `.wp-block-group.has-background` 24px of
+   side padding below 600px, because the surfaces on these pages carry 28 to
+   40px inline and 40px is a fifth of a phone screen spent twice over. Right
+   almost everywhere, and wrong for exactly the four objects on this page whose
+   cells hold the padding instead: push 24px in and the inked fifth stop ends
+   up floating in a cream margin.
+
+   Both sides are `!important`, so ORDER DECIDES NOTHING and specificity
+   decides everything. Rule 14's selector is `.wcblr-guide
+   .wp-block-group.has-background`, three class-weight units; the obvious
+   `.wcblr-tl .wcblr-tl-plan` is two and would lose silently. `.has-background`
+   is on all four already, so naming it here levels the count and the later
+   file wins the tie. */
+@media (max-width: 600px) {
+	.wcblr-tl .wcblr-tl-plan.has-background,
+	.wcblr-tl .wcblr-tl-grid.has-background,
+	.wcblr-tl .wcblr-tl-trade.has-background,
+	.wcblr-tl .wcblr-tl-tl.has-background {
+		padding-left: 0 !important;
+		padding-right: 0 !important;
+	}
+}
+
+/* And the other half of the same fault. `_guide.scss` rule 15 strips the side
+   padding off a stacked `.wp-block-column` that carries no background, on the
+   grounds that such padding is usually a gutter pretending to be padding. In
+   these objects it is the cell's own inset and it is the only thing holding
+   the copy off the panel edge, so it is put back.
+
+   Rule 15's `:not()` chain is four more class-weight units on top of its two,
+   so this has to carry the same chain to reach it. Repeating it is ugly and it
+   is also the honest thing: these selectors have to move together, and a
+   reader who changes one will see the other. */
+@media (max-width: 781px) {
+	.wcblr-tl .wcblr-tl-seat.wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell):not(.wcblr-tier-soon),
+	.wcblr-tl .wcblr-tl-cell.wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell):not(.wcblr-tier-soon),
+	.wcblr-tl .wcblr-tl-ask.wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell):not(.wcblr-tier-soon),
+	.wcblr-tl .wcblr-tl-get.wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell):not(.wcblr-tier-soon) {
+		padding-left: 26px !important;
+		padding-right: 26px !important;
+	}
+
+	.wcblr-tl .wcblr-tl-tl .wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell):not(.wcblr-tier-soon) {
+		padding-left: 22px !important;
+		padding-right: 22px !important;
+	}
+
+	/* The form and its sidebar, same fault: both are padded columns with no
+	   background, and on a phone the copy would sit flush against the card
+	   edge the `wp:columns` wrapper draws around them. */
+	.wcblr-tl .wcblr-form.wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell):not(.wcblr-tier-soon),
+	.wcblr-tl .wcblr-tl-aside.wp-block-column:not(.has-background):not(.wcblr-statcard):not(.wcblr-cell):not(.wcblr-tier-soon) {
+		padding-left: 24px !important;
+		padding-right: 24px !important;
+	}
+}
+
+/* ---- The portrait beside `not_required` ---------------------------------
+   The illustration is 928x1152, and in the 38% column this template gives it
+   that wants roughly 560px of height. The quadrant panel beside it is shorter
+   than that, so in flow the figure sets the row's height and hangs below the
+   thing it is supposed to be level with.
+
+   Fixing it in the block is not possible: a fixed `aspectRatio` would have to
+   guess the panel's height, and the panel's height is whatever its four
+   quadrants make it at the reader's width. So the column becomes the
+   positioning context, the figure comes out of flow, and the image crops to
+   whatever height the row ends up being. Taking the figure out of flow is the
+   whole trick: a stretched column matches the tallest column's CONTENT, and
+   while the figure is in flow the figure IS that content.
+
+   `object-fit` is one of the properties the Remote CSS sanitiser keeps,
+   checked against the served stylesheet rather than assumed. Only while the
+   columns are side by side: below 782px they stack, the row has no shared
+   height to match, and the illustration should simply be itself.
+
+   Until the image is uploaded the column holds the dashed `wcblr-tba` gap
+   instead, which is in flow and unaffected. */
+@media (min-width: 782px) {
+	.wcblr-tl .wcblr-tl-figcol {
+		position: relative;
+	}
+
+	.wcblr-tl .wcblr-tl-figcol > figure {
+		position: absolute;
+		inset: 0;
+		margin: 0;
+	}
+
+	.wcblr-tl .wcblr-tl-figcol > figure > img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: 50% 18%;
+	}
+}
