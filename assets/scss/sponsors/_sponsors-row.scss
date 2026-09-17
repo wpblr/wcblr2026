@@ -31,3 +31,68 @@
 		grid-template-columns: 1fr !important;
 	}
 }
+
+/* ---- Sponsor tile hover --------------------------------------------------- */
+/* This lived in `sections/_home-motion.scss` under a `body.home` scope while
+   the home teaser was the only place the row appeared. The /sponsors/ page now
+   carries the same query loop, so the scope is gone and the rule is here, next
+   to the rest of the row's styling. Its numbers are unchanged: the deep gold
+   #a8760f is the colour the site gives a sponsor everywhere else, and it is
+   deliberately NOT the #c0ab8c warm border the attendee and table-lead cards
+   take.
+
+   Every tile is a link. The featured image is rendered with isLink, so the
+   logo sits inside an <a> pointing at that sponsor's own page, and a lift is
+   honest here in a way it would not be on an attendee card.
+
+   That <a> is inline by default, which leaves it exactly as wide as the logo
+   and turns the rest of the tile into a dead zone that still looks clickable.
+   Making it a block hands it the whole content box of the figure, so the
+   pointer is over the real link across nearly the whole tile.
+
+   !important is not decoration. The border colour and width arrive as INLINE
+   styles on the group, printed from the block attributes
+   (border-color:#ddd9d2;border-width:2px), and no stylesheet rule beats an
+   inline one. The responsive rules above carry it for the same reason; the
+   home-page version did not need it because it only ever set the colour on
+   hover, which is the same battle, so it was quietly losing to the inline
+   value there too. */
+.wcblr-sponsors-row .wp-block-post-featured-image a {
+	display: block;
+}
+
+.wcblr-sponsors-row li.wp-block-post > .wp-block-group {
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-sponsors-row li.wp-block-post > .wp-block-group {
+		transition:
+			border-color 0.2s ease,
+			box-shadow 0.2s ease,
+			transform 0.2s cubic-bezier(0.2, 0.6, 0.2, 1);
+	}
+}
+
+/* :focus-within is outside the hover gate on purpose. A keyboard reaches these
+   tiles on every device, including the ones that never report a fine pointer,
+   so the focused tile has to light up there too. */
+.wcblr-sponsors-row li.wp-block-post > .wp-block-group:focus-within {
+	border-color: #a8760f !important;
+	box-shadow: 0 6px 18px rgba(42, 29, 20, 0.08);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.wcblr-sponsors-row li.wp-block-post > .wp-block-group:hover {
+		border-color: #a8760f !important;
+		box-shadow: 0 6px 18px rgba(42, 29, 20, 0.08);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.wcblr-sponsors-row li.wp-block-post > .wp-block-group:hover {
+			transform: translateY(-3px);
+		}
+	}
+}

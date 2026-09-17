@@ -48,9 +48,11 @@
    the avatar is nearly as wide as the card, and 16 made the corners look tight
    around it. Everything else on the site keeps 16.
 
-   There is deliberately no hover lift. An organizer card is a link to a profile
-   and earns one; an attendee card goes nowhere, and a surface that rises under
-   the pointer while refusing the click is worse than one that sits still. */
+   The card does not lift. An organizer card is a link to a profile and earns
+   one; this card goes nowhere, and a surface that rises under the pointer
+   while refusing the click is worse than one that sits still. It does answer
+   the pointer, though, without pretending to be a button: see "Card hover"
+   below. */
 .wcblr-attendees #tix-attendees .tix-attendee-list li {
 	float: none;
 	width: auto;
@@ -323,6 +325,59 @@
 	height: 24px;
 	background-color: #7a6757;
 	clip-path: path("M15.6,7.2H14v1.5h1.6c2,0,3.7,1.7,3.7,3.7s-1.7,3.7-3.7,3.7H14v1.5h1.6c2.8,0,5.2-2.3,5.2-5.2,0-2.9-2.3-5.2-5.2-5.2zM4.7,12.4c0-2,1.7-3.7,3.7-3.7H10V7.2H8.4c-2.9,0-5.2,2.3-5.2,5.2,0,2.9,2.3,5.2,5.2,5.2H10v-1.5H8.4c-2,0-3.7-1.7-3.7-3.7zm4.6.9h5.3v-1.5H9.3v1.5z");
+}
+
+/* ---- Card hover ----------------------------------------------------------
+   The card warms rather than moves. The frame goes from the neutral #dad5cd to
+   #c0ab8c, the same warm border the table-lead cards take, its shadow deepens,
+   and the photograph grows by four percent inside its frame. The card itself
+   never shifts a pixel, so nothing about it starts claiming to be clickable,
+   and the row still answers the pointer.
+
+   The moat stays #FBF8F1 throughout, per the warning on .avatar: the avatar's
+   background IS the card colour, so tinting the card on hover without tinting
+   the avatar would open a visible ring of the wrong colour around every face.
+   Neither one is tinted here, which is the cheapest way to keep that true.
+
+   Only the scale is gated on a fine pointer and on motion preference. The
+   colour and the shadow are a state change rather than an animation, so a
+   touch browser emulating :hover on tap is better off showing them than
+   showing nothing at all.
+
+   :focus-within is what carries this for the keyboard: the chips inside the
+   card are the only focusable things in it, so tabbing to one lights its card
+   the same way the pointer does. It survives the sanitiser, which serves the
+   two uses already in this stylesheet. */
+.wcblr-attendees #tix-attendees .tix-attendee-list li {
+	transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.wcblr-attendees #tix-attendees .tix-attendee-list li:hover,
+.wcblr-attendees #tix-attendees .tix-attendee-list li:focus-within {
+	border-color: #c0ab8c;
+	box-shadow: 0 6px 16px rgba(42, 29, 20, 0.1);
+}
+
+.wcblr-attendees #tix-attendees .tix-attendee-list .avatar {
+	transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.wcblr-attendees #tix-attendees .tix-attendee-list li:hover .avatar,
+.wcblr-attendees #tix-attendees .tix-attendee-list li:focus-within .avatar {
+	border-color: #c0ab8c;
+	box-shadow: 0 8px 20px rgba(42, 29, 20, 0.16);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	@media (prefers-reduced-motion: no-preference) {
+		.wcblr-attendees #tix-attendees .tix-attendee-list .avatar {
+			transition: transform 0.2s cubic-bezier(0.2, 0.6, 0.2, 1), border-color 0.18s ease, box-shadow 0.18s ease;
+		}
+
+		.wcblr-attendees #tix-attendees .tix-attendee-list li:hover .avatar {
+			transform: scale(1.04);
+		}
+	}
 }
 
 /* ---- Hover ---------------------------------------------------------------

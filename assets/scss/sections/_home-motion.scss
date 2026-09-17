@@ -278,41 +278,15 @@ body.home .wcblr-blog-grid li.wp-block-post {
 }
 
 /* ---- The sponsor logos --------------------------------------------------
-   `.wcblr-logo` in `sections/_sponsors-teaser.scss` has carried a lift for a
-   long time and matches nothing on this page: the home page row is a query
-   loop of sponsor posts, so the class is never applied. Measured, not assumed:
-   `.wcblr-sponsors-row .wcblr-logo` returns zero elements on the live page.
+   Moved out. The tile hover now lives in `sponsors/_sponsors-row.scss` with no
+   `body.home` scope on it, because the /sponsors/ page renders the same query
+   loop and wanted the same treatment. Nothing home-specific was left behind.
 
-   The card is the `.wp-block-group` inside each post, which already has the
-   2px #ddd9d2 edge. It warms to the deep gold, which is the colour the site
-   uses for a sponsor everywhere else. */
-body.home .wcblr-sponsors-row li.wp-block-post > .wp-block-group {
-	transition:
-		border-color 0.2s ease,
-		box-shadow 0.2s ease;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-	body.home .wcblr-sponsors-row li.wp-block-post > .wp-block-group {
-		transition:
-			border-color 0.2s ease,
-			box-shadow 0.2s ease,
-			transform 0.2s cubic-bezier(0.2, 0.6, 0.2, 1);
-	}
-}
-
-@media (hover: hover) and (pointer: fine) {
-	body.home .wcblr-sponsors-row li.wp-block-post > .wp-block-group:hover {
-		border-color: #a8760f;
-		box-shadow: 0 6px 18px rgba(42, 29, 20, 0.08);
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		body.home .wcblr-sponsors-row li.wp-block-post > .wp-block-group:hover {
-			transform: translateY(-3px);
-		}
-	}
-}
+   The note that came with it is worth keeping here: `.wcblr-logo` in
+   `sections/_sponsors-teaser.scss` has carried a lift for a long time and
+   matches nothing on this page. Measured, not assumed, the home row is a query
+   loop of sponsor posts, so `.wcblr-sponsors-row .wcblr-logo` returns zero
+   elements on the live page. */
 
 /* ---- The venue map ------------------------------------------------------
    "Where we're gathering" is a heading, three hairline info rows, a button and
