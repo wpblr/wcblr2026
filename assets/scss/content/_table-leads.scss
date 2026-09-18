@@ -418,10 +418,11 @@
 }
 
 /* ---- The portrait beside `not_required` ---------------------------------
-   The illustration is 928x1152, and in the 38% column this template gives it
-   that wants roughly 560px of height. The quadrant panel beside it is shorter
-   than that, so in flow the figure sets the row's height and hangs below the
-   thing it is supposed to be level with.
+   The illustration is 896x1200. The 38% column this template gives it is about
+   440px wide, so in flow the figure wants close to 590px of height. The
+   quadrant panel beside it is shorter than that, so the figure ends up setting
+   the row's height and hanging below the thing it is supposed to be level
+   with.
 
    Fixing it in the block is not possible: a fixed `aspectRatio` would have to
    guess the panel's height, and the panel's height is whatever its four
@@ -436,8 +437,11 @@
    columns are side by side: below 782px they stack, the row has no shared
    height to match, and the illustration should simply be itself.
 
-   Until the image is uploaded the column holds the dashed `wcblr-tba` gap
-   instead, which is in flow and unaffected. */
+   The figure has to be a DIRECT child of the column for any of this to fire.
+   While the image was still a placeholder it sat inside a dashed `wcblr-tba`
+   group, and `.wcblr-tl-figcol > figure` quietly matched nothing. If the
+   portrait ever starts setting the row height again, that wrapper is the first
+   thing to look for. */
 @media (min-width: 782px) {
 	.wcblr-tl .wcblr-tl-figcol {
 		position: relative;
