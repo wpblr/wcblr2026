@@ -1,0 +1,739 @@
+/* ---- Getting to Bengaluru ------------------------------------------------
+   The travel post, drawn as the journey rather than described. Four objects,
+   each one a thing you actually hold or read on the way in:
+
+     .wcblr-pass     the two venues as two tickets, with a perforated stub
+                     that states what gets you through the door
+     .wcblr-route    one arrival point per row, its legs as coloured chips
+     .wcblr-board    the airport options as a departures board
+     .wcblr-line     the stretch of the Purple Line both venues sit on
+     .wcblr-postcard the "come a day early" beat, as a postcard
+
+   Everything is scoped under `.wcblr-arrive` on the post wrapper, so nothing
+   else on the site can move. The blocks carry classes and text only; the look
+   lives here, which is why the editor shows them plain.
+
+   Colour has one job per object. On the route chips and the line, colour is
+   the transport mode, and the two metro colours are the network's own (Purple
+   and Green Line), the way the social glyphs use each brand's own value. They
+   always travel with their name in text, so colour never carries a fact alone.
+
+   Sanitiser notes, all measured elsewhere and relied on here: no url()
+   anywhere; gradients, clip-path, box-shadow and `content` survive.        */
+
+$arr-espresso: #2a1d14;
+$arr-cream: #f2ece0;
+$arr-card: #fbf8f1;
+$arr-line: #dad5cd;
+$arr-muted: #7a6757;
+$arr-crimson: #c8344b;
+$arr-green: #136451;
+$arr-gold: #e0a526;
+$arr-gold-deep: #a8760f;
+$arr-purple: #6b3fa0;
+$arr-mono: var(--wp--preset--font-family--jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
+$arr-serif: var(--wp--preset--font-family--fraunces), "Fraunces", Georgia, serif;
+$arr-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif;
+
+/* ======================================================================
+   1. The pass
+   ====================================================================== */
+
+.wcblr-arrive .wcblr-passes {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 22px;
+	margin-top: 32px;
+
+	@media (max-width: 781px) {
+		grid-template-columns: 1fr;
+	}
+}
+
+.wcblr-arrive .wcblr-pass {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	margin: 0 !important;
+	background: $arr-card;
+	border: 1.5px solid $arr-line;
+	border-radius: 16px;
+	overflow: visible;
+	box-shadow: 0 1px 0 rgba(42, 29, 20, 0.04), 0 14px 30px -18px rgba(42, 29, 20, 0.35);
+	transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+	@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+		&:hover {
+			transform: translateY(-4px) rotate(-0.4deg);
+			box-shadow: 0 1px 0 rgba(42, 29, 20, 0.04), 0 22px 36px -18px rgba(42, 29, 20, 0.4);
+		}
+	}
+}
+
+/* The coloured head: the day, as a ticket prints it. */
+.wcblr-arrive .wcblr-pass-head {
+	margin: 0 !important;
+	padding: 22px 28px 20px;
+	border-radius: 14px 14px 0 0;
+	color: $arr-cream;
+	background: $arr-crimson;
+
+	p { margin: 0 !important; color: inherit; }
+}
+
+.wcblr-arrive .wcblr-pass-sat .wcblr-pass-head { background: $arr-green; }
+
+.wcblr-arrive .wcblr-pass-day {
+	font-family: $arr-mono;
+	font-size: 12px !important;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	opacity: 0.85;
+}
+
+.wcblr-arrive .wcblr-pass-where {
+	margin-top: 6px !important;
+	font-family: $arr-serif;
+	font-size: clamp(30px, 3.4vw, 40px) !important;
+	line-height: 1.05;
+	font-weight: 400;
+	letter-spacing: -0.01em;
+}
+
+.wcblr-arrive .wcblr-pass-body {
+	flex: 1;
+	margin: 0 !important;
+	padding: 22px 28px 24px;
+
+	p { margin: 0 !important; }
+}
+
+.wcblr-arrive .wcblr-pass-venue {
+	font-family: $arr-sans;
+	font-size: 19px !important;
+	font-weight: 600;
+	line-height: 1.3;
+	color: $arr-espresso;
+
+	a { color: inherit; }
+}
+
+.wcblr-arrive .wcblr-pass-what {
+	margin-top: 8px !important;
+	font-size: 15px !important;
+	line-height: 1.6;
+}
+
+/* Label over value, two per pass, side by side. */
+.wcblr-arrive .wcblr-pass-facts {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 14px 20px;
+	margin: 18px 0 0 !important;
+
+	> .wp-block-group { margin: 0 !important; }
+}
+
+.wcblr-arrive .wcblr-pass-k {
+	font-family: $arr-mono;
+	font-size: 11px !important;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: $arr-muted;
+}
+
+.wcblr-arrive .wcblr-pass-v {
+	margin-top: 3px !important;
+	font-size: 15px !important;
+	line-height: 1.45;
+	color: $arr-espresso;
+}
+
+/* The stub: a perforation, two punched notches, and the admission rule. */
+.wcblr-arrive .wcblr-pass-stub {
+	position: relative;
+	margin: 0 !important;
+	padding: 18px 28px 22px;
+	border-top: 2px dashed #cfc6b8;
+
+	&::before,
+	&::after {
+		content: "";
+		position: absolute;
+		top: -12px;
+		width: 22px;
+		height: 22px;
+		border-radius: 50%;
+		background: $arr-cream;
+		border: 1.5px solid $arr-line;
+	}
+
+	&::before { left: -12px; clip-path: inset(0 0 0 50%); }
+	&::after { right: -12px; clip-path: inset(0 50% 0 0); }
+
+	p { margin: 0 !important; }
+}
+
+.wcblr-arrive .wcblr-pass-admit {
+	font-family: $arr-mono;
+	font-size: 12px !important;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: $arr-espresso;
+}
+
+.wcblr-arrive .wcblr-pass-rule {
+	margin-top: 6px !important;
+	font-size: 15px !important;
+	line-height: 1.55;
+}
+
+/* The one stamp on the page, straddling Saturday's top edge so it never
+   sits on the day line, at any width. */
+.wcblr-arrive .wcblr-pass .wcblr-stamp {
+	position: absolute;
+	top: -15px;
+	right: 18px;
+	z-index: 2;
+}
+
+/* ======================================================================
+   2. Route strips
+   ====================================================================== */
+
+.wcblr-arrive .wcblr-routes {
+	margin-top: 30px !important;
+	border-top: 2px solid $arr-espresso;
+}
+
+.wcblr-arrive .wcblr-route {
+	display: grid;
+	grid-template-columns: 230px minmax(0, 1fr) 150px;
+	align-items: center;
+	gap: 10px 24px;
+	margin: 0 !important;
+	padding: 18px 16px;
+	border-bottom: 1px solid $arr-line;
+	transition: background-color 0.2s ease;
+
+	> * { margin: 0 !important; }
+
+	@media (hover: hover) and (pointer: fine) {
+		&:hover { background: $arr-card; }
+	}
+
+	@media (max-width: 781px) {
+		grid-template-columns: minmax(0, 1fr) auto;
+		padding: 16px 4px;
+
+		.wcblr-legs { grid-column: 1 / -1; grid-row: 2; }
+	}
+}
+
+.wcblr-arrive .wcblr-route-from {
+	p { margin: 0 !important; }
+}
+
+.wcblr-arrive .wcblr-route-name {
+	font-family: $arr-sans;
+	font-size: 17px !important;
+	font-weight: 600;
+	line-height: 1.3;
+	color: $arr-espresso;
+}
+
+.wcblr-arrive .wcblr-route-code {
+	margin-top: 3px !important;
+	font-family: $arr-mono;
+	font-size: 11px !important;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: $arr-muted;
+}
+
+.wcblr-arrive .wcblr-legs {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 26px;
+
+	> p { margin: 0 !important; }
+
+	@media (max-width: 781px) { gap: 8px; }
+}
+
+/* A leg: a pill in its mode's colour. The arrow between legs is drawn, not
+   typed, so a screen reader reads the legs as a list of steps. */
+.wcblr-arrive .wcblr-leg {
+	position: relative;
+	display: inline-block;
+	padding: 6px 12px;
+	border-radius: 999px;
+	font-family: $arr-mono;
+	font-size: 12px !important;
+	font-weight: 600;
+	line-height: 1.3;
+	letter-spacing: 0.02em;
+	color: #fff;
+	background: $arr-espresso;
+
+	/* On a phone the legs wrap, and a connector would dangle at a line end. */
+	@media (max-width: 781px) {
+		&:not(:last-child)::after { display: none; }
+	}
+
+	&:not(:last-child)::after {
+		content: "";
+		position: absolute;
+		right: -19px;
+		top: 50%;
+		width: 12px;
+		height: 2px;
+		background: $arr-muted;
+		transform: translateY(-50%);
+	}
+}
+
+.wcblr-arrive .wcblr-leg-purple { background: $arr-purple; }
+.wcblr-arrive .wcblr-leg-green { background: $arr-green; }
+.wcblr-arrive .wcblr-leg-bus { background: $arr-gold; color: $arr-espresso; }
+.wcblr-arrive .wcblr-leg-cab { background: $arr-espresso; color: $arr-cream; }
+.wcblr-arrive .wcblr-leg-walk {
+	background: transparent;
+	color: $arr-espresso;
+	box-shadow: inset 0 0 0 1.5px $arr-muted;
+}
+
+.wcblr-arrive .wcblr-route-time {
+	text-align: right;
+
+	p { margin: 0 !important; }
+}
+
+.wcblr-arrive .wcblr-route-min {
+	font-family: $arr-serif;
+	font-size: 30px !important;
+	line-height: 1;
+	color: $arr-espresso;
+
+	@media (max-width: 781px) { font-size: 24px !important; }
+}
+
+.wcblr-arrive .wcblr-route-cost {
+	margin-top: 4px !important;
+	font-family: $arr-mono;
+	font-size: 12px !important;
+	color: $arr-muted;
+}
+
+/* ======================================================================
+   3. The departures board
+   ====================================================================== */
+
+.wcblr-arrive .wcblr-board {
+	margin-top: 32px !important;
+	padding: 26px 28px 18px;
+	background: #211710;
+	border-radius: 16px;
+	box-shadow: inset 0 0 0 1px #3b2c20, 0 20px 40px -24px rgba(42, 29, 20, 0.6);
+	font-family: $arr-mono;
+	color: #d9cfbf;
+
+	p { margin: 0 !important; }
+}
+
+.wcblr-arrive .wcblr-board-title {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding-bottom: 16px;
+	border-bottom: 1px solid #3b2c20;
+	font-size: 13px !important;
+	font-weight: 700;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: $arr-gold;
+
+	&::before {
+		content: "";
+		flex: none;
+		width: 9px;
+		height: 9px;
+		border-radius: 50%;
+		background: #4cc38a;
+		box-shadow: 0 0 0 4px rgba(76, 195, 138, 0.18);
+
+		@media (prefers-reduced-motion: no-preference) {
+			animation: wcblr-arrive-blink 2.4s ease-in-out infinite;
+		}
+	}
+}
+
+@keyframes wcblr-arrive-blink {
+	0%, 60%, 100% { opacity: 1; }
+	75% { opacity: 0.25; }
+}
+
+.wcblr-arrive .wcblr-board-row,
+.wcblr-arrive .wcblr-board-head {
+	display: grid;
+	grid-template-columns: 1.25fr 1.6fr 0.75fr 0.95fr 1.2fr;
+	align-items: center;
+	gap: 6px 18px;
+	margin: 0 !important;
+	padding: 14px 0;
+	border-bottom: 1px dashed #3b2c20;
+
+	> p { margin: 0 !important; }
+}
+
+.wcblr-arrive .wcblr-board-head {
+	padding: 12px 0 10px;
+	font-size: 10px;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: #8f8273;
+
+	> p { font-size: 10px !important; }
+}
+
+.wcblr-arrive .wcblr-board-row {
+	font-size: 14px;
+	transition: background-color 0.2s ease;
+
+	&:last-child { border-bottom: 0; }
+
+	> p { font-size: 14px !important; line-height: 1.4; }
+
+	> p:first-child {
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: $arr-cream;
+	}
+
+	> p:nth-child(3),
+	> p:nth-child(4) { color: $arr-gold; font-weight: 600; }
+
+	@media (hover: hover) and (pointer: fine) {
+		&:hover { background: rgba(224, 165, 38, 0.06); }
+	}
+}
+
+/* Status: the one column a traveller reads first. */
+.wcblr-arrive .wcblr-board-status {
+	justify-self: start;
+	padding: 4px 10px;
+	border-radius: 4px;
+	font-size: 11px !important;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: #9fe3bf;
+	background: rgba(76, 195, 138, 0.14);
+	box-shadow: inset 0 0 0 1px rgba(76, 195, 138, 0.35);
+}
+
+.wcblr-arrive .wcblr-board-warn {
+	color: #f2c46a;
+	background: rgba(224, 165, 38, 0.12);
+	box-shadow: inset 0 0 0 1px rgba(224, 165, 38, 0.4);
+}
+
+.wcblr-arrive .wcblr-board-stop {
+	color: #ff9aa9;
+	background: rgba(200, 52, 75, 0.16);
+	box-shadow: inset 0 0 0 1px rgba(200, 52, 75, 0.5);
+}
+
+.wcblr-arrive .wcblr-board-off {
+	color: #8f8273;
+	background: transparent;
+	box-shadow: inset 0 0 0 1px #4a3a2c;
+}
+
+/* The metro row is not running yet, and the row looks it. */
+.wcblr-arrive .wcblr-board-row.is-off > p:not(.wcblr-board-status) {
+	color: #6f6356 !important;
+	text-decoration: line-through;
+	text-decoration-color: #4a3a2c;
+}
+
+.wcblr-arrive .wcblr-board-notes {
+	margin-top: 16px !important;
+	padding-top: 14px;
+	border-top: 1px solid #3b2c20;
+	font-size: 12px !important;
+	line-height: 1.6;
+	color: #a39c92;
+}
+
+@media (max-width: 781px) {
+	.wcblr-arrive .wcblr-board { padding: 22px 18px 14px; }
+	.wcblr-arrive .wcblr-board-head { display: none; }
+
+	.wcblr-arrive .wcblr-board-row {
+		grid-template-columns: minmax(0, 1fr) auto auto;
+
+		> p:first-child { grid-column: 1 / -1; }
+		> p:nth-child(2) { grid-column: 1 / -1; color: #a39c92; }
+		> p:nth-child(3) { grid-column: 1; }
+		> .wcblr-board-status { grid-column: 1 / -1; }
+	}
+}
+
+/* ======================================================================
+   4. The Purple Line
+   ====================================================================== */
+
+.wcblr-arrive .wcblr-line {
+	position: relative;
+	display: grid;
+	grid-template-columns: repeat(10, minmax(0, 1fr));
+	margin-top: 40px !important;
+	padding: 34px 26px 26px;
+	background: $arr-card;
+	border: 1.5px solid $arr-line;
+	border-radius: 16px;
+
+	/* The track, through every dot. 51px is the dot's centre: 34px padding
+	   plus the 17px half-height of the stop's top band. */
+	&::before {
+		content: "";
+		position: absolute;
+		left: 26px;
+		right: 26px;
+		top: 49px;
+		height: 6px;
+		border-radius: 3px;
+		background: $arr-purple;
+	}
+}
+
+.wcblr-arrive .wcblr-line-label {
+	position: absolute;
+	top: 12px;
+	left: 26px;
+	margin: 0 !important;
+	font-family: $arr-mono;
+	font-size: 11px !important;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: $arr-purple;
+}
+
+.wcblr-arrive .wcblr-line-ends {
+	position: absolute;
+	top: 12px;
+	right: 26px;
+	margin: 0 !important;
+	font-family: $arr-mono;
+	font-size: 11px !important;
+	color: $arr-muted;
+}
+
+.wcblr-arrive .wcblr-stop {
+	position: relative;
+	margin: 0 !important;
+	padding-top: 40px;
+	text-align: center;
+
+	p { margin: 0 !important; }
+
+	/* The dot */
+	&::before {
+		content: "";
+		position: absolute;
+		top: 8px;
+		left: 50%;
+		width: 18px;
+		height: 18px;
+		box-sizing: border-box;
+		border-radius: 50%;
+		background: #fff;
+		border: 4px solid $arr-purple;
+		transform: translateX(-50%);
+	}
+}
+
+/* An interchange is a ring in both colours. */
+.wcblr-arrive .wcblr-stop-xfer::before {
+	width: 24px;
+	height: 24px;
+	top: 5px;
+	border-color: $arr-purple;
+	box-shadow: 0 0 0 3px $arr-green;
+}
+
+/* The two stops the venue sits between get the crimson dot. */
+.wcblr-arrive .wcblr-stop-venue::before {
+	background: $arr-crimson;
+	border-color: #fff;
+	box-shadow: 0 0 0 3px $arr-crimson;
+}
+
+.wcblr-arrive .wcblr-stop-name {
+	padding: 0 4px;
+	font-family: $arr-sans;
+	font-size: 13px !important;
+	font-weight: 600;
+	line-height: 1.25;
+	color: $arr-espresso;
+}
+
+.wcblr-arrive .wcblr-stop-tag {
+	display: inline-block;
+	margin-top: 8px !important;
+	padding: 4px 8px;
+	border-radius: 6px;
+	font-family: $arr-mono;
+	font-size: 10.5px !important;
+	font-weight: 700;
+	line-height: 1.35;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: $arr-espresso;
+	background: rgba(42, 29, 20, 0.07);
+}
+
+.wcblr-arrive .wcblr-tag-venue { color: #fff; background: $arr-crimson; }
+.wcblr-arrive .wcblr-tag-sat { color: #fff; background: $arr-green; }
+.wcblr-arrive .wcblr-tag-rail { background: $arr-gold; }
+
+/* On a phone the line turns vertical: the track runs down the left. */
+@media (max-width: 781px) {
+	.wcblr-arrive .wcblr-line {
+		grid-template-columns: 1fr;
+		padding: 46px 18px 18px 18px;
+
+		&::before {
+			left: 34px;
+			right: auto;
+			top: 58px;
+			bottom: 38px;
+			width: 6px;
+			height: auto;
+		}
+	}
+
+	.wcblr-arrive .wcblr-line-label { left: 18px; }
+	.wcblr-arrive .wcblr-line-ends { display: none; }
+
+	.wcblr-arrive .wcblr-stop {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 6px 10px;
+		min-height: 44px;
+		padding: 10px 0 10px 48px;
+		text-align: left;
+
+		&::before { top: 22px; left: 19px; }
+
+		.wcblr-stop-tag { margin-top: 0 !important; }
+	}
+
+	.wcblr-arrive .wcblr-stop-xfer::before { top: 19px; }
+	.wcblr-arrive .wcblr-stop-name { padding: 0; font-size: 15px !important; }
+}
+
+/* ======================================================================
+   5. The postcard
+   ====================================================================== */
+
+.wcblr-arrive .wcblr-postcard {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	margin-top: 34px !important;
+	background: #fffdf8;
+	border: 1.5px solid $arr-line;
+	border-radius: 6px;
+	box-shadow: 0 18px 36px -22px rgba(42, 29, 20, 0.45);
+	transform: rotate(-0.8deg);
+	transition: transform 0.3s ease;
+
+	> * { margin: 0 !important; }
+
+	@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+		&:hover { transform: rotate(0deg) translateY(-3px); }
+	}
+
+	@media (max-width: 781px) {
+		grid-template-columns: 1fr;
+		transform: none;
+	}
+}
+
+.wcblr-arrive .wcblr-postcard-photo {
+	padding: 14px;
+
+	figure { margin: 0 !important; height: 100%; }
+
+	img {
+		width: 100%;
+		height: 100%;
+		min-height: 280px;
+		object-fit: cover;
+		border-radius: 3px;
+		display: block;
+	}
+}
+
+.wcblr-arrive .wcblr-postcard-text {
+	position: relative;
+	padding: 28px 30px 26px 32px;
+	border-left: 1.5px dashed #d4cabb;
+
+	@media (max-width: 781px) {
+		border-left: 0;
+		border-top: 1.5px dashed #d4cabb;
+		padding: 22px 20px;
+	}
+
+	p { margin: 0 !important; }
+}
+
+.wcblr-arrive .wcblr-postcard-hello {
+	font-family: $arr-serif;
+	font-style: italic;
+	font-size: 24px !important;
+	line-height: 1.2;
+	color: $arr-espresso;
+}
+
+.wcblr-arrive .wcblr-beat {
+	margin-top: 18px !important;
+	padding-left: 18px;
+	border-left: 3px solid $arr-crimson;
+
+	p { margin: 0 !important; }
+}
+
+.wcblr-arrive .wcblr-beat-noon { border-left-color: $arr-green; }
+.wcblr-arrive .wcblr-beat-eve { border-left-color: $arr-gold-deep; }
+
+.wcblr-arrive .wcblr-beat-when {
+	font-family: $arr-mono;
+	font-size: 11px !important;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: $arr-muted;
+}
+
+.wcblr-arrive .wcblr-beat-text {
+	margin-top: 4px !important;
+	font-size: 15px !important;
+	line-height: 1.6;
+}
+
+.wcblr-arrive .wcblr-postcard-credit {
+	margin-top: 18px !important;
+	font-family: $arr-mono;
+	font-size: 11px !important;
+	color: $arr-muted;
+}
