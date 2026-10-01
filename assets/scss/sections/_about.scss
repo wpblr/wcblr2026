@@ -141,3 +141,18 @@
 	}
 }
 
+
+/* ---- Stats on a phone ------------------------------------------------------
+   Stacked, the four stat cards kept the columns' 50px desktop gap, then the
+   dark "Where innovation roots deeply" card followed 19px below the last one.
+   Two spacings in one run of cards. Both are 16px now, which is also the gap
+   between the Get Involved cards further down. */
+@media (max-width: 600px) {
+	.wcblr-stats .wp-block-columns {
+		row-gap: 16px !important;
+	}
+
+	.wcblr-stats .wcblr-about-cta {
+		margin-top: 16px !important;
+	}
+}

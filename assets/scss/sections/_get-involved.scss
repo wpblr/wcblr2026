@@ -51,3 +51,24 @@
 		animation: wcblr-pulse 3.5s 1.2s ease-in-out infinite;
 	}
 }
+
+/* ---- A closed card looks closed, every time ------------------------------
+   The cards were closed by hand as each call ended, and they were closed two
+   different ways: Speak got a dashed border, an ink link and a grey number,
+   Media Partner kept the solid border, the crimson link and the gold number
+   the open cards use. So the grid said "closed" twice in two dialects.
+
+   Any card in a row that has live cards, and is not live itself, now takes
+   Speak's treatment. Nothing to remember next time a call closes: drop
+   `wcblr-live` from the card and the rest follows. */
+.wp-block-columns:has(>.wcblr-live) > .wp-block-column:not(.wcblr-live) {
+	border-style: dashed !important;
+
+	a {
+		color: #2a1d14 !important;
+	}
+
+	.has-accent-2-color {
+		color: #a39c92 !important;
+	}
+}

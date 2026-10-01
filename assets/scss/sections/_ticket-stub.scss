@@ -390,3 +390,33 @@
 		}
 	}
 }
+
+/* ---- Phones: the stub's inner padding ------------------------------------
+   The block pads the stub 30px a side, inline. In a 315px column that left
+   255px of content, and both pills ("SEAT ONLY BY SIGN-UP", "YOUR TICKET GETS
+   YOU IN") broke over two lines, a pill being the one shape that cannot take
+   a second line. So did the printed head and the inclusions strip. At 20px a
+   side, with the tracking on the mono lines eased a notch, every one of them
+   holds a single line at 390 and at 360. The notches move in with the
+   padding, so their centres stay on the card's edge. */
+@media (max-width: 600px) {
+	.wcblr-stub {
+		padding-left: 20px !important;
+		padding-right: 20px !important;
+
+		.wcblr-perf {
+			&::before { left: -31px; }
+			&::after  { right: -31px; }
+		}
+
+		&__pill {
+			padding: 6px 11px;
+			letter-spacing: 0.6px;
+		}
+
+		&__head,
+		&__incl {
+			letter-spacing: 0.9px;
+		}
+	}
+}

@@ -21,3 +21,20 @@
 		}
 	}
 }
+
+/* ---- Directions buttons on a phone ---------------------------------------
+   "Directions to SJBHS" and "Directions to BIC" wrap onto two rows at their
+   own widths, 180px and 162px, which reads as a ragged column. Full width
+   they read as two choices, the same call the tickets page's closing band
+   makes. Matched on the maps link, since the row carries no class. */
+@media (max-width: 600px) {
+	.wp-block-buttons:has(a[href*="maps"]) {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.wp-block-buttons:has(a[href*="maps"]) .wp-block-button__link {
+		display: block;
+		text-align: center;
+	}
+}

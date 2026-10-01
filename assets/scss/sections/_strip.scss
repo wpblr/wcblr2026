@@ -24,3 +24,26 @@
 		text-align: center !important;
 	}
 }
+
+/* ---- The header strip on a phone -----------------------------------------
+   The two halves sit in a `nowrap` row, so under ~575px each got about 150px
+   and broke over three lines: a 44px command line followed by a three-line
+   aside, on every page, above the masthead. The command is the joke and it
+   fits a phone on one line at 11px; "// brewed by the community since 2023"
+   is the aside, and the footer strip still carries it. The ellipsis is a
+   floor for anything narrower than 360, not something a phone should see. */
+@media (max-width: 575px) {
+	header .wcblr-strip .wcblr-strip__cmd:last-child {
+		display: none;
+	}
+
+	header .wcblr-strip .wcblr-strip__cmd:first-child {
+		flex: 1 1 auto;
+		min-width: 0;
+		font-size: 11px !important;
+		text-align: left !important;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}
