@@ -738,6 +738,62 @@
 	}
 }
 
+/* ---- Stacked: the picker comes second, not sixth ----------------------------
+   Below 782px core stacks the two columns of the opening section, so a phone
+   got the whole left column first: kicker, heading, a paragraph, four bullets
+   and the 2024 group photo, about 1,250px, before a single price. People
+   arriving from a poster QR or the header button came to buy, and they were
+   scrolling past the case for buying.
+
+   So on a stacked layout the left column dissolves (`display: contents`) and
+   its children join the row as flex items, which lets `order` put the picker
+   straight under the heading and everything else after it. Nothing is hidden
+   and nothing moves on desktop, where the two columns sit side by side and
+   this block does not apply. Measured on the live page at 390: the CampTix
+   form starts at 371px instead of 1,198px, so General Admission, its price
+   and its quantity are on the first screen.
+
+   The same block removes the doubled gutter. `main` already pads by the root
+   padding (30px on a phone), and this page's `alignfull` wrapper carries
+   `has-global-padding` and pads by it again, so the content measured 255px
+   inside a 375px viewport: two thirds of the screen, with "General
+   Admission" breaking over two lines and the card's footer chips wrapping.
+   With the wrapper's padding gone the content lines up with the masthead
+   logo at 30px and the ticket card gets 315px. Nothing inside the wrapper is
+   `alignfull`, so no child was relying on that padding to pull back into. */
+@media (max-width: 781px) {
+	.wcblr-post.wcblr-tix-page {
+		padding-left: 0 !important;
+		padding-right: 0 !important;
+	}
+
+	/* The row's 28px gap was the space between two stacked columns. Between a
+	   kicker and its heading it would be a hole, so the children keep their
+	   own margins instead. */
+	.wcblr-tix-page .wcblr-tix-row {
+		row-gap: 0 !important;
+	}
+	.wcblr-tix-page .wcblr-tix-row > .wp-block-column:first-child {
+		display: contents;
+	}
+	.wcblr-tix-page .wcblr-tix-row > .wp-block-column:first-child > * {
+		flex: 0 0 100%;
+		min-width: 0;
+	}
+	.wcblr-tix-page .wcblr-tix-row > .wp-block-column:first-child > .wcblr-eyebrow { order: 1; }
+	.wcblr-tix-page .wcblr-tix-row > .wp-block-column:first-child > h2 { order: 2; }
+	.wcblr-tix-page .wcblr-tix-row > .wp-block-column:last-child {
+		order: 3;
+		margin-top: 22px !important;
+	}
+	.wcblr-tix-page .wcblr-tix-row > .wp-block-column:first-child > p:not(.wcblr-eyebrow) {
+		order: 4;
+		margin-top: 36px !important;
+	}
+	.wcblr-tix-page .wcblr-tix-row > .wp-block-column:first-child > ul { order: 5; }
+	.wcblr-tix-page .wcblr-tix-row > .wp-block-column:first-child > figure { order: 6; }
+}
+
 /* ---- Interaction ---------------------------------------------------------
    The load ladder in `content/_motion.scss` covers the opening section and
    nothing else, by design: this page is about 8,000px and an entrance played

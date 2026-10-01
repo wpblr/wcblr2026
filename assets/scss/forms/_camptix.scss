@@ -1962,6 +1962,17 @@ $tix-has-stock: ".tix_tickets_table>tbody>tr:not(.tix-sold-out):not(.tix-row-cou
 .wcblr-tix-manage {
 	display: none;
 }
+/* The row hide above LOSES on its own. The row is a core Columns block, so it
+   also carries `is-layout-flex`, and core prints `body .is-layout-flex {
+   display: flex }` inline: one class and one element, which outranks one
+   class. Measured on the live tickets page on 2 Oct 2026: the row rendered as
+   an empty 24px flex box plus its 20px margin under the masthead, on every
+   page built from this template, desktop included. Naming the block class as
+   well gives two classes, which beats core, and the `main:has()` reveals below
+   still win on the checkout screens because they add an element on top. */
+.wp-block-columns.wcblr-tix-headrow {
+	display: none;
+}
 /* The manage screen's own header. It cannot share `.wcblr-tix-head`: that one
    says "// registration" over the event name and is followed by a three-step
    progress bar, and none of that is true here. Somebody arriving on this screen
