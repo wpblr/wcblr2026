@@ -396,6 +396,22 @@ $spkx-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", sy
 	display: none;
 }
 
+/* No session posts yet, which is the state until the sessions are entered:
+   the block renders nothing, so drop the "// on_stage" label that would sit
+   over an empty card and let the ticket line lead. `>` inside :has() on
+   purpose, see the photo rule above. */
+.wcblr-spkx .wcblr-spkx-card:not(:has(> .wcblr-spkx-sessions)) > .wcblr-spkx-eyebrow {
+	display: none;
+}
+
+.wcblr-spkx .wcblr-spkx-card:not(:has(> .wcblr-spkx-sessions)) > .wcblr-spkx-cardnote {
+	margin-top: 0 !important;
+	padding-top: 0;
+	border-top: 0;
+	font-size: 15.5px;
+	color: #4a3a2e;
+}
+
 .wcblr-spkx .wcblr-spkx-cardnote {
 	margin-top: 24px !important;
 	padding-top: 20px;
