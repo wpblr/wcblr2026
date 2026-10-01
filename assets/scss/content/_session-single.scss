@@ -33,6 +33,8 @@ $sesx-serif: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif;
 $sesx-mono: var(--wp--preset--font-family--jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
 $sesx-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif;
 $sesx-pad: 56px;
+$sesx-side: 360px;
+$sesx-gutter: 72px;
 
 /* ── Page ground ─────────────────────────────────────────────────────────────
    Flow layout throughout, so core gives every sibling a blockGap margin;
@@ -329,8 +331,53 @@ $sesx-pad: 56px;
 
 /* ── The talk ────────────────────────────────────────────────────────────── */
 .wcblr-sesx .wcblr-sesx-read {
-	max-width: 760px;
-	margin: 80px auto 0 !important;
+	margin-top: 80px !important;
+}
+
+/* The abstract keeps a reading measure on the left, and the presenters sit
+   in a sticky column on the right, so the body runs edge to edge under the
+   ticket instead of a narrow column floating in the middle of it. The
+   people group is the last child of the content, so the grid places it. */
+@media (min-width: 1101px) {
+	.wcblr-sesx .wcblr-sesx-read > .wcblr-sesx-eyebrow {
+		margin-right: calc(#{$sesx-side} + #{$sesx-gutter}) !important;
+	}
+
+	.wcblr-sesx .wcblr-sesx-body {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) $sesx-side;
+		column-gap: $sesx-gutter;
+		align-items: start;
+	}
+
+	.wcblr-sesx .wcblr-sesx-body > * {
+		grid-column: 1;
+	}
+
+	/* Pulled up by the eyebrow's height so "// on_stage" lines up with
+	   "// the_talk" across the gutter. */
+	/* `.wcblr-sesx-read` in these two for weight: the base presenter rules
+	   further down have the same specificity and would win on order. */
+	.wcblr-sesx .wcblr-sesx-read > .wcblr-sesx-body > .wcblr-sesx-people {
+		grid-column: 2;
+		grid-row: 1 / span 40;
+		position: sticky;
+		top: 110px;
+		grid-template-columns: 1fr;
+		margin-top: -44px !important;
+	}
+
+	/* No abstract (the panels and the workshop): nothing for a sidebar to
+	   sit beside, so the presenters take the full width in a row. */
+	.wcblr-sesx .wcblr-sesx-body:has(> .wcblr-sesx-people:first-child) {
+		display: block;
+	}
+
+	.wcblr-sesx .wcblr-sesx-read > .wcblr-sesx-body > .wcblr-sesx-people:first-child {
+		position: static;
+		grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+		margin-top: 0 !important;
+	}
 }
 
 .wcblr-sesx .wcblr-sesx-eyebrow {
@@ -340,6 +387,7 @@ $sesx-pad: 56px;
 	margin: 0 0 24px !important;
 	font-family: $sesx-mono;
 	font-size: 13px;
+	line-height: 20px;
 	letter-spacing: 0.5px;
 	color: $sesx-crimson;
 }
@@ -408,7 +456,7 @@ $sesx-pad: 56px;
 	font-family: $sesx-mono;
 	font-size: 13px;
 	letter-spacing: 0.5px;
-	line-height: 1.4;
+	line-height: 20px;
 	color: $sesx-crimson;
 }
 
