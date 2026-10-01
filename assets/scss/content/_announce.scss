@@ -30,8 +30,7 @@ $annc-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", sy
 
 /* Where layout already separates the pieces (the sticker's stacked lines, the
    pills) the dots go; in running text (kicker, role, citation) they stay. */
-.wcblr-annc .wcblr-annc-sticker .wcblr-annc-dot,
-.wcblr-annc .wcblr-annc-links .wcblr-annc-dot {
+.wcblr-annc .wcblr-annc-sticker .wcblr-annc-dot {
 	display: none;
 }
 
@@ -349,45 +348,73 @@ $annc-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", sy
 	max-width: 74ch;
 }
 
-.wcblr-annc .wcblr-annc-bio > p.wcblr-annc-links {
-	max-width: none;
-}
-
-/* The links the speaker gave, as pills. */
-.wcblr-annc .wcblr-annc-links {
+/* Their links: the logos as round chips, then the profile pill, on one row
+   under a hairline. Glyph colours come from the brand map in
+   content/_social-brand.scss, which lists this row; `chain` (a website) has no
+   brand and keeps the ink default set here. */
+.wcblr-annc .wcblr-annc-linkrow {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 10px;
-	padding-top: 22px;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px 24px;
+	padding-top: 24px;
 	border-top: 1px solid #e4dccd;
 }
 
-.wcblr-annc .wcblr-annc-links a {
+.wcblr-annc .wcblr-annc-social {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px !important;
+	margin: 0 !important;
+	padding: 0;
+}
+
+.wcblr-annc .wcblr-annc-social .wp-block-social-link {
+	margin: 0 !important;
+	background: none !important;
+}
+
+.wcblr-annc .wcblr-annc-social .wp-block-social-link,
+.wcblr-annc .wcblr-annc-social .wp-block-social-link-anchor {
+	color: $annc-ink !important;
+}
+
+.wcblr-annc .wcblr-annc-social .wp-block-social-link-anchor {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 46px;
+	height: 46px;
+	padding: 0 !important;
+	border: 1.5px solid $annc-line;
+	border-radius: 50%;
+	background: $annc-cream;
+}
+
+.wcblr-annc .wcblr-annc-social .wp-block-social-link-anchor svg {
+	width: 21px;
+	height: 21px;
+}
+
+.wcblr-annc .wcblr-annc-profile a {
 	display: inline-flex;
 	align-items: center;
-	padding: 8px 15px;
-	border: 1.5px solid $annc-line;
+	gap: 10px;
+	padding: 12px 20px;
 	border-radius: 999px;
-	background: $annc-cream;
+	background: $annc-ink;
 	font-family: $annc-mono;
 	font-size: 12px;
-	font-weight: 600;
-	letter-spacing: 0.1em;
+	font-weight: 700;
+	letter-spacing: 0.12em;
 	text-transform: uppercase;
-	color: $annc-ink;
+	color: $annc-cream;
 	text-decoration: none;
 }
 
-/* the profile link is the last one, and the one that stays on this site */
-.wcblr-annc .wcblr-annc-links a:last-child {
-	border-color: $annc-ink;
-	background: $annc-ink;
-	color: $annc-cream;
-}
-
-.wcblr-annc .wcblr-annc-links a:last-child::after {
+.wcblr-annc .wcblr-annc-profile a::after {
 	content: "\2192";
-	margin-left: 8px;
 }
 
 .wcblr-annc .wcblr-flourish {
@@ -471,13 +498,12 @@ $annc-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", sy
 		@include wcblr-link-wipe-hover;
 	}
 
-	.wcblr-annc .wcblr-annc-links a:not(:last-child):hover {
-		border-color: $annc-crimson;
-		color: $annc-crimson;
+	.wcblr-annc .wcblr-annc-social .wp-block-social-link-anchor:hover {
+		border-color: currentColor;
+		background: #ffffff;
 	}
 
-	.wcblr-annc .wcblr-annc-links a:last-child:hover {
-		border-color: $annc-crimson;
+	.wcblr-annc .wcblr-annc-profile a:hover {
 		background: $annc-crimson;
 	}
 
@@ -506,13 +532,18 @@ $annc-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", sy
 			transform: rotate(4deg) scale(1.06);
 		}
 
-		.wcblr-annc .wcblr-annc-links a,
+		.wcblr-annc .wcblr-annc-social .wp-block-social-link,
+		.wcblr-annc .wcblr-annc-profile a::after,
 		.wcblr-annc .wcblr-annc-stublink a::after {
-			transition: transform 0.22s $annc-ease, border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+			transition: transform 0.22s $annc-ease;
 		}
 
-		.wcblr-annc .wcblr-annc-links a:hover {
-			transform: translateY(-2px);
+		.wcblr-annc .wcblr-annc-social .wp-block-social-link:hover {
+			transform: translateY(-3px);
+		}
+
+		.wcblr-annc .wcblr-annc-profile a:hover::after {
+			transform: translateX(4px);
 		}
 
 		.wcblr-annc .wcblr-annc-stublink a:hover::after {

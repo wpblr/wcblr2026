@@ -101,7 +101,8 @@ $wcblr-social-rows:
 	".wcblr-mp .wcblr-mp-social",                 /* media partners page */
 	".wcblr-org-card__social",                   /* organizers page cards */
 	".wcblr-spk .wcblr-spk-social",              /* speakers page cards */
-	".wcblr-spkx .wcblr-spkx-bio .wp-block-social-links";  /* single speaker bio */
+	".wcblr-spkx .wcblr-spkx-bio .wp-block-social-links",  /* single speaker bio */
+	".wcblr-annc .wcblr-annc-social";            /* speaker announcement posts */
 
 @each $service, $colour in $wcblr-social-brands {
 	@each $row in $wcblr-social-rows {
