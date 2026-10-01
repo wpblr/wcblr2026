@@ -9,3 +9,18 @@
 	display: block;
 }
 
+
+/* ---- A session with no time yet ------------------------------------------- */
+/* Sessions were published on 1 Oct 2026 so speaker pages could list their
+   talks, weeks before the schedule gives them times. With `_wcpt_session_time`
+   unset, wordcamp/session-date prints the Unix epoch ("Jan 1, 1970 5:30 AM",
+   epoch in IST), and the card's "Add to Calendar" button has no link at all.
+   Until a time is set, the whole details card goes; it comes back on its own
+   the moment the session is scheduled.
+
+   Child combinators all the way down on purpose: clean-css deletes a
+   descendant SPACE inside :has(), so `:has(.a time)` would ship as
+   `:has(.atime)` and match nothing. */
+.single-wcb_session .wp-block-group:has(> .wp-block-group > .wp-block-wordcamp-session-date > time[datetime^="1970-01-01"]) {
+	display: none;
+}
