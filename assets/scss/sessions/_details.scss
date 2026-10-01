@@ -20,7 +20,10 @@
 
    Child combinators all the way down on purpose: clean-css deletes a
    descendant SPACE inside :has(), so `:has(.a time)` would ship as
-   `:has(.atime)` and match nothing. */
-.single-wcb_session .wp-block-group:has(> .wp-block-group > .wp-block-wordcamp-session-date > time[datetime^="1970-01-01"]) {
+   `:has(.atime)` and match nothing.
+
+   The new template's ticket stub has the same shape and handles the
+   missing time itself (content/_session-single.scss), so it is excluded. */
+.single-wcb_session .wp-block-group:not(.wcblr-sesx-stub):has(> .wp-block-group > .wp-block-wordcamp-session-date > time[datetime^="1970-01-01"]) {
 	display: none;
 }
