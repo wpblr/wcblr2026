@@ -43,6 +43,13 @@ $sesx-pad: 56px;
 	padding-bottom: 104px;
 }
 
+/* Same column as the header and footer: the content size (1200px), not the
+   wide size (1340px) an alignwide group gets, which overhung the logo and the
+   nav by 70px a side. */
+.wcblr-sesx > .wcblr-sesx-inner {
+	max-width: var(--wp--style--global--content-size, 1200px) !important;
+}
+
 .wcblr-sesx .wcblr-sesx-inner > *,
 .wcblr-sesx .wcblr-sesx-hero > *,
 .wcblr-sesx .wcblr-sesx-top > *,

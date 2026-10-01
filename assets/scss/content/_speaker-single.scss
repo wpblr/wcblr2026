@@ -43,6 +43,13 @@ $spkx-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", sy
 	padding-bottom: 104px;
 }
 
+/* Same column as the header and footer: the content size (1200px), not the
+   wide size (1340px) an alignwide group gets, which overhung the logo and the
+   nav by 70px a side. */
+.wcblr-spkx > .wcblr-spkx-inner {
+	max-width: var(--wp--style--global--content-size, 1200px) !important;
+}
+
 .wcblr-spkx .wcblr-spkx-inner > *,
 .wcblr-spkx .wcblr-spkx-hero > *,
 .wcblr-spkx .wcblr-spkx-introcol > *,
