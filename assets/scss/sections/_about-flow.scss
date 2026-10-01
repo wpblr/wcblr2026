@@ -1,0 +1,173 @@
+/* ==== About page: one rhythm, and a phone layout that earns its scroll ======
+   Audited 2 Oct 2026 at 1440 and 390, alongside the home page. The type scale
+   lives in `_home-flow.scss` and covers both pages; this file is the About
+   page's layout. Uses the `$hf-*` values defined there, so it is imported
+   after it.
+
+   - The gaps between sections were 19, 20, 40, 60 and 64px, from a mix of the
+     block gap, padding on some sections and a margin on the WhatsApp card.
+     One gap now, the home page's section rhythm.
+   - "Be part of 2026" carried a 2px ink rule, the one the home page dropped;
+     its band now opens on padding alone.
+   - Jetpack's "Share this" row sat under the last section as a stray band.
+     An About page is not something people share from a button; hidden here.
+   - On a phone: the photo stamps hung past the screen edge, the stats ran as
+     four full-width rows, the meetup buttons stacked at two widths, the
+     WhatsApp button was squeezed into three lines beside a QR code nobody
+     can scan from the phone it is on, and six gallery photos ran full width
+     for nearly 1,900px.                                                    */
+
+$af-gap: clamp(48px, 1.5rem + 4.4vw, 88px);
+
+/* The sections sit one level down, inside the page's wrapper group; the
+   closing band and the share row are the wrapper's siblings. */
+body.page-template-about .entry-content > *,
+body.page-template-about .entry-content > .wp-block-group:first-child > * {
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+}
+
+body.page-template-about .entry-content > .wp-block-group:first-child > .wcblr-about-info,
+body.page-template-about .entry-content > .wp-block-group:first-child > .wcblr-about-stats,
+body.page-template-about .entry-content > .wp-block-group:first-child > .wcblr-meetups,
+body.page-template-about .entry-content > .wp-block-group:first-child > .wcblr-whatsapp-section,
+body.page-template-about .entry-content > .wp-block-group:first-child > .wcblr-past-editions {
+	margin-top: $af-gap !important;
+}
+
+body.page-template-about .entry-content > .wp-block-group:first-child {
+	padding-bottom: 0 !important;
+}
+
+body.page-template-about .wcblr-about-stats,
+body.page-template-about .wcblr-past-editions {
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+}
+
+/* The closing band: same rhythm as a home-page band, no rule. */
+body.page-template-about .entry-content > .alignfull.has-background {
+	margin-top: $af-gap !important;
+	padding-top: $hf-sec !important;
+	padding-bottom: $hf-sec !important;
+	border-top: 0 !important;
+	border-bottom: 0 !important;
+}
+
+body.page-template-about .entry-content > .sharedaddy,
+body.page-template-about .sharedaddy.sd-sharing-enabled {
+	display: none !important;
+}
+
+@media (max-width: 600px) {
+	/* The stamp sits on the photo's top-left corner, inside the screen. */
+	body.page-template-about .wcblr-tagpill {
+		left: 10px;
+		top: -12px;
+	}
+
+	/* Stats two by two. At 390 a cell is ~160px; the padding comes down so
+	   "Monthly" at the stat size still fits its cell. Overrides the one-column
+	   rule in `_about.scss`, which made four 66px rows of a strip that reads
+	   better as a block. */
+	body.page-template-about .wcblr-about-stats .wp-block-columns {
+		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+	}
+
+	body.page-template-about .wcblr-about-stats .wp-block-column > .wp-block-group {
+		padding: 20px 18px !important;
+	}
+
+	body.page-template-about .wcblr-about-stats .wp-block-column:nth-child(2) > .wp-block-group {
+		border-top-right-radius: 6px !important;
+	}
+
+	body.page-template-about .wcblr-about-stats .wp-block-column:nth-child(3) > .wp-block-group {
+		border-bottom-left-radius: 6px !important;
+	}
+
+	/* Meetup buttons: full width, two clear choices. */
+	body.page-template-about .wcblr-meetups .wp-block-buttons {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	body.page-template-about .wcblr-meetups .wp-block-button__link {
+		display: block;
+		text-align: center;
+	}
+
+	/* WhatsApp: the button is the action on a phone. The QR code and its
+	   "or scan the code" pointer are for a laptop screen, and on a phone they
+	   squeezed the button to three lines. */
+	body.page-template-about .wcblr-whatsapp-section .wp-block-column:last-child,
+	body.page-template-about .wcblr-whatsapp-section .wcblr-whatsapp-btn + p {
+		display: none !important;
+	}
+
+	body.page-template-about .wcblr-whatsapp-section .wcblr-whatsapp-btn {
+		flex: 1 1 auto;
+	}
+
+	body.page-template-about .wcblr-whatsapp-section .wcblr-whatsapp-btn a {
+		justify-content: center;
+		white-space: nowrap;
+	}
+
+	/* Past editions: two to a row. The two rows of three are separate Columns
+	   blocks, so they dissolve into one grid with the section's own header
+	   spanning it; six photos become three rows instead of six screens. */
+	body.page-template-about .wcblr-past-editions {
+		display: grid !important;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		column-gap: 10px;
+		row-gap: 10px;
+	}
+
+	body.page-template-about .wcblr-past-editions > :not(.wp-block-columns) {
+		grid-column: 1 / -1;
+	}
+
+	body.page-template-about .wcblr-past-editions > .wp-block-columns {
+		display: contents !important;
+	}
+
+	body.page-template-about .wcblr-past-editions > .wp-block-columns > .wp-block-column {
+		margin: 0 !important;
+		min-width: 0;
+	}
+}
+
+/* The template's decorative `main::before` is placed at `right: -40px`, so the
+   page scrolled 40px sideways on desktop. It is ornament; clip it at the
+   window edge. `clip`, not `hidden`, so no scroll container is created. */
+body.page-template-about main {
+	overflow-x: clip;
+}
+
+/* The hero intro lost its hand-placed <br>s, which broke it raggedly on a
+   phone; a measure does the same job at every width. */
+body.page-template-about .entry-content p[style*=", 18px)"] {
+	max-width: 62ch;
+	margin-left: 0 !important;
+	margin-right: auto !important;
+}
+
+/* The `// labels` sat on their headings once the headings' line-height came
+   down from 1.6. A small gap restores the kicker-over-title read. */
+body.page-template-about .entry-content p.has-jetbrains-mono-font-family[style*="font-size:14px"] {
+	margin-bottom: 12px !important;
+}
+
+body.page-template-about .entry-content > .alignfull.has-background h2.wp-block-heading {
+	margin-bottom: clamp(24px, 1rem + 1.4vw, 40px) !important;
+}
+
+@media (max-width: 600px) {
+	/* The WhatsApp card padded ~44px inside a 330px column; its copy ran in a
+	   200px strip. */
+	body.page-template-about .wcblr-whatsapp-section {
+		padding-left: 22px !important;
+		padding-right: 22px !important;
+	}
+}

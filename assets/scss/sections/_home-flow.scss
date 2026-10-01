@@ -47,6 +47,8 @@ $hf-h2: clamp(30px, 1.25rem + 2.4vw, 46px);
 $hf-h3-band: clamp(24px, 1.1rem + 1.2vw, 33px);
 $hf-h3-card: clamp(19px, 1.05rem + 0.35vw, 22px);
 $hf-num: clamp(46px, 2.1rem + 2.1vw, 64px);
+$hf-h2-sm: clamp(26px, 1.1rem + 1.6vw, 38px);
+$hf-stat: clamp(28px, 1.2rem + 1.6vw, 44px);
 $hf-val: clamp(16px, 0.9rem + 0.4vw, 21px);
 $hf-lead: clamp(16px, 0.95rem + 0.25vw, 18px);
 $hf-body: clamp(15px, 0.9rem + 0.12vw, 16px);
@@ -155,25 +157,33 @@ body.home .wcblr-home-gi h2.wp-block-heading {
 	margin-bottom: $hf-head !important;
 }
 
-/* ---- 2. Type ------------------------------------------------------------ */
+/* ---- 2. Type ------------------------------------------------------------
+   Shared with the About page (`body.page-template-about`), which had the same
+   spread: 38 and 44px headings, 15px card titles on a phone, eight body sizes.
+   Its extra steps, a 38px heading and 44px stat values, are at the end.     */
 
 body.home .entry-content h2.wp-block-heading[style*=", 46px)"],
-body.home .entry-content h2.wp-block-heading[style*=", 44px)"] {
+body.page-template-about .entry-content h2.wp-block-heading[style*=", 46px)"],
+body.home .entry-content h2.wp-block-heading[style*=", 44px)"],
+body.page-template-about .entry-content h2.wp-block-heading[style*=", 44px)"] {
 	font-size: $hf-h2 !important;
 	line-height: 1.15 !important;
 }
 
-body.home .entry-content h3[style*=", 33px)"] {
+body.home .entry-content h3[style*=", 33px)"],
+body.page-template-about .entry-content h3[style*=", 33px)"] {
 	font-size: $hf-h3-band !important;
 	line-height: 1.2 !important;
 }
 
-body.home .entry-content h3[style*=", 22px)"] {
+body.home .entry-content h3[style*=", 22px)"],
+body.page-template-about .entry-content h3[style*=", 22px)"] {
 	font-size: $hf-h3-card !important;
 	line-height: 1.25 !important;
 }
 
-body.home .entry-content h3[style*=", 64px)"] {
+body.home .entry-content h3[style*=", 64px)"],
+body.page-template-about .entry-content h3[style*=", 64px)"] {
 	font-size: $hf-num !important;
 }
 
@@ -187,36 +197,62 @@ body.home .wcblr-home-news h2.wp-block-post-title {
 
 /* The glance values floor at 16px: at 18 "The community, since 2023" no
    longer fitted beside its label at 390 and that one row stacked. */
-body.home .entry-content p[style*=", 21px)"] {
+body.home .entry-content p[style*=", 21px)"],
+body.page-template-about .entry-content p[style*=", 21px)"] {
 	font-size: $hf-val !important;
 }
 
 body.home .entry-content p[style*=", 17px)"],
-body.home .entry-content p[style*=", 20px)"] {
+body.page-template-about .entry-content p[style*=", 17px)"],
+body.home .entry-content p[style*=", 20px)"],
+body.page-template-about .entry-content p[style*=", 20px)"] {
 	font-size: $hf-lead !important;
 	line-height: 1.6 !important;
 }
 
 body.home .entry-content p[style*=", 15px)"],
-body.home .entry-content p[style*=", 16px)"] {
+body.page-template-about .entry-content p[style*=", 15px)"],
+body.home .entry-content p[style*=", 16px)"],
+body.page-template-about .entry-content p[style*=", 16px)"] {
 	font-size: $hf-body !important;
 	line-height: 1.6 !important;
 }
 
 body.home .entry-content p[style*="font-size:13px"]:not(.has-jetbrains-mono-font-family):not(.wcblr-eyebrow),
-body.home .entry-content p[style*="font-size:14px"]:not(.has-jetbrains-mono-font-family):not(.wcblr-eyebrow) {
+body.page-template-about .entry-content p[style*="font-size:13px"]:not(.has-jetbrains-mono-font-family):not(.wcblr-eyebrow),
+body.home .entry-content p[style*="font-size:14px"]:not(.has-jetbrains-mono-font-family):not(.wcblr-eyebrow),
+body.page-template-about .entry-content p[style*="font-size:14px"]:not(.has-jetbrains-mono-font-family):not(.wcblr-eyebrow) {
 	font-size: $hf-small !important;
 	line-height: 1.55 !important;
 }
 
 body.home .entry-content p.has-jetbrains-mono-font-family[style*="font-size:11px"],
-body.home .entry-content p.has-jetbrains-mono-font-family[style*="font-size:12px"] {
+body.page-template-about .entry-content p.has-jetbrains-mono-font-family[style*="font-size:11px"],
+body.home .entry-content p.has-jetbrains-mono-font-family[style*="font-size:12px"],
+body.page-template-about .entry-content p.has-jetbrains-mono-font-family[style*="font-size:12px"] {
 	font-size: $hf-label !important;
 }
 
 body.home .entry-content .wp-block-button__link[style*=", 15px)"],
-body.home .entry-content .wp-block-button__link[style*=", 16px)"] {
+body.page-template-about .entry-content .wp-block-button__link[style*=", 15px)"],
+body.home .entry-content .wp-block-button__link[style*=", 16px)"],
+body.page-template-about .entry-content .wp-block-button__link[style*=", 16px)"] {
 	font-size: $hf-button !important;
+}
+
+body.home .entry-content h2.wp-block-heading[style*=", 38px)"],
+body.page-template-about .entry-content h2.wp-block-heading[style*=", 38px)"] {
+	font-size: $hf-h2-sm !important;
+	line-height: 1.2 !important;
+}
+
+body.page-template-about .entry-content p[style*=", 44px)"] {
+	font-size: $hf-stat !important;
+}
+
+body.page-template-about .entry-content p[style*=", 18px)"] {
+	font-size: $hf-lead !important;
+	line-height: 1.6 !important;
 }
 
 /* ---- 3. The open items ------------------------------------------------- */
