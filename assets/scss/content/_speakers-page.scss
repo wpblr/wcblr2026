@@ -278,7 +278,7 @@ $spk-mono: var(--wp--preset--font-family--jetbrains-mono), "JetBrains Mono", ui-
 	outline: none;
 }
 
-.wcblr-spk .wcblr-spk-card:has(.wcblr-spk-name a:focus-visible) {
+.wcblr-spk .wcblr-spk-card:has(.wcblr-spk-name > a:focus-visible) {
 	outline: 2px solid #c8344b;
 	outline-offset: 3px;
 }
