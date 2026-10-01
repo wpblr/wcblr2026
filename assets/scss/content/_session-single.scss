@@ -184,6 +184,13 @@ $sesx-pad: 56px;
 	color: #f3cf7a;
 }
 
+/* WordCamp.org's own block stylesheet puts a comma after every name but the
+   last, as an ::after; with the "&" between names that read "Name, & Name".
+   Live only: the local stand-in block ships no stylesheet. */
+.wcblr-sesx .wp-block-wordcamp-session-speakers__name::after {
+	content: none !important;
+}
+
 .wcblr-sesx .wcblr-sesx-by .wp-block-wordcamp-session-speakers__name + .wp-block-wordcamp-session-speakers__name::before {
 	content: "&";
 	margin-right: 14px;
