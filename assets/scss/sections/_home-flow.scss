@@ -36,23 +36,23 @@
       the sponsor rows on a phone, the edges (rhythm above) and a skyline that
       stopped short of the screen's edges on a phone.                       */
 
-body.home {
-	--hf-sec: clamp(48px, 1.5rem + 4.4vw, 88px);
-	--hf-head: clamp(28px, 1rem + 2.2vw, 48px);
-	--hf-cream: #f2ece0;
-	--hf-paper: #fbf8f1;
-
-	--hf-h2: clamp(30px, 1.25rem + 2.4vw, 46px);
-	--hf-h3-band: clamp(24px, 1.1rem + 1.2vw, 33px);
-	--hf-h3-card: clamp(19px, 1.05rem + 0.35vw, 22px);
-	--hf-num: clamp(46px, 2.1rem + 2.1vw, 64px);
-	--hf-val: clamp(16px, 0.9rem + 0.4vw, 21px);
-	--hf-lead: clamp(16px, 0.95rem + 0.25vw, 18px);
-	--hf-body: clamp(15px, 0.9rem + 0.12vw, 16px);
-	--hf-small: clamp(13.5px, 0.82rem + 0.06vw, 14px);
-	--hf-label: 11.5px;
-	--hf-button: 15px;
-}
+/* Sass variables, not custom properties. The WordCamp sanitiser drops custom
+   property declarations outright: the first deploy shipped `body.home { }`
+   empty and every hf variable resolved to nothing on live (2 Oct 2026). */
+$hf-sec: clamp(48px, 1.5rem + 4.4vw, 88px);
+$hf-head: clamp(28px, 1rem + 2.2vw, 48px);
+$hf-cream: #f2ece0;
+$hf-paper: #fbf8f1;
+$hf-h2: clamp(30px, 1.25rem + 2.4vw, 46px);
+$hf-h3-band: clamp(24px, 1.1rem + 1.2vw, 33px);
+$hf-h3-card: clamp(19px, 1.05rem + 0.35vw, 22px);
+$hf-num: clamp(46px, 2.1rem + 2.1vw, 64px);
+$hf-val: clamp(16px, 0.9rem + 0.4vw, 21px);
+$hf-lead: clamp(16px, 0.95rem + 0.25vw, 18px);
+$hf-body: clamp(15px, 0.9rem + 0.12vw, 16px);
+$hf-small: clamp(13.5px, 0.82rem + 0.06vw, 14px);
+$hf-label: 11.5px;
+$hf-button: 15px;
 
 /* ---- 1. Rhythm ---------------------------------------------------------- */
 
@@ -71,22 +71,22 @@ body.home .wcblr-hero-banner > figure {
 }
 
 body.home .wcblr-about {
-	padding-top: var(--hf-sec) !important;
+	padding-top: $hf-sec !important;
 	padding-bottom: 0 !important;
-	background-color: var(--hf-cream) !important;
+	background-color: $hf-cream !important;
 }
 
 /* Stats live inside About, on the same ground: a sub-section, so it takes
    the rhythm for its own top and closes the whole About band at the bottom. */
 body.home .wcblr-about .wcblr-stats {
-	padding-top: var(--hf-sec) !important;
-	padding-bottom: var(--hf-sec) !important;
+	padding-top: $hf-sec !important;
+	padding-bottom: $hf-sec !important;
 	margin-top: 0 !important;
 }
 
 body.home .wcblr-home-sec {
-	padding-top: var(--hf-sec) !important;
-	padding-bottom: var(--hf-sec) !important;
+	padding-top: $hf-sec !important;
+	padding-bottom: $hf-sec !important;
 	margin-top: 0 !important;
 	margin-bottom: 0 !important;
 	border-top: 0 !important;
@@ -117,106 +117,106 @@ body.home .wcblr-home-sponsors {
 }
 
 body.home .wcblr-home-gi {
-	background-color: var(--hf-paper);
-	box-shadow: 0 0 0 100vmax var(--hf-paper);
+	background-color: $hf-paper;
+	box-shadow: 0 0 0 100vmax $hf-paper;
 }
 
 body.home .wcblr-home-sponsors {
-	background-color: var(--hf-cream);
-	box-shadow: 0 0 0 100vmax var(--hf-cream);
+	background-color: $hf-cream;
+	box-shadow: 0 0 0 100vmax $hf-cream;
 }
 
 body.home .wcblr-home-venue {
-	background-color: var(--hf-paper) !important;
+	background-color: $hf-paper !important;
 }
 
 body.home .wcblr-home-news {
-	background-color: var(--hf-cream) !important;
+	background-color: $hf-cream !important;
 }
 
 body.home .wcblr-home-sec.wcblr-newsletter {
-	background-color: var(--hf-paper) !important;
+	background-color: $hf-paper !important;
 }
 
 /* The lotus opens every section, so it owns the space under it and nothing
    else does. */
 body.home .wcblr-home-sec .wcblr-flourish {
 	margin-top: 0 !important;
-	margin-bottom: var(--hf-head) !important;
+	margin-bottom: $hf-head !important;
 }
 
 /* Header to content: one gap. The section headers were spaced by whatever
    margin their last paragraph happened to carry. */
 body.home .wcblr-home-sec .wcblr-section-header {
-	margin-bottom: var(--hf-head) !important;
+	margin-bottom: $hf-head !important;
 }
 
 body.home .wcblr-home-gi h2.wp-block-heading {
-	margin-bottom: var(--hf-head) !important;
+	margin-bottom: $hf-head !important;
 }
 
 /* ---- 2. Type ------------------------------------------------------------ */
 
 body.home .entry-content h2.wp-block-heading[style*=", 46px)"],
 body.home .entry-content h2.wp-block-heading[style*=", 44px)"] {
-	font-size: var(--hf-h2) !important;
+	font-size: $hf-h2 !important;
 	line-height: 1.15 !important;
 }
 
 body.home .entry-content h3[style*=", 33px)"] {
-	font-size: var(--hf-h3-band) !important;
+	font-size: $hf-h3-band !important;
 	line-height: 1.2 !important;
 }
 
 body.home .entry-content h3[style*=", 22px)"] {
-	font-size: var(--hf-h3-card) !important;
+	font-size: $hf-h3-card !important;
 	line-height: 1.25 !important;
 }
 
 body.home .entry-content h3[style*=", 64px)"] {
-	font-size: var(--hf-num) !important;
+	font-size: $hf-num !important;
 }
 
 /* The news cards' post titles are printed at a fluid 20px that bottoms out
    near 14px, smaller than the card's own date line on a phone. They are card
    titles, so they take the card title step. */
 body.home .wcblr-home-news h2.wp-block-post-title {
-	font-size: var(--hf-h3-card) !important;
+	font-size: $hf-h3-card !important;
 	line-height: 1.25 !important;
 }
 
 /* The glance values floor at 16px: at 18 "The community, since 2023" no
    longer fitted beside its label at 390 and that one row stacked. */
 body.home .entry-content p[style*=", 21px)"] {
-	font-size: var(--hf-val) !important;
+	font-size: $hf-val !important;
 }
 
 body.home .entry-content p[style*=", 17px)"],
 body.home .entry-content p[style*=", 20px)"] {
-	font-size: var(--hf-lead) !important;
+	font-size: $hf-lead !important;
 	line-height: 1.6 !important;
 }
 
 body.home .entry-content p[style*=", 15px)"],
 body.home .entry-content p[style*=", 16px)"] {
-	font-size: var(--hf-body) !important;
+	font-size: $hf-body !important;
 	line-height: 1.6 !important;
 }
 
 body.home .entry-content p[style*="font-size:13px"]:not(.has-jetbrains-mono-font-family):not(.wcblr-eyebrow),
 body.home .entry-content p[style*="font-size:14px"]:not(.has-jetbrains-mono-font-family):not(.wcblr-eyebrow) {
-	font-size: var(--hf-small) !important;
+	font-size: $hf-small !important;
 	line-height: 1.55 !important;
 }
 
 body.home .entry-content p.has-jetbrains-mono-font-family[style*="font-size:11px"],
 body.home .entry-content p.has-jetbrains-mono-font-family[style*="font-size:12px"] {
-	font-size: var(--hf-label) !important;
+	font-size: $hf-label !important;
 }
 
 body.home .entry-content .wp-block-button__link[style*=", 15px)"],
 body.home .entry-content .wp-block-button__link[style*=", 16px)"] {
-	font-size: var(--hf-button) !important;
+	font-size: $hf-button !important;
 }
 
 /* ---- 3. The open items ------------------------------------------------- */
