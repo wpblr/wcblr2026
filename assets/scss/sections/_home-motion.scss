@@ -1,8 +1,8 @@
 /* ---- Home page motion ---------------------------------------------------
    Everything here is scoped to `body.home`, which WordPress puts on the front
    page, so no other page changes by a frame. Two of these blocks touch shared
-   components (`.wcblr-cell`, `.wcblr-live`, the header CTA) and scoping is what
-   makes that safe to try on one page first.
+   components (`.wcblr-cell`, `.wcblr-live`) and scoping is what makes that
+   safe to try on one page first.
 
    The rules this file obeys, all of them from `content/_motion.scss`:
 
@@ -20,37 +20,7 @@
    vocabulary. What varies is the colour it lifts into, and only where the
    element already owns a colour.                                            */
 
-/* ---- 1. Load: the last beat is the primary action -----------------------
-   The hero already runs a six-step ladder in `sections/_hero-intro.scss`, from
-   the kicker at 0.05s to the stamp at 0.95s. This adds one beat after it: the
-   header's ticket button, at 1.05s, once everything else has settled. It is
-   the punctuation pattern the motion file describes, landing on something
-   small after the page is still.
-
-   TRANSFORM ONLY, and that is the whole point of not reusing `wcblr-pop`.
-   That keyframe starts at `opacity: 0`, which is correct for a decorative
-   stamp and wrong here: with `both` fill the button would be invisible for the
-   first 1.05 seconds of every home page load, and if any part of this were
-   ever stripped it would stay invisible. The primary action on the site is not
-   something to risk on an animation surviving. A scale with no opacity means
-   the worst case is a button that does not move. */
-@keyframes wcblr-home-cta {
-	from {
-		transform: scale(0.86);
-	}
-	to {
-		transform: none;
-	}
-}
-
-@media (prefers-reduced-motion: no-preference) {
-	body.home .wcblr-header .wcblr-tix-btn .wp-block-button__link {
-		animation: wcblr-home-cta 0.5s 1.05s cubic-bezier(0.34, 1.56, 0.64, 1)
-			both;
-	}
-}
-
-/* ---- 2. The statistic cells --------------------------------------------
+/* ---- 1. The statistic cells --------------------------------------------
    `.wcblr-cell` had no hover at all, which left four of the most looked-at
    objects on the page inert while the news cards and sponsor logos beside them
    answered the pointer.
@@ -124,7 +94,7 @@ body.home .wcblr-stats .wcblr-cell {
 	}
 }
 
-/* ---- 3. The Get Involved cards -----------------------------------------
+/* ---- 2. The Get Involved cards -----------------------------------------
    `.wcblr-live` already carries the gold border, the tint and the pulsing dot
    that mean "this call is open". What it never had was a response to the
    pointer, so a card that advertises itself as live sat still when you reached
@@ -177,14 +147,14 @@ body.home .wp-block-columns:has(.wcblr-live) > .wp-block-column {
 	}
 }
 
-/* ---- 4. The buttons -----------------------------------------------------
+/* ---- 3. The buttons -----------------------------------------------------
    The buttons in this page body used to take a halo, a lift and a press here.
    Every button on the site now shares one hover, the wipe in
    content/_buttons.scss, so this whole layer is gone: the general buttons get
    the espresso wipe and the two inside the hero stub get the stub's cream one,
    both from that one file, and nothing home-specific is needed. */
 
-/* ---- 5. Photographs zoom, cards lift, logos do neither -------------------
+/* ---- 4. Photographs zoom, cards lift, logos do neither -------------------
    One rule for the whole page, so the response tells you what kind of thing
    you are pointing at:
 
@@ -324,7 +294,7 @@ body.home main div.googlemaps {
 	}
 }
 
-/* ---- 6. The hero mural --------------------------------------------------
+/* ---- 5. The hero mural --------------------------------------------------
    The skyline is a different kind of object from everything above and needed a
    different answer, arrived at by measuring it rather than by reaching for the
    zoom used on the photographs.
@@ -387,7 +357,7 @@ body.home .wcblr-hero-banner .wcblr-skyline img {
 	}
 }
 
-/* ---- 7. The about facts -------------------------------------------------
+/* ---- 6. The about facts -------------------------------------------------
    Third arrangement of these four, and the first two are worth recording
    because each failed for its own reason.
 
