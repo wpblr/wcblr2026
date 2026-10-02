@@ -106,3 +106,57 @@
 .wcblr-sponsors-row + .wcblr-sponsors-row {
 	border-top: 0 !important;
 }
+
+/* ---- Logo size follows the tier -----------------------------------------
+   "Logo on the website: Largest / Medium / Small" is a listed tier benefit on
+   the call for sponsors, but every row was the same four-up grid, so a Kanchu
+   logo would have shown at Suvarna size. The rows carry no tier class, only
+   the tier label inside them (t-plat Suvarna, t-gold Belli, t-silver Kanchu),
+   so the row is matched on its label. More tiles per row means a smaller tile,
+   and the padding is set so the logo itself steps down: measured at 1440,
+   about 186px wide for Suvarna, 150 for Belli and 112 for Kanchu.
+
+   Suvarna keeps the existing grid: four up on desktop, two below 1024. */
+.wcblr-sponsors-row:has(.tier-label.t-gold) .wp-block-query ul {
+	grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+}
+
+.wcblr-sponsors-row:has(.tier-label.t-gold) .wp-block-post-featured-image {
+	padding: 10px 36px !important;
+}
+
+.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-query ul {
+	grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+}
+
+.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-post-featured-image {
+	padding: 8px 34px !important;
+}
+
+@media (max-width: 1023px) {
+	.wcblr-sponsors-row:has(.tier-label.t-gold) .wp-block-query ul {
+		grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+	}
+
+	.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-query ul {
+		grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+	}
+}
+
+@media (max-width: 600px) {
+	.wcblr-sponsors-row:has(.tier-label.t-gold) .wp-block-query ul {
+		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+	}
+
+	.wcblr-sponsors-row:has(.tier-label.t-gold) .wp-block-post-featured-image {
+		padding: 8px 26px !important;
+	}
+
+	.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-query ul {
+		grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+	}
+
+	.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-post-featured-image {
+		padding: 6px 8px !important;
+	}
+}
