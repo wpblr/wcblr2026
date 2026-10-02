@@ -22,6 +22,7 @@
    anywhere; gradients, clip-path, box-shadow and `content` survive.        */
 
 $arr-espresso: #2a1d14;
+$arr-walnut: #5a4632;
 $arr-cream: #f2ece0;
 $arr-card: #fbf8f1;
 $arr-line: #dad5cd;
@@ -70,18 +71,20 @@ $arr-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", sys
 	}
 }
 
-/* The coloured head: the day, as a ticket prints it. */
+/* The coloured head: the day, as a ticket prints it. Espresso for Sunday,
+   walnut for Saturday: the brand's browns, not crimson and green, which read
+   too bright at this size. The venue tags on the line strip match. */
 .wcblr-arrive .wcblr-pass-head {
 	margin: 0 !important;
 	padding: 22px 28px 20px;
 	border-radius: 14px 14px 0 0;
 	color: $arr-cream;
-	background: $arr-crimson;
+	background: $arr-espresso;
 
 	p { margin: 0 !important; color: inherit; }
 }
 
-.wcblr-arrive .wcblr-pass-sat .wcblr-pass-head { background: $arr-green; }
+.wcblr-arrive .wcblr-pass-sat .wcblr-pass-head { background: $arr-walnut; }
 
 .wcblr-arrive .wcblr-pass-day {
 	font-family: $arr-mono;
@@ -569,11 +572,11 @@ $arr-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", sys
 	box-shadow: 0 0 0 3px $arr-green;
 }
 
-/* The two stops the venue sits between get the crimson dot. */
+/* The two stops the venue sits between get Sunday's espresso dot. */
 .wcblr-arrive .wcblr-stop-venue::before {
-	background: $arr-crimson;
+	background: $arr-espresso;
 	border-color: #fff;
-	box-shadow: 0 0 0 3px $arr-crimson;
+	box-shadow: 0 0 0 3px $arr-espresso;
 }
 
 .wcblr-arrive .wcblr-stop-name {
@@ -600,8 +603,8 @@ $arr-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", sys
 	background: rgba(42, 29, 20, 0.07);
 }
 
-.wcblr-arrive .wcblr-tag-venue { color: #fff; background: $arr-crimson; }
-.wcblr-arrive .wcblr-tag-sat { color: #fff; background: $arr-green; }
+.wcblr-arrive .wcblr-tag-venue { color: $arr-cream; background: $arr-espresso; }
+.wcblr-arrive .wcblr-tag-sat { color: $arr-cream; background: $arr-walnut; }
 .wcblr-arrive .wcblr-tag-rail { background: $arr-gold; }
 
 /* On a phone the line turns vertical: the track runs down the left. */
