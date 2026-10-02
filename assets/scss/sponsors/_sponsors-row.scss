@@ -155,6 +155,14 @@ body:not(.home) .wcblr-sponsors-row + .wcblr-sponsors-row {
 	margin-inline: auto;
 }
 
+/* A Kanchu tile is short enough that a square mark still read small at
+   16:9, so the box is a little taller here. A wordmark is bound by the width
+   cap and does not change. The block prints its 16:9 as an inline style on
+   the img, hence !important. */
+.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-post-featured-image img {
+	aspect-ratio: 16 / 10 !important;
+}
+
 @media (max-width: 1023px) {
 	.wcblr-sponsors-row:has(.tier-label.t-gold) .wp-block-query ul {
 		grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
