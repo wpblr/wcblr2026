@@ -41,10 +41,12 @@ body.home .wcblr-about--v2 .wcblr-about__head {
 
 body.home .wcblr-about--v2 h2.wcblr-about__title {
 	font-family: "Fraunces", Georgia, serif;
-	font-size: clamp(34px, 1.3rem + 3vw, 62px) !important;
+	/* The home h2 step ($hf-h2), not display size: at 62px it read as a
+	   second hero straight after the first one. */
+	font-size: clamp(30px, 1.25rem + 2.4vw, 46px) !important;
 	font-weight: 400 !important;
-	line-height: 1.05 !important;
-	letter-spacing: -0.025em !important;
+	line-height: 1.15 !important;
+	letter-spacing: -0.015em !important;
 	color: $ha-ink !important;
 	text-wrap: balance;
 }
@@ -466,5 +468,788 @@ body.home .wcblr-keynote__cta .wp-block-button__link:focus-visible {
 
 	body.home .wcblr-keynote__meta a::before {
 		content: none;
+	}
+}
+
+/* ==== Get involved: open calls first, closed calls as a ledger ==============
+   Redesigned 2 Oct 2026. Five identical cards made a closed call look as
+   available as an open one, and the CLOSED pill was the only difference.
+   State now sets the layout. Open calls are three large cards with the
+   deadline in the footer, so the date you act on is the last thing you read.
+   Closed calls drop to one muted row each. When a call closes, its card
+   moves down to the ledger.
+
+   The accent tick on each open card is the same mark, colours and order as
+   the numbers panel above (red, green, gold), so the two sections read as one
+   system. The whole card is the link: the CTA's ::after covers it. */
+$gi-paper: #fbf8f1;
+$gi-card: #fffdf8;
+$gi-border: #dad5cd;
+
+body.home .wcblr-calls > *,
+body.home .wcblr-calls__grid > *,
+body.home .wcblr-call > *,
+body.home .wcblr-call__top > *,
+body.home .wcblr-call__foot > *,
+body.home .wcblr-calls__closed > *,
+body.home .wcblr-closed-row > * {
+	margin: 0 !important;
+}
+
+body.home p.wcblr-calls__lbl {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	font-size: 11.5px !important;
+	font-weight: 600;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: #a8760f !important;
+	margin-bottom: 18px !important;
+}
+
+/* The label runs into a hairline, which makes "Open now" and "Closed" read
+   as the two halves of one list. */
+body.home p.wcblr-calls__lbl::after {
+	content: "";
+	flex: 1;
+	height: 1px;
+	background: $gi-border;
+}
+
+body.home .wcblr-calls__grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 18px;
+}
+
+body.home .wcblr-call {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	padding: 28px 28px 22px;
+	background: $gi-card;
+	border: 1.5px solid $gi-border;
+	border-radius: 16px;
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.25s ease;
+}
+
+body.home .wcblr-call::before {
+	content: "";
+	display: block;
+	width: 28px;
+	height: 3px;
+	border-radius: 2px;
+	margin-bottom: 20px;
+	background: $ha-ink;
+	transition: width 0.3s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+body.home .wcblr-call--red::before { background: $ha-red; }
+body.home .wcblr-call--green::before { background: $ha-green; }
+body.home .wcblr-call--gold::before { background: $ha-gold; }
+
+body.home .wcblr-call__top {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
+}
+
+body.home p.wcblr-call__idx {
+	font-size: 11.5px !important;
+	font-weight: 600;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: $ha-soft !important;
+}
+
+/* The live dot sits on the "Open now" label rather than on every card: same
+   gold and same `wcblr-pulse` as the highlighted nav item, so open reads
+   identically everywhere, and once is enough. */
+body.home p.wcblr-calls__lbl--live::before {
+	content: "";
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: $ha-gold;
+	flex: none;
+	margin-right: -4px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	body.home p.wcblr-calls__lbl--live::before {
+		animation: wcblr-pulse 2s ease-in-out infinite;
+	}
+}
+
+body.home h3.wcblr-call__title {
+	margin-top: 18px !important;
+	font-size: clamp(24px, 1.2rem + 0.8vw, 30px) !important;
+	font-weight: 500 !important;
+	line-height: 1.1 !important;
+	letter-spacing: -0.015em;
+	color: $ha-ink !important;
+}
+
+body.home p.wcblr-call__body {
+	margin-top: 10px !important;
+	font-size: 15.5px !important;
+	line-height: 1.55 !important;
+	color: $ha-body !important;
+}
+
+/* The footer sits on the card's foot whatever the copy above it, so the
+   three deadlines share a line. */
+body.home .wcblr-call__foot {
+	margin-top: auto !important;
+	padding-top: 22px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px 16px;
+}
+
+body.home .wcblr-call__foot::before {
+	content: "";
+	flex: 0 0 100%;
+	height: 1px;
+	margin-bottom: 6px;
+	background: #e2ded6;
+}
+
+body.home p.wcblr-call__due {
+	font-size: 12px !important;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: $ha-ink !important;
+}
+
+body.home p.wcblr-call__go {
+	font-size: 15px !important;
+	font-weight: 600;
+}
+
+body.home p.wcblr-call__go a {
+	color: $ha-red !important;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+body.home p.wcblr-call__go a::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: 16px;
+	z-index: 1;
+}
+
+body.home p.wcblr-call__go a:focus-visible {
+	outline: none;
+}
+
+body.home .wcblr-call:has(a:focus-visible) {
+	outline: 2px solid $ha-ink;
+	outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	body.home .wcblr-call:hover {
+		box-shadow: 0 14px 34px -14px rgba(42, 29, 20, 0.22);
+	}
+
+	body.home .wcblr-call:hover::before {
+		width: 56px;
+	}
+
+	body.home .wcblr-call--red:hover { border-color: $ha-red; }
+	body.home .wcblr-call--green:hover { border-color: $ha-green; }
+	body.home .wcblr-call--gold:hover { border-color: #a8760f; }
+
+	@media (prefers-reduced-motion: no-preference) {
+		body.home .wcblr-call {
+			transition:
+				border-color 0.2s ease,
+				box-shadow 0.25s ease,
+				transform 0.25s cubic-bezier(0.2, 0.6, 0.2, 1);
+		}
+
+		body.home .wcblr-call:hover {
+			transform: translateY(-4px);
+		}
+	}
+}
+
+/* ---- The closed ledger --------------------------------------------------- */
+
+body.home .wcblr-calls__closed {
+	margin-top: clamp(32px, 1rem + 2vw, 48px) !important;
+}
+
+body.home .wcblr-closed-row {
+	display: grid;
+	grid-template-columns: 200px minmax(0, 1fr) auto;
+	align-items: baseline;
+	gap: 6px 24px;
+	padding: 16px 0;
+	border-bottom: 1px solid #e2ded6;
+}
+
+body.home p.wcblr-closed-row__name {
+	font-family: "Fraunces", Georgia, serif !important;
+	font-size: 19px !important;
+	font-weight: 500;
+	color: $ha-soft !important;
+}
+
+body.home p.wcblr-closed-row__note {
+	font-size: 14.5px !important;
+	line-height: 1.5 !important;
+	color: $ha-soft !important;
+}
+
+body.home p.wcblr-closed-row__go {
+	font-size: 14px !important;
+	font-weight: 500;
+}
+
+body.home p.wcblr-closed-row__go a {
+	color: $ha-ink !important;
+	text-decoration: none;
+	border-bottom: 1px solid rgba(42, 29, 20, 0.28);
+	white-space: nowrap;
+	transition: border-bottom-color 0.18s ease;
+}
+
+body.home p.wcblr-closed-row__go a:hover,
+body.home p.wcblr-closed-row__go a:focus-visible {
+	border-bottom-color: $ha-ink;
+}
+
+@media (max-width: 900px) {
+	body.home .wcblr-calls__grid {
+		grid-template-columns: 1fr;
+		gap: 14px;
+	}
+
+	body.home .wcblr-call {
+		padding: 22px 22px 18px;
+	}
+}
+
+@media (max-width: 640px) {
+	body.home .wcblr-closed-row {
+		grid-template-columns: minmax(0, 1fr) auto;
+	}
+
+	body.home p.wcblr-closed-row__note {
+		grid-column: 1 / -1;
+		grid-row: 2;
+	}
+}
+
+/* With the access chips gone from the ticket (the day cards carry them now),
+   the ticket is the shorter column. Centred, it floated with cream above and
+   below; bottom-aligned, it ends on the same line as the day cards, so the
+   two columns close together. Two-up widths only. */
+@media (min-width: 782px) {
+	body.home .wcblr-hero__grid > .wcblr-hero__right {
+		align-self: flex-end !important;
+	}
+
+	body.home .wcblr-hero__grid > .wcblr-hero__right .wcblr-stub {
+		margin-bottom: clamp(24px, 1rem + 2.4vw, 64px);
+	}
+}
+
+/* ==== The lotus closes a section instead of opening it =====================
+   It sat between the band change and the eyebrow, so every section opened on
+   an ornament before its own heading. Moved in the markup to the last block of
+   each section; here it takes the header gap above it and nothing below, so
+   the section's own bottom padding is the space to the next band. */
+body.home .wcblr-home-sec .wcblr-flourish {
+	margin-top: clamp(40px, 1.4rem + 2.6vw, 72px) !important;
+	margin-bottom: 0 !important;
+}
+
+
+/* ==== Venue: two passes and the map ========================================
+   Redesigned 2 Oct 2026. It was four label-over-value rows, a long asterisked
+   footnote and two buttons beside an unframed map. Now each building is a
+   pass: the ticket's date chip, what happens there in the hero's gold or
+   green, the address and the metro line, and the whole card links to
+   directions. The map sits beside them at the passes' height, and the
+   footnote became one line, since the hero already explains the sign-up. */
+body.home .wcblr-venue__head {
+	margin-bottom: clamp(28px, 1rem + 2vw, 48px) !important;
+}
+
+body.home .wcblr-venue__head p:last-child {
+	margin-bottom: 0 !important;
+	margin-left: 0 !important;
+	max-width: 60ch;
+}
+
+body.home .wcblr-venue__grid {
+	gap: 24px !important;
+	align-items: stretch !important;
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+}
+
+body.home .wcblr-venue__info {
+	display: flex;
+	flex-direction: column;
+}
+
+body.home .wcblr-venue__info > *,
+body.home .wcblr-venue__passes > *,
+body.home .wcblr-pass > *,
+body.home .wcblr-pass__chip > *,
+body.home .wcblr-pass__body > *,
+body.home .wcblr-venue__map > * {
+	margin: 0 !important;
+}
+
+body.home .wcblr-venue__passes {
+	display: grid;
+	gap: 14px;
+}
+
+body.home .wcblr-pass {
+	position: relative;
+	display: grid;
+	grid-template-columns: 64px minmax(0, 1fr);
+	gap: 20px;
+	padding: 22px 24px;
+	background: $gi-card;
+	border: 1.5px solid $gi-border;
+	border-radius: 16px;
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.25s ease;
+}
+
+/* The chip is the ticket's, inverted for a light card: espresso for Sunday,
+   the day your ticket covers, and a gold-tinted one for Saturday. */
+body.home .wcblr-pass__chip {
+	align-self: start;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 10px 0 9px;
+	border-radius: 12px;
+	text-align: center;
+	line-height: 1;
+}
+
+body.home .wcblr-pass--sun .wcblr-pass__chip {
+	background: $ha-ink;
+	color: $ha-cream;
+}
+
+body.home .wcblr-pass--sat .wcblr-pass__chip {
+	background: transparent;
+	box-shadow: inset 0 0 0 1.5px rgba(42, 29, 20, 0.18);
+	color: $ha-ink;
+}
+
+body.home p.wcblr-pass__d,
+body.home p.wcblr-pass__m {
+	font-size: 10.5px !important;
+	font-weight: 600;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	line-height: 1 !important;
+	color: inherit !important;
+	opacity: 0.8;
+}
+
+body.home p.wcblr-pass__n {
+	margin: 4px 0 !important;
+	font-family: "Fraunces", Georgia, serif;
+	font-size: 30px !important;
+	font-weight: 500;
+	line-height: 1 !important;
+	color: inherit !important;
+}
+
+body.home p.wcblr-pass__kick {
+	font-size: 11px !important;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}
+
+body.home .wcblr-pass--sat p.wcblr-pass__kick { color: #8a5f0a !important; }
+body.home .wcblr-pass--sun p.wcblr-pass__kick { color: #16705a !important; }
+
+body.home p.wcblr-pass__name {
+	margin-top: 6px !important;
+	font-family: "Fraunces", Georgia, serif;
+	font-size: clamp(20px, 1.1rem + 0.35vw, 23px) !important;
+	font-weight: 500;
+	line-height: 1.2 !important;
+	color: $ha-ink !important;
+}
+
+body.home p.wcblr-pass__addr {
+	margin-top: 4px !important;
+	font-size: 14.5px !important;
+	line-height: 1.5 !important;
+	color: $ha-soft !important;
+}
+
+body.home p.wcblr-pass__transit {
+	margin-top: 10px !important;
+	font-size: 14px !important;
+	line-height: 1.5 !important;
+	color: $ha-body !important;
+}
+
+body.home p.wcblr-pass__transit span {
+	display: inline-block;
+	margin-right: 8px;
+	padding: 2px 7px;
+	border-radius: 5px;
+	background: rgba(42, 29, 20, 0.07);
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 10.5px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: $ha-ink;
+	vertical-align: 1px;
+}
+
+body.home p.wcblr-pass__go {
+	margin-top: 12px !important;
+	font-size: 14.5px !important;
+	font-weight: 600;
+}
+
+body.home p.wcblr-pass__go a {
+	color: $ha-red !important;
+	text-decoration: none;
+}
+
+body.home p.wcblr-pass__go a::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: 16px;
+	z-index: 1;
+}
+
+body.home p.wcblr-pass__go a:focus-visible {
+	outline: none;
+}
+
+body.home .wcblr-pass:has(a:focus-visible) {
+	outline: 2px solid $ha-ink;
+	outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	body.home .wcblr-pass:hover {
+		box-shadow: 0 14px 34px -14px rgba(42, 29, 20, 0.22);
+	}
+
+	body.home .wcblr-pass--sat:hover { border-color: #a8760f; }
+	body.home .wcblr-pass--sun:hover { border-color: $ha-green; }
+}
+
+body.home p.wcblr-venue__note {
+	margin-top: 16px !important;
+	font-size: 14px !important;
+	line-height: 1.55 !important;
+	color: $ha-soft !important;
+}
+
+body.home p.wcblr-venue__note a {
+	color: $ha-ink !important;
+	text-decoration: none;
+	border-bottom: 1px solid rgba(42, 29, 20, 0.3);
+}
+
+/* ---- The map ------------------------------------------------------------ */
+
+body.home .wcblr-venue__mapcol {
+	display: flex;
+}
+
+body.home .wcblr-venue__map {
+	position: relative;
+	flex: 1;
+	min-height: 360px;
+	border: 1.5px solid $gi-border;
+	border-radius: 16px;
+	overflow: hidden;
+	background: #e9e4da;
+}
+
+body.home .wcblr-venue__map .googlemaps {
+	position: absolute;
+	inset: 0;
+	border: 0 !important;
+}
+
+body.home .wcblr-venue__map .googlemaps iframe {
+	width: 100% !important;
+	height: 100% !important;
+	aspect-ratio: auto !important;
+}
+
+
+@media (max-width: 781px) {
+	body.home .wcblr-venue__map {
+		min-height: 300px;
+	}
+}
+
+@media (max-width: 480px) {
+	body.home .wcblr-pass {
+		grid-template-columns: 54px minmax(0, 1fr);
+		gap: 14px;
+		padding: 18px;
+	}
+
+	body.home p.wcblr-pass__n {
+		font-size: 26px !important;
+	}
+}
+
+body.home p.wcblr-pass__kick span {
+	white-space: nowrap;
+}
+
+/* ==== Hero: how the two days work ===========================================
+   Moved out of the ticket stub (2 Oct 2026), where it made the ticket twice
+   the height of the title column.
+
+   Fourth shape in one evening, and the record matters: two cards with pastel
+   pill fills read as app UI; a ruled two-column programme read as broken
+   markup, rules hanging in cream. What sits quietly under a hero is one soft
+   panel, a single tone darker than the page with no border, holding two
+   itinerary rows: a small date block, the title with its access note set as
+   plain mono text on the right, and one line of detail. Nothing is filled
+   except the panel itself. */
+$hd-panel: rgba(42, 29, 20, 0.045);
+
+body.home .wcblr-hero-days {
+	margin-top: clamp(26px, 1rem + 1.4vw, 40px) !important;
+	/* The skyline below rides up 50px into the hero. */
+	margin-bottom: clamp(24px, 1rem + 2.4vw, 64px) !important;
+}
+
+body.home .wcblr-hero-days > *,
+body.home .wcblr-hero-days__grid > *,
+body.home .wcblr-hero-day > *,
+body.home .wcblr-hero-day__date > *,
+body.home .wcblr-hero-day__main > *,
+body.home .wcblr-hero-day__head > * {
+	margin: 0 !important;
+}
+
+body.home p.wcblr-hero-days__lbl {
+	font-size: 11px !important;
+	font-weight: 600;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: $ha-soft !important;
+	margin-bottom: 10px !important;
+}
+
+body.home .wcblr-hero-days__grid {
+	padding: 4px 22px;
+	background: $hd-panel;
+	border-radius: 14px;
+}
+
+body.home .wcblr-hero-day {
+	display: grid;
+	grid-template-columns: 44px minmax(0, 1fr);
+	gap: 18px;
+	padding: 18px 0;
+}
+
+body.home .wcblr-hero-day + .wcblr-hero-day {
+	border-top: 1px solid rgba(42, 29, 20, 0.1);
+}
+
+body.home .wcblr-hero-day__date {
+	text-align: center;
+	padding-top: 2px;
+}
+
+body.home p.wcblr-hero-day__dow {
+	font-size: 10.5px !important;
+	font-weight: 600;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	line-height: 1 !important;
+	color: $ha-soft !important;
+}
+
+body.home p.wcblr-hero-day__num {
+	margin-top: 4px !important;
+	font-family: "Fraunces", Georgia, serif;
+	font-size: 28px !important;
+	font-weight: 500;
+	line-height: 1 !important;
+	color: $ha-ink !important;
+}
+
+body.home .wcblr-hero-day__head {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 2px 14px;
+}
+
+body.home p.wcblr-hero-day__title {
+	font-family: "Fraunces", Georgia, serif;
+	font-size: clamp(19px, 1.05rem + 0.3vw, 21px) !important;
+	font-weight: 500;
+	line-height: 1.2 !important;
+	letter-spacing: -0.01em;
+	color: $ha-ink !important;
+}
+
+body.home p.wcblr-hero-day__pill {
+	font-size: 10.5px !important;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	line-height: 1.4 !important;
+}
+
+body.home p.wcblr-hero-day__pill::before {
+	content: "\25C6";
+	margin-right: 6px;
+	font-size: 0.9em;
+}
+
+body.home p.wcblr-hero-day__pill span {
+	white-space: nowrap;
+}
+
+body.home .wcblr-hero-day--sat p.wcblr-hero-day__pill {
+	color: #9a6a0c !important;
+}
+
+body.home .wcblr-hero-day--sun p.wcblr-hero-day__pill {
+	color: $ha-soft !important;
+}
+
+body.home p.wcblr-hero-day__body {
+	margin-top: 6px !important;
+	font-size: 14.5px !important;
+	line-height: 1.55 !important;
+	color: $ha-soft !important;
+}
+
+body.home p.wcblr-hero-day__body strong {
+	color: $ha-ink;
+	font-weight: 600;
+}
+
+@media (max-width: 480px) {
+	body.home .wcblr-hero-days__grid {
+		padding: 2px 16px;
+	}
+
+	body.home .wcblr-hero-day {
+		grid-template-columns: 36px minmax(0, 1fr);
+		gap: 14px;
+	}
+}
+
+/* ==== Phones: the numbers and the venue passes ==============================
+   Found in the 2 Oct responsive pass at 320 and 390. The 2x2 numbers squeezed
+   each description into a 100px column; on a phone each stat becomes a row,
+   numeral left, label and line right. The venue pass gave its date chip a
+   column, leaving the venue name three lines deep; on a phone the chip turns
+   into one "SAT 21 NOV" strip above the text. */
+@media (max-width: 480px) {
+	body.home .wcblr-keynote {
+		padding: 24px 20px !important;
+	}
+
+	body.home .wcblr-keynote__stats {
+		grid-template-columns: 1fr;
+	}
+
+	body.home .wcblr-kstat,
+	body.home .wcblr-kstat:nth-child(3),
+	body.home .wcblr-kstat:nth-child(even) {
+		display: grid;
+		grid-template-columns: 112px minmax(0, 1fr);
+		column-gap: 14px;
+		align-items: start;
+		padding: 20px 0;
+		border-left: 0;
+		border-top: 1px solid $ha-line-dark;
+	}
+
+	body.home .wcblr-kstat:first-child {
+		border-top: 0;
+	}
+
+	body.home .wcblr-kstat::before {
+		grid-column: 1 / -1;
+		margin-bottom: 14px;
+	}
+
+	body.home p.wcblr-kstat__num {
+		grid-row: 2 / span 2;
+		font-size: 52px !important;
+	}
+
+	body.home p.wcblr-kstat__lbl {
+		grid-column: 2;
+		margin-top: 4px !important;
+	}
+
+	body.home p.wcblr-kstat__body {
+		grid-column: 2;
+		margin-top: 6px !important;
+		max-width: none;
+	}
+
+	body.home .wcblr-pass {
+		grid-template-columns: 1fr;
+		gap: 12px;
+	}
+
+	body.home .wcblr-pass__chip {
+		justify-self: start;
+		flex-direction: row;
+		align-items: baseline;
+		gap: 6px;
+		padding: 6px 10px;
+		border-radius: 8px;
+	}
+
+	body.home p.wcblr-pass__n {
+		margin: 0 !important;
+		font-size: 17px !important;
+	}
+}
+
+@media (max-width: 360px) {
+	body.home .wcblr-kstat,
+	body.home .wcblr-kstat:nth-child(3),
+	body.home .wcblr-kstat:nth-child(even) {
+		grid-template-columns: 96px minmax(0, 1fr);
+	}
+
+	body.home p.wcblr-kstat__num {
+		font-size: 44px !important;
 	}
 }
