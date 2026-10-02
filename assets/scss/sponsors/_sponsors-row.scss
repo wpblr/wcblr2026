@@ -96,3 +96,13 @@
 		}
 	}
 }
+
+/* ---- Stacked rows --------------------------------------------------------
+   Every row is a copy of the same synced pattern, which carries a top and a
+   bottom rule. Stacked, the first row's bottom rule and the next row's top
+   rule sat on top of each other as a 2px double line. A row that follows
+   another keeps only its bottom rule, which is what the home page's rows do
+   by hand. */
+.wcblr-sponsors-row + .wcblr-sponsors-row {
+	border-top: 0 !important;
+}
