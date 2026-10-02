@@ -1,0 +1,24 @@
+/* ---- Email-only content ---------------------------------------------------
+   Jetpack mails a new post to subscribers, and the email carries none of this
+   stylesheet: classes do nothing there, only inline styles and plain HTML
+   survive. A post whose layout lives in Remote CSS (the passes and departures
+   board in Getting to Bengaluru, say) falls apart into loose one-line
+   paragraphs in an inbox.
+
+   So such a post opens with a short summary written for the inbox, styled with
+   block attributes only (which save as inline styles), followed by a More
+   block. Jetpack mails only what sits above the More block, then a "continue
+   reading" link. On the site the summary is redundant with the page below it,
+   so it is hidden here, which an email client never sees.
+
+   The summary is the first block of the post content, which makes the real
+   wrapper a later sibling, and the layout's block gap would then push it down.
+   Pull it back up so the page renders exactly as it did without a summary. */
+
+.wcblr-email-only {
+	display: none !important;
+}
+
+.wcblr-email-only ~ .wcblr-post {
+	margin-block-start: 0 !important;
+}
