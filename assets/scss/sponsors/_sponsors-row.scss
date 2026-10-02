@@ -107,6 +107,12 @@
 	border-top: 0 !important;
 }
 
+/* The /sponsors/ rows carry no padding of their own, unlike the home rows, so
+   a second tier's label sat 19px under the first tier's logos. */
+body:not(.home) .wcblr-sponsors-row + .wcblr-sponsors-row {
+	margin-top: 48px !important;
+}
+
 /* ---- Logo size follows the tier -----------------------------------------
    "Logo on the website: Largest / Medium / Small" is a listed tier benefit on
    the call for sponsors, but every row was the same four-up grid, so a Kanchu
@@ -122,7 +128,7 @@
 }
 
 .wcblr-sponsors-row:has(.tier-label.t-gold) .wp-block-post-featured-image {
-	padding: 10px 36px !important;
+	padding: 10px 12px !important;
 }
 
 .wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-query ul {
@@ -130,7 +136,23 @@
 }
 
 .wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-post-featured-image {
-	padding: 8px 34px !important;
+	padding: 8px 12px !important;
+}
+
+/* The step-down was first done with side padding alone, which only works for
+   a wide wordmark. A square mark in the 16:9 box is bound by height, so the
+   padding that took a wordmark to 112px left Studio Goncharov's clock at 35px
+   on the home page, where the open-slot tile makes the grid narrower. The
+   padding is now small and the logo box is capped instead: a wordmark still
+   stops at 149 or 112px, and a square mark gets the full height of the tile. */
+.wcblr-sponsors-row:has(.tier-label.t-gold) .wp-block-post-featured-image img {
+	max-width: 149px;
+	margin-inline: auto;
+}
+
+.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-post-featured-image img {
+	max-width: 112px;
+	margin-inline: auto;
 }
 
 @media (max-width: 1023px) {
