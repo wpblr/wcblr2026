@@ -414,6 +414,60 @@ $tg-paper: #ffffff;
 	}
 }
 
+/* ---- Buying several, editing later ---------------------------------------- */
+
+.wcblr-tguide .tg-pair,
+.wcblr-tguide .tg-edit {
+	scroll-margin-top: 90px;
+
+	.tg-why-lead {
+		font-size: 18px !important;
+		max-width: 62ch;
+		margin: 14px 0 6px !important;
+	}
+
+	.wp-block-columns {
+		margin-top: 28px !important;
+	}
+
+	h3 {
+		font-family: "Fraunces", serif !important;
+		font-size: 22px !important;
+		font-weight: 500 !important;
+		line-height: 1.2 !important;
+		color: $tg-ink !important;
+		margin: 0 0 8px !important;
+	}
+
+	.wp-block-column > p {
+		font-size: 15.5px !important;
+		line-height: 1.6 !important;
+		margin: 0 0 16px !important;
+	}
+}
+
+/* the pair faces off: a crimson rule over each side */
+.wcblr-tguide .tg-pair .wp-block-column {
+	border-top: 3px solid $tg-red;
+	padding-top: 16px;
+}
+
+.wcblr-tguide .tg-edit .wp-block-columns + .wp-block-columns {
+	margin-top: 36px !important;
+}
+
+/* the mini sequence: an outlined number, so it never reads as a main step */
+.wcblr-tguide .tg-num.tg-num-sm {
+	width: 34px;
+	height: 34px;
+	font-size: 15px !important;
+	color: $tg-red !important;
+	background: transparent;
+	border: 2px solid $tg-red;
+	box-shadow: none;
+	margin: 0 0 12px !important;
+}
+
 /* ---- Codes, questions, close ---------------------------------------------- */
 
 .wcblr-tguide .tg-panel {
