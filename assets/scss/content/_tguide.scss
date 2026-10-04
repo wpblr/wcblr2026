@@ -1,0 +1,551 @@
+/* ---- Ticket guide (how-to-get-your-ticket) --------------------------------
+   One straight purchase flow: a dark hero with the video and a ten-step map,
+   then each step as a white card (number, title, what to press, a framed
+   screenshot), then codes, questions and the close. Everything is scoped under
+   .wcblr-tguide on the post wrapper, so nothing already published moves.
+
+   Sanitiser rules this file obeys: no url() anywhere (icons are drawn with
+   gradients and clip-path), no CSS custom properties (Sass variables compile
+   to literals), no filter. */
+
+$tg-ink: #2a1d14;
+$tg-text: #5f4f42;
+$tg-muted: #8a7a6b;
+$tg-red: #c8344b;
+$tg-gold: #e0a526;
+$tg-golddeep: #a8760f;
+$tg-line: #e7e0d4;
+$tg-cream: #f2ece0;
+$tg-paper: #ffffff;
+
+.wcblr-post.wcblr-tguide {
+	// the default post template crushes every h2 to 25px with !important
+	h2.tg-h,
+	h2.tg-sh {
+		font-family: "Fraunces", serif !important;
+		font-weight: 500 !important;
+		letter-spacing: -0.015em !important;
+		margin: 0 !important;
+	}
+
+	h2.tg-h {
+		font-size: clamp(34px, 4.6vw, 54px) !important;
+		line-height: 1.06 !important;
+		color: $tg-cream !important;
+	}
+
+	h2.tg-sh {
+		font-size: clamp(28px, 3.4vw, 40px) !important;
+		line-height: 1.12 !important;
+		color: $tg-ink !important;
+	}
+
+	h2 em,
+	h3 em {
+		font-style: italic;
+		color: $tg-red;
+	}
+
+	.tg-hero h2 em {
+		color: $tg-gold;
+	}
+
+	/* key chips: the exact label of a button or link, written as inline code */
+	code {
+		font-family: "Hanken Grotesk", sans-serif;
+		font-size: 0.88em;
+		font-weight: 650;
+		color: $tg-ink;
+		background: #f7f3ec;
+		border: 1px solid #dcd2c3;
+		border-bottom-width: 2px;
+		border-radius: 7px;
+		padding: 1px 7px 2px;
+		-webkit-box-decoration-break: clone;
+		box-decoration-break: clone;
+		line-height: 1.9;
+	}
+}
+
+/* ---- Hero ---------------------------------------------------------------- */
+
+.wcblr-tguide .tg-hero {
+	position: relative;
+	overflow: hidden;
+	border-radius: 26px;
+	padding: 52px 52px 40px;
+	color: $tg-cream;
+	background:
+		radial-gradient(110% 90% at 100% 0%, rgba(200, 52, 75, 0.26), rgba(200, 52, 75, 0) 58%),
+		radial-gradient(80% 70% at 0% 100%, rgba(224, 165, 38, 0.16), rgba(224, 165, 38, 0) 60%),
+		$tg-ink;
+	box-shadow: 0 30px 60px -30px rgba(42, 29, 20, 0.55);
+	animation: tg-rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.wcblr-tguide .tg-kicker {
+	font-family: "JetBrains Mono", monospace;
+	font-size: 12px;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: $tg-gold;
+	margin: 0 0 18px;
+}
+
+.wcblr-tguide .tg-lede {
+	font-size: 19px;
+	line-height: 1.6;
+	color: #d7cdbf;
+	margin: 18px 0 0;
+	max-width: 46ch;
+}
+
+.wcblr-tguide .tg-hero .wp-block-buttons {
+	margin-top: 28px;
+}
+
+.wcblr-tguide .tg-hero .tg-note {
+	font-size: 14px;
+	color: #a99d8f;
+	margin: 14px 0 0;
+}
+
+/* the video: a framed 16:9 slot until the walkthrough exists. A real
+   Embed block dropped into the same column gets the same frame. */
+.wcblr-tguide .tg-video,
+.wcblr-tguide .tg-hero .wp-block-embed {
+	aspect-ratio: 16 / 9;
+	border-radius: 18px;
+	overflow: hidden;
+	margin: 0;
+	border: 1px solid rgba(242, 236, 224, 0.14);
+	box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.6);
+}
+
+.wcblr-tguide .tg-video {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 16px;
+	background:
+		radial-gradient(70% 60% at 50% 40%, rgba(242, 236, 224, 0.08), rgba(242, 236, 224, 0) 70%),
+		linear-gradient(150deg, #3b2b20, #1c130d);
+
+	p {
+		position: relative;
+		padding: 98px 16px 0;
+		text-align: center;
+		font-family: "JetBrains Mono", monospace;
+		font-size: 12px;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: #cbbfb0;
+		margin: 0;
+
+		/* the play button: a crimson disc with a triangle cut by clip-path */
+		&::before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 50%;
+			margin-left: -37px;
+			width: 74px;
+			height: 74px;
+			border-radius: 50%;
+			background: $tg-red;
+			box-shadow: 0 0 0 10px rgba(200, 52, 75, 0.18);
+		}
+
+		&::after {
+			content: "";
+			position: absolute;
+			top: 23px;
+			left: 50%;
+			margin-left: -8px;
+			width: 24px;
+			height: 28px;
+			background: #ffffff;
+			clip-path: polygon(0 0, 100% 50%, 0 100%);
+		}
+	}
+}
+
+.wcblr-tguide .tg-hero .wp-block-embed iframe {
+	width: 100%;
+	height: 100%;
+}
+
+/* the ten-step map along the bottom of the hero */
+.wcblr-tguide .tg-map {
+	list-style: none;
+	margin: 40px 0 0;
+	padding: 28px 0 0;
+	border-top: 1px solid rgba(242, 236, 224, 0.14);
+	display: grid;
+	grid-template-columns: repeat(5, minmax(0, 1fr));
+	gap: 10px;
+	counter-reset: tg-map;
+
+	li {
+		counter-increment: tg-map;
+		display: flex;
+		margin: 0 !important;
+		padding: 0;
+	}
+
+	a {
+		flex: 1;
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 10px 12px;
+		border-radius: 12px;
+		background: rgba(242, 236, 224, 0.06);
+		border: 1px solid rgba(242, 236, 224, 0.1);
+		color: #e9e1d4;
+		font-size: 14px;
+		font-weight: 600;
+		line-height: 1.25;
+		text-decoration: none;
+		transition: background 0.15s, border-color 0.15s, transform 0.15s;
+
+		&::before {
+			content: counter(tg-map);
+			flex: 0 0 26px;
+			height: 26px;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-family: "JetBrains Mono", monospace;
+			font-size: 12px;
+			font-weight: 700;
+			color: $tg-ink;
+			background: $tg-gold;
+		}
+
+		&:hover,
+		&:focus {
+			background: rgba(242, 236, 224, 0.12);
+			border-color: rgba(224, 165, 38, 0.5);
+			transform: translateY(-1px);
+			color: #ffffff;
+		}
+	}
+}
+
+/* ---- Steps ---------------------------------------------------------------- */
+
+.wcblr-tguide .tg-step {
+	position: relative;
+	background: $tg-paper;
+	border: 1px solid $tg-line;
+	border-radius: 22px;
+	padding: 38px 40px;
+	box-shadow: 0 1px 2px rgba(42, 29, 20, 0.05), 0 18px 40px -22px rgba(42, 29, 20, 0.22);
+	scroll-margin-top: 90px;
+
+	/* a short rail joining each card to the next */
+	&:not(:last-child)::after {
+		content: "";
+		position: absolute;
+		left: 65px;
+		bottom: -31px;
+		width: 2px;
+		height: 30px;
+		background: linear-gradient($tg-red, rgba(200, 52, 75, 0.15));
+	}
+
+	& + .tg-step {
+		margin-top: 30px !important;
+	}
+
+	h3 {
+		font-family: "Fraunces", serif !important;
+		font-size: 29px !important;
+		font-weight: 500 !important;
+		line-height: 1.15 !important;
+		letter-spacing: -0.01em !important;
+		color: $tg-ink !important;
+		margin: 0 0 14px !important;
+	}
+
+	p {
+		font-size: 17px;
+		line-height: 1.65;
+		color: $tg-text;
+		margin: 0 0 14px;
+	}
+
+	p:last-child {
+		margin-bottom: 0;
+	}
+}
+
+.wcblr-tguide .tg-num {
+	width: 52px;
+	height: 52px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: "Hanken Grotesk", sans-serif;
+	font-size: 20px !important;
+	font-weight: 800;
+	color: #ffffff !important;
+	background: $tg-red;
+	box-shadow: 0 0 0 6px rgba(200, 52, 75, 0.12);
+	margin: 0 0 20px !important;
+}
+
+/* the last step is the goal: green instead of crimson */
+.wcblr-tguide .tg-step-done .tg-num {
+	background: #1d8b6e;
+	box-shadow: 0 0 0 6px rgba(29, 139, 110, 0.14);
+}
+
+.wcblr-tguide .tg-tip {
+	background: #fbf5e7;
+	border: 1px solid #efe1c3;
+	border-left: 4px solid $tg-golddeep;
+	border-radius: 12px;
+	padding: 14px 18px;
+	margin-top: 20px !important;
+
+	p {
+		font-size: 15px !important;
+		line-height: 1.55 !important;
+		color: #5a4630 !important;
+		margin: 0 !important;
+	}
+
+	strong {
+		color: $tg-ink;
+	}
+}
+
+/* screenshots sit in a browser frame: a tinted bar with three dots drawn
+   in gradients, the image below it */
+.wcblr-tguide .tg-shot {
+	position: relative;
+	margin: 0 !important;
+	padding: 30px 10px 10px;
+	border-radius: 16px;
+	background: #ece6dc;
+	box-shadow: inset 0 0 0 1px #e0d7c9;
+
+	&::before {
+		content: "";
+		position: absolute;
+		top: 11px;
+		left: 14px;
+		width: 46px;
+		height: 9px;
+		background:
+			radial-gradient(circle at 4.5px 4.5px, #e46a5f 3.6px, transparent 4.2px),
+			radial-gradient(circle at 22.5px 4.5px, #e6b54d 3.6px, transparent 4.2px),
+			radial-gradient(circle at 40.5px 4.5px, #6cbf72 3.6px, transparent 4.2px);
+	}
+
+	img {
+		display: block;
+		margin: 0 auto;
+		max-width: 100%;
+		height: auto;
+		border-radius: 9px;
+		background: #ffffff;
+		box-shadow: 0 1px 3px rgba(42, 29, 20, 0.12);
+	}
+
+	figcaption {
+		font-size: 13px !important;
+		line-height: 1.45;
+		color: $tg-muted !important;
+		text-align: center;
+		margin: 10px 4px 2px !important;
+	}
+
+	& + .tg-shot {
+		margin-top: 16px !important;
+	}
+}
+
+/* ---- Codes, questions, close ---------------------------------------------- */
+
+.wcblr-tguide .tg-panel {
+	background: $tg-paper;
+	border: 1px solid $tg-line;
+	border-radius: 22px;
+	padding: 38px 40px;
+	box-shadow: 0 1px 2px rgba(42, 29, 20, 0.05), 0 18px 40px -22px rgba(42, 29, 20, 0.18);
+
+	p {
+		font-size: 17px;
+		line-height: 1.65;
+		color: $tg-text;
+	}
+}
+
+.wcblr-tguide .tg-eyebrow {
+	font-family: "JetBrains Mono", monospace;
+	font-size: 12px !important;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: $tg-red !important;
+	margin: 0 0 12px !important;
+}
+
+.wcblr-tguide .tg-faq {
+	details {
+		background: $tg-paper;
+		border: 1px solid $tg-line;
+		border-radius: 14px;
+		padding: 0;
+		margin: 12px 0 0 !important;
+		transition: border-color 0.15s, box-shadow 0.15s;
+
+		&[open] {
+			border-color: #d8ccb9;
+			box-shadow: 0 10px 26px -18px rgba(42, 29, 20, 0.3);
+		}
+	}
+
+	summary {
+		list-style: none;
+		cursor: pointer;
+		position: relative;
+		padding: 19px 56px 19px 22px;
+		font-size: 17px;
+		font-weight: 600;
+		color: $tg-ink;
+
+		&::-webkit-details-marker {
+			display: none;
+		}
+
+		/* chevron */
+		&::after {
+			content: "";
+			position: absolute;
+			right: 24px;
+			top: 50%;
+			width: 9px;
+			height: 9px;
+			margin-top: -7px;
+			border-right: 2px solid $tg-red;
+			border-bottom: 2px solid $tg-red;
+			transform: rotate(45deg);
+			transition: transform 0.2s, margin-top 0.2s;
+		}
+	}
+
+	details[open] summary::after {
+		transform: rotate(-135deg);
+		margin-top: -2px;
+	}
+
+	details p {
+		padding: 0 22px 20px;
+		margin: 0 !important;
+		font-size: 16px !important;
+		line-height: 1.6;
+		color: $tg-text !important;
+	}
+}
+
+.wcblr-tguide .tg-close .wp-block-buttons {
+	justify-content: flex-end;
+}
+
+.wcblr-tguide .tg-close {
+	border-radius: 26px;
+	padding: 44px 48px;
+	background:
+		radial-gradient(90% 120% at 100% 100%, rgba(200, 52, 75, 0.28), rgba(200, 52, 75, 0) 60%),
+		$tg-ink;
+
+	h2.tg-sh {
+		color: $tg-cream !important;
+	}
+
+	p {
+		color: #cfc5b8 !important;
+	}
+}
+
+@keyframes tg-rise {
+	from {
+		opacity: 0;
+		transform: translateY(14px);
+	}
+
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wcblr-tguide .tg-hero {
+		animation: none;
+	}
+}
+
+/* ---- Small screens --------------------------------------------------------- */
+
+@media (max-width: 781px) {
+	.wcblr-tguide .tg-hero {
+		padding: 34px 22px 26px;
+		border-radius: 22px;
+	}
+
+	.wcblr-tguide .tg-map {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		margin-top: 30px;
+		padding-top: 22px;
+	}
+
+	.wcblr-tguide .tg-step,
+	.wcblr-tguide .tg-panel {
+		padding: 26px 20px;
+		border-radius: 18px;
+	}
+
+	.wcblr-tguide .tg-step:not(:last-child)::after {
+		left: 45px;
+	}
+
+	.wcblr-tguide .tg-step h3 {
+		font-size: 25px !important;
+	}
+
+	.wcblr-tguide .tg-num {
+		width: 46px;
+		height: 46px;
+		font-size: 18px !important;
+		margin-bottom: 16px !important;
+	}
+
+	.wcblr-tguide .tg-shot {
+		padding: 26px 5px 5px;
+		margin-left: -12px !important;
+		margin-right: -12px !important;
+	}
+
+	.wcblr-tguide .tg-close .wp-block-buttons {
+		justify-content: flex-start;
+	}
+
+	.wcblr-tguide .tg-close {
+		padding: 32px 24px;
+	}
+
+	/* 16:9 at phone width is too short for the play button and its label */
+	.wcblr-tguide .tg-video {
+		aspect-ratio: auto;
+		padding: 30px 0 28px;
+	}
+}
