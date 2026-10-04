@@ -1903,6 +1903,91 @@ $tix-has-stock: ".tix_tickets_table>tbody>tr:not(.tix-sold-out):not(.tix-row-cou
 	display: none;
 }
 
+/* THE WAY IN FOR A FIRST-TIME BUYER, above the card.
+
+   Logged out, CampTix puts its "please log in / please create one" box at the
+   top of `#tix`, and that box is exactly where a newcomer stalls. So the guide
+   is offered before it, as the first thing in the column on both widths (the
+   column leads on a phone). The whole strip is the link, through a stretched
+   `::after`, and the arrow is the new-tab glyph because the guide opens beside
+   the form rather than replacing it.
+
+   Keyed on the same stock condition as the card: on a sold-out page there is
+   nothing to buy, so there is nothing to guide. Fails towards SHOWING, like
+   the card does, if `:has()` is ever dropped. */
+.wcblr-tix-guidebar {
+	position: relative;
+	margin: 0 0 14px !important;
+	padding: 15px 54px 16px 20px;
+	background: #fbf5e7;
+	border: 1px solid #efe1c3;
+	border-left: 4px solid #e0a526;
+	border-radius: 14px;
+	transition: border-color 0.15s ease, transform 0.15s ease;
+
+	&::after {
+		content: "\2197";
+		position: absolute;
+		right: 20px;
+		top: 50%;
+		transform: translateY(-50%);
+		font-size: 20px;
+		line-height: 1;
+		color: #C8344B;
+		transition: transform 0.15s ease;
+	}
+
+	&:hover,
+	&:focus-within {
+		border-color: #e3c98f;
+		border-left-color: #C8344B;
+	}
+
+	&:hover::after,
+	&:focus-within::after {
+		transform: translate(3px, calc(-50% - 3px));
+	}
+}
+.wcblr-tix-guidebar-k {
+	margin: 0 0 3px !important;
+	font-family: "JetBrains Mono", monospace;
+	font-size: 11px !important;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: #9a6b12 !important;
+}
+.wcblr-tix-guidebar-l {
+	margin: 0 !important;
+	font-family: "Hanken Grotesk", sans-serif;
+	font-size: 16.5px !important;
+	font-weight: 600;
+	line-height: 1.35 !important;
+
+	a {
+		color: #2a1d14 !important;
+		text-decoration: none !important;
+	}
+
+	a::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: 14px;
+	}
+
+	a:focus-visible {
+		outline: none;
+	}
+}
+.wcblr-tix-guidebar:has(a:focus-visible) {
+	outline: 2px solid #C8344B;
+	outline-offset: 2px;
+}
+.wcblr-tix-row:not(:has(#{$tix-has-stock})) .wcblr-tix-guidebar {
+	display: none;
+}
+
 /* Edge to edge, for the reason `.wcblr-tier-cta` is: a 200px button floating
    at the left of the card reads as belonging to the line above it. This one is
    standing in for Register, which was full width. */
