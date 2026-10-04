@@ -373,6 +373,47 @@ $tg-paper: #ffffff;
 	}
 }
 
+/* ---- Why an account ---------------------------------------------------------- */
+
+.wcblr-tguide .tg-hero .tg-lede a {
+	color: $tg-gold;
+	text-decoration-color: rgba(224, 165, 38, 0.5);
+}
+
+.wcblr-tguide .tg-why {
+	scroll-margin-top: 90px;
+
+	.tg-why-lead {
+		font-size: 18px !important;
+		max-width: 62ch;
+		margin: 14px 0 6px !important;
+	}
+
+	.wp-block-columns {
+		margin-top: 22px !important;
+	}
+
+	.wp-block-column {
+		border-top: 3px solid $tg-red;
+		padding-top: 16px;
+	}
+
+	h3 {
+		font-family: "Fraunces", serif !important;
+		font-size: 21px !important;
+		font-weight: 500 !important;
+		line-height: 1.2 !important;
+		color: $tg-ink !important;
+		margin: 0 0 8px !important;
+	}
+
+	.wp-block-column p {
+		font-size: 15.5px !important;
+		line-height: 1.6 !important;
+		margin: 0 !important;
+	}
+}
+
 /* ---- Codes, questions, close ---------------------------------------------- */
 
 .wcblr-tguide .tg-panel {
