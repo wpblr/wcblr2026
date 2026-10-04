@@ -497,6 +497,36 @@ $tg-paper: #ffffff;
 /* ---- Small screens --------------------------------------------------------- */
 
 @media (max-width: 781px) {
+	/* the site gutter is 30px on the page frame plus 30px on the post wrapper,
+	   which leaves a screenshot guide 240px wide on a small phone. This post
+	   drops its own 30px and pulls out to a 16px edge. */
+	.wcblr-post.wcblr-tguide {
+		padding-left: 0 !important;
+		padding-right: 0 !important;
+	}
+
+	.wcblr-post.wcblr-tguide > .alignwide {
+		margin-left: -14px !important;
+		margin-right: -14px !important;
+	}
+
+	.wcblr-tguide .tg-map {
+		gap: 8px;
+	}
+
+	.wcblr-tguide .tg-map a {
+		min-width: 0;
+		padding: 9px 10px;
+		gap: 8px;
+		font-size: 13px;
+	}
+
+	.wcblr-tguide .tg-map a::before {
+		flex-basis: 24px;
+		height: 24px;
+		font-size: 11px;
+	}
+
 	.wcblr-tguide .tg-hero {
 		padding: 34px 22px 26px;
 		border-radius: 22px;
