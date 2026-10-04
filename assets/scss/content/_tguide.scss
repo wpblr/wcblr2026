@@ -237,6 +237,38 @@ $tg-paper: #ffffff;
 	}
 }
 
+/* the side routes, under the ten-step map */
+.wcblr-tguide .tg-hero .tg-also {
+	margin: 18px 0 0 !important;
+	font-size: 14px !important;
+	line-height: 1.9 !important;
+	color: #a99d8f !important;
+
+	a {
+		color: #e9e1d4 !important;
+		font-weight: 600;
+		text-decoration: underline;
+		text-decoration-color: rgba(224, 165, 38, 0.6);
+		text-underline-offset: 4px;
+		white-space: nowrap;
+	}
+
+	a:hover,
+	a:focus {
+		color: #ffffff !important;
+		text-decoration-color: $tg-gold;
+	}
+}
+
+/* the way back into the main flow, at the end of a side panel */
+.wcblr-tguide .tg-next {
+	margin: 22px 0 0 !important;
+	padding-top: 18px;
+	border-top: 1px solid $tg-line;
+	font-weight: 600;
+	color: $tg-ink !important;
+}
+
 /* ---- Steps ---------------------------------------------------------------- */
 
 .wcblr-tguide .tg-step {
