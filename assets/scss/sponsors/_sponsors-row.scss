@@ -198,9 +198,16 @@ body:not(.home) .wcblr-sponsors-row + .wcblr-sponsors-row {
    next to their 33-35px. The logo is scaled up inside its tile rather than given
    a wider box: a wider img also grows taller, since the block fixes it at 16:9,
    and that tile stood out below the rest of the row. A transform leaves the
-   tile's size alone, and 1.4 still clears the tile's sides at every width.
+   tile's size alone. Phones get less: the two-up tiles there have little side
+   padding, and 1.4 ran the logo past the tile's edges at 390px.
    Remove this once they send a stacked or squarer logo. post-1427 is their
    sponsor post. */
 .wcblr-sponsors-row .wp-block-query li.post-1427 .wp-block-post-featured-image img {
 	transform: scale(1.4);
+}
+
+@media (max-width: 600px) {
+	.wcblr-sponsors-row .wp-block-query li.post-1427 .wp-block-post-featured-image img {
+		transform: scale(1.15);
+	}
 }
