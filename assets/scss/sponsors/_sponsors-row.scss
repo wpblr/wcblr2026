@@ -195,11 +195,12 @@ body:not(.home) .wcblr-sponsors-row + .wcblr-sponsors-row {
    Every tile fits its logo inside the same box, so a wide wordmark is bound by
    width and its height is width / aspect ratio. Flow Automate's wordmark is 8:1
    against roughly 5:1 for Bluehost and Hostinger, so it came out about 21px tall
-   next to their 33-35px. Its tile drops most of the side padding, which gives
-   the logo more width and so more height. Remove this once they send a stacked
-   or squarer logo. post-1427 is their sponsor post; the extra .wp-block-query
-   is there to outrank the tier rules, which carry :has() and !important. */
-.wcblr-sponsors-row .wp-block-query li.post-1427 .wp-block-post-featured-image {
-	padding-left: 10px !important;
-	padding-right: 10px !important;
+   next to their 33-35px. The logo is scaled up inside its tile rather than given
+   a wider box: a wider img also grows taller, since the block fixes it at 16:9,
+   and that tile stood out below the rest of the row. A transform leaves the
+   tile's size alone, and 1.4 still clears the tile's sides at every width.
+   Remove this once they send a stacked or squarer logo. post-1427 is their
+   sponsor post. */
+.wcblr-sponsors-row .wp-block-query li.post-1427 .wp-block-post-featured-image img {
+	transform: scale(1.4);
 }
