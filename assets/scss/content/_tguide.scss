@@ -130,7 +130,9 @@ $tg-paper: #ffffff;
 	margin: 0 auto;
 	background: #1c130d;
 
-	.wp-block-embed__wrapper {
+	/* Jetpack wraps the iframe in span.embed-youtube, which has no height of its own */
+	.wp-block-embed__wrapper,
+	.embed-youtube {
 		height: 100%;
 	}
 
