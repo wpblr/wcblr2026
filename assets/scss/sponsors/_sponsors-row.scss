@@ -115,65 +115,81 @@ body:not(.home) .wcblr-sponsors-row + .wcblr-sponsors-row {
 
 /* ---- Logo size follows the tier -----------------------------------------
    "Logo on the website: Largest / Medium / Small" is a listed tier benefit on
-   the call for sponsors, but every row was the same four-up grid, so a Kanchu
-   logo would have shown at Suvarna size. The rows carry no tier class, only
-   the tier label inside them (t-plat Suvarna, t-gold Belli, t-silver Kanchu),
-   so the row is matched on its label. Hitaishi (t-comm) takes the Kanchu
-   size, since its benefit is a small logo too. More tiles per row means a smaller tile,
-   and the padding is set so the logo itself steps down: measured at 1440,
-   about 186px wide for Suvarna, 150 for Belli and 112 for Kanchu.
+   the call for sponsors. The rows carry no tier class, only the tier label
+   inside them (t-plat Suvarna, t-gold Belli, t-silver Kanchu, t-comm
+   Hitaishi), so the row is matched on its label.
+
+   The steps are kept close on purpose. Kanchu first came out at 112px against
+   Suvarna's 186 and read as an afterthought (9 Oct 2026), so it now sits one
+   step down, not three. Measured at 1440 on /sponsors/: logo cap 186 / 164 /
+   146 / 123 for Suvarna, Belli, Kanchu and Hitaishi, tiles 286 / ~215 / 182 /
+   159. Tile count does the stepping and the max-width keeps a wordmark from
+   outgrowing the tier above when a row has room to spare.
 
    Suvarna keeps the existing grid: four up on desktop, two below 1024. */
-.wcblr-sponsors-row:has(.tier-label.t-gold) .wp-block-query ul {
+.wcblr-sponsors-row:has(.tier-label.t-gold) .wp-block-query ul,
+.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-query ul {
 	grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+}
+
+/* On the home page the Kanchu row also carries the Become a Sponsor tile, so
+   five up there left each tile at ~150px. Four up gives back the same size as
+   /sponsors/. */
+.wcblr-sponsors-row:has(.tier-label.t-silver):has(.wcblr-become-sponsor) .wp-block-query ul {
+	grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+.wcblr-sponsors-row:has(.tier-label.t-comm) .wp-block-query ul {
+	grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
 }
 
 .wcblr-sponsors-row:has(.tier-label.t-gold) .wp-block-post-featured-image {
 	padding: 10px 12px !important;
 }
 
-.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-query ul,
-.wcblr-sponsors-row:has(.tier-label.t-comm) .wp-block-query ul {
-	grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-post-featured-image {
+	padding: 10px 16px !important;
 }
 
-.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-post-featured-image,
 .wcblr-sponsors-row:has(.tier-label.t-comm) .wp-block-post-featured-image {
-	padding: 8px 12px !important;
+	padding: 8px 16px !important;
 }
 
-/* The step-down was first done with side padding alone, which only works for
-   a wide wordmark. A square mark in the 16:9 box is bound by height, so the
-   padding that took a wordmark to 112px left Studio Goncharov's clock at 35px
-   on the home page, where the open-slot tile makes the grid narrower. The
-   padding is now small and the logo box is capped instead: a wordmark still
-   stops at 149 or 112px, and a square mark gets the full height of the tile. */
+/* A square mark in the 16:9 box is bound by height, so side padding alone
+   cannot step a logo down: it left Studio Goncharov's clock at 35px. The
+   padding is small and the logo box is capped instead, so a wordmark stops at
+   the cap and a square mark gets the full height of the tile. */
 .wcblr-sponsors-row:has(.tier-label.t-gold) .wp-block-post-featured-image img {
-	max-width: 149px;
+	max-width: 164px;
 	margin-inline: auto;
 }
 
-.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-post-featured-image img,
+.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-post-featured-image img {
+	max-width: 146px;
+	margin-inline: auto;
+}
+
 .wcblr-sponsors-row:has(.tier-label.t-comm) .wp-block-post-featured-image img {
-	max-width: 112px;
+	max-width: 123px;
 	margin-inline: auto;
 }
 
-/* A Kanchu tile is short enough that a square mark still read small at
-   16:9, so the box is a little taller here. A wordmark is bound by the width
-   cap and does not change. The block prints its 16:9 as an inline style on
-   the img, hence !important. */
+/* Kanchu and Hitaishi tiles are short enough that a square mark still read
+   small at 16:9, so the box is a little taller there. A wordmark is bound by
+   the width cap and does not change. The block prints its 16:9 as an inline
+   style on the img, hence !important. */
 .wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-post-featured-image img,
 .wcblr-sponsors-row:has(.tier-label.t-comm) .wp-block-post-featured-image img {
 	aspect-ratio: 16 / 10 !important;
 }
 
 @media (max-width: 1023px) {
-	.wcblr-sponsors-row:has(.tier-label.t-gold) .wp-block-query ul {
+	.wcblr-sponsors-row:has(.tier-label.t-gold) .wp-block-query ul,
+	.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-query ul,
+	.wcblr-sponsors-row:has(.tier-label.t-silver):has(.wcblr-become-sponsor) .wp-block-query ul {
 		grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
 	}
 
-	.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-query ul,
 	.wcblr-sponsors-row:has(.tier-label.t-comm) .wp-block-query ul {
 		grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
 	}
@@ -189,6 +205,7 @@ body:not(.home) .wcblr-sponsors-row + .wcblr-sponsors-row {
 	}
 
 	.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-query ul,
+	.wcblr-sponsors-row:has(.tier-label.t-silver):has(.wcblr-become-sponsor) .wp-block-query ul,
 	.wcblr-sponsors-row:has(.tier-label.t-comm) .wp-block-query ul {
 		grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
 	}
