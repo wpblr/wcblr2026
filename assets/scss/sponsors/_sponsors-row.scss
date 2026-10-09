@@ -118,7 +118,8 @@ body:not(.home) .wcblr-sponsors-row + .wcblr-sponsors-row {
    the call for sponsors, but every row was the same four-up grid, so a Kanchu
    logo would have shown at Suvarna size. The rows carry no tier class, only
    the tier label inside them (t-plat Suvarna, t-gold Belli, t-silver Kanchu),
-   so the row is matched on its label. More tiles per row means a smaller tile,
+   so the row is matched on its label. Hitaishi (t-comm) takes the Kanchu
+   size, since its benefit is a small logo too. More tiles per row means a smaller tile,
    and the padding is set so the logo itself steps down: measured at 1440,
    about 186px wide for Suvarna, 150 for Belli and 112 for Kanchu.
 
@@ -131,11 +132,13 @@ body:not(.home) .wcblr-sponsors-row + .wcblr-sponsors-row {
 	padding: 10px 12px !important;
 }
 
-.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-query ul {
+.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-query ul,
+.wcblr-sponsors-row:has(.tier-label.t-comm) .wp-block-query ul {
 	grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
 }
 
-.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-post-featured-image {
+.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-post-featured-image,
+.wcblr-sponsors-row:has(.tier-label.t-comm) .wp-block-post-featured-image {
 	padding: 8px 12px !important;
 }
 
@@ -150,7 +153,8 @@ body:not(.home) .wcblr-sponsors-row + .wcblr-sponsors-row {
 	margin-inline: auto;
 }
 
-.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-post-featured-image img {
+.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-post-featured-image img,
+.wcblr-sponsors-row:has(.tier-label.t-comm) .wp-block-post-featured-image img {
 	max-width: 112px;
 	margin-inline: auto;
 }
@@ -159,7 +163,8 @@ body:not(.home) .wcblr-sponsors-row + .wcblr-sponsors-row {
    16:9, so the box is a little taller here. A wordmark is bound by the width
    cap and does not change. The block prints its 16:9 as an inline style on
    the img, hence !important. */
-.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-post-featured-image img {
+.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-post-featured-image img,
+.wcblr-sponsors-row:has(.tier-label.t-comm) .wp-block-post-featured-image img {
 	aspect-ratio: 16 / 10 !important;
 }
 
@@ -168,7 +173,8 @@ body:not(.home) .wcblr-sponsors-row + .wcblr-sponsors-row {
 		grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
 	}
 
-	.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-query ul {
+	.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-query ul,
+	.wcblr-sponsors-row:has(.tier-label.t-comm) .wp-block-query ul {
 		grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
 	}
 }
@@ -182,11 +188,13 @@ body:not(.home) .wcblr-sponsors-row + .wcblr-sponsors-row {
 		padding: 8px 26px !important;
 	}
 
-	.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-query ul {
+	.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-query ul,
+	.wcblr-sponsors-row:has(.tier-label.t-comm) .wp-block-query ul {
 		grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
 	}
 
-	.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-post-featured-image {
+	.wcblr-sponsors-row:has(.tier-label.t-silver) .wp-block-post-featured-image,
+	.wcblr-sponsors-row:has(.tier-label.t-comm) .wp-block-post-featured-image {
 		padding: 6px 8px !important;
 	}
 }
