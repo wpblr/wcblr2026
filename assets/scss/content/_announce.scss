@@ -116,6 +116,18 @@ $annc-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", sy
 	background: #3a2a1e;
 }
 
+/* A sponsor announcement puts the 4:5 feed poster here instead of a photo. The
+   10:11 photo crop cut off its header and its URL band, so a poster gets its own
+   shape and is shown whole. */
+.wcblr-annc .wcblr-annc-photo.wcblr-annc-poster {
+	aspect-ratio: 4 / 5;
+}
+
+.wcblr-annc .wcblr-annc-photo.wcblr-annc-poster img {
+	object-fit: contain;
+	object-position: center;
+}
+
 .wcblr-annc .wcblr-annc-photo a {
 	display: block;
 	height: 100%;
@@ -522,6 +534,11 @@ $annc-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", sy
 
 		.wcblr-annc .wcblr-annc-photocol:hover .wcblr-annc-photo img {
 			transform: scale(1.05);
+		}
+
+		/* A poster is text edge to edge, so it does not zoom. */
+		.wcblr-annc .wcblr-annc-photocol:hover .wcblr-annc-poster img {
+			transform: none;
 		}
 
 		.wcblr-annc .wcblr-annc-sticker {
