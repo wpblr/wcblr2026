@@ -128,6 +128,51 @@ $annc-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", sy
 	object-position: center;
 }
 
+/* A sponsor announcement (`.wcblr-annc-sponsor`, build-sponsor-announcements.py)
+   puts the sponsor's logo here: a white tile on the same gold frame, the logo
+   contained with room around it, whatever its proportions. */
+.wcblr-annc .wcblr-annc-logo {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	aspect-ratio: 1 / 1;
+	padding: 13% !important;
+	border: 1.5px solid $annc-line;
+}
+
+.wcblr-annc .wcblr-annc-logo .wp-block-image {
+	width: 100%;
+	margin: 0 !important;
+}
+
+.wcblr-annc .wcblr-annc-logo img {
+	display: block;
+	width: 100% !important;
+	height: auto !important;
+	max-height: 240px;
+	object-fit: contain;
+}
+
+.wcblr-annc .wcblr-annc-thanks {
+	font-family: $annc-serif;
+	font-style: italic;
+}
+
+.wcblr-annc .wcblr-annc-thanks + .wcblr-annc-fact {
+	padding-top: 16px;
+	margin-top: 18px !important;
+	border-top: 1px solid #e4dccd;
+}
+
+/* Their description sits in the column the speaker's abstract uses, so it
+   stretches to the sponsorship card's height rather than taking the bio's
+   section margin. */
+.wcblr-annc .wcblr-annc-quotecol > .wcblr-annc-bio {
+	height: 100%;
+	margin: 0 !important;
+}
+
 .wcblr-annc .wcblr-annc-photo a {
 	display: block;
 	height: 100%;
@@ -587,7 +632,8 @@ $annc-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", sy
 }
 
 @media (prefers-reduced-motion: no-preference) {
-	.wcblr-motion.wcblr-annc .wcblr-annc-photo {
+	.wcblr-motion.wcblr-annc .wcblr-annc-photo,
+	.wcblr-motion.wcblr-annc .wcblr-annc-logo {
 		animation: wcblr-lift 0.9s $annc-rise 0.05s backwards;
 	}
 
