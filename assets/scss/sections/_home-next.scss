@@ -1038,3 +1038,119 @@ body.home .wcblr-newsletter p {
 		padding-bottom: 48px !important;
 	}
 }
+
+/* ---- 19 Oct fixes after the release ----------------------------------------- */
+
+/* Sponsor tiers, sized by tier: Suvarna largest, then Belli, Kanchu,
+   Hitaishi. Columns set the tile width; the tile's inner padding keeps every
+   logo off its edges at every size. */
+body.home .wcblr-home-sponsors .wcblr-sponsors-row .wp-block-post-template {
+	display: grid !important;
+}
+
+body.home .t-suvarna.wcblr-sponsors-row .wp-block-post-template { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+body.home .t-belli.wcblr-sponsors-row .wp-block-post-template { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+body.home .t-silver.wcblr-sponsors-row .wp-block-post-template { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; }
+body.home .t-comm.wcblr-sponsors-row .wp-block-post-template { grid-template-columns: repeat(6, minmax(0, 1fr)) !important; }
+
+body.home .wcblr-home-sponsors .wp-block-post-featured-image {
+	margin: 0 !important;
+}
+
+body.home .t-suvarna .wp-block-post-featured-image { padding: clamp(22px, 2.6vw, 40px) clamp(28px, 3.4vw, 56px) !important; }
+body.home .t-belli .wp-block-post-featured-image { padding: clamp(18px, 2vw, 30px) clamp(22px, 2.6vw, 44px) !important; }
+body.home .t-silver .wp-block-post-featured-image { padding: clamp(14px, 1.4vw, 22px) clamp(16px, 1.8vw, 28px) !important; }
+body.home .t-comm .wp-block-post-featured-image { padding: clamp(12px, 1.1vw, 18px) clamp(12px, 1.3vw, 20px) !important; }
+
+@media (max-width: 781px) {
+	body.home .t-suvarna.wcblr-sponsors-row .wp-block-post-template { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+	body.home .t-belli.wcblr-sponsors-row .wp-block-post-template { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+	body.home .t-silver.wcblr-sponsors-row .wp-block-post-template { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+	body.home .t-comm.wcblr-sponsors-row .wp-block-post-template { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+
+	body.home .t-suvarna .wp-block-post-featured-image { padding: 16px 18px !important; }
+	body.home .t-belli .wp-block-post-featured-image { padding: 14px 16px !important; }
+	body.home .t-silver .wp-block-post-featured-image,
+	body.home .t-comm .wp-block-post-featured-image { padding: 10px 10px !important; }
+}
+
+/* "Become a Sponsor": no longer a tile inside the Kanchu row but one quiet
+   invitation under every tier. */
+body.home .wcblr-home-sponsors .wcblr-become-sponsor {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	min-height: 0 !important;
+	margin-top: clamp(28px, 1rem + 2vw, 48px) !important;
+	padding: 22px 24px !important;
+	border: 1.5px dashed rgba(200, 52, 75, 0.45) !important;
+	border-radius: 999px !important;
+	background: transparent !important;
+}
+
+body.home .wcblr-home-sponsors .wcblr-become-sponsor p {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+body.home .wcblr-home-sponsors .wcblr-become-sponsor a {
+	font-weight: 600;
+	color: #c8344b !important;
+	text-decoration: none !important;
+}
+
+body.home .wcblr-home-sponsors .wcblr-become-sponsor a::after {
+	content: "  →";
+}
+
+/* News: three equal cards. The feature-plus-two layout left the two side
+   posts as thumbnails and the posters' text unreadable; the images also sat
+   flush on the date line. The posts' images are 1200x630 posters, so they
+   show whole, at their own ratio, with room under them. */
+@media (min-width: 782px) {
+	body.home .wcblr-home-news .wcblr-blog-grid .wp-block-post-template {
+		grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+		grid-template-rows: auto !important;
+	}
+
+	body.home .wcblr-home-news .wcblr-blog-grid .wp-block-post-template > li:first-child {
+		grid-row: auto !important;
+	}
+
+	body.home .wcblr-home-news .wcblr-blog-grid .wp-block-post-template > li:first-child h2.wp-block-post-title {
+		font-size: clamp(22px, 1rem + 0.7vw, 28px) !important;
+		line-height: 1.1 !important;
+		letter-spacing: -0.025em;
+	}
+
+	body.home .wcblr-home-news .wcblr-blog-grid .wp-block-post-template > li:not(:first-child) > .wp-block-group {
+		display: block !important;
+	}
+}
+
+body.home .wcblr-home-news .wp-block-post-featured-image {
+	aspect-ratio: 1200 / 630 !important;
+	height: auto !important;
+	margin: 0 0 18px !important;
+}
+
+body.home .wcblr-home-news .wp-block-post-featured-image img {
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover;
+}
+
+body.home .wcblr-home-news .wcblr-blog-grid .wp-block-post-template > li > .wp-block-group > * + * {
+	margin-top: 10px !important;
+}
+
+body.home .wcblr-home-news .wcblr-blog-grid .wp-block-post-template > li > .wp-block-group:not(:has(.wp-block-post-featured-image))::before {
+	aspect-ratio: 1200 / 630;
+	margin-bottom: 18px;
+}
+
+/* `.t-comm` is also an icon class (content/_cfs-icons.scss, a heart drawn as a
+   url()); the sanitiser empties it on live, but nothing should depend on that. */
+body.home .wcblr-sponsors-row .tier-label.t-comm {
+	background-image: none !important;
+}

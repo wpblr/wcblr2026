@@ -473,3 +473,21 @@ body.home .wcblr-reel-cta .wp-block-button__link:focus-visible {
 body.home .wcblr-reel__row::-webkit-scrollbar {
 	display: none;
 }
+
+/* ---- Safari (19 Oct) --------------------------------------------------------
+   WebKit sized a set by each card's max-content width (its 560px photo, about
+   357px a card) instead of the card's flex-basis, so a 15-card set measured
+   5354px with 2430px of cards in it. The loop slid across the empty part and
+   the second rail looked like it ended. An explicit width ties the two. */
+body.home .wcblr-rc {
+	width: $hr-card-w;
+	min-width: 0;
+	max-width: $hr-card-w;
+}
+
+@media (max-width: 781px) {
+	body.home .wcblr-rc {
+		width: 150px;
+		max-width: 150px;
+	}
+}
