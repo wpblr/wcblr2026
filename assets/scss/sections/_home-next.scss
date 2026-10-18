@@ -691,7 +691,7 @@ body.home .wcblr-home-sponsors .wcblr-become-sponsor {
 
 /* ---- 8. Venue: the map, wide, with the two places on it ------------------------
    The map runs the window's width less an edge; the two venues sit on it
-   as solid panels, bottom left, clear of Google's own place card at the top
+   as solid panels, bottom right, clear of Google's own place card at the top
    left (covering that card was why the 2 Oct design took its overlay off). */
 @media (min-width: 782px) {
 	body.home .wcblr-home-venue .wcblr-venue__grid {
@@ -721,7 +721,9 @@ body.home .wcblr-home-sponsors .wcblr-become-sponsor {
 	body.home .wcblr-home-venue .wcblr-venue__info {
 		position: absolute;
 		z-index: 2;
-		left: clamp(16px, 2vw, 32px);
+		/* Bottom right: Google's place card holds the top left, and on live
+		   the left-hand stack reached up into it (19 Oct). */
+		right: clamp(16px, 2vw, 32px);
 		bottom: clamp(16px, 2vw, 32px);
 		width: min(460px, 42%) !important;
 		flex-basis: auto !important;
