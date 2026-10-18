@@ -1154,3 +1154,44 @@ body.home .wcblr-home-news .wcblr-blog-grid .wp-block-post-template > li > .wp-b
 body.home .wcblr-sponsors-row .tier-label.t-comm {
 	background-image: none !important;
 }
+
+/* News posts as real cards (19 Oct): the 2 Oct hover (_home-motion.scss)
+   lifts and shadows the <li>, and with no fill or padding of its own the
+   shadow hugged the poster's edge and the text ("0 padding"); on a phone the
+   posts ran into one another with nothing between them. Paper, a radius and
+   inner padding, the poster inset at a smaller radius. */
+body.home .wcblr-home-news .wcblr-blog-grid li.wp-block-post {
+	overflow: hidden;
+	border-radius: 22px;
+	background: $hn-paper;
+	box-shadow: 0 1px 2px rgba(42, 29, 20, 0.04);
+}
+
+body.home .wcblr-home-news .wcblr-blog-grid .wp-block-post-template > li > .wp-block-group {
+	height: 100%;
+	padding: 12px 12px 22px !important;
+}
+
+body.home .wcblr-home-news .wcblr-blog-grid .wp-block-post-template > li > .wp-block-group > *:not(.wp-block-post-featured-image) {
+	padding-left: 10px !important;
+	padding-right: 10px !important;
+}
+
+body.home .wcblr-home-news .wp-block-post-featured-image,
+body.home .wcblr-home-news .wp-block-post-featured-image img {
+	border-radius: 14px !important;
+}
+
+body.home .wcblr-home-news .wcblr-blog-grid .wp-block-post-template > li > .wp-block-group:not(:has(.wp-block-post-featured-image))::before {
+	border-radius: 14px;
+}
+
+body.home .wcblr-home-news .wcblr-blog-grid li.wp-block-post:hover {
+	box-shadow: 0 2px 4px rgba(42, 29, 20, 0.05), 0 22px 44px rgba(42, 29, 20, 0.14) !important;
+}
+
+@media (max-width: 781px) {
+	body.home .wcblr-home-news .wcblr-blog-grid .wp-block-post-template {
+		gap: 16px !important;
+	}
+}
