@@ -107,8 +107,10 @@ body.home .wcblr-home-gi > .wp-block-group {
 	padding-bottom: 0 !important;
 }
 
-/* The bands. Paper, cream, paper, cream, paper down the page, so no two
-   neighbours share a ground. The box-shadow trick on the two sections that
+/* The bands. They alternate, so no two neighbours share a ground. Since the
+   speakers band went in after About (18 Oct 2026, paper, in
+   sections/_home-speakers.scss) everything below it flipped by one: Get
+   Involved cream, Sponsors paper, Venue cream, News paper, Newsletter cream. The box-shadow trick on the two sections that
    sit inside the constrained wrapper: a 100vmax spread clipped back to the
    section's own top and bottom. It paints to both edges of the window and,
    being a shadow, adds nothing to the page's scroll width. */
@@ -119,25 +121,25 @@ body.home .wcblr-home-sponsors {
 }
 
 body.home .wcblr-home-gi {
-	background-color: $hf-paper;
-	box-shadow: 0 0 0 100vmax $hf-paper;
-}
-
-body.home .wcblr-home-sponsors {
 	background-color: $hf-cream;
 	box-shadow: 0 0 0 100vmax $hf-cream;
 }
 
-body.home .wcblr-home-venue {
-	background-color: $hf-paper !important;
+body.home .wcblr-home-sponsors {
+	background-color: $hf-paper;
+	box-shadow: 0 0 0 100vmax $hf-paper;
 }
 
-body.home .wcblr-home-news {
+body.home .wcblr-home-venue {
 	background-color: $hf-cream !important;
 }
 
-body.home .wcblr-home-sec.wcblr-newsletter {
+body.home .wcblr-home-news {
 	background-color: $hf-paper !important;
+}
+
+body.home .wcblr-home-sec.wcblr-newsletter {
+	background-color: $hf-cream !important;
 }
 
 /* The lotus opens every section, so it owns the space under it and nothing

@@ -116,6 +116,9 @@
 @import "sections/home-flow";
 @import "sections/about-flow";
 @import "sections/home-about";
+@import "sections/home-speakers";
+@import "sections/home-next";
+@import "layout/chrome-next";
 
 // ── Buttons — one hover for all of them, last so its bare-class default sits
 //    at the end of the cascade and its surface hooks win on specificity ──────

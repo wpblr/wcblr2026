@@ -1,0 +1,737 @@
+/* ==== Header and footer, next =============================================
+   19 Oct 2026, with the home page redesign (sections/_home-next.scss): "can
+   we redesign the header and the footer as well to be next-gen". SITEWIDE:
+   both are template parts (header-mm, footer-mm) on every page, so nothing
+   here is scoped to the home page. CSS only; the parts' markup is unchanged.
+
+   HEADER. The dark command strip stays at the very top and scrolls away; the
+   bar under it becomes a floating, rounded navigation bar held a slim edge
+   off the window, and it stays on screen as the page scrolls. It was
+   `position: sticky` before, but sticky only works inside its parent, and
+   its parent was the template part's own wrapper, a box exactly as tall as
+   the header, so it never actually stuck. The whole header part is sticky
+   now, offset by the strip's height so only the bar remains.
+
+   FOOTER. One dark closing block: the closing line at display size with its
+   two buttons, the link columns in cream, the follow row, and the site's
+   name set huge in outline across the foot. On the home page the
+   newsletter's dark band runs straight into it. */
+
+$ch-ink: #2a1d14;
+$ch-espresso: #241a12;
+$ch-red: #c8344b;
+$ch-gold: #e0a526;
+$ch-cream: #f2ece0;
+$ch-paper: #fbf8f1;
+$ch-edge: clamp(10px, 1.2vw, 18px);
+$ch-strip: 37px;
+$ch-serif: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif;
+
+/* ---- Header -------------------------------------------------------------- */
+
+.wp-site-blocks > header.wp-block-template-part {
+	position: sticky;
+	top: calc(#{$ch-strip} * -1);
+	z-index: 80;
+	margin: 0 !important;
+}
+
+.wp-site-blocks > header.wp-block-template-part .wcblr-strip {
+	height: $ch-strip;
+	box-sizing: border-box;
+}
+
+body.admin-bar .wp-site-blocks > header.wp-block-template-part {
+	top: calc(32px - #{$ch-strip});
+}
+
+/* The bar: a compact floating pill, centred and capped at the content width
+   rather than stretched edge to edge, solid paper with a hairline and a soft
+   shadow so it holds its own over photographs as the page scrolls under it.
+   (backdrop-filter is stripped by the sanitiser, so no frosted glass.) */
+.wcblr-header {
+	position: relative !important;
+	top: auto !important;
+	width: min(1240px, calc(100% - 2 * #{$ch-edge})) !important;
+	max-width: none !important;
+	margin: $ch-edge auto 0 !important;
+	padding: 7px 8px 7px clamp(12px, 1.2vw, 18px) !important;
+	border: 1px solid rgba(42, 29, 20, 0.08) !important;
+	border-radius: 999px;
+	background: rgba(251, 248, 241, 0.97) !important;
+	box-shadow: 0 1px 2px rgba(42, 29, 20, 0.05), 0 12px 32px -8px rgba(42, 29, 20, 0.18);
+}
+
+.wcblr-header > .wp-block-group {
+	max-width: none !important;
+	width: 100% !important;
+}
+
+/* A smaller lockup: the logo at 40px, the Kannada line kept. */
+.wcblr-header .wcblr-site-logo .wp-block-site-logo img {
+	width: 40px !important;
+	height: auto !important;
+}
+
+.wcblr-header .wp-block-site-title {
+	font-size: 17px !important;
+}
+
+.wcblr-header .wp-block-navigation {
+	font-size: 14.5px !important;
+	gap: 2px !important;
+}
+
+.wcblr-header .wp-block-navigation .wp-block-navigation-item__content {
+	padding: 9px 14px !important;
+	border-radius: 999px;
+}
+
+.wcblr-header .wcblr-header-ctas .wp-block-button__link {
+	padding: 11px 20px !important;
+	border-radius: 999px !important;
+}
+
+/* The WhatsApp button, if present, rounds to match. */
+.wcblr-header .wcblr-header_right a[href*="whatsapp"],
+.wcblr-header .wcblr-header_right .wp-block-social-link {
+	border-radius: 999px !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.wcblr-header .wp-block-navigation > .wp-block-navigation__container > .wp-block-navigation-item > .wp-block-navigation-item__content:hover,
+	.wcblr-header .wp-block-navigation > .wp-block-navigation__container > .wp-block-navigation-item:focus-within > .wp-block-navigation-item__content {
+		background: rgba(42, 29, 20, 0.06);
+	}
+}
+
+/* Dropdowns hang as floating sheets of the same paper. */
+.wcblr-header .wp-block-navigation__submenu-container {
+	border: 1px solid rgba(42, 29, 20, 0.08) !important;
+	border-radius: 18px !important;
+	box-shadow: 0 18px 40px -10px rgba(42, 29, 20, 0.25) !important;
+	overflow: hidden;
+}
+
+@media (max-width: 781px) {
+	.wcblr-header {
+		width: calc(100% - 2 * #{$ch-edge}) !important;
+		border-radius: 22px;
+		padding: 6px 6px 6px 12px !important;
+	}
+
+	.wcblr-header .wcblr-site-logo .wp-block-site-logo img {
+		width: 34px !important;
+	}
+
+	.wcblr-header .wp-block-site-title {
+		font-size: 15px !important;
+	}
+}
+
+/* ---- Footer --------------------------------------------------------------- */
+
+footer.wp-block-template-part {
+	margin-top: 0 !important;
+}
+
+.wcblr-footer {
+	padding-bottom: clamp(120px, 14vw, 260px) !important;
+	background: $ch-espresso !important;
+	background-image:
+		radial-gradient(ellipse 50% 60% at 100% 0%, rgba(224, 165, 38, 0.12), rgba(224, 165, 38, 0) 70%),
+		radial-gradient(ellipse 40% 50% at 0% 100%, rgba(200, 52, 75, 0.12), rgba(200, 52, 75, 0) 70%) !important;
+	color: rgba(242, 236, 224, 0.82) !important;
+}
+
+/* The name across the foot, in outline: the last thing on every page. */
+.wcblr-footer::after {
+	content: "WordCamp Bengaluru";
+	position: absolute;
+	z-index: 0;
+	left: 50%;
+	bottom: clamp(40px, 4vw, 72px);
+	transform: translateX(-50%);
+	font-family: $ch-serif;
+	font-size: clamp(54px, 10.4vw, 200px);
+	font-weight: 400;
+	line-height: 0.8;
+	letter-spacing: -0.05em;
+	white-space: nowrap;
+	color: transparent;
+	-webkit-text-stroke: 1.2px rgba(224, 165, 38, 0.4);
+	pointer-events: none;
+}
+
+.wcblr-footer .wcblr-orn {
+	display: none !important;
+}
+
+.wcblr-footer .wcblr-footer-cta {
+	padding-top: clamp(64px, 2rem + 5vw, 128px) !important;
+	padding-bottom: clamp(48px, 2rem + 3vw, 88px) !important;
+	border: 0 !important;
+	background: none !important;
+}
+
+.wcblr-footer .wcblr-footer-cta .wp-block-heading {
+	font-size: clamp(36px, 1.2rem + 3.6vw, 76px) !important;
+	line-height: 1 !important;
+	letter-spacing: -0.035em !important;
+	color: $ch-paper !important;
+}
+
+.wcblr-footer .wcblr-footer-label {
+	color: $ch-gold !important;
+}
+
+.wcblr-footer .wcblr-footer-cols {
+	border-top: 1px solid rgba(242, 236, 224, 0.12) !important;
+	border-bottom: 0 !important;
+	padding-top: clamp(40px, 1.4rem + 2vw, 64px) !important;
+}
+
+.wcblr-footer .wcblr-footer-cols > .wp-block-column {
+	border: 0 !important;
+}
+
+.wcblr-footer a,
+.wcblr-footer .wp-block-navigation-item__content,
+.wcblr-footer .wp-block-site-title a,
+.wcblr-footer .wcblr-footer-mail {
+	color: $ch-cream !important;
+}
+
+.wcblr-footer .wcblr-footer-blurb,
+.wcblr-footer .wcblr-footer-venue,
+.wcblr-footer .wcblr-footer-kn,
+.wcblr-footer p {
+	color: rgba(242, 236, 224, 0.68) !important;
+}
+
+.wcblr-footer .wcblr-footer-label,
+.wcblr-footer p.wcblr-footer-label {
+	color: $ch-gold !important;
+}
+
+.wcblr-footer .wcblr-footer-bottom {
+	border-top: 1px solid rgba(242, 236, 224, 0.12) !important;
+	border-bottom: 0 !important;
+}
+
+/* Social glyphs carry their brand colours; on espresso, cream reads better
+   and keeps the row one tone. */
+.wcblr-footer .wcblr-social .wp-block-social-link,
+.wcblr-footer .wcblr-social .wp-block-social-link a {
+	color: $ch-cream !important;
+}
+
+/* The two buttons: paper and an outline in cream. */
+.wcblr-footer .wcblr-footer-ctas .wp-block-button__link {
+	border-radius: 999px !important;
+}
+
+.wcblr-footer .wcblr-btn-onlight .is-style-outline .wp-block-button__link {
+	color: $ch-cream !important;
+	border-color: rgba(242, 236, 224, 0.5) !important;
+}
+
+/* The legal strip sits under the outline name. */
+.wcblr-footer .wcblr-strip {
+	position: absolute !important;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1;
+	background: transparent !important;
+}
+
+/* On the home page the newsletter band runs straight into the footer. */
+body.home .wcblr-home-sec.wcblr-newsletter {
+	padding-bottom: clamp(56px, 2rem + 4vw, 112px) !important;
+}
+
+/* The part's own separators doubled the rules above; the columns and the
+   follow row carry the only lines now. And no top rule: the dark block
+   starts where the page ends. */
+.wcblr-footer {
+	border-top: 0 !important;
+}
+
+.wcblr-footer hr.wp-block-separator {
+	display: none !important;
+}
+
+/* Room between the columns and the follow row, which sat on the email link. */
+.wcblr-footer .wcblr-footer-bottom {
+	margin-top: clamp(32px, 1rem + 2vw, 56px) !important;
+	padding-top: 24px !important;
+}
+
+/* The outline name fits the window at every width (18 characters at about
+   0.55em each). */
+.wcblr-footer::after {
+	font-size: clamp(28px, 9.4vw, 190px);
+}
+
+/* Dropdown items: the panel gets an inner padding and each item's highlight
+   fills its row as a rounded rectangle, rather than a 999px pill butting the
+   panel's edges with dividers between (19 Oct: "not fully filling"). */
+.wcblr-header .wp-block-navigation__submenu-container {
+	padding: 6px !important;
+	min-width: 220px !important;
+}
+
+.wcblr-header .wp-block-navigation__submenu-container .wp-block-navigation-item {
+	width: 100%;
+	border: 0 !important;
+	background: none !important;
+}
+
+.wcblr-header .wp-block-navigation__submenu-container .wp-block-navigation-item__content {
+	display: block !important;
+	width: 100% !important;
+	box-sizing: border-box;
+	padding: 11px 14px !important;
+	border-radius: 12px !important;
+	border: 0 !important;
+}
+
+/* ---- Header on a phone: one row ---------------------------------------------
+   It wrapped to two (the lockup, then the menu and buttons), 100px of pill
+   holding a third of a phone's first screen. One row now: logo and a short
+   title, then the ticket button, WhatsApp and the menu, all at 40px. The
+   Kannada line drops here only; the hero carries it a line below. */
+@media (max-width: 781px) {
+	.wcblr-header {
+		width: calc(100vw - 2 * #{$ch-edge}) !important;
+		margin-left: calc(50% - 50vw + #{$ch-edge}) !important;
+		margin-right: 0 !important;
+		padding: 6px 6px 6px 10px !important;
+		border-radius: 999px;
+	}
+
+	.wcblr-header > .wp-block-group {
+		flex-wrap: nowrap !important;
+		gap: 8px !important;
+		align-items: center !important;
+	}
+
+	.wcblr-header .wcblr-site-logo {
+		gap: 8px !important;
+		min-width: 0;
+		flex: 1 1 auto;
+	}
+
+	.wcblr-header .wcblr-site-logo .wp-block-site-logo img {
+		width: 30px !important;
+	}
+
+	.wcblr-header .wcblr-site-logo > .wp-block-group {
+		min-width: 0;
+		border-left: 0 !important;
+		padding-left: 0 !important;
+	}
+
+	.wcblr-header .wp-block-site-title {
+		font-size: 14px !important;
+		line-height: 1.1 !important;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.wcblr-header .wcblr-eyebrow--plain {
+		display: none !important;
+	}
+
+	.wcblr-header .wcblr-header_right {
+		flex-wrap: nowrap !important;
+		gap: 6px !important;
+		flex: 0 0 auto;
+	}
+
+	/* The menu button goes last, at the right edge. */
+	.wcblr-header .wcblr-header_right > .wp-block-navigation {
+		order: 3;
+	}
+
+	.wcblr-header .wcblr-header-ctas {
+		gap: 6px !important;
+		flex-wrap: nowrap !important;
+	}
+
+	.wcblr-header .wcblr-header-ctas .wp-block-button__link {
+		padding: 10px 14px !important;
+		font-size: 13px !important;
+		line-height: 1.1 !important;
+		white-space: nowrap;
+	}
+
+	.wcblr-header .wcblr-header-ctas .wp-block-button:last-child .wp-block-button__link {
+		padding: 10px 11px !important;
+	}
+
+	.wcblr-header .wp-block-navigation__responsive-container-open {
+		width: 40px;
+		height: 40px;
+		display: inline-flex !important;
+		align-items: center;
+		justify-content: center;
+		border-radius: 999px;
+		background: rgba(42, 29, 20, 0.06);
+	}
+}
+
+/* On a phone the title reads #WCBLR: the full name truncated to
+   "WordCamp Benga..." (19 Oct). The link keeps its accessible name; the
+   visible text swaps in through ::after. */
+@media (max-width: 781px) {
+	.wcblr-header .wp-block-site-title a {
+		font-size: 0 !important;
+	}
+
+	.wcblr-header .wp-block-site-title a::after {
+		content: "#WCBLR";
+		font-family: var(--wp--preset--font-family--jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
+		font-size: 15px;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+		color: #2a1d14;
+	}
+}
+
+@media (max-width: 781px) {
+	/* The right-hand group took the full row and squeezed the lockup to
+	   nothing; it takes only what it needs now. */
+	.wcblr-header .wcblr-header_right {
+		width: auto !important;
+		flex: 0 0 auto !important;
+		margin-left: auto !important;
+	}
+
+	.wcblr-header .wcblr-site-logo {
+		flex: 1 1 0 !important;
+		width: auto !important;
+	}
+
+	/* The bar cannot hold five things at 390px; WhatsApp stays in the
+	   footer's follow row. */
+	.wcblr-header .wcblr-header-ctas .wp-block-button:not(:first-child) {
+		display: none !important;
+	}
+}
+
+/* backdrop-filter (from layout/_header.scss) makes the bar a containing
+   block for fixed descendants, so the phone menu opened inside the pill
+   instead of over the page. The live sanitiser strips the property anyway. */
+.wcblr-header {
+	-webkit-backdrop-filter: none !important;
+	backdrop-filter: none !important;
+}
+
+/* Inside the open phone menu the sub-lists are plain, indented lists, not
+   the desktop dropdown's floating sheets. */
+.wcblr-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__submenu-container {
+	border: 0 !important;
+	box-shadow: none !important;
+	background: transparent !important;
+	padding: 0 0 0 12px !important;
+	min-width: 0 !important;
+	border-radius: 0 !important;
+}
+
+.wcblr-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__submenu-container .wp-block-navigation-item__content {
+	padding: 10px 12px !important;
+}
+
+/* ---- Phone: closed bar and open menu, redone -------------------------------
+   19 Oct: "Header looks really bad still on phone ... including when the
+   navigation expands". Closed: no command strip, the bar alone at the top.
+   Open: a full-screen espresso sheet, the top links in the serif at display
+   size, each submenu a gold mono label over its links, no rules, no boxes. */
+@media (max-width: 781px) {
+	.wp-site-blocks > header.wp-block-template-part .wcblr-strip {
+		display: none !important;
+	}
+
+	.wp-site-blocks > header.wp-block-template-part {
+		top: 0;
+	}
+
+	body.admin-bar .wp-site-blocks > header.wp-block-template-part {
+		top: 46px;
+	}
+
+	.wcblr-header .wp-block-navigation__responsive-container-open {
+		background: #2a1d14 !important;
+		color: #f2ece0 !important;
+	}
+
+	.wcblr-header .wp-block-navigation__responsive-container-open svg {
+		fill: currentColor;
+	}
+
+	/* The sheet. */
+	.wcblr-header .wp-block-navigation__responsive-container.is-menu-open {
+		padding: 0 !important;
+		background: #241a12 !important;
+		background-image:
+			radial-gradient(ellipse 70% 40% at 100% 0%, rgba(224, 165, 38, 0.18), rgba(224, 165, 38, 0) 70%),
+			radial-gradient(ellipse 60% 40% at 0% 100%, rgba(200, 52, 75, 0.2), rgba(200, 52, 75, 0) 70%) !important;
+		color: #f2ece0 !important;
+	}
+
+	.wcblr-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content {
+		padding: 96px 28px 40px !important;
+		align-items: flex-start !important;
+	}
+
+	/* The close button, round, top right, where the menu button was. */
+	.wcblr-header .wp-block-navigation__responsive-container-close {
+		top: 18px !important;
+		right: 18px !important;
+		width: 44px;
+		height: 44px;
+		display: inline-flex !important;
+		align-items: center;
+		justify-content: center;
+		border-radius: 999px;
+		background: rgba(242, 236, 224, 0.12) !important;
+		color: #f2ece0 !important;
+	}
+
+	.wcblr-header .wp-block-navigation__responsive-container-close svg {
+		fill: currentColor;
+	}
+
+	/* The bar's own lockup stays on top of the sheet; recolour it to match. */
+	.wcblr-header:has(.is-menu-open) .wp-block-site-title a::after {
+		color: #e0a526;
+	}
+
+	/* Chevrons: the groups are always open in the sheet. */
+	.wcblr-header .is-menu-open .wp-block-navigation-submenu__toggle {
+		display: none !important;
+	}
+
+	.wcblr-header .is-menu-open .wp-block-navigation__container {
+		gap: 6px !important;
+		width: 100%;
+	}
+
+	.wcblr-header .is-menu-open .wp-block-navigation__container > .wp-block-navigation-item {
+		border: 0 !important;
+		width: 100%;
+	}
+
+	/* Top-level links, large serif. */
+	.wcblr-header .is-menu-open .wp-block-navigation__container > .wp-block-navigation-item:not(.has-child) > .wp-block-navigation-item__content {
+		padding: 4px 0 !important;
+		font-family: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif !important;
+		font-size: 34px !important;
+		line-height: 1.15 !important;
+		letter-spacing: -0.025em;
+		color: #fbf8f1 !important;
+		background: none !important;
+		border: 0 !important;
+	}
+
+	/* A submenu's parent becomes a small gold label above its group. */
+	.wcblr-header .is-menu-open .wp-block-navigation__container > .has-child {
+		margin-top: 22px !important;
+	}
+
+	.wcblr-header .is-menu-open .has-child > .wp-block-navigation-item__content {
+		padding: 0 !important;
+		font-family: var(--wp--preset--font-family--jetbrains-mono), "JetBrains Mono", ui-monospace, monospace !important;
+		font-size: 11.5px !important;
+		font-weight: 600;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: #e0a526 !important;
+		background: none !important;
+		border: 0 !important;
+		pointer-events: none;
+	}
+
+	.wcblr-header .is-menu-open .has-child > .wp-block-navigation-item__content::before,
+	.wcblr-header .is-menu-open .has-child > .wp-block-navigation-item__content::after,
+	.wcblr-header .is-menu-open .wcblr-nav-cta::before,
+	.wcblr-header .is-menu-open .wp-block-navigation__submenu-icon {
+		display: none !important;
+	}
+
+	.wcblr-header .is-menu-open .wp-block-navigation__submenu-container {
+		margin-top: 8px !important;
+		margin-left: 0 !important;
+		padding: 0 !important;
+		border: 0 !important;
+		border-left: 0 !important;
+		gap: 0 !important;
+	}
+
+	.wcblr-header .is-menu-open .wp-block-navigation__submenu-container .wp-block-navigation-item {
+		border: 0 !important;
+		padding-left: 0 !important;
+		margin-left: 0 !important;
+	}
+
+	.wcblr-header .is-menu-open .wp-block-navigation__submenu-container .wp-block-navigation-item__content {
+		padding: 6px 0 !important;
+		font-family: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif !important;
+		font-size: 24px !important;
+		line-height: 1.2 !important;
+		letter-spacing: -0.015em;
+		color: rgba(251, 248, 241, 0.86) !important;
+		background: none !important;
+		border: 0 !important;
+		border-radius: 0 !important;
+	}
+
+	/* No focus ring on the link the menu opens onto; keyboard focus keeps one. */
+	.wcblr-header .is-menu-open a:focus:not(:focus-visible) {
+		outline: none !important;
+	}
+
+	.wcblr-header .is-menu-open a:focus-visible {
+		outline: 2px solid #e0a526 !important;
+		outline-offset: 4px;
+		border-radius: 6px;
+	}
+
+	/* A ticket button at the foot of the sheet. */
+	.wcblr-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content::after {
+		content: "";
+		display: block;
+		height: 24px;
+	}
+}
+
+/* Stronger selectors for three things core and _header.scss hold on to in
+   the open phone sheet: the chevron buttons, the submenu's 16px left padding
+   and the links' 12px. */
+@media (max-width: 781px) {
+	.wcblr-header .wp-block-navigation__responsive-container.is-menu-open .has-child > button.wp-block-navigation__submenu-icon {
+		display: none !important;
+	}
+
+	.wcblr-header .wp-block-navigation__responsive-container.is-menu-open .has-child > ul.wp-block-navigation__submenu-container {
+		padding-left: 0 !important;
+	}
+
+	.wcblr-header .wp-block-navigation__responsive-container.is-menu-open .has-child > ul.wp-block-navigation__submenu-container > li > a.wp-block-navigation-item__content {
+		padding-left: 0 !important;
+		padding-right: 0 !important;
+	}
+}
+
+/* ---- Phone header, third pass (19 Oct) ---------------------------------------
+   "Still kinda looks bad": the floating pill, its shadow, a big red button
+   and a dark round menu button all competed on a 390px screen. Now a flat
+   bar across the top, paper with a hairline under it: the logo and #WCBLR
+   in the serif on the left, a small ticket pill and a plain menu icon on the
+   right. The open sheet uses one family, Hanken Grotesk, at two sizes, with
+   the group labels in small gold capitals ("the fonts ... need to be
+   proper"). Everything here overrides the earlier phone rules above it. */
+@media (max-width: 781px) {
+	.wcblr-header {
+		width: 100vw !important;
+		margin: 0 0 0 calc(50% - 50vw) !important;
+		padding: 10px 16px !important;
+		border: 0 !important;
+		border-bottom: 1px solid rgba(42, 29, 20, 0.1) !important;
+		border-radius: 0 !important;
+		background: rgba(251, 248, 241, 0.98) !important;
+		box-shadow: none !important;
+	}
+
+	.wcblr-header .wcblr-site-logo .wp-block-site-logo img {
+		width: 32px !important;
+	}
+
+	.wcblr-header .wp-block-site-title a::after {
+		font-family: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif;
+		font-size: 19px;
+		font-weight: 500;
+		letter-spacing: -0.01em;
+	}
+
+	.wcblr-header .wcblr-header-ctas .wp-block-button__link {
+		padding: 8px 14px !important;
+		font-size: 13px !important;
+		font-weight: 600 !important;
+	}
+
+	.wcblr-header .wp-block-navigation__responsive-container-open {
+		width: 40px;
+		height: 40px;
+		background: transparent !important;
+		color: #2a1d14 !important;
+	}
+
+	/* The sheet: one family, two sizes. */
+	.wcblr-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content {
+		padding: 88px 24px 40px !important;
+	}
+
+	.wcblr-header .is-menu-open .wp-block-navigation__container {
+		gap: 0 !important;
+	}
+
+	.wcblr-header .is-menu-open .wp-block-navigation__container > .wp-block-navigation-item:not(.has-child) > .wp-block-navigation-item__content {
+		padding: 10px 0 !important;
+		font-family: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif !important;
+		font-size: 26px !important;
+		font-weight: 600 !important;
+		line-height: 1.2 !important;
+		letter-spacing: -0.015em;
+		color: #fbf8f1 !important;
+	}
+
+	.wcblr-header .is-menu-open .wp-block-navigation__container > .has-child {
+		margin-top: 26px !important;
+	}
+
+	.wcblr-header .is-menu-open .has-child > .wp-block-navigation-item__content {
+		font-size: 11px !important;
+		letter-spacing: 0.16em;
+	}
+
+	.wcblr-header .is-menu-open .wp-block-navigation__submenu-container {
+		margin-top: 6px !important;
+	}
+
+	.wcblr-header .wp-block-navigation__responsive-container.is-menu-open .has-child > ul.wp-block-navigation__submenu-container > li > a.wp-block-navigation-item__content {
+		padding: 7px 0 !important;
+		font-family: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif !important;
+		font-size: 19px !important;
+		font-weight: 400 !important;
+		line-height: 1.3 !important;
+		letter-spacing: 0;
+		color: rgba(251, 248, 241, 0.82) !important;
+	}
+
+	.wcblr-header .wp-block-navigation__responsive-container.is-menu-open .has-child > ul.wp-block-navigation__submenu-container {
+		padding-left: 0 !important;
+		margin-left: 0 !important;
+	}
+
+	.wcblr-header .wp-block-navigation__responsive-container.is-menu-open .has-child > ul.wp-block-navigation__submenu-container > li {
+		padding-left: 0 !important;
+		margin-left: 0 !important;
+	}
+
+	/* With the menu open the bar's lockup sits on the dark sheet. */
+	.wcblr-header:has(.is-menu-open) {
+		background: transparent !important;
+		border-bottom-color: transparent !important;
+	}
+}
+
+@media (max-width: 781px) {
+	/* Fully solid: at 98% the copy scrolling under it showed through. */
+	.wcblr-header:not(:has(.is-menu-open)) {
+		background: #fbf8f1 !important;
+	}
+}
