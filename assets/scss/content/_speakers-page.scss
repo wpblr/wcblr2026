@@ -22,6 +22,7 @@ $spk-gold: #e0a526;
 $spk-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
 $spk-serif: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif;
 $spk-mono: var(--wp--preset--font-family--jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
+$spk-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif;
 
 /* ── The "26" behind the hero and the closing band ───────────────────────────
    The mock's outlined numerals. Text, not an image: `url()` is stripped by
@@ -291,17 +292,22 @@ $spk-mono: var(--wp--preset--font-family--jetbrains-mono), "JetBrains Mono", ui-
 	color: $spk-muted;
 }
 
-/* The session title, in the italic serif, under a hairline. 22px rather than
-   the mock's 19: the talk is half of why anyone is reading the card, and at
-   19 it sat a size below the name and read as a caption. */
+/* The session title, under a hairline, in the sans at semibold. It was the
+   italic serif at 22px, and Fraunces' italic is its display cut: swash forms
+   and a wandering slant that turn a long title ("Beyond Rankings: Making
+   WordPress Content Discoverable in the AI Search Era") into a block of
+   curls. Upright sans also separates it from the serif name above, so the
+   card reads as who, then what. 19px at 600 holds its weight against the
+   25px name without competing with it. */
 .wcblr-spk .wcblr-spk-session {
 	margin: 18px 8px 0 !important;
 	padding-top: 18px;
 	border-top: 1px solid #e4dccd;
-	font-family: $spk-serif;
-	font-size: 22px;
-	font-style: italic;
-	line-height: 1.3;
+	font-family: $spk-sans;
+	font-size: 19px;
+	font-weight: 600;
+	line-height: 1.35;
+	letter-spacing: -0.01em;
 	color: $spk-ink;
 }
 
@@ -342,10 +348,10 @@ $spk-mono: var(--wp--preset--font-family--jetbrains-mono), "JetBrains Mono", ui-
 	z-index: 2;
 	display: flex;
 	flex-wrap: wrap;
-	gap: 11px;
+	gap: 14px;
 	margin: 0 !important;
 	padding-left: 0;
-	font-size: 18px !important;
+	font-size: 24px !important;
 }
 
 .wcblr-spk .wcblr-spk-social .wp-block-social-link,
