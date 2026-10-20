@@ -227,6 +227,76 @@ body:not(.home) .wcblr-sponsors-row + .wcblr-sponsors-row {
 
 @media (max-width: 600px) {
 	.wcblr-sponsors-row .wp-block-query li.post-1427 .wp-block-post-featured-image img {
-		transform: scale(1.15);
+		transform: scale(1.08); /* 1.15 touched the tile edges once logos got a fixed width (20 Oct) */
+	}
+}
+
+/* ---- Same logo size on every page --------------------------------------------
+   20 Oct 2026 (Arun): a sponsor's logo must be the same size on the home page
+   and on /sponsors/. Both pages run the same query loop, but each sized the
+   logo from its own tile, and the tiles differ: the home Suvarna row is three
+   up in a 959px column, /sponsors/ is four up in 1200px, and the Kanchu row
+   there sits in 882px. That gave Suvarna 199 against 187px, Kanchu 176 against
+   172 and Hitaishi 146 against 172.
+
+   So the logo's width is now set from the viewport alone, by the same formula
+   on both pages, and the tile only has to hold it. Each formula was fitted under
+   the narrower page's tile at every width from 360 to 1440 (the home tiles
+   shrink fast between 782 and 1100, the /sponsors/ ones on phones), then capped.
+   Hitaishi matches Kanchu, as above. The block prints width:100% inline on the
+   img, and the home rows set their own padding with body.home .t-* rules, hence
+   the !important and the li in the selectors. */
+
+body .wcblr-sponsors-row:has(.tier-label) li.wp-block-post .wp-block-post-featured-image {
+	padding-left: 12px !important;
+	padding-right: 12px !important;
+}
+
+body .wcblr-sponsors-row li.wp-block-post .wp-block-post-featured-image a {
+	width: auto !important;
+}
+
+/* The img used to be width:100%, which is what stretched the query to its row:
+   on /sponsors/ the query sits in a vertical flex group aligned to flex-start,
+   so at a fixed logo width it shrank to hug the logos. The query is stretched
+   instead, and the img is a block so margin-inline centres it. */
+body .wcblr-sponsors-row:has(.tier-label) .wp-block-query {
+	align-self: stretch !important;
+	width: 100% !important;
+}
+
+body .wcblr-sponsors-row:has(.tier-label) li.wp-block-post .wp-block-post-featured-image img {
+	display: block;
+}
+
+body .wcblr-sponsors-row:has(.tier-label.t-plat) li.wp-block-post .wp-block-post-featured-image img {
+	width: min(192px, 20vw - 24px) !important;
+	max-width: 100% !important;
+	height: auto !important;
+	aspect-ratio: 16 / 9 !important;
+	margin-inline: auto;
+}
+
+body .wcblr-sponsors-row:has(.tier-label.t-silver) li.wp-block-post .wp-block-post-featured-image img,
+body .wcblr-sponsors-row:has(.tier-label.t-comm) li.wp-block-post .wp-block-post-featured-image img {
+	width: min(168px, 20vw - 68px) !important;
+	max-width: 100% !important;
+	height: auto !important;
+	margin-inline: auto;
+}
+
+@media (max-width: 781px) {
+	body .wcblr-sponsors-row:has(.tier-label) li.wp-block-post .wp-block-post-featured-image {
+		padding-left: 8px !important;
+		padding-right: 8px !important;
+	}
+
+	body .wcblr-sponsors-row:has(.tier-label.t-plat) li.wp-block-post .wp-block-post-featured-image img {
+		width: min(180px, 43.5vw - 33px) !important;
+	}
+
+	body .wcblr-sponsors-row:has(.tier-label.t-silver) li.wp-block-post .wp-block-post-featured-image img,
+	body .wcblr-sponsors-row:has(.tier-label.t-comm) li.wp-block-post .wp-block-post-featured-image img {
+		width: min(140px, 32.5vw - 46px) !important;
 	}
 }
