@@ -1118,9 +1118,13 @@ a.wcblr-sch-person:hover .wcblr-sch-face {
    - Link works: the plugin keeps #fav-sessions-link up to date.
    - Print: the plugin's print rules only know its old table, so it printed the
      whole page. Our own print rules below print only the starred sessions. */
+/* Print only (Arun, 20 Oct): the share link is gone too. Starring stays in the
+   visitor's browser (no request is made when logged out), the link is only a
+   URL, and email is broken in the plugin and public, so only Print is offered. */
 .wcblr-sch .show-email-form,
 .wcblr-sch .fav-session-share-tab,
-.wcblr-sch #fav-session-tab-email {
+.wcblr-sch #fav-session-tab-email,
+.wcblr-sch #fav-session-tab-link {
 	display: none !important;
 }
 
