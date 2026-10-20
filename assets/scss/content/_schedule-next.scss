@@ -1107,129 +1107,158 @@ a.wcblr-sch-person:hover .wcblr-sch-face {
 	display: none !important;
 }
 
-/* WordCamp floats its share button bottom right once anything is starred,
-   and slides the Email / Link / Print panel up above it. Kept, restyled. */
-.wcblr-sch .show-email-form {
-	right: 24px !important;
-	bottom: 24px !important;
-	z-index: 60 !important;
-	align-items: center;
-	gap: 8px;
-	padding: 13px 20px !important;
-	border: 0 !important;
-	border-radius: 999px !important;
-	background: $sch-espresso !important;
-	color: $sch-gold !important;
-	box-shadow: 0 18px 40px -16px rgba(36, 26, 18, 0.65);
-	font-family: $sch-sans;
-	font-weight: 600;
-	text-decoration: none !important;
-	transition: transform 0.4s $sch-spring;
-}
-
-.wcblr-sch .show-email-form[style*="inline"],
-.wcblr-sch .show-email-form[style*="block"] {
-	display: inline-flex !important;
-}
-
-.wcblr-sch .show-email-form .dashicons {
-	display: none;
-}
-
-.wcblr-sch .show-email-form::before {
-	content: "\2605";
-	font-size: 16px;
-}
-
-.wcblr-sch .show-email-form::after {
-	content: "Share my picks";
-	font-size: 14.5px;
-	color: $sch-cream;
-}
-
-.wcblr-sch .show-email-form:focus {
-	outline: 0;
-}
-
-.wcblr-sch .show-email-form:hover {
-	transform: translateY(-2px);
+/* WordCamp's share panel, re-seated (20 Oct, after Arun found it broken).
+   - Email is broken in the plugin itself: its script posts to
+     favSessionsPhpObject.root + 'wc-post-types/v1/...', and the plugin never
+     sets `root`, so every request fails. Hidden.
+   - The floating "share" button sat under the cookie banner. Hidden; the panel
+     is shown inline in the dark box instead. The plugin still shows and hides
+     it (.email-form) as picks come and go, so it appears once something is
+     starred.
+   - Link works: the plugin keeps #fav-sessions-link up to date.
+   - Print: the plugin's print rules only know its old table, so it printed the
+     whole page. Our own print rules below print only the starred sessions. */
+.wcblr-sch .show-email-form,
+.wcblr-sch .fav-session-share-tab,
+.wcblr-sch #fav-session-tab-email {
+	display: none !important;
 }
 
 .wcblr-sch .email-form {
-	right: 24px !important;
-	bottom: 84px !important;
-	z-index: 60 !important;
-	width: min(360px, calc(100vw - 48px)) !important;
-	border-radius: 20px !important;
-	background: $sch-espresso !important;
+	position: static !important;
+	width: auto !important;
+	max-height: none !important;
+	overflow: visible !important;
+	margin-top: 20px !important;
+	padding: 0 !important;
+	border-radius: 0 !important;
+	background: transparent !important;
+	box-shadow: none !important;
 	color: $sch-cream;
 	font-size: 14.5px !important;
-	box-shadow: 0 30px 60px -24px rgba(36, 26, 18, 0.7);
 }
 
-.wcblr-sch .email-form.fav-session-email-form-show {
-	padding: 16px !important;
+.wcblr-sch .email-form[style*="none"] {
+	display: none !important;
 }
 
-.wcblr-sch .fav-session-share-tab {
+.wcblr-sch .email-form:not([style*="none"]) {
 	display: flex !important;
-	gap: 6px;
-	width: auto !important;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 12px 16px;
+}
+
+.wcblr-sch #fav-session-tab-link,
+.wcblr-sch #fav-session-tab-print {
+	display: block !important;
+	min-height: 0 !important;
+	padding: 0 !important;
 	border: 0 !important;
 	background: transparent !important;
+	font-size: 0 !important;
 }
 
-.wcblr-sch .fav-session-share-tab div {
-	display: block !important;
-	padding: 8px 14px !important;
-	border-radius: 999px;
-	background: rgba(242, 236, 224, 0.1) !important;
-	font-size: 13.5px !important;
+.wcblr-sch #fav-session-tab-link {
+	flex: 1 1 320px;
+	min-width: 0;
+}
+
+.wcblr-sch #fav-session-tab-link br {
+	display: none;
+}
+
+.wcblr-sch #fav-sessions-link {
+	display: block;
+	padding: 12px 16px;
+	border-radius: 12px;
+	background: rgba(242, 236, 224, 0.08);
+	color: $sch-gold !important;
+	font-family: $sch-mono;
+	font-size: 12.5px;
+	line-height: 1.4;
+	word-break: break-all;
+	text-decoration: none;
+	box-shadow: inset 0 0 0 1px rgba(224, 165, 38, 0.3);
+}
+
+.wcblr-sch #fav-sessions-link::before {
+	content: "Your link  ";
+	color: rgba(242, 236, 224, 0.6);
+	font-family: $sch-sans;
+	font-size: 13px;
 	font-weight: 600;
 }
 
-.wcblr-sch .fav-session-share-tab div.active,
-.wcblr-sch .fav-session-share-tab div:hover {
-	background: $sch-gold !important;
-	color: $sch-espresso;
-}
-
-.wcblr-sch .fav-session-share-tabcontent {
-	min-height: 0 !important;
-	padding: 14px 2px 2px !important;
-	border: 0 !important;
-	background: transparent !important;
-}
-
-.wcblr-sch #fav-session-email-form {
-	margin: 0 !important;
-}
-
-.wcblr-sch #fav-sessions-email-address {
-	box-sizing: border-box;
-	width: 100% !important;
-	margin: 10px 0 8px !important;
-	padding: 11px 14px !important;
-	border: 0;
-	border-radius: 10px;
-	background: $sch-cream;
-	color: $sch-ink;
-	font-size: 15px;
-}
-
-.wcblr-sch .email-form input[type="submit"],
 .wcblr-sch #fav-session-print {
-	padding: 10px 18px;
+	padding: 12px 22px;
 	border: 0;
 	border-radius: 999px;
 	background: $sch-gold;
 	color: $sch-espresso;
+	font-family: $sch-sans;
+	font-size: 14.5px;
 	font-weight: 600;
 	cursor: pointer;
+	transition: transform 0.4s $sch-spring;
 }
 
-.wcblr-sch #fav-sessions-link {
-	color: $sch-gold;
+.wcblr-sch #fav-session-print:hover {
+	transform: translateY(-2px);
+}
+
+/* Print: only the starred sessions, when there are any. */
+@media print {
+	body:has(.wcb-favourite-session) header,
+	body:has(.wcb-favourite-session) footer,
+	body:has(.wcb-favourite-session) .wp-block-template-part,
+	body:has(.wcb-favourite-session) .sharedaddy,
+	body:has(.wcb-favourite-session) .wp-site-blocks > :not(main),
+	body:has(.wcb-favourite-session) #eu-cookie-law,
+	body:has(.wcb-favourite-session) .widget_eu_cookie_law_widget,
+	.wcblr-sch:has(.wcb-favourite-session) .wcblr-sch-hero,
+	.wcblr-sch:has(.wcb-favourite-session) .wcblr-sch-bar,
+	.wcblr-sch:has(.wcb-favourite-session) .wcblr-sch-favbox,
+	.wcblr-sch:has(.wcb-favourite-session) .wcblr-sch-foot,
+	.wcblr-sch:has(.wcb-favourite-session) .wcblr-sch-break,
+	.wcblr-sch:has(.wcb-favourite-session) .wcblr-sch-block:not(:has(.wcb-favourite-session)),
+	.wcblr-sch:has(.wcb-favourite-session) .wcblr-sch-card:not(:has(.wcb-favourite-session)),
+	.wcblr-sch:has(.wcb-favourite-session) .wcblr-sch-quiet,
+	.wcblr-sch:has(.wcb-favourite-session) .wcblr-sch-room {
+		display: none !important;
+	}
+
+	.wcblr-sch:has(.wcb-favourite-session) .wcblr-sch-day::before {
+		content: "My WordCamp Bengaluru 2026 · Sunday 22 November · St Joseph's Boys' High School";
+		display: block;
+		margin-bottom: 18px;
+		font-family: $sch-serif;
+		font-size: 22px;
+	}
+
+	.wcblr-sch .wcblr-sch-block {
+		display: block !important;
+		break-inside: avoid;
+		padding: 12px 0 !important;
+	}
+
+	.wcblr-sch .wcblr-sch-time,
+	.wcblr-sch .wcblr-sch-time > * {
+		position: static !important;
+	}
+
+	.wcblr-sch .wcblr-sch-card {
+		margin-top: 8px !important;
+		box-shadow: inset 0 0 0 1px #ccc !important;
+		background: #fff !important;
+		transform: none !important;
+		opacity: 1 !important;
+		filter: none !important;
+	}
+
+	.wcblr-sch .wcblr-sch-fav {
+		display: none !important;
+	}
 }
 
 /* The highlight WordCamp paints on a favourite's cell; the card's ring does that job here. */
