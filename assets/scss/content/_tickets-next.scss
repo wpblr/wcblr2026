@@ -1,0 +1,901 @@
+/* ==== Tickets, next =========================================================
+   20 Oct 2026. Arun: make the tickets page "modern and next-gen as well,
+   compared to the home page and the about page ... easy to claim a ticket and
+   easy to follow through and understand what happens at the event".
+
+   THE SHAPE
+   The page widens to the home page's 1280px frame and speaks its grammar:
+   the page's name set huge, a sentence under it, mono labels, the dark card.
+   Register: "Tickets" huge beside the CampTix stub, four numbered claim steps
+   under it · Included: eight tiles · The weekend: Saturday on paper, Sunday
+   dark with the day as a time ribbon, then what to bring · Ticket types: three
+   cards, the price set large · the FAQ and closing band, restyled.
+
+   forms/_camptix.scss owns the form and the register row's layout; nothing
+   here touches #tix, .wcblr-tix-row's columns, the guide bar or the sold-out
+   panel. Everything is scoped to .wcblr-tixn (the page wrapper). Markup:
+   website/tools/build-tickets.py. No custom properties, no url(). */
+
+$tn-ink: #2a1d14;
+$tn-espresso: #241a12;
+$tn-red: #c8344b;
+$tn-green: #136451;
+$tn-gold: #e0a526;
+$tn-gold-deep: #a8760f;
+$tn-cream: #f2ece0;
+$tn-paper: #fbf8f1;
+$tn-muted: #7a6757;
+$tn-soft: #5c4a3b;
+$tn-rule: rgba(42, 29, 20, 0.12);
+$tn-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+$tn-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+$tn-serif: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif;
+$tn-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif;
+$tn-mono: var(--wp--preset--font-family--jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
+$tn-frame: 1280px;
+$tn-gutter: clamp(20px, 5vw, 96px);
+$tn-pad: max(#{$tn-gutter}, calc((100vw - #{$tn-frame}) / 2));
+$tn-sec: clamp(88px, 2.5rem + 6vw, 160px);
+
+/* ---- The ground: the home page's width --------------------------------------- */
+
+body:has(.wcblr-tixn) main::before,
+body:has(.wcblr-tixn) main::after {
+	display: none !important;
+}
+
+body:has(.wcblr-tixn),
+body:has(.wcblr-tixn) .wp-site-blocks > main {
+	background-color: $tn-cream !important;
+}
+
+.entry-content:has(> .wcblr-tixn) {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+	max-width: none !important;
+}
+
+/* The `pages` template boxes content in a 1200px group, so the wrapper breaks
+   out to the window and then sets the home page's frame as its own padding. */
+.entry-content > .wcblr-tixn.alignfull {
+	width: 100vw !important;
+	max-width: none !important;
+	margin: 0 0 0 calc(50% - 50vw) !important;
+	box-sizing: border-box;
+	padding: clamp(28px, 1rem + 3vw, 72px) $tn-pad clamp(80px, 2rem + 5vw, 140px) !important;
+	overflow-x: clip;
+}
+
+.wcblr-tixn > .alignwide {
+	max-width: none !important;
+	width: 100% !important;
+}
+
+.wcblr-tixn .wcblr-tixn-sec :where(p, h2, h3, .wp-block-group) {
+	margin: 0 !important;
+	max-width: none !important;
+}
+
+.wcblr-tixn .wcblr-tixn-sec a {
+	text-decoration: none;
+}
+
+.wcblr-tixn em {
+	color: $tn-red;
+	font-style: italic;
+}
+
+/* ---- 1. Register: the copy column --------------------------------------------- */
+
+.wcblr-tixn .wcblr-tix-row > .wp-block-column:first-child > * {
+	max-width: none !important;
+}
+
+.wcblr-tixn p.wcblr-tixn-kicker {
+	margin: 0 !important;
+	font-family: $tn-mono !important;
+	font-size: 12px !important;
+	font-weight: 600;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: $tn-gold-deep;
+}
+
+/* Beats forms/_camptix.scss's `.wcblr-post.wcblr-guide .wcblr-sec:first-child h2`. */
+.wcblr-tixn.wcblr-post.wcblr-guide .wcblr-sec:first-child h2.wcblr-tixn-h {
+	margin: clamp(14px, 1.4vw, 22px) 0 0 !important;
+	font-family: $tn-serif !important;
+	font-size: clamp(72px, 1.6rem + 8.4vw, 176px) !important;
+	font-weight: 400 !important;
+	line-height: 0.82 !important;
+	letter-spacing: -0.06em !important;
+	color: $tn-ink !important;
+}
+
+.wcblr-tixn p.wcblr-tixn-lede {
+	margin: clamp(16px, 1.4vw, 24px) 0 0 !important;
+	font-family: $tn-serif !important;
+	font-size: clamp(28px, 1rem + 2vw, 46px) !important;
+	line-height: 1.08 !important;
+	letter-spacing: -0.025em;
+	color: $tn-soft;
+}
+
+.wcblr-tixn p.wcblr-tixn-lead {
+	margin: 22px 0 0 !important;
+	max-width: 46ch !important;
+	font-size: 17px !important;
+	line-height: 1.65 !important;
+	color: $tn-soft;
+}
+
+.wcblr-tixn p.wcblr-tixn-howto {
+	display: flex !important;
+	flex-wrap: wrap;
+	align-items: baseline;
+	column-gap: 12px;
+	row-gap: 4px;
+	margin: clamp(32px, 3vw, 48px) 0 0 !important;
+	padding-top: 18px;
+	box-shadow: 0 -1px 0 $tn-rule;
+	font-family: $tn-serif !important;
+	font-size: 24px !important;
+	line-height: 1.2 !important;
+	color: $tn-ink;
+
+	span {
+		font-family: $tn-sans;
+		font-size: 14.5px;
+		color: $tn-muted;
+	}
+
+	a {
+		margin-left: auto;
+		font-family: $tn-mono;
+		font-size: 11.5px;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: $tn-red;
+		text-decoration: none;
+		box-shadow: inset 0 -1px 0 rgba(200, 52, 75, 0.4);
+	}
+
+	a::after {
+		content: " \2197";
+	}
+}
+
+/* Four steps as a 2 x 2 of numbered cards. */
+.wcblr-tixn ol.wcblr-tixn-steps {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 10px;
+	margin: 18px 0 0 !important;
+	padding: 0 !important;
+	list-style: none !important;
+	counter-reset: tn-step;
+}
+
+.wcblr-tixn .wcblr-tix-row .wcblr-tixn-steps {
+	display: none !important;
+}
+
+.wcblr-tixn .wcblr-tix-row:has(.tix_tickets_table:not(.tix-order-summary):not(.tix-attendee-form)) .wcblr-tixn-steps {
+	display: grid !important;
+}
+
+.wcblr-tixn ol.wcblr-tixn-steps > li {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	margin: 0 !important;
+	padding: 18px 18px 18px 60px !important;
+	border-radius: 18px;
+	background: $tn-paper;
+	counter-increment: tn-step;
+	font-size: 14.5px;
+	line-height: 1.5;
+	color: $tn-soft;
+	transition: transform 0.45s $tn-spring, box-shadow 0.3s $tn-ease;
+
+	&::before {
+		content: counter(tn-step);
+		position: absolute;
+		top: 16px;
+		left: 16px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
+		background: $tn-espresso;
+		color: $tn-gold;
+		font-family: $tn-serif;
+		font-size: 16px;
+	}
+
+	strong {
+		font-size: 15.5px;
+		font-weight: 600;
+		color: $tn-ink;
+	}
+
+	a {
+		color: $tn-red;
+		box-shadow: inset 0 -1px 0 rgba(200, 52, 75, 0.35);
+		text-decoration: none;
+	}
+
+	&:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 18px 32px -24px rgba(42, 29, 20, 0.5);
+	}
+}
+
+/* ---- 2. Section titles (the new sections) --------------------------------------- */
+
+.wcblr-tixn {
+	counter-reset: tn-sec;
+}
+
+.wcblr-tixn .wcblr-tixn-sec {
+	padding-top: $tn-sec;
+	scroll-margin-top: 100px;
+}
+
+.wcblr-tixn .wcblr-tixn-titles {
+	margin-bottom: clamp(32px, 1rem + 3vw, 60px) !important;
+}
+
+.wcblr-tixn h2.wcblr-tixn-bt {
+	counter-increment: tn-sec;
+	display: flex;
+	align-items: flex-start;
+	gap: 0.12em;
+	font-family: $tn-serif !important;
+	font-size: clamp(56px, 1.6rem + 6vw, 128px) !important;
+	font-weight: 400 !important;
+	line-height: 0.86 !important;
+	letter-spacing: -0.055em !important;
+	color: $tn-ink;
+}
+
+.wcblr-tixn h2.wcblr-tixn-bt::after {
+	content: counter(tn-sec, decimal-leading-zero);
+	margin-top: 0.4em;
+	font-family: $tn-mono;
+	font-size: 12px;
+	font-weight: 500;
+	letter-spacing: 0.06em;
+	color: $tn-red;
+}
+
+.wcblr-tixn p.wcblr-tixn-sub {
+	margin-top: clamp(14px, 1.2vw, 22px) !important;
+	font-family: $tn-serif !important;
+	font-size: clamp(28px, 1.1rem + 2vw, 52px) !important;
+	line-height: 1.06 !important;
+	letter-spacing: -0.025em;
+	color: $tn-soft;
+}
+
+/* ---- 3. Included: eight tiles ------------------------------------------------------- */
+
+.wcblr-tixn .wcblr-tixn-tiles {
+	display: grid !important;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 12px;
+}
+
+.wcblr-tixn .wcblr-tixn-tile {
+	display: flex !important;
+	flex-direction: column;
+	min-height: 200px;
+	padding: 22px 22px 24px !important;
+	border-radius: 22px;
+	background: $tn-paper;
+	transition: transform 0.45s $tn-spring, background 0.25s $tn-ease;
+}
+
+.wcblr-tixn .wcblr-tixn-tile:hover {
+	transform: translateY(-3px);
+	background: #fff;
+}
+
+.wcblr-tixn .wcblr-tixn-tile:nth-child(3) {
+	background: $tn-espresso;
+	color: $tn-cream;
+}
+
+.wcblr-tixn p.wcblr-tixn-tile-i {
+	font-family: $tn-serif !important;
+	font-size: 34px !important;
+	font-weight: 300;
+	line-height: 1 !important;
+	color: $tn-red;
+}
+
+.wcblr-tixn .wcblr-tixn-tile:nth-child(3) p.wcblr-tixn-tile-i {
+	color: $tn-gold;
+}
+
+.wcblr-tixn h3.wcblr-tixn-tile-t {
+	margin-top: auto !important;
+	padding-top: 26px;
+	font-family: $tn-serif !important;
+	font-size: 22px !important;
+	font-weight: 500 !important;
+	line-height: 1.12 !important;
+	letter-spacing: -0.015em !important;
+	color: inherit !important;
+}
+
+.wcblr-tixn p.wcblr-tixn-tile-b {
+	margin-top: 8px !important;
+	font-size: 14.5px !important;
+	line-height: 1.5 !important;
+	color: $tn-soft;
+}
+
+.wcblr-tixn .wcblr-tixn-tile:nth-child(3) p.wcblr-tixn-tile-b {
+	color: rgba(242, 236, 224, 0.72);
+}
+
+.wcblr-tixn p.wcblr-tixn-foot {
+	margin-top: 18px !important;
+	max-width: 80ch !important;
+	font-size: 14px !important;
+	line-height: 1.6 !important;
+	color: $tn-muted;
+}
+
+/* ---- 4. The weekend --------------------------------------------------------------------- */
+
+.wcblr-tixn .wcblr-tixn-days {
+	display: grid !important;
+	grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+	gap: 14px;
+}
+
+.wcblr-tixn .wcblr-tixn-day {
+	position: relative;
+	display: flex !important;
+	flex-direction: column;
+	padding: clamp(24px, 2.6vw, 40px) !important;
+	border-radius: 28px;
+	background: $tn-paper;
+	overflow: hidden;
+}
+
+.wcblr-tixn .wcblr-tixn-day.is-sun {
+	background: $tn-espresso;
+	color: $tn-cream;
+}
+
+.wcblr-tixn .wcblr-tixn-day.is-sun::before {
+	content: "";
+	position: absolute;
+	right: -20%;
+	top: -30%;
+	width: 70%;
+	height: 70%;
+	background: radial-gradient(closest-side, rgba(224, 165, 38, 0.18), rgba(224, 165, 38, 0));
+	pointer-events: none;
+}
+
+.wcblr-tixn .wcblr-tixn-day > * {
+	position: relative;
+}
+
+.wcblr-tixn p.wcblr-tixn-day-chip {
+	display: inline-flex !important;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	align-self: flex-start;
+	width: 66px;
+	height: 74px;
+	border-radius: 16px;
+	background: $tn-espresso;
+	color: $tn-cream;
+	font-family: $tn-mono !important;
+	font-size: 10px !important;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	line-height: 1.2 !important;
+
+	strong {
+		font-family: $tn-serif;
+		font-size: 30px;
+		font-weight: 500;
+		letter-spacing: -0.02em;
+		line-height: 1;
+	}
+}
+
+.wcblr-tixn .is-sun p.wcblr-tixn-day-chip {
+	background: $tn-cream;
+	color: $tn-ink;
+}
+
+.wcblr-tixn p.wcblr-tixn-day-tag {
+	margin-top: 22px !important;
+	font-family: $tn-mono !important;
+	font-size: 11px !important;
+	font-weight: 600;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: $tn-gold-deep;
+}
+
+.wcblr-tixn .is-sun p.wcblr-tixn-day-tag {
+	color: $tn-gold;
+}
+
+.wcblr-tixn h3.wcblr-tixn-day-t {
+	margin-top: 8px !important;
+	font-family: $tn-serif !important;
+	font-size: clamp(34px, 1rem + 2vw, 52px) !important;
+	font-weight: 400 !important;
+	line-height: 1 !important;
+	letter-spacing: -0.03em !important;
+	color: inherit !important;
+}
+
+.wcblr-tixn p.wcblr-tixn-day-b {
+	margin-top: 14px !important;
+	max-width: 52ch !important;
+	font-size: 15.5px !important;
+	line-height: 1.6 !important;
+	color: $tn-soft;
+
+	a {
+		color: inherit;
+		box-shadow: inset 0 -1px 0 currentColor;
+	}
+}
+
+.wcblr-tixn .is-sun p.wcblr-tixn-day-b {
+	color: rgba(242, 236, 224, 0.75);
+}
+
+.wcblr-tixn .wcblr-tixn-day-facts {
+	margin-top: auto !important;
+	padding-top: 26px;
+}
+
+.wcblr-tixn p.wcblr-tixn-fact {
+	display: grid !important;
+	grid-template-columns: 76px 1fr;
+	gap: 12px;
+	padding: 12px 0;
+	box-shadow: 0 -1px 0 $tn-rule;
+	font-size: 14.5px !important;
+	line-height: 1.45 !important;
+	color: $tn-ink;
+
+	span {
+		font-family: $tn-mono;
+		font-size: 10.5px;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: $tn-muted;
+		padding-top: 2px;
+	}
+
+	b {
+		font-weight: 400;
+	}
+
+	a {
+		color: $tn-red;
+		box-shadow: inset 0 -1px 0 rgba(200, 52, 75, 0.4);
+	}
+}
+
+/* Sunday, as a ribbon: a time, a dot on the line, what happens. */
+.wcblr-tixn ol.wcblr-tixn-ribbon {
+	position: relative;
+	margin: 26px 0 0 !important;
+	padding: 0 !important;
+	list-style: none !important;
+}
+
+.wcblr-tixn ol.wcblr-tixn-ribbon::before {
+	content: "";
+	position: absolute;
+	left: 66px;
+	top: 10px;
+	bottom: 10px;
+	width: 2px;
+	background: linear-gradient(180deg, $tn-gold, rgba(224, 165, 38, 0.15));
+}
+
+.wcblr-tixn ol.wcblr-tixn-ribbon li {
+	position: relative;
+	display: grid;
+	grid-template-columns: 54px 1fr;
+	column-gap: 34px;
+	align-items: baseline;
+	margin: 0 !important;
+	padding: 7px 0 !important;
+	font-size: 15px;
+	line-height: 1.35;
+
+	&::before {
+		content: "";
+		position: absolute;
+		left: 62px;
+		top: 13px;
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background: $tn-espresso;
+		box-shadow: 0 0 0 2px $tn-gold;
+	}
+
+	time {
+		font-family: $tn-mono;
+		font-size: 13px;
+		font-weight: 600;
+		color: $tn-gold;
+		font-variant-numeric: tabular-nums;
+	}
+
+	strong {
+		font-weight: 600;
+		color: $tn-cream;
+	}
+
+	span {
+		grid-column: 2;
+		font-size: 13.5px;
+		color: rgba(242, 236, 224, 0.6);
+	}
+}
+
+.wcblr-tixn ol.wcblr-tixn-ribbon li:nth-child(3)::before {
+	background: $tn-gold;
+}
+
+.wcblr-tixn p.wcblr-tixn-day-more {
+	margin-top: 22px !important;
+
+	a {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		padding: 13px 22px;
+		border-radius: 999px;
+		background: $tn-gold;
+		color: $tn-espresso;
+		font-size: 15px;
+		font-weight: 600;
+		transition: transform 0.4s $tn-spring;
+	}
+
+	a::after {
+		content: "\2192";
+	}
+
+	a:hover {
+		transform: translateY(-2px);
+	}
+}
+
+/* What to bring: one strip, three items. */
+.wcblr-tixn .wcblr-tixn-bring {
+	display: grid !important;
+	grid-template-columns: auto repeat(3, minmax(0, 1fr));
+	gap: 0;
+	align-items: stretch;
+	margin-top: 14px !important;
+	border-radius: 22px;
+	background: $tn-paper;
+	overflow: hidden;
+}
+
+.wcblr-tixn p.wcblr-tixn-bring-k {
+	display: flex !important;
+	align-items: center;
+	padding: 22px 26px;
+	background: $tn-gold;
+	color: $tn-espresso;
+	font-family: $tn-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+}
+
+.wcblr-tixn p.wcblr-tixn-bring-i {
+	display: flex !important;
+	flex-direction: column;
+	gap: 3px;
+	padding: 20px 24px;
+	font-size: 14px !important;
+	line-height: 1.45 !important;
+	color: $tn-soft;
+
+	strong {
+		font-size: 15.5px;
+		color: $tn-ink;
+	}
+
+	a {
+		color: $tn-red;
+		box-shadow: inset 0 -1px 0 rgba(200, 52, 75, 0.4);
+	}
+}
+
+.wcblr-tixn p.wcblr-tixn-bring-i + p.wcblr-tixn-bring-i {
+	box-shadow: inset 1px 0 0 $tn-rule;
+}
+
+/* ---- 5. Ticket types ---------------------------------------------------------------------- */
+
+.wcblr-tixn .wcblr-tixn-types {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 14px;
+}
+
+.wcblr-tixn .wcblr-tixn-type {
+	position: relative;
+	display: flex !important;
+	flex-direction: column;
+	padding: clamp(24px, 2.4vw, 34px) !important;
+	border-radius: 26px;
+	background: $tn-paper;
+	transition: transform 0.5s $tn-spring, box-shadow 0.3s $tn-ease;
+}
+
+.wcblr-tixn .wcblr-tixn-type.is-on:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 28px 50px -32px rgba(42, 29, 20, 0.55);
+}
+
+.wcblr-tixn .wcblr-tixn-type:nth-child(3) {
+	background: $tn-espresso;
+	color: $tn-cream;
+}
+
+.wcblr-tixn .wcblr-tixn-type.is-sold {
+	background: transparent;
+	box-shadow: inset 0 0 0 1.5px $tn-rule;
+}
+
+.wcblr-tixn p.wcblr-tixn-type-state {
+	align-self: flex-start;
+	padding: 6px 12px;
+	border-radius: 999px;
+	background: rgba(19, 100, 81, 0.14);
+	color: $tn-green;
+	font-family: $tn-mono !important;
+	font-size: 10.5px !important;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}
+
+.wcblr-tixn .wcblr-tixn-type:nth-child(3) p.wcblr-tixn-type-state {
+	background: rgba(224, 165, 38, 0.2);
+	color: $tn-gold;
+}
+
+.wcblr-tixn .is-sold p.wcblr-tixn-type-state {
+	background: rgba(42, 29, 20, 0.08);
+	color: $tn-muted;
+}
+
+.wcblr-tixn h3.wcblr-tixn-type-t {
+	margin-top: 22px !important;
+	font-family: $tn-serif !important;
+	font-size: clamp(26px, 1rem + 1vw, 34px) !important;
+	font-weight: 400 !important;
+	line-height: 1.05 !important;
+	letter-spacing: -0.02em !important;
+	color: inherit !important;
+}
+
+.wcblr-tixn p.wcblr-tixn-type-price {
+	margin-top: 10px !important;
+	font-family: $tn-sans !important;
+	font-size: clamp(56px, 1.4rem + 3.4vw, 88px) !important;
+	font-weight: 300;
+	line-height: 1 !important;
+	letter-spacing: -0.06em;
+
+	span {
+		margin-right: 4px;
+		font-size: 0.45em;
+		vertical-align: 0.75em;
+		color: $tn-red;
+	}
+}
+
+.wcblr-tixn .wcblr-tixn-type:nth-child(3) p.wcblr-tixn-type-price span {
+	color: $tn-gold;
+}
+
+.wcblr-tixn .is-sold p.wcblr-tixn-type-price {
+	color: rgba(42, 29, 20, 0.28);
+}
+
+.wcblr-tixn .is-sold p.wcblr-tixn-type-price span {
+	color: inherit;
+}
+
+.wcblr-tixn p.wcblr-tixn-type-b {
+	margin-top: 14px !important;
+	font-size: 15px !important;
+	line-height: 1.55 !important;
+	color: $tn-soft;
+}
+
+.wcblr-tixn .wcblr-tixn-type:nth-child(3) p.wcblr-tixn-type-b {
+	color: rgba(242, 236, 224, 0.72);
+}
+
+.wcblr-tixn ul.wcblr-tixn-type-list {
+	margin: 18px 0 0 !important;
+	padding: 16px 0 0 !important;
+	box-shadow: 0 -1px 0 $tn-rule;
+	list-style: none !important;
+
+	li {
+		position: relative;
+		margin: 0 !important;
+		padding: 5px 0 5px 22px !important;
+		font-size: 14.5px;
+		line-height: 1.4;
+	}
+
+	li::before {
+		content: "\2713";
+		position: absolute;
+		left: 0;
+		color: $tn-green;
+		font-weight: 700;
+	}
+}
+
+.wcblr-tixn .wcblr-tixn-type:nth-child(3) ul.wcblr-tixn-type-list {
+	box-shadow: 0 -1px 0 rgba(242, 236, 224, 0.15);
+}
+
+.wcblr-tixn .wcblr-tixn-type:nth-child(3) ul.wcblr-tixn-type-list li::before {
+	color: $tn-gold;
+}
+
+.wcblr-tixn p.wcblr-tixn-type-go {
+	margin-top: auto !important;
+	padding-top: 24px;
+
+	a {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 10px;
+		padding: 14px 20px;
+		border-radius: 14px;
+		background: $tn-red;
+		color: #fff;
+		font-size: 15px;
+		font-weight: 600;
+		transition: background 0.2s $tn-ease;
+	}
+
+	a::after {
+		content: "\2191";
+	}
+
+	a:hover {
+		background: #a82a3e;
+	}
+}
+
+/* ---- 6. The FAQ and closing band, kept, re-set to the frame --------------------------- */
+
+.wcblr-tixn #tickets-faq {
+	padding-top: $tn-sec;
+	margin-top: 0 !important;
+}
+
+.wcblr-tixn.wcblr-post.wcblr-guide #tickets-faq .wcblr-sechead h2 {
+	font-family: $tn-serif !important;
+	font-size: clamp(48px, 1.4rem + 4.4vw, 96px) !important;
+	font-weight: 400 !important;
+	line-height: 0.86 !important;
+	letter-spacing: -0.055em !important;
+}
+
+.wcblr-tixn #tickets-faq .wcblr-sechead .wcblr-eyebrow {
+	margin-bottom: 18px !important;
+}
+
+/* ---- Motion: the opening screen only ----------------------------------------------------- */
+
+@keyframes wcblr-tn-in {
+	from { opacity: 0; transform: translateY(16px); }
+	to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-tixn ol.wcblr-tixn-steps > li:nth-child(1) { animation: wcblr-tn-in 0.6s $tn-ease 0.35s backwards; }
+	.wcblr-tixn ol.wcblr-tixn-steps > li:nth-child(2) { animation: wcblr-tn-in 0.6s $tn-ease 0.42s backwards; }
+	.wcblr-tixn ol.wcblr-tixn-steps > li:nth-child(3) { animation: wcblr-tn-in 0.6s $tn-ease 0.49s backwards; }
+	.wcblr-tixn ol.wcblr-tixn-steps > li:nth-child(4) { animation: wcblr-tn-in 0.6s $tn-ease 0.56s backwards; }
+}
+
+/* ---- Smaller screens ----------------------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+	.wcblr-tixn .wcblr-tixn-tiles {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.wcblr-tixn .wcblr-tixn-days,
+	.wcblr-tixn .wcblr-tixn-types {
+		grid-template-columns: 1fr;
+	}
+
+	.wcblr-tixn .wcblr-tixn-bring {
+		grid-template-columns: 1fr;
+	}
+
+	.wcblr-tixn p.wcblr-tixn-bring-i + p.wcblr-tixn-bring-i {
+		box-shadow: inset 0 1px 0 $tn-rule;
+	}
+}
+
+@media (max-width: 781px) {
+	/* content/_ticket-panel.scss flattens the copy column on a phone and puts
+	   the form straight after the title. The same order for the new pieces:
+	   kicker, title, lede, the form, then the intro and the four steps. */
+	.wcblr-tixn .wcblr-tix-row > .wp-block-column:first-child > p.wcblr-tixn-kicker { order: 1; margin-top: 0 !important; }
+	.wcblr-tixn .wcblr-tix-row > .wp-block-column:first-child > .wcblr-tixn-h { order: 2; }
+	.wcblr-tixn .wcblr-tix-row > .wp-block-column:first-child > p.wcblr-tixn-lede { order: 2; margin-bottom: 4px !important; }
+	.wcblr-tixn .wcblr-tix-row > .wp-block-column:first-child > p.wcblr-tixn-lead { order: 4; margin-top: 36px !important; }
+	.wcblr-tixn .wcblr-tix-row > .wp-block-column:first-child > p.wcblr-tixn-howto { order: 5; margin-top: 28px !important; }
+	.wcblr-tixn .wcblr-tix-row > .wp-block-column:first-child > .wcblr-tixn-steps { order: 6; }
+
+	.wcblr-tixn ol.wcblr-tixn-steps {
+		grid-template-columns: 1fr;
+	}
+
+	.wcblr-tixn p.wcblr-tixn-howto a {
+		margin-left: 0;
+		flex-basis: 100%;
+	}
+
+	.wcblr-tixn .wcblr-tixn-tile {
+		min-height: 0;
+		padding: 18px !important;
+	}
+
+	.wcblr-tixn h3.wcblr-tixn-tile-t {
+		padding-top: 16px;
+		font-size: 19px !important;
+	}
+
+	.wcblr-tixn p.wcblr-tixn-tile-b {
+		font-size: 13.5px !important;
+	}
+
+	.wcblr-tixn p.wcblr-tixn-tile-i {
+		font-size: 26px !important;
+	}
+
+	.wcblr-tixn .wcblr-tixn-tiles {
+		gap: 8px;
+	}
+
+	.wcblr-tixn ol.wcblr-tixn-ribbon li {
+		column-gap: 26px;
+	}
+}
