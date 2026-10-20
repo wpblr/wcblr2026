@@ -696,8 +696,8 @@ $sch-gap: 12px;
 }
 
 .wcblr-sch-card.is-lightning .wcblr-sch-title {
-	margin-top: 8px !important;
-	font-size: 16px !important;
+	margin-top: 10px !important;
+	font-size: 18px !important;
 }
 
 .wcblr-sch-card.is-lightning .wcblr-sch-who {
@@ -716,14 +716,12 @@ $sch-gap: 12px;
 .wcblr-sch-card.is-panel.is-link:hover { background: #f8e8e4; }
 .wcblr-sch-card.is-workshop.is-link:hover { background: #e3efe9; }
 
+/* Same title as every other session (Arun, 20 Oct): the display serif made
+   the panels and the workshop look like the only things on. The tint and the
+   people chips say what they are; the title does not need to shout. */
 .wcblr-sch-card.is-panel .wcblr-sch-title,
 .wcblr-sch-card.is-workshop .wcblr-sch-title {
-	margin-top: 16px !important;
-	font-family: $sch-serif !important;
-	font-size: clamp(26px, 0.9rem + 1.2vw, 38px) !important;
-	font-weight: 400 !important;
-	line-height: 1.04 !important;
-	letter-spacing: -0.025em !important;
+	margin-top: 12px !important;
 }
 
 /* A slot nobody holds yet. */
