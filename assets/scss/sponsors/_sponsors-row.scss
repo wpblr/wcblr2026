@@ -222,7 +222,16 @@ body:not(.home) .wcblr-sponsors-row + .wcblr-sponsors-row {
    Remove this once they send a stacked or squarer logo. post-1427 is their
    sponsor post. */
 .wcblr-sponsors-row .wp-block-query li.post-1427 .wp-block-post-featured-image img {
-	transform: scale(1.4);
+	transform: scale(1.3);
+}
+
+/* 21 Oct 2026: with the logo at a fixed width the tile no longer grows with it,
+   and between 782 and 1200 the home tiles are only ~1.2x the logo, so 1.4 ran
+   the wordmark past the tile. */
+@media (max-width: 1200px) {
+	.wcblr-sponsors-row .wp-block-query li.post-1427 .wp-block-post-featured-image img {
+		transform: scale(1.12);
+	}
 }
 
 @media (max-width: 600px) {
