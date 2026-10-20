@@ -135,62 +135,215 @@ body:has(.wcblr-sch) main::after {
 	}
 }
 
-.wcblr-sch-facts {
-	padding-bottom: 6px;
-}
-
 .wcblr-sch-lead {
-	max-width: 44ch !important;
+	margin-top: 22px !important;
+	max-width: 46ch !important;
 	font-size: 17px !important;
 	line-height: 1.6 !important;
 	color: $sch-soft;
 }
 
-.wcblr-sch-where {
-	margin-top: 18px !important;
-	line-height: 1.5 !important;
-	font-size: 15px !important;
-	font-weight: 600;
-	color: $sch-ink;
-
-	a {
-		box-shadow: inset 0 -1px 0 rgba(42, 29, 20, 0.3);
-		transition: box-shadow 0.2s $sch-ease, color 0.2s $sch-ease;
-	}
-
-	a:hover {
-		color: $sch-red;
-		box-shadow: inset 0 -1px 0 $sch-red;
-	}
-
-	span {
-		display: block;
-		margin-top: 4px;
-		font-family: $sch-mono;
-		font-size: 11px;
-		font-weight: 500;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: $sch-muted;
-	}
+/* The day pass: the home page's dark ticket, with Namma Wapuu sitting on
+   its top edge with his filter coffee (Arun, 20 Oct: "a nice card like
+   before, maybe with a wapuu"). */
+.wcblr-sch-pass {
+	position: relative;
+	margin-top: 96px !important;
+	padding: 28px 28px 26px !important;
+	border-radius: 28px;
+	background: $sch-espresso;
+	color: $sch-cream;
+	box-shadow: 0 36px 70px -36px rgba(36, 26, 18, 0.75);
+	transition: transform 0.6s $sch-spring;
 }
 
-.wcblr-sch-cta {
+/* A warm glow in the corner, clipped to the card (the card itself must not
+   clip, or Wapuu loses his head). */
+.wcblr-sch-pass::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	background: radial-gradient(circle at 100% 0%, rgba(224, 165, 38, 0.22), rgba(224, 165, 38, 0) 55%);
+	pointer-events: none;
+}
+
+.wcblr-sch-pass:hover {
+	transform: translateY(-4px);
+}
+
+.wcblr-sch-wapuu-wrap {
+	position: absolute !important;
+	right: 22px;
+	bottom: calc(100% - 96px);
+	z-index: 2;
+	width: 136px;
+	pointer-events: none;
+}
+
+.wcblr-sch-wapuu {
+	display: block;
+	width: 100%;
+	height: auto;
+	filter: drop-shadow(0 14px 18px rgba(36, 26, 18, 0.28));
+	transform-origin: 50% 90%;
+	transition: transform 0.7s $sch-spring;
+}
+
+.wcblr-sch-pass:hover .wcblr-sch-wapuu {
+	transform: rotate(-6deg) translateY(-6px);
+}
+
+/* The home page's tilted code sticker. */
+.wcblr-sch-pass-tag {
+	position: absolute !important;
+	top: -16px;
+	left: 26px;
+	z-index: 3;
+	padding: 7px 14px;
+	border-radius: 999px;
+	background: $sch-gold;
+	color: $sch-espresso;
+	font-family: $sch-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 600;
+	transform: rotate(-4deg);
+	box-shadow: 0 10px 20px -12px rgba(36, 26, 18, 0.6);
+}
+
+.wcblr-sch-pass-top,
+.wcblr-sch-pass-hours {
+	position: relative;
+	font-family: $sch-mono !important;
+	font-size: 10.5px !important;
+	font-weight: 600;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+}
+
+.wcblr-sch-pass-top {
+	margin-top: 8px !important;
+	padding-right: 130px;
+	color: $sch-gold;
+}
+
+.wcblr-sch-pass-day {
+	position: relative;
+	display: flex !important;
+	gap: 16px;
+	align-items: center;
 	margin-top: 22px !important;
 }
 
+.wcblr-sch-date {
+	display: flex !important;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 64px;
+	height: 72px;
+	flex: 0 0 auto;
+	border-radius: 14px;
+	background: $sch-cream;
+	color: $sch-ink;
+	font-family: $sch-mono !important;
+	font-size: 10px !important;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	line-height: 1.2 !important;
+
+	strong {
+		font-family: $sch-serif;
+		font-size: 30px;
+		font-weight: 500;
+		letter-spacing: -0.02em;
+		line-height: 1;
+	}
+}
+
+.wcblr-sch-pass-name {
+	font-family: $sch-serif !important;
+	font-size: 28px !important;
+	line-height: 1.05 !important;
+	letter-spacing: -0.02em;
+}
+
+.wcblr-sch-pass-venue {
+	margin-top: 6px !important;
+	font-size: 14px !important;
+	line-height: 1.45 !important;
+	color: rgba(242, 236, 224, 0.72);
+
+	a {
+		box-shadow: inset 0 -1px 0 rgba(242, 236, 224, 0.35);
+		transition: color 0.2s $sch-ease;
+	}
+
+	a:hover {
+		color: $sch-gold;
+	}
+}
+
+.wcblr-sch-pass-rooms {
+	position: relative;
+	display: grid !important;
+	grid-template-columns: 1fr 1fr;
+	gap: 8px;
+	margin-top: 22px !important;
+}
+
+.wcblr-sch-troom {
+	display: flex !important;
+	flex-direction: column;
+	gap: 2px;
+	padding: 12px 14px;
+	border-radius: 14px;
+	background: rgba(242, 236, 224, 0.08);
+
+	strong {
+		font-size: 15px;
+		font-weight: 600;
+	}
+
+	span {
+		font-family: $sch-mono;
+		font-size: 10px;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: rgba(242, 236, 224, 0.55);
+	}
+}
+
+.wcblr-sch-pass-hours {
+	display: flex !important;
+	justify-content: space-between;
+	margin-top: 18px !important;
+	color: rgba(242, 236, 224, 0.6);
+}
+
+.wcblr-sch-cta {
+	position: relative;
+	margin-top: 18px !important;
+}
+
+.wcblr-sch-cta .wp-block-button {
+	width: 100%;
+}
+
 .wcblr-sch-cta .wp-block-button__link {
-	display: inline-flex;
+	display: flex;
+	justify-content: center;
 	align-items: center;
 	gap: 10px;
-	padding: 14px 24px !important;
-	border-radius: 999px !important;
+	width: 100%;
+	padding: 15px 24px !important;
+	border-radius: 14px !important;
 	background: $sch-red !important;
 	color: #fff !important;
 	font-family: $sch-sans !important;
 	font-size: 15px !important;
 	font-weight: 600 !important;
-	transition: background 0.2s $sch-ease, transform 0.4s $sch-spring;
+	transition: background 0.2s $sch-ease;
 }
 
 .wcblr-sch-cta .wp-block-button__link::after {
@@ -200,7 +353,6 @@ body:has(.wcblr-sch) main::after {
 
 .wcblr-sch-cta .wp-block-button__link:hover {
 	background: #a82a3e !important;
-	transform: translateY(-2px);
 }
 
 .wcblr-sch-cta .wp-block-button__link:hover::after {
@@ -796,6 +948,16 @@ a.wcblr-sch-person:hover .wcblr-sch-face {
 	to { transform: none; }
 }
 
+@keyframes wcblr-sch-hop {
+	from { transform: translateY(40px) scale(0.9); }
+	to { transform: none; }
+}
+
+@keyframes wcblr-sch-tag {
+	from { transform: rotate(-4deg) scale(0.4); }
+	to { transform: rotate(-4deg); }
+}
+
 @keyframes wcblr-sch-in {
 	from { opacity: 0; transform: translateY(18px); }
 	to { opacity: 1; transform: none; }
@@ -808,7 +970,10 @@ a.wcblr-sch-person:hover .wcblr-sch-face {
 
 	.wcblr-sch-kicker { animation: wcblr-sch-in 0.7s $sch-ease 0.05s both; }
 	.wcblr-sch-sub { animation: wcblr-sch-in 0.8s $sch-ease 0.18s both; }
-	.wcblr-sch-facts { animation: wcblr-sch-in 0.8s $sch-ease 0.32s both; }
+	.wcblr-sch-lead { animation: wcblr-sch-in 0.8s $sch-ease 0.26s both; }
+	.wcblr-sch-pass { animation: wcblr-sch-in 0.9s $sch-ease 0.3s backwards; }
+	.wcblr-sch-wapuu { animation: wcblr-sch-hop 0.9s $sch-spring 0.85s backwards; }
+	.wcblr-sch-pass-tag { animation: wcblr-sch-tag 0.7s $sch-spring 1.1s backwards; }
 	.wcblr-sch-bar { animation: wcblr-sch-in 0.8s $sch-ease 0.46s both; }
 	.wcblr-sch-day > :nth-child(1) { animation: wcblr-sch-in 0.7s $sch-ease 0.6s both; }
 	.wcblr-sch-day > :nth-child(2) { animation: wcblr-sch-in 0.7s $sch-ease 0.7s both; }
@@ -1077,7 +1242,25 @@ a.wcblr-sch-person:hover .wcblr-sch-face {
 	background: transparent !important;
 }
 
-/* ---- 9. Tablet: the facts under the title ------------------------------------ */
+/* ---- 9. Narrower cards: a smaller Wapuu, so he never sits on the heading ---- */
+
+@media (max-width: 1279px) {
+	.wcblr-sch-pass {
+		margin-top: 84px !important;
+	}
+
+	.wcblr-sch-wapuu-wrap {
+		right: 16px;
+		bottom: calc(100% - 58px);
+		width: 96px;
+	}
+
+	.wcblr-sch-pass-top {
+		padding-right: 100px;
+	}
+}
+
+/* ---- 9b. Tablet: the card under the title ------------------------------------ */
 
 @media (max-width: 1023px) {
 	.wcblr-sch-hero {
