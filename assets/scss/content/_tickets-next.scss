@@ -1017,6 +1017,39 @@ body:has(.wcblr-tixn) .wp-site-blocks > main {
 	}
 }
 
+/* The cards were 110px tall for one line of question (Arun, 20 Oct): the
+   kept markup carries 24/28px of inline padding and an 18px serif. Tighter. */
+.wcblr-tixn .wcblr-faqgrid .wp-block-accordion-item {
+	padding: 15px 20px !important;
+	border-radius: 14px !important;
+}
+
+.wcblr-tixn .wcblr-faqgrid h3.wp-block-accordion-heading {
+	margin: 0 !important;
+	font-size: 16px !important;
+	line-height: 1.35 !important;
+}
+
+.wcblr-tixn .wcblr-faqgrid .wp-block-accordion-heading__toggle {
+	padding: 0 !important;
+	min-height: 0 !important;
+}
+
+.wcblr-tixn .wcblr-faqgrid .wp-block-accordion-panel {
+	padding-top: 10px !important;
+	font-size: 14.5px !important;
+}
+
+.wcblr-tixn .wcblr-faqgrid .wcblr-faq-ask {
+	padding: 13px 20px !important;
+}
+
+.wcblr-tixn .wcblr-tixn-faqcol,
+.wcblr-tixn .wcblr-tixn-faqcol > .wp-block-accordion,
+.wcblr-tixn.wcblr-guide .wcblr-faqgrid {
+	gap: 8px !important;
+}
+
 /* ---- 6b. FAQ: two independent columns ------------------------------------------------- */
 
 .wcblr-tixn.wcblr-guide .wcblr-faqgrid {
@@ -1027,6 +1060,7 @@ body:has(.wcblr-tixn) .wp-site-blocks > main {
 }
 
 .wcblr-tixn .wcblr-tixn-faqcol {
+	margin: 0 !important;
 	display: flex !important;
 	flex-direction: column;
 	gap: 12px;
@@ -1050,7 +1084,8 @@ body:has(.wcblr-tixn) .wp-site-blocks > main {
 	.wcblr-tixn.wcblr-guide .wcblr-faqgrid {
 		display: flex !important;
 		flex-direction: column;
-		gap: 10px;
+		align-items: stretch !important;
+		gap: 8px !important;
 	}
 
 	.wcblr-tixn .wcblr-tixn-faqcol,
