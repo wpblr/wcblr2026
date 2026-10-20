@@ -305,21 +305,12 @@ body:has(.wcblr-tixn) .wp-site-blocks > main {
 	background: #fff;
 }
 
-.wcblr-tixn .wcblr-tixn-tile:nth-child(3) {
-	background: $tn-espresso;
-	color: $tn-cream;
-}
-
 .wcblr-tixn p.wcblr-tixn-tile-i {
 	font-family: $tn-serif !important;
 	font-size: 34px !important;
 	font-weight: 300;
 	line-height: 1 !important;
 	color: $tn-red;
-}
-
-.wcblr-tixn .wcblr-tixn-tile:nth-child(3) p.wcblr-tixn-tile-i {
-	color: $tn-gold;
 }
 
 .wcblr-tixn h3.wcblr-tixn-tile-t {
@@ -340,10 +331,6 @@ body:has(.wcblr-tixn) .wp-site-blocks > main {
 	color: $tn-soft;
 }
 
-.wcblr-tixn .wcblr-tixn-tile:nth-child(3) p.wcblr-tixn-tile-b {
-	color: rgba(242, 236, 224, 0.72);
-}
-
 .wcblr-tixn p.wcblr-tixn-foot {
 	margin-top: 18px !important;
 	max-width: 80ch !important;
@@ -354,10 +341,41 @@ body:has(.wcblr-tixn) .wp-site-blocks > main {
 
 /* ---- 4. The weekend --------------------------------------------------------------------- */
 
+/* Sunday leads, wide; Saturday and what to bring stack beside it, compact.
+   Contributor Day has a limited sign-up, so it is stated, not sold (20 Oct). */
 .wcblr-tixn .wcblr-tixn-days {
 	display: grid !important;
-	grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+	grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
 	gap: 14px;
+	align-items: start;
+}
+
+.wcblr-tixn .wcblr-tixn-side {
+	display: flex !important;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.wcblr-tixn .wcblr-tixn-day.is-sat {
+	padding: 24px 26px !important;
+	border-radius: 22px;
+	background: transparent;
+	box-shadow: inset 0 0 0 1.5px $tn-rule;
+}
+
+.wcblr-tixn .is-sat p.wcblr-tixn-day-tag {
+	margin-top: 0 !important;
+	color: $tn-muted;
+}
+
+.wcblr-tixn .is-sat h3.wcblr-tixn-day-t {
+	font-size: 24px !important;
+}
+
+.wcblr-tixn .is-sat p.wcblr-tixn-day-b {
+	margin-top: 8px !important;
+	font-size: 14.5px !important;
+	color: $tn-muted;
 }
 
 .wcblr-tixn .wcblr-tixn-day {
@@ -590,10 +608,9 @@ body:has(.wcblr-tixn) .wp-site-blocks > main {
 /* What to bring: one strip, three items. */
 .wcblr-tixn .wcblr-tixn-bring {
 	display: grid !important;
-	grid-template-columns: auto repeat(3, minmax(0, 1fr));
+	grid-template-columns: 1fr;
 	gap: 0;
 	align-items: stretch;
-	margin-top: 14px !important;
 	border-radius: 22px;
 	background: $tn-paper;
 	overflow: hidden;
@@ -602,7 +619,7 @@ body:has(.wcblr-tixn) .wp-site-blocks > main {
 .wcblr-tixn p.wcblr-tixn-bring-k {
 	display: flex !important;
 	align-items: center;
-	padding: 22px 26px;
+	padding: 14px 24px;
 	background: $tn-gold;
 	color: $tn-espresso;
 	font-family: $tn-mono !important;
@@ -633,7 +650,7 @@ body:has(.wcblr-tixn) .wp-site-blocks > main {
 }
 
 .wcblr-tixn p.wcblr-tixn-bring-i + p.wcblr-tixn-bring-i {
-	box-shadow: inset 1px 0 0 $tn-rule;
+	box-shadow: inset 0 1px 0 $tn-rule;
 }
 
 /* ---- 5. Ticket types ---------------------------------------------------------------------- */
