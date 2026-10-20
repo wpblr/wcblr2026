@@ -52,6 +52,12 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 	background-color: $sch-cream !important;
 }
 
+/* The template's ghost "26" numeral sits behind the hero copy; this page has its own. */
+body:has(.wcblr-sch) main::before,
+body:has(.wcblr-sch) main::after {
+	display: none !important;
+}
+
 .entry-content:has(> .wcblr-sch) {
 	padding-left: 0 !important;
 	padding-right: 0 !important;
@@ -81,12 +87,18 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 	text-decoration: none;
 }
 
-/* ---- 3. Hero ------------------------------------------------------------------ */
+/* ---- 2. Hero ------------------------------------------------------------------
+   Fourth round: "the hero is somewhat disconnected ... we want the entire
+   room to feel connected." No separate ticket card any more. The hero is the
+   top of the same three-column grid the day uses: the title over the time
+   column and the first room, the practical facts over the second room, and
+   it runs straight into the bar that carries the filters and the room
+   names, which then sticks while the day scrolls under it. */
 
 .wcblr-sch-hero {
 	display: grid !important;
-	grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
-	gap: clamp(32px, 4vw, 72px);
+	grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+	gap: clamp(28px, 4vw, 72px);
 	align-items: end;
 }
 
@@ -102,15 +114,15 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 .wcblr-sch-h1 {
 	margin-top: clamp(14px, 1.4vw, 22px) !important;
 	font-family: $sch-serif !important;
-	font-size: clamp(64px, 1.6rem + 7.4vw, 152px) !important;
+	font-size: clamp(68px, 1.6rem + 8vw, 168px) !important;
 	font-weight: 400 !important;
-	line-height: 0.84 !important;
-	letter-spacing: -0.055em !important;
+	line-height: 0.82 !important;
+	letter-spacing: -0.06em !important;
 	color: $sch-ink;
 }
 
 .wcblr-sch-sub {
-	margin-top: clamp(14px, 1.2vw, 22px) !important;
+	margin-top: clamp(16px, 1.4vw, 24px) !important;
 	font-family: $sch-serif !important;
 	font-size: clamp(26px, 1rem + 2vw, 44px) !important;
 	line-height: 1.1 !important;
@@ -123,250 +135,232 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 	}
 }
 
+.wcblr-sch-facts {
+	padding-bottom: 6px;
+}
+
 .wcblr-sch-lead {
-	margin-top: 18px !important;
-	max-width: 56ch !important;
+	max-width: 44ch !important;
 	font-size: 17px !important;
 	line-height: 1.6 !important;
 	color: $sch-soft;
 }
 
-/* The day in four numbers, the home page's "by the numbers" in miniature. */
-.wcblr-sch-stats {
-	display: grid !important;
-	grid-template-columns: repeat(4, minmax(0, 1fr));
-	margin-top: 32px !important;
-	box-shadow: 0 -1px 0 rgba(42, 29, 20, 0.14);
-}
+.wcblr-sch-where {
+	margin-top: 18px !important;
+	line-height: 1.5 !important;
+	font-size: 15px !important;
+	font-weight: 600;
+	color: $sch-ink;
 
-.wcblr-sch-stat {
-	display: flex !important;
-	flex-direction: column;
-	gap: 6px;
-	padding: 18px 16px 0 0;
+	a {
+		box-shadow: inset 0 -1px 0 rgba(42, 29, 20, 0.3);
+		transition: box-shadow 0.2s $sch-ease, color 0.2s $sch-ease;
+	}
 
-	strong {
-		font-family: $sch-serif;
-		font-size: clamp(34px, 1.2rem + 1.6vw, 48px);
-		font-weight: 400;
-		line-height: 1;
-		letter-spacing: -0.04em;
-		color: $sch-ink;
+	a:hover {
+		color: $sch-red;
+		box-shadow: inset 0 -1px 0 $sch-red;
 	}
 
 	span {
+		display: block;
+		margin-top: 4px;
 		font-family: $sch-mono;
-		font-size: 10.5px;
-		font-weight: 600;
-		letter-spacing: 0.12em;
+		font-size: 11px;
+		font-weight: 500;
+		letter-spacing: 0.1em;
 		text-transform: uppercase;
 		color: $sch-muted;
 	}
 }
 
-.wcblr-sch-stat.is-lightning strong { color: $sch-gold-deep; }
-.wcblr-sch-stat.is-panel strong { color: $sch-red; }
-.wcblr-sch-stat.is-workshop strong { color: $sch-green; }
-
-/* The day pass: the home page's dark ticket, re-cut for one day. */
-.wcblr-sch-ticket {
-	position: relative;
-	padding: 26px 26px 24px !important;
-	border-radius: 24px;
-	background: $sch-espresso;
-	color: $sch-cream;
-	box-shadow: 0 30px 60px -32px rgba(36, 26, 18, 0.65);
-	overflow: hidden;
-	transition: transform 0.6s $sch-spring;
-}
-
-.wcblr-sch-ticket::before {
-	content: "";
-	position: absolute;
-	right: -110px;
-	top: -130px;
-	width: 300px;
-	height: 300px;
-	border-radius: 50%;
-	background: radial-gradient(closest-side, rgba(224, 165, 38, 0.22), rgba(224, 165, 38, 0));
-	pointer-events: none;
-}
-
-.wcblr-sch-ticket:hover {
-	transform: translateY(-4px);
-}
-
-.wcblr-sch-ticket-top,
-.wcblr-sch-ticket-hours {
-	display: flex !important;
-	justify-content: space-between;
-	font-family: $sch-mono !important;
-	font-size: 10.5px !important;
-	font-weight: 600;
-	letter-spacing: 0.14em;
-	text-transform: uppercase;
-}
-
-.wcblr-sch-ticket-top { color: $sch-gold; }
-.wcblr-sch-ticket-top span + span { color: rgba(242, 236, 224, 0.55); }
-
-.wcblr-sch-ticket-day {
-	display: flex !important;
-	gap: 16px;
-	align-items: center;
+.wcblr-sch-cta {
 	margin-top: 22px !important;
 }
 
-.wcblr-sch-date {
-	display: flex !important;
-	flex-direction: column;
+.wcblr-sch-cta .wp-block-button__link {
+	display: inline-flex;
 	align-items: center;
-	justify-content: center;
-	width: 64px;
-	height: 72px;
-	flex: 0 0 auto;
-	border-radius: 14px;
-	background: $sch-cream;
-	color: $sch-ink;
-	font-family: $sch-mono !important;
-	font-size: 10px !important;
-	letter-spacing: 0.12em;
-	text-transform: uppercase;
-	line-height: 1.2 !important;
-
-	strong {
-		font-family: $sch-serif;
-		font-size: 30px;
-		font-weight: 500;
-		letter-spacing: -0.02em;
-		line-height: 1;
-	}
-}
-
-.wcblr-sch-ticket-name {
-	font-family: $sch-serif !important;
-	font-size: 26px !important;
-	line-height: 1.1 !important;
-}
-
-.wcblr-sch-ticket-venue {
-	margin-top: 6px !important;
-	font-size: 14px !important;
-	color: rgba(242, 236, 224, 0.7);
-
-	a {
-		box-shadow: inset 0 -1px 0 rgba(242, 236, 224, 0.35);
-		transition: color 0.2s $sch-ease;
-	}
-
-	a:hover {
-		color: $sch-gold;
-	}
-}
-
-.wcblr-sch-ticket-rooms {
-	display: grid !important;
-	grid-template-columns: 1fr 1fr;
-	gap: 8px;
-	margin-top: 22px !important;
-}
-
-.wcblr-sch-troom {
-	display: flex !important;
-	flex-direction: column;
-	gap: 2px;
-	padding: 12px 14px;
-	border-radius: 14px;
-	background: rgba(242, 236, 224, 0.07);
-
-	strong {
-		font-size: 15px;
-		font-weight: 600;
-	}
-
-	span {
-		font-family: $sch-mono;
-		font-size: 10px;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: rgba(242, 236, 224, 0.55);
-	}
-}
-
-.wcblr-sch-ticket-hours {
-	margin-top: 18px !important;
-	color: rgba(242, 236, 224, 0.6);
-}
-
-.wcblr-sch-ticket-cta {
-	margin-top: 18px !important;
-}
-
-.wcblr-sch-ticket-cta .wp-block-buttons,
-.wcblr-sch-ticket-cta .wp-block-button {
-	width: 100%;
-	margin: 0 !important;
-}
-
-.wcblr-sch-ticket-cta .wp-block-button__link {
-	display: block;
-	width: 100%;
-	padding: 14px 18px !important;
-	border-radius: 12px !important;
+	gap: 10px;
+	padding: 14px 24px !important;
+	border-radius: 999px !important;
 	background: $sch-red !important;
 	color: #fff !important;
 	font-family: $sch-sans !important;
 	font-size: 15px !important;
 	font-weight: 600 !important;
-	text-align: center;
-	transition: background 0.2s $sch-ease;
+	transition: background 0.2s $sch-ease, transform 0.4s $sch-spring;
 }
 
-.wcblr-sch-ticket-cta .wp-block-button__link:hover {
+.wcblr-sch-cta .wp-block-button__link::after {
+	content: "\2192";
+	transition: transform 0.4s $sch-spring;
+}
+
+.wcblr-sch-cta .wp-block-button__link:hover {
 	background: #a82a3e !important;
+	transform: translateY(-2px);
 }
 
-/* ---- 4. Jump links ------------------------------------------------------------ */
+.wcblr-sch-cta .wp-block-button__link:hover::after {
+	transform: translateX(4px);
+}
 
-/* One segmented bar rather than loose pills. */
-.wcblr-sch-jump {
-	display: inline-flex !important;
+/* ---- 3. The bar: filters and rooms, sticky ------------------------------------ */
+
+.wcblr-sch-bar {
+	position: sticky;
+	top: 80px;
+	z-index: 6;
+	margin-top: clamp(40px, 4vw, 72px) !important;
+	padding: 14px 0 0 !important;
+	background: rgba(242, 236, 224, 0.94);
+	backdrop-filter: blur(14px);
+	box-shadow: 0 1px 0 $sch-rule;
+}
+
+/* The filters: one control, each option a button with its count. */
+.wcblr-sch-filter {
+	display: flex !important;
 	flex-wrap: wrap;
-	gap: 4px;
-	margin-top: clamp(48px, 5vw, 88px) !important;
-	padding: 5px;
-	border-radius: 999px;
-	background: rgba(42, 29, 20, 0.06);
+	gap: 6px;
 
 	a {
 		display: inline-flex;
-		align-items: baseline;
+		align-items: center;
 		gap: 10px;
-		padding: 11px 20px;
+		padding: 10px 14px 10px 18px;
 		border-radius: 999px;
-		font-size: 15px;
+		background: $sch-paper;
+		box-shadow: 0 1px 2px rgba(42, 29, 20, 0.06), 0 8px 18px -14px rgba(42, 29, 20, 0.5);
+		font-size: 14.5px;
 		font-weight: 600;
-		color: $sch-soft;
-		transition: background 0.2s $sch-ease, color 0.2s $sch-ease;
+		color: $sch-ink;
+		cursor: pointer;
+		transition: background 0.25s $sch-ease, color 0.25s $sch-ease, transform 0.4s $sch-spring, box-shadow 0.25s $sch-ease;
 	}
 
 	a span {
+		min-width: 26px;
+		padding: 3px 8px;
+		border-radius: 999px;
+		background: rgba(42, 29, 20, 0.07);
 		font-family: $sch-mono;
-		font-size: 11px;
+		font-size: 11.5px;
 		font-weight: 600;
-		letter-spacing: 0.06em;
-		color: $sch-muted;
+		text-align: center;
+		transition: background 0.25s $sch-ease, color 0.25s $sch-ease;
 	}
+
+	a.is-lightning span { background: rgba(224, 165, 38, 0.24); color: #7d5a0c; }
+	a.is-panel span { background: rgba(200, 52, 75, 0.14); color: #9c2438; }
+	a.is-workshop span { background: rgba(19, 100, 81, 0.14); color: $sch-green; }
 
 	a:hover {
-		background: $sch-paper;
-		color: $sch-ink;
-		box-shadow: 0 6px 16px -10px rgba(42, 29, 20, 0.4);
+		transform: translateY(-2px);
+		box-shadow: 0 1px 2px rgba(42, 29, 20, 0.06), 0 14px 24px -16px rgba(42, 29, 20, 0.55);
 	}
 
-	a:hover span {
-		color: $sch-gold-deep;
+	a:active {
+		transform: translateY(0) scale(0.97);
 	}
+}
+
+/* The room names sit on the day's own columns. */
+.wcblr-sch-bar-rooms {
+	display: grid !important;
+	grid-template-columns: $sch-timecol minmax(0, 1fr) minmax(0, 1fr);
+	column-gap: clamp(14px, 1.6vw, 24px);
+	align-items: end;
+	margin-top: 14px !important;
+	padding-bottom: 14px;
+}
+
+.wcblr-sch-bar-time {
+	font-family: $sch-mono !important;
+	font-size: 11px !important;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: $sch-muted;
+}
+
+.wcblr-sch-bar-room {
+	display: flex !important;
+	align-items: baseline;
+	flex-wrap: wrap;
+	column-gap: 12px;
+
+	strong {
+		font-family: $sch-serif;
+		font-size: clamp(22px, 1rem + 0.8vw, 30px);
+		font-weight: 400;
+		letter-spacing: -0.02em;
+		line-height: 1;
+		color: $sch-ink;
+	}
+
+	span {
+		font-size: 13.5px;
+		color: $sch-muted;
+	}
+}
+
+/* ---- 4. Filtering, with no script --------------------------------------------
+   Each filter links to an empty anchor pinned to the viewport, so following
+   it changes :target without scrolling. Whatever does not match fades back
+   and steps down; the match stays exactly where it was, so the eye keeps its
+   place in the day. */
+
+.wcblr-sch-f {
+	position: fixed !important;
+	top: 0;
+	left: 0;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	pointer-events: none;
+}
+
+.wcblr-sch-card,
+.wcblr-sch-quiet {
+	transition: opacity 0.45s $sch-ease, filter 0.45s $sch-ease, transform 0.5s $sch-spring, background 0.25s $sch-ease, box-shadow 0.3s $sch-ease;
+}
+
+.wcblr-sch:has(#f-talk:target) .wcblr-sch-card:not(.is-talk),
+.wcblr-sch:has(#f-talk:target) .wcblr-sch-quiet,
+.wcblr-sch:has(#f-lightning:target) .wcblr-sch-card:not(.is-lightning),
+.wcblr-sch:has(#f-lightning:target) .wcblr-sch-quiet,
+.wcblr-sch:has(#f-panel:target) .wcblr-sch-card:not(.is-panel),
+.wcblr-sch:has(#f-panel:target) .wcblr-sch-quiet,
+.wcblr-sch:has(#f-workshop:target) .wcblr-sch-card:not(.is-workshop),
+.wcblr-sch:has(#f-workshop:target) .wcblr-sch-quiet {
+	opacity: 0.2;
+	filter: grayscale(1);
+	transform: scale(0.98);
+	pointer-events: none;
+}
+
+/* The active filter: filled dark. "Everything" is active until another is chosen. */
+.wcblr-sch:not(:has(.wcblr-sch-f:target)) .wcblr-sch-filter a.is-all,
+.wcblr-sch:has(#f-all:target) .wcblr-sch-filter a.is-all,
+.wcblr-sch:has(#f-talk:target) .wcblr-sch-filter a.is-talk,
+.wcblr-sch:has(#f-lightning:target) .wcblr-sch-filter a.is-lightning,
+.wcblr-sch:has(#f-panel:target) .wcblr-sch-filter a.is-panel,
+.wcblr-sch:has(#f-workshop:target) .wcblr-sch-filter a.is-workshop {
+	background: $sch-espresso;
+	color: $sch-cream;
+	box-shadow: 0 12px 24px -14px rgba(36, 26, 18, 0.7);
+}
+
+.wcblr-sch:not(:has(.wcblr-sch-f:target)) .wcblr-sch-filter a.is-all span,
+.wcblr-sch:has(#f-all:target) .wcblr-sch-filter a.is-all span,
+.wcblr-sch:has(#f-talk:target) .wcblr-sch-filter a.is-talk span,
+.wcblr-sch:has(#f-lightning:target) .wcblr-sch-filter a.is-lightning span,
+.wcblr-sch:has(#f-panel:target) .wcblr-sch-filter a.is-panel span,
+.wcblr-sch:has(#f-workshop:target) .wcblr-sch-filter a.is-workshop span {
+	background: rgba(242, 236, 224, 0.16);
+	color: $sch-cream;
 }
 
 /* ---- 5. The day grid ----------------------------------------------------------
@@ -384,7 +378,6 @@ $sch-gap: 12px;
 	margin-top: 28px !important;
 }
 
-.wcblr-sch-head,
 .wcblr-sch-block,
 .wcblr-sch-break {
 	display: grid !important;
@@ -392,54 +385,11 @@ $sch-gap: 12px;
 	column-gap: clamp(14px, 1.6vw, 24px);
 }
 
-/* Room names stay pinned under the floating header while the day scrolls. */
-.wcblr-sch-head {
-	position: sticky;
-	top: 84px;
-	z-index: 5;
-	align-items: end;
-	padding: 18px 0 16px !important;
-	background: rgba(242, 236, 224, 0.92);
-	backdrop-filter: blur(12px);
-	box-shadow: 0 1px 0 $sch-rule;
-}
-
-.wcblr-sch-head-time {
-	font-family: $sch-mono !important;
-	font-size: 11px !important;
-	letter-spacing: 0.12em;
-	text-transform: uppercase;
-	color: $sch-muted;
-}
-
-.wcblr-sch-head-room {
-	display: flex !important;
-	align-items: baseline;
-	gap: 12px;
-
-	strong {
-		font-family: $sch-serif;
-		font-size: clamp(22px, 1rem + 0.8vw, 30px);
-		font-weight: 400;
-		letter-spacing: -0.02em;
-		line-height: 1;
-		color: $sch-ink;
-	}
-
-	span {
-		font-family: $sch-mono;
-		font-size: 11px;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: $sch-muted;
-	}
-}
-
 .wcblr-sch-block {
 	row-gap: $sch-gap;
 	padding: 28px 0 !important;
 	box-shadow: 0 1px 0 $sch-rule;
-	scroll-margin-top: 160px;
+	scroll-margin-top: 200px;
 }
 
 @for $n from 1 through 8 {
@@ -459,7 +409,7 @@ $sch-gap: 12px;
 
 .wcblr-sch-time > * {
 	position: sticky;
-	top: 168px;
+	top: 196px;
 }
 
 .wcblr-sch-start {
@@ -473,7 +423,7 @@ $sch-gap: 12px;
 }
 
 .wcblr-sch-dur {
-	top: 222px !important;
+	top: 250px !important;
 	margin-top: 10px !important;
 	font-family: $sch-mono !important;
 	font-size: 10.5px !important;
@@ -615,32 +565,6 @@ $sch-gap: 12px;
 	letter-spacing: -0.025em !important;
 }
 
-.wcblr-sch-people {
-	display: flex !important;
-	flex-wrap: wrap;
-	gap: 6px;
-	margin-top: auto !important;
-	padding-top: 18px;
-	position: relative;
-	z-index: 1;
-}
-
-.wcblr-sch-chip {
-	padding: 7px 13px;
-	border-radius: 999px;
-	background: rgba(251, 248, 241, 0.9);
-	font-size: 13.5px !important;
-	font-weight: 500;
-	line-height: 1.3 !important;
-	color: $sch-ink;
-}
-
-.wcblr-sch-chip.is-tbc {
-	background: rgba(42, 29, 20, 0.06);
-	color: $sch-muted;
-	font-style: italic;
-}
-
 /* A slot nobody holds yet. */
 .wcblr-sch-card.is-tba {
 	background: rgba(42, 29, 20, 0.035);
@@ -657,7 +581,7 @@ $sch-gap: 12px;
 	align-items: baseline;
 	padding: 18px 0 !important;
 	box-shadow: 0 1px 0 $sch-rule;
-	scroll-margin-top: 160px;
+	scroll-margin-top: 200px;
 }
 
 .wcblr-sch-bt {
@@ -717,23 +641,198 @@ $sch-gap: 12px;
 	text-align: center;
 }
 
-/* ---- 8. Tablet: the ticket under the intro ----------------------------------- */
+/* ---- 7. People ------------------------------------------------------------------
+   Fourth round: "make those pills better designed so that they can represent
+   the speakers". Every speaker is a face and a name, linked to their speaker
+   page. A talk lists them under the title; a panel or the workshop lines its
+   cast up as face chips. A seat still open is an empty face with a "+". */
+
+.wcblr-sch-who,
+.wcblr-sch-cast {
+	position: relative;
+	z-index: 1;
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 6px 14px;
+	margin-top: auto !important;
+	padding-top: 14px;
+}
+
+.wcblr-sch-person {
+	display: inline-flex;
+	align-items: center;
+	gap: 9px;
+	min-width: 0;
+	font-size: 14.5px;
+	font-weight: 500;
+	line-height: 1.25;
+	color: $sch-soft;
+}
+
+.wcblr-sch-face {
+	flex: 0 0 auto;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	object-fit: cover;
+	background: rgba(42, 29, 20, 0.08);
+	box-shadow: 0 0 0 2px $sch-paper;
+	transition: transform 0.45s $sch-spring;
+}
+
+.wcblr-sch-face.is-initials {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: $sch-espresso;
+	color: $sch-gold;
+	font-family: $sch-mono;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+}
+
+.wcblr-sch-name {
+	display: flex;
+	flex-direction: column;
+}
+
+.wcblr-sch-role {
+	font-size: 12.5px;
+	font-weight: 400;
+	color: $sch-muted;
+}
+
+a.wcblr-sch-person:hover {
+	color: $sch-ink;
+}
+
+a.wcblr-sch-person:hover .wcblr-sch-face {
+	transform: scale(1.12);
+}
+
+.wcblr-sch-card.is-lightning .wcblr-sch-who {
+	padding-top: 10px;
+}
+
+.wcblr-sch-card.is-lightning .wcblr-sch-face {
+	width: 26px;
+	height: 26px;
+}
+
+.wcblr-sch-card.is-lightning .wcblr-sch-person {
+	font-size: 14px;
+}
+
+/* The cast of a panel or the workshop: face chips. */
+.wcblr-sch-cast {
+	gap: 6px;
+	padding-top: 20px;
+}
+
+.wcblr-sch-cast .wcblr-sch-person {
+	padding: 4px 14px 4px 4px;
+	border-radius: 999px;
+	background: rgba(251, 248, 241, 0.92);
+	font-size: 13.5px;
+	color: $sch-ink;
+	transition: transform 0.4s $sch-spring, box-shadow 0.25s $sch-ease, background 0.2s $sch-ease;
+}
+
+.wcblr-sch-cast .wcblr-sch-face {
+	width: 32px;
+	height: 32px;
+	box-shadow: none;
+}
+
+.wcblr-sch-cast a.wcblr-sch-person:hover {
+	transform: translateY(-2px);
+	background: #fff;
+	box-shadow: 0 10px 20px -14px rgba(42, 29, 20, 0.5);
+}
+
+.wcblr-sch-person.is-tbc {
+	background: rgba(42, 29, 20, 0.05);
+	color: $sch-muted;
+	font-style: italic;
+}
+
+.wcblr-sch-person.is-tbc .wcblr-sch-face {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(42, 29, 20, 0.08);
+	color: $sch-muted;
+	font-family: $sch-sans;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 500;
+}
+
+/* ---- 8. Motion -------------------------------------------------------------------
+   On load, the opening screen only (references/motion.md): the title rises
+   (transform only, it is the LCP), then the sentence, the facts, the bar and
+   the first rows of the day arrive on the home page's easing. Everything
+   further down moves only under the reader's hand: lifts, faces, filters.
+   Gated on no-preference, so reduced motion gets the still page. */
+
+@keyframes wcblr-sch-rise {
+	from { transform: translateY(28px); }
+	to { transform: none; }
+}
+
+@keyframes wcblr-sch-in {
+	from { opacity: 0; transform: translateY(18px); }
+	to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-sch-h1 {
+		animation: wcblr-sch-rise 1s $sch-ease both;
+	}
+
+	.wcblr-sch-kicker { animation: wcblr-sch-in 0.7s $sch-ease 0.05s both; }
+	.wcblr-sch-sub { animation: wcblr-sch-in 0.8s $sch-ease 0.18s both; }
+	.wcblr-sch-facts { animation: wcblr-sch-in 0.8s $sch-ease 0.32s both; }
+	.wcblr-sch-bar { animation: wcblr-sch-in 0.8s $sch-ease 0.46s both; }
+	.wcblr-sch-day > :nth-child(1) { animation: wcblr-sch-in 0.7s $sch-ease 0.6s both; }
+	.wcblr-sch-day > :nth-child(2) { animation: wcblr-sch-in 0.7s $sch-ease 0.7s both; }
+	.wcblr-sch-day > :nth-child(3) { animation: wcblr-sch-in 0.7s $sch-ease 0.8s both; }
+}
+
+/* ---- 9. Tablet: the facts under the title ------------------------------------ */
 
 @media (max-width: 1023px) {
 	.wcblr-sch-hero {
 		grid-template-columns: 1fr;
 		align-items: start;
 	}
-
-	.wcblr-sch-ticket {
-		max-width: 460px;
-	}
 }
 
-/* ---- 9. Phones: one column, in source order ---------------------------------- */
+/* ---- 10. Phones: one column, in source order --------------------------------- */
 
 @media (max-width: 781px) {
-	.wcblr-sch-head {
+	.wcblr-sch-bar {
+		top: 60px;
+		padding-top: 10px !important;
+		padding-bottom: 10px !important;
+	}
+
+	/* The filters scroll sideways rather than wrapping into a tall bar. */
+	.wcblr-sch-filter {
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		scrollbar-width: none;
+		margin-left: calc(#{$sch-gutter} * -1) !important;
+		margin-right: calc(#{$sch-gutter} * -1) !important;
+		padding: 2px #{$sch-gutter} 8px;
+	}
+
+	.wcblr-sch-filter a {
+		flex: 0 0 auto;
+	}
+
+	.wcblr-sch-bar-rooms {
 		display: none !important;
 	}
 
@@ -784,15 +883,5 @@ $sch-gap: 12px;
 		grid-column: 2;
 		flex-wrap: wrap;
 		row-gap: 4px;
-	}
-
-	.wcblr-sch-stats {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		row-gap: 6px;
-	}
-
-	.wcblr-sch-jump a {
-		padding: 10px 15px;
-		font-size: 14px;
 	}
 }
