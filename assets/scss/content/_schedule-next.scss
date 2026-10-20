@@ -1028,12 +1028,15 @@ a.wcblr-sch-person:hover .wcblr-sch-face {
 	transform: scale(1.1);
 }
 
-.wcblr-sch-fav .fav-session-button[aria-pressed="true"] {
+/* Keyed on the class WordCamp's script toggles on the span, not on
+   aria-pressed: live's content filter strips aria-pressed from saved markup, so
+   the script's first toggle would read it as missing and set it the wrong way. */
+.wcblr-sch-fav.wcb-favourite-session .fav-session-button {
 	color: $sch-gold;
 	animation: wcblr-sch-pop 0.5s $sch-spring;
 }
 
-.wcblr-sch-fav .fav-session-button[aria-pressed="true"]::before {
+.wcblr-sch-fav.wcb-favourite-session .fav-session-button::before {
 	content: "\2605";
 }
 
