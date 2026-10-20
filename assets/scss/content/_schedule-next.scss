@@ -5,7 +5,7 @@
    plain name set huge, mono labels, the dark ticket card.
 
    Second round, same day: "all these dashes and dots are kind of seeming
-   weird", so there are none. No dashed rules, no format dots or diamonds,
+   weird", so there are none. Third round: cards sit on a time-scaled grid. No dashed rules, no format dots or diamonds,
    no ticket perforations, no dashed chips. A format is a filled tag; a break
    is a quiet row; the only lines are solid hairlines between time blocks.
    No session is billed as a keynote.
@@ -81,28 +81,6 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 	text-decoration: none;
 }
 
-/* ---- 2. Format tags, shared by the legend and the cards --------------------- */
-
-.wcblr-sch-tag,
-.wcblr-sch-key {
-	display: inline-flex;
-	align-items: center;
-	border-radius: 999px;
-	font-family: $sch-mono;
-	font-weight: 600;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	background: rgba(42, 29, 20, 0.07);
-	color: $sch-ink;
-}
-
-.is-lightning .wcblr-sch-tag,
-.wcblr-sch-key.is-lightning { background: rgba(224, 165, 38, 0.22); color: #7d5a0c; }
-.is-panel .wcblr-sch-tag,
-.wcblr-sch-key.is-panel { background: rgba(200, 52, 75, 0.14); color: #9c2438; }
-.is-workshop .wcblr-sch-tag,
-.wcblr-sch-key.is-workshop { background: rgba(19, 100, 81, 0.14); color: $sch-green; }
-
 /* ---- 3. Hero ------------------------------------------------------------------ */
 
 .wcblr-sch-hero {
@@ -153,26 +131,42 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 	color: $sch-soft;
 }
 
-.wcblr-sch-legend {
-	display: flex !important;
-	flex-wrap: wrap;
-	gap: 8px;
-	margin-top: 28px !important;
+/* The day in four numbers, the home page's "by the numbers" in miniature. */
+.wcblr-sch-stats {
+	display: grid !important;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	margin-top: 32px !important;
+	box-shadow: 0 -1px 0 rgba(42, 29, 20, 0.14);
 }
 
-.wcblr-sch-key {
-	gap: 8px;
-	padding: 9px 15px;
-	font-size: 11.5px !important;
+.wcblr-sch-stat {
+	display: flex !important;
+	flex-direction: column;
+	gap: 6px;
+	padding: 18px 16px 0 0;
 
 	strong {
 		font-family: $sch-serif;
-		font-size: 17px;
-		font-weight: 500;
-		letter-spacing: -0.01em;
-		text-transform: none;
+		font-size: clamp(34px, 1.2rem + 1.6vw, 48px);
+		font-weight: 400;
+		line-height: 1;
+		letter-spacing: -0.04em;
+		color: $sch-ink;
+	}
+
+	span {
+		font-family: $sch-mono;
+		font-size: 10.5px;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: $sch-muted;
 	}
 }
+
+.wcblr-sch-stat.is-lightning strong { color: $sch-gold-deep; }
+.wcblr-sch-stat.is-panel strong { color: $sch-red; }
+.wcblr-sch-stat.is-workshop strong { color: $sch-green; }
 
 /* The day pass: the home page's dark ticket, re-cut for one day. */
 .wcblr-sch-ticket {
@@ -334,22 +328,26 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 
 /* ---- 4. Jump links ------------------------------------------------------------ */
 
+/* One segmented bar rather than loose pills. */
 .wcblr-sch-jump {
-	display: flex !important;
+	display: inline-flex !important;
 	flex-wrap: wrap;
-	gap: 8px;
+	gap: 4px;
 	margin-top: clamp(48px, 5vw, 88px) !important;
+	padding: 5px;
+	border-radius: 999px;
+	background: rgba(42, 29, 20, 0.06);
 
 	a {
 		display: inline-flex;
 		align-items: baseline;
 		gap: 10px;
-		padding: 12px 20px;
+		padding: 11px 20px;
 		border-radius: 999px;
-		background: $sch-paper;
 		font-size: 15px;
 		font-weight: 600;
-		transition: transform 0.35s $sch-spring, background 0.2s $sch-ease, color 0.2s $sch-ease;
+		color: $sch-soft;
+		transition: background 0.2s $sch-ease, color 0.2s $sch-ease;
 	}
 
 	a span {
@@ -357,21 +355,30 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 		font-size: 11px;
 		font-weight: 600;
 		letter-spacing: 0.06em;
-		color: $sch-gold-deep;
+		color: $sch-muted;
 	}
 
 	a:hover {
-		transform: translateY(-2px);
-		background: $sch-espresso;
-		color: $sch-cream;
+		background: $sch-paper;
+		color: $sch-ink;
+		box-shadow: 0 6px 16px -10px rgba(42, 29, 20, 0.4);
 	}
 
 	a:hover span {
-		color: $sch-gold;
+		color: $sch-gold-deep;
 	}
 }
 
-/* ---- 5. The day grid ---------------------------------------------------------- */
+/* ---- 5. The day grid ----------------------------------------------------------
+   Third round, 20 Oct: "the 30-minute one is not coming properly in the 15
+   minutes". Each block is now its own time-scaled grid: one row per 15
+   minutes (wcblr-sch-nN sets N rows), every card placed by its start row
+   (wcblr-sch-rN) and length in rows (wcblr-sch-sN), both written by the
+   generator. Rows size to their content, so a 30 minute talk stretches to
+   exactly the height of the two lightning talks beside it, and a 60 minute
+   workshop to the two talks. */
+
+$sch-gap: 12px;
 
 .wcblr-sch-day {
 	margin-top: 28px !important;
@@ -391,8 +398,8 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 	top: 84px;
 	z-index: 5;
 	align-items: end;
-	padding: 16px 0 14px !important;
-	background: rgba(242, 236, 224, 0.9);
+	padding: 18px 0 16px !important;
+	background: rgba(242, 236, 224, 0.92);
 	backdrop-filter: blur(12px);
 	box-shadow: 0 1px 0 $sch-rule;
 }
@@ -429,16 +436,30 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 }
 
 .wcblr-sch-block {
-	padding: 30px 0 !important;
+	row-gap: $sch-gap;
+	padding: 28px 0 !important;
 	box-shadow: 0 1px 0 $sch-rule;
 	scroll-margin-top: 160px;
 }
 
-/* The start time rides down a long block, so it is never off screen. */
+@for $n from 1 through 8 {
+	.wcblr-sch-block.wcblr-sch-n#{$n} { grid-template-rows: repeat(#{$n}, auto); }
+	.wcblr-sch-block > .wcblr-sch-r#{$n} { grid-row-start: #{$n}; }
+	.wcblr-sch-block > .wcblr-sch-s#{$n} { grid-row-end: span #{$n}; }
+}
+
+.wcblr-sch-block > .is-main { grid-column: 2; }
+.wcblr-sch-block > .is-second { grid-column: 3; }
+
+/* The time column runs the block's full height; the start rides down with it. */
 .wcblr-sch-time {
+	grid-column: 1;
+	grid-row: 1 / -1;
+}
+
+.wcblr-sch-time > * {
 	position: sticky;
-	top: 160px;
-	align-self: start;
+	top: 168px;
 }
 
 .wcblr-sch-start {
@@ -452,75 +473,50 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 }
 
 .wcblr-sch-dur {
+	top: 222px !important;
 	margin-top: 10px !important;
 	font-family: $sch-mono !important;
 	font-size: 10.5px !important;
-	letter-spacing: 0.08em;
+	letter-spacing: 0.1em;
 	text-transform: uppercase;
 	color: $sch-muted;
 }
 
-.wcblr-sch-lane {
-	display: flex !important;
-	flex-direction: column;
-	gap: 10px;
-	min-width: 0;
-}
-
-/* Desktop prints the room once, in the sticky head; the lane label is for phones. */
+/* Desktop prints the room once, in the sticky head; these labels are for phones. */
 .wcblr-sch-room {
 	display: none;
 }
 
-/* A lane with nothing on: one quiet line. */
+/* A room with nothing on. */
 .wcblr-sch-quiet {
-	padding: 20px 22px;
+	display: flex !important;
+	align-items: center;
+	padding: 20px 24px;
 	border-radius: 20px;
 	background: rgba(42, 29, 20, 0.035);
 	font-size: 15px !important;
 	color: $sch-muted;
 }
 
-/* ---- 6. Cards ----------------------------------------------------------------- */
+/* ---- 6. Cards ------------------------------------------------------------------
+   One shape for everything: a time and a kind on top, the title, the people
+   pinned to the bottom so a stretched card still reads as one piece. */
 
 .wcblr-sch-card {
 	position: relative;
-	padding: 22px 24px 24px !important;
-	border-radius: 22px;
+	display: flex !important;
+	flex-direction: column;
+	min-height: 0;
+	padding: 20px 22px !important;
+	border-radius: 20px;
 	background: $sch-paper;
 	transition: transform 0.45s $sch-spring, background 0.25s $sch-ease, box-shadow 0.3s $sch-ease;
 }
 
 .wcblr-sch-card.is-link:hover {
-	transform: translateY(-3px);
+	transform: translateY(-2px);
 	background: #fff;
-	box-shadow: 0 24px 44px -30px rgba(42, 29, 20, 0.45);
-}
-
-/* An arrow that arrives on hover, top right. */
-.wcblr-sch-card.is-link::after {
-	content: "\2197";
-	position: absolute;
-	top: 18px;
-	right: 18px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 34px;
-	height: 34px;
-	border-radius: 50%;
-	background: $sch-espresso;
-	color: $sch-cream;
-	font-size: 15px;
-	opacity: 0;
-	transform: scale(0.6) rotate(-45deg);
-	transition: opacity 0.25s $sch-ease, transform 0.45s $sch-spring;
-	pointer-events: none;
-}
-
-.wcblr-sch-card.is-link:hover::after {
-	opacity: 1;
-	transform: none;
+	box-shadow: 0 22px 40px -28px rgba(42, 29, 20, 0.45);
 }
 
 /* The whole card is the link's target area. */
@@ -533,33 +529,41 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 
 .wcblr-sch-meta {
 	display: flex !important;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 8px;
-	padding-right: 40px;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 12px;
 	font-family: $sch-mono !important;
-	font-size: 10.5px !important;
-	font-weight: 600;
+	font-size: 11px !important;
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
-	color: $sch-muted;
-}
-
-.wcblr-sch-tag {
-	padding: 5px 10px;
-	font-size: 10px;
 }
 
 .wcblr-sch-at {
 	font-size: 13px;
+	font-weight: 700;
 	letter-spacing: 0.02em;
 	color: $sch-ink;
 }
 
+.wcblr-sch-kind {
+	font-weight: 600;
+	color: $sch-muted;
+
+	span {
+		margin-left: 10px;
+		font-weight: 400;
+		opacity: 0.8;
+	}
+}
+
+.is-lightning .wcblr-sch-kind { color: $sch-gold-deep; }
+.is-panel .wcblr-sch-kind { color: #9c2438; }
+.is-workshop .wcblr-sch-kind { color: $sch-green; }
+
 .wcblr-sch-title {
-	margin-top: 14px !important;
+	margin-top: 12px !important;
 	font-family: $sch-sans !important;
-	font-size: 19px !important;
+	font-size: 18.5px !important;
 	font-weight: 600 !important;
 	line-height: 1.3 !important;
 	letter-spacing: -0.012em !important;
@@ -568,51 +572,46 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 }
 
 .wcblr-sch-who {
-	margin-top: 8px !important;
+	margin-top: auto !important;
+	padding-top: 10px;
 	font-size: 14.5px !important;
-	line-height: 1.45 !important;
+	line-height: 1.4 !important;
 	color: $sch-soft;
 }
 
-/* Lightning talks: four to an hour, so a little tighter. */
 .wcblr-sch-card.is-lightning {
-	padding: 18px 20px 20px !important;
-	border-radius: 18px;
+	padding: 16px 20px !important;
+	border-radius: 16px;
 }
 
 .wcblr-sch-card.is-lightning .wcblr-sch-title {
-	margin-top: 10px !important;
-	font-size: 16.5px !important;
+	margin-top: 8px !important;
+	font-size: 16px !important;
 }
 
 .wcblr-sch-card.is-lightning .wcblr-sch-who {
-	margin-top: 5px !important;
+	padding-top: 6px;
 	font-size: 14px !important;
 }
 
 /* Panels and the workshop: tinted, a display title, their people as chips. */
 .wcblr-sch-card.is-panel,
 .wcblr-sch-card.is-workshop {
-	padding: 26px 26px 24px !important;
+	padding: 24px 26px !important;
 }
 
 .wcblr-sch-card.is-panel { background: #f5e1dd; }
 .wcblr-sch-card.is-workshop { background: #dbe9e2; }
-.wcblr-sch-card.is-panel.is-link:hover { background: #f8e7e3; }
-.wcblr-sch-card.is-workshop.is-link:hover { background: #e2eee8; }
-
-.wcblr-sch-card.is-panel .wcblr-sch-tag,
-.wcblr-sch-card.is-workshop .wcblr-sch-tag {
-	background: rgba(251, 248, 241, 0.75);
-}
+.wcblr-sch-card.is-panel.is-link:hover { background: #f8e8e4; }
+.wcblr-sch-card.is-workshop.is-link:hover { background: #e3efe9; }
 
 .wcblr-sch-card.is-panel .wcblr-sch-title,
 .wcblr-sch-card.is-workshop .wcblr-sch-title {
 	margin-top: 16px !important;
 	font-family: $sch-serif !important;
-	font-size: clamp(26px, 0.9rem + 1.2vw, 36px) !important;
+	font-size: clamp(26px, 0.9rem + 1.2vw, 38px) !important;
 	font-weight: 400 !important;
-	line-height: 1.05 !important;
+	line-height: 1.04 !important;
 	letter-spacing: -0.025em !important;
 }
 
@@ -620,7 +619,8 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 	display: flex !important;
 	flex-wrap: wrap;
 	gap: 6px;
-	margin-top: 18px !important;
+	margin-top: auto !important;
+	padding-top: 18px;
 	position: relative;
 	z-index: 1;
 }
@@ -655,7 +655,7 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 
 .wcblr-sch-break {
 	align-items: baseline;
-	padding: 20px 0 !important;
+	padding: 18px 0 !important;
 	box-shadow: 0 1px 0 $sch-rule;
 	scroll-margin-top: 160px;
 }
@@ -686,19 +686,14 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 		font-size: 10.5px;
 		font-style: normal;
 		font-weight: 600;
-		letter-spacing: 0.08em;
+		letter-spacing: 0.1em;
 		text-transform: uppercase;
 		color: $sch-muted;
 	}
 }
 
-.wcblr-sch-break.is-meal .wcblr-sch-break-label {
-	color: $sch-gold-deep;
-}
-
-.wcblr-sch-break.is-stage .wcblr-sch-break-label {
-	color: $sch-ink;
-}
+.wcblr-sch-break.is-meal .wcblr-sch-break-label { color: $sch-gold-deep; }
+.wcblr-sch-break.is-stage .wcblr-sch-break-label { color: $sch-ink; }
 
 .wcblr-sch-break.is-move {
 	padding: 12px 0 !important;
@@ -735,7 +730,7 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 	}
 }
 
-/* ---- 9. Phones: one column ----------------------------------------------------- */
+/* ---- 9. Phones: one column, in source order ---------------------------------- */
 
 @media (max-width: 781px) {
 	.wcblr-sch-head {
@@ -744,27 +739,34 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 
 	.wcblr-sch-block {
 		grid-template-columns: 1fr;
-		row-gap: 14px;
+		grid-template-rows: none !important;
+		row-gap: 10px;
 		padding: 26px 0 !important;
 	}
 
+	.wcblr-sch-block > * {
+		grid-column: 1 !important;
+		grid-row: auto !important;
+	}
+
 	.wcblr-sch-time {
-		position: static;
 		display: flex !important;
 		align-items: baseline;
 		gap: 12px;
+		margin-bottom: 4px !important;
+	}
+
+	.wcblr-sch-time > * {
+		position: static;
 	}
 
 	.wcblr-sch-dur {
 		margin-top: 0 !important;
 	}
 
-	.wcblr-sch-lane + .wcblr-sch-lane {
-		margin-top: 8px;
-	}
-
 	.wcblr-sch-room {
 		display: block !important;
+		margin-top: 8px !important;
 		font-family: $sch-mono !important;
 		font-size: 11px !important;
 		font-weight: 600;
@@ -784,16 +786,13 @@ body:has(.wcblr-sch) .wp-site-blocks > main {
 		row-gap: 4px;
 	}
 
+	.wcblr-sch-stats {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		row-gap: 6px;
+	}
+
 	.wcblr-sch-jump a {
 		padding: 10px 15px;
 		font-size: 14px;
-	}
-
-	.wcblr-sch-card.is-link::after {
-		display: none;
-	}
-
-	.wcblr-sch-meta {
-		padding-right: 0;
 	}
 }
