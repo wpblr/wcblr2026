@@ -505,6 +505,7 @@ body.home .wcblr-call .wcblr-call__img img {
 	width: 100% !important;
 	height: 100% !important;
 	object-fit: cover;
+	object-position: 50% 20%;
 }
 
 body.home .wcblr-call::after {
@@ -512,7 +513,9 @@ body.home .wcblr-call::after {
 	position: absolute;
 	inset: 0;
 	z-index: 1;
-	background: linear-gradient(to top, rgba(24, 16, 10, 0.92) 0%, rgba(24, 16, 10, 0.55) 34%, rgba(24, 16, 10, 0.05) 70%);
+	/* Deeper since 20 Oct: the booth photos that replaced the darker hall shots
+	   are bright, and the label and title sit about halfway up the tile. */
+	background: linear-gradient(to top, rgba(24, 16, 10, 0.95) 0%, rgba(24, 16, 10, 0.82) 42%, rgba(24, 16, 10, 0.3) 72%, rgba(24, 16, 10, 0.12) 100%);
 	pointer-events: none;
 }
 
