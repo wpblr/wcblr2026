@@ -216,10 +216,11 @@ body:has(.wcblr-sch) main::after {
 	margin-top: clamp(40px, 4vw, 72px) !important;
 	padding: 14px 0 0 !important;
 	background: $sch-cream;
-	/* The cream runs to the window's edges and up behind the floating header,
-	   so nothing scrolling under the bar peeks out above or beside it. */
+	/* The cream runs to the window's edges so nothing scrolls past beside it.
+	   It must not run upwards: that band sat over the hero's last lines while
+	   the bar was still in place below them, and hid the subline (20 Oct). */
 	box-shadow: 0 0 0 100vmax $sch-cream;
-	clip-path: inset(-80px -100vmax 0 -100vmax);
+	clip-path: inset(0 -100vmax 0 -100vmax);
 }
 
 .wcblr-sch-bar::after {
