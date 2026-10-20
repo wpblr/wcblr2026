@@ -154,230 +154,258 @@ body.home .wcblr-hsch-btn .wp-block-button__link:hover::after {
 	transform: translateX(4px);
 }
 
-/* ---- The day map ---------------------------------------------------------------
-   20 Oct 2026, round 2 (Arun): four highlight cards read as the only sessions and
-   carried a wall of names. Now the whole day as two lanes on a 15-minute grid,
-   every session a block coloured by format, no titles or names. The generator
-   puts a c-N (start column) and s-N (span) class on each block. */
-
-$hs-cols: 34; // 09:00 to 17:30 in 15-minute columns
-$hs-talk: #2a1d14;
-$hs-panel: #c8344b;
-$hs-workshop: #136451;
-$hs-lightning: #e0a526;
-
-body.home .wcblr-hsch-day {
+/* Four cards: the workshop, both panels, and the lightning talks as one. */
+body.home .wcblr-hsch-cards {
 	display: grid !important;
-	grid-template-columns: 170px minmax(0, 1fr);
-	row-gap: 14px;
-	padding: clamp(22px, 2.6vw, 40px) !important;
-	border-radius: 28px;
-	background: $hs-paper;
-	box-shadow: 0 1px 0 rgba(42, 29, 20, 0.06), 0 30px 60px -48px rgba(42, 29, 20, 0.45);
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 14px;
 }
 
-body.home .wcblr-hsch-hours,
-body.home .wcblr-hsch-track {
-	display: grid !important;
-	grid-template-columns: repeat($hs-cols, minmax(0, 1fr));
-	grid-column: 2;
-}
-
-body.home .wcblr-hsch-hours span {
-	grid-row: 1;
-	grid-column-end: span 1; // one column, text overflows; a wider span past 17:30 adds implicit columns
-	white-space: nowrap;
-	font-family: $hs-mono;
-	font-size: 11px;
-	font-weight: 600;
-	letter-spacing: 0.06em;
-	color: $hs-muted;
-	box-shadow: inset 1px 0 0 rgba(42, 29, 20, 0.14);
-	padding-left: 6px;
-}
-
-body.home .wcblr-hsch-lane {
-	display: contents !important;
-}
-
-body.home .wcblr-hsch-room {
-	grid-column: 1;
-	align-self: center;
-	padding-right: 18px;
-	font-family: $hs-serif !important;
-	font-size: clamp(19px, 0.9rem + 0.5vw, 24px) !important;
-	line-height: 1.1 !important;
-	letter-spacing: -0.02em;
-	color: $hs-ink;
-
-	span {
-		display: block;
-		margin-top: 5px;
-		font-family: $hs-sans;
-		font-size: 12.5px;
-		letter-spacing: 0;
-		line-height: 1.35;
-		color: $hs-muted;
-	}
-}
-
-body.home .wcblr-hsch-track {
-	height: 76px;
-	column-gap: 0;
-}
-
-body.home .wcblr-hsch-b {
-	grid-row: 1;
-	margin: 0 2px;
-	border-radius: 10px;
-	background: $hs-talk;
-	transition: transform 0.35s $hs-spring, box-shadow 0.25s $hs-ease;
-	transform-origin: 50% 100%;
-
-	&:hover {
-		transform: translateY(-4px);
-		box-shadow: 0 14px 22px -14px rgba(42, 29, 20, 0.7);
-	}
-
-	&.is-panel { background: $hs-panel; }
-	&.is-workshop { background: $hs-workshop; }
-	&.is-lightning { background: $hs-lightning; border-radius: 6px; margin: 0 1.5px; }
-	&.is-tba { background: transparent; box-shadow: inset 0 0 0 1.5px rgba(168, 118, 15, 0.7); }
-	&.is-break {
-		margin: 18px 2px;
-		border-radius: 6px;
-		background: repeating-linear-gradient(135deg, rgba(42, 29, 20, 0.07) 0 6px, rgba(42, 29, 20, 0.02) 6px 12px);
-
-		&:hover { transform: none; box-shadow: none; }
-	}
-}
-
-@for $i from 1 through $hs-cols {
-	body.home .wcblr-hsch-day .c-#{$i} { grid-column-start: $i; }
-}
-
-@for $i from 1 through 5 {
-	body.home .wcblr-hsch-day .s-#{$i} { grid-column-end: span $i; }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-	body.home .wcblr-hsch-track .wcblr-hsch-b {
-		animation: wcblr-hs-rise 0.7s $hs-spring backwards;
-	}
-
-	@for $i from 1 through $hs-cols {
-		body.home .wcblr-hsch-track .c-#{$i} { animation-delay: #{$i * 22}ms; }
-	}
-}
-
-@keyframes wcblr-hs-rise {
-	from { transform: scaleY(0.2); opacity: 0; }
-	to { transform: none; opacity: 1; }
-}
-
-body.home .wcblr-hsch-legend {
-	grid-column: 2;
+body.home .wcblr-hsch-card {
+	position: relative;
 	display: flex !important;
-	flex-wrap: wrap;
-	gap: 10px 26px;
-	margin-top: 10px !important;
-	padding-top: 18px;
-	box-shadow: inset 0 1px 0 rgba(42, 29, 20, 0.1);
-	font-family: $hs-sans;
-	font-size: 14px;
-	color: $hs-soft;
+	flex-direction: column;
+	min-height: 360px;
+	padding: 24px 24px 22px !important;
+	border-radius: 24px;
+	background: $hs-paper;
+	transition: transform 0.5s $hs-spring, box-shadow 0.3s $hs-ease;
+}
 
-	span {
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-	}
+body.home .wcblr-hsch-card.is-panel { background: #f5e1dd; }
+body.home .wcblr-hsch-card.is-workshop { background: #dbe9e2; }
+body.home .wcblr-hsch-card.is-lightning { background: $hs-espresso; color: $hs-cream; }
 
-	span::before {
-		content: "";
-		width: 14px;
-		height: 14px;
-		border-radius: 4px;
-		background: $hs-talk;
-	}
+/* The home page dims its h3s; a card's title is the card's own colour. */
+body.home .wcblr-home-sch .wcblr-hsch-card h3.wcblr-hsch-title,
+body.home .wcblr-home-sch .wcblr-hsch-card h3.wcblr-hsch-title a {
+	color: $hs-ink !important;
+}
 
-	.is-panel::before { background: $hs-panel; }
-	.is-workshop::before { background: $hs-workshop; }
-	.is-lightning::before { background: $hs-lightning; }
-	.is-break::before { background: repeating-linear-gradient(135deg, rgba(42, 29, 20, 0.16) 0 3px, rgba(42, 29, 20, 0.04) 3px 6px); }
+body.home .wcblr-home-sch .wcblr-hsch-card.is-lightning h3.wcblr-hsch-title,
+body.home .wcblr-home-sch .wcblr-hsch-card.is-lightning h3.wcblr-hsch-title a {
+	color: $hs-cream !important;
+}
+
+body.home .wcblr-hsch-card:hover {
+	transform: translateY(-6px);
+	box-shadow: 0 28px 50px -30px rgba(42, 29, 20, 0.55);
+}
+
+/* The whole card is the link. */
+body.home .wcblr-hsch-title a::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+}
+
+body.home .wcblr-hsch-when {
+	display: flex !important;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 10px;
 
 	strong {
 		font-family: $hs-serif;
-		font-size: 22px;
+		font-size: 44px;
 		font-weight: 400;
 		line-height: 1;
-		color: $hs-ink;
+		letter-spacing: -0.04em;
+	}
+
+	span {
+		font-family: $hs-mono;
+		font-size: 10.5px;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		opacity: 0.7;
+	}
+}
+
+body.home .wcblr-hsch-kind {
+	margin-top: 22px !important;
+	font-family: $hs-mono !important;
+	font-size: 11px !important;
+	font-weight: 600;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: $hs-muted;
+}
+
+body.home .is-panel .wcblr-hsch-kind { color: #9c2438; }
+body.home .is-workshop .wcblr-hsch-kind { color: $hs-green; }
+body.home .is-lightning .wcblr-hsch-kind { color: $hs-gold; }
+
+body.home .wcblr-hsch-title {
+	margin-top: 10px !important;
+	font-family: $hs-serif !important;
+	font-size: clamp(24px, 0.9rem + 0.9vw, 32px) !important;
+	font-weight: 400 !important;
+	line-height: 1.06 !important;
+	letter-spacing: -0.025em !important;
+	color: inherit !important;
+	text-wrap: balance;
+}
+
+/* Faces, overlapping, that spread a little when the card is hovered. */
+body.home .wcblr-hsch-faces {
+	display: flex !important;
+	margin-top: auto !important;
+	padding-top: 22px;
+
+	img,
+	span {
+		width: 42px;
+		height: 42px;
+		margin-right: -10px;
+		border-radius: 50%;
+		object-fit: cover;
+		box-shadow: 0 0 0 3px $hs-paper;
+		transition: margin 0.45s $hs-spring;
+	}
+
+	span.is-tbc {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(42, 29, 20, 0.08);
+		color: $hs-muted;
+		font-size: 18px;
+	}
+}
+
+body.home .is-panel .wcblr-hsch-faces img,
+body.home .is-panel .wcblr-hsch-faces span { box-shadow: 0 0 0 3px #f5e1dd; }
+body.home .is-workshop .wcblr-hsch-faces img { box-shadow: 0 0 0 3px #dbe9e2; }
+
+body.home .wcblr-hsch-card:hover .wcblr-hsch-faces img,
+body.home .wcblr-hsch-card:hover .wcblr-hsch-faces span {
+	margin-right: -2px;
+}
+
+/* The lightning card's faces: a small mosaic rather than a stack. */
+body.home .wcblr-hsch-faces.is-mosaic {
+	flex-wrap: wrap;
+	gap: 6px;
+
+	img {
+		width: 34px;
+		height: 34px;
+		margin: 0;
+		box-shadow: none;
+	}
+}
+
+body.home .wcblr-hsch-card:hover .wcblr-hsch-faces.is-mosaic img {
+	margin: 0;
+}
+
+body.home .wcblr-hsch-cast {
+	margin-top: 12px !important;
+	font-size: 14px !important;
+	line-height: 1.45 !important;
+	color: $hs-soft;
+}
+
+body.home .is-lightning .wcblr-hsch-cast {
+	color: rgba(242, 236, 224, 0.7);
+}
+
+@media (max-width: 1100px) {
+	body.home .wcblr-hsch-cards {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 }
 
 @media (max-width: 781px) {
-	body.home .wcblr-hsch-day {
-		grid-template-columns: minmax(0, 1fr);
-		row-gap: 8px;
-		padding: 20px 16px !important;
-		border-radius: 22px;
-	}
-
-	body.home .wcblr-hsch-hours,
-	body.home .wcblr-hsch-track,
-	body.home .wcblr-hsch-room,
-	body.home .wcblr-hsch-legend {
-		grid-column: 1;
-	}
-
 	body.home .wcblr-home-sch .wcblr-hsch-head {
 		grid-template-columns: 1fr;
-		gap: 14px;
 	}
 
-	/* Every other hour, so the labels fit. */
-	body.home .wcblr-hsch-hours span {
-		font-size: 10px;
+	/* Cards slide sideways on a phone, each at its own height. */
+	body.home .wcblr-hsch-cards {
+		display: flex !important;
+		align-items: flex-start;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: none;
+		margin-right: -20px !important;
+		padding-right: 20px;
 	}
 
-	body.home .wcblr-hsch-hours span:nth-child(even),
-	body.home .wcblr-hsch-hours span:last-child {
-		display: none;
-	}
-
-	body.home .wcblr-hsch-room {
-		margin-top: 10px !important;
-		padding-right: 0;
-		font-size: 18px !important;
-
-		span {
-			display: inline;
-			margin: 0 0 0 8px;
-			font-size: 12px;
-		}
-	}
-
-	body.home .wcblr-hsch-track {
-		height: 54px;
-	}
-
-	body.home .wcblr-hsch-b {
-		margin: 0 1px;
-		border-radius: 5px;
-
-		&.is-lightning { margin: 0 1px; border-radius: 3px; }
-		&.is-break { margin: 14px 1px; }
-	}
-
-	body.home .wcblr-hsch-legend {
-		gap: 10px 18px;
-		font-size: 13px;
-
-		strong { font-size: 19px; }
+	body.home .wcblr-hsch-card {
+		flex: 0 0 80%;
+		min-height: 0;
+		scroll-snap-align: start;
 	}
 }
 
-/* ---- The way in: the crimson band, all of it one link ------------------------- */
+/* ---- Phones: the hero says the two days once ------------------------------------
+   "How the two days work" sits right above the ticket on a phone, so the
+   ticket's own two day rows and its perforation repeated it (Arun, 20 Oct).
+   On a phone the ticket is the call to action: sticker, Wapuu, what is
+   included, and the two buttons. */
+@media (max-width: 781px) {
+	body.home .wcblr-hero .wcblr-stub .wcblr-stub__day,
+	body.home .wcblr-hero .wcblr-stub .wcblr-perf,
+	body.home .wcblr-hero .wcblr-stub hr.wp-block-separator ~ hr.wp-block-separator {
+		display: none !important;
+	}
+
+	body.home .wcblr-hero .wcblr-stub {
+		margin-top: 72px !important;
+	}
+
+	body.home .wcblr-hsch-card {
+		padding: 22px 20px 20px !important;
+	}
+
+	body.home .wcblr-hsch-kind {
+		margin-top: 16px !important;
+	}
+
+	body.home .wcblr-hsch-faces.is-mosaic img {
+		width: 28px;
+		height: 28px;
+	}
+}
+
+/* ---- "A few highlights" and the way into the full day -------------------------------
+   Arun, 20 Oct: the four cards read as if only a few sessions were on. So the
+   cards are labelled as highlights, with a count link beside the label, and a
+   crimson band under them opens the full schedule; the whole band is the link. */
+
+body.home .wcblr-hsch-label {
+	display: flex !important;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 16px;
+	margin-bottom: 16px !important;
+	padding-bottom: 12px;
+	box-shadow: 0 1px 0 rgba(42, 29, 20, 0.12);
+	font-family: $hs-mono !important;
+	font-size: 13px !important;
+	font-weight: 600;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: $hs-ink; // "Some of the 23 sessions" has to be read, not skimmed (Arun, 20 Oct)
+
+	a {
+		color: $hs-red !important;
+		box-shadow: inset 0 -1px 0 rgba(200, 52, 75, 0.4);
+		transition: box-shadow 0.2s $hs-ease;
+	}
+
+	a::after {
+		content: " \2192";
+	}
+
+	a:hover {
+		box-shadow: inset 0 -1px 0 $hs-red;
+	}
+}
 
 body.home .wcblr-home-sch .wcblr-hsch-full {
 	position: relative !important;
@@ -385,12 +413,12 @@ body.home .wcblr-home-sch .wcblr-hsch-full {
 
 body.home .wcblr-hsch-full {
 	position: relative;
-	display: flex !important;
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto;
+	gap: clamp(20px, 3vw, 48px);
 	align-items: center;
-	justify-content: space-between;
-	gap: 24px;
 	margin-top: 14px !important;
-	padding: clamp(24px, 2.6vw, 38px) clamp(24px, 3vw, 48px) !important;
+	padding: clamp(26px, 3vw, 44px) clamp(24px, 3vw, 48px) !important;
 	border-radius: 28px;
 	background: $hs-red;
 	color: #fff;
@@ -436,11 +464,11 @@ body.home .wcblr-home-sch .wcblr-hsch-full h3.wcblr-hsch-full-t a {
 }
 
 body.home .wcblr-hsch-full-t {
-	margin-top: 8px !important;
+	margin-top: 10px !important;
 	font-family: $hs-serif !important;
-	font-size: clamp(26px, 1rem + 1.6vw, 42px) !important;
+	font-size: clamp(28px, 1rem + 1.8vw, 46px) !important;
 	font-weight: 400 !important;
-	line-height: 1.04 !important;
+	line-height: 1.02 !important;
 	letter-spacing: -0.03em !important;
 	text-wrap: balance;
 }
@@ -452,6 +480,41 @@ body.home .wcblr-hsch-full-t a::after {
 	inset: 0;
 	z-index: 2;
 	border-radius: inherit;
+}
+
+body.home .wcblr-hsch-full-p {
+	margin-top: 12px !important;
+	max-width: 46ch !important;
+	font-size: 15px !important;
+	line-height: 1.55 !important;
+	color: rgba(255, 255, 255, 0.82);
+}
+
+body.home .wcblr-hsch-full-counts {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 14px 20px;
+
+	span {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		font-family: $hs-mono;
+		font-size: 10.5px;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.75);
+	}
+
+	strong {
+		font-family: $hs-serif;
+		font-size: clamp(34px, 1rem + 1.6vw, 48px);
+		font-weight: 400;
+		line-height: 1;
+		letter-spacing: -0.04em;
+		color: #fff;
+	}
 }
 
 body.home .wcblr-hsch-full-go {
@@ -478,11 +541,35 @@ body.home .wcblr-hsch-full:hover .wcblr-hsch-full-go::after {
 	transform: translateX(5px);
 }
 
+@media (max-width: 1100px) {
+	body.home .wcblr-hsch-full {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	}
+
+	body.home .wcblr-hsch-full-go {
+		grid-column: 1 / -1;
+		justify-self: start;
+	}
+}
+
 @media (max-width: 781px) {
 	body.home .wcblr-hsch-full {
-		flex-direction: column;
-		align-items: stretch;
-		gap: 20px;
+		grid-template-columns: 1fr;
+		gap: 22px;
+	}
+
+	body.home .wcblr-hsch-full-counts {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 10px;
+
+		span {
+			font-size: 9px;
+			letter-spacing: 0.06em;
+		}
+
+		strong {
+			font-size: 30px;
+		}
 	}
 
 	body.home .wcblr-hsch-full-go {
