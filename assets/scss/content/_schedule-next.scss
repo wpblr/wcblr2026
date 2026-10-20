@@ -215,9 +215,21 @@ body:has(.wcblr-sch) main::after {
 	z-index: 6;
 	margin-top: clamp(40px, 4vw, 72px) !important;
 	padding: 14px 0 0 !important;
-	background: rgba(242, 236, 224, 0.94);
-	backdrop-filter: blur(14px);
-	box-shadow: 0 1px 0 $sch-rule;
+	background: $sch-cream;
+	/* The cream runs to the window's edges and up behind the floating header,
+	   so nothing scrolling under the bar peeks out above or beside it. */
+	box-shadow: 0 0 0 100vmax $sch-cream;
+	clip-path: inset(-80px -100vmax 0 -100vmax);
+}
+
+.wcblr-sch-bar::after {
+	content: "";
+	position: absolute;
+	left: -100vmax;
+	right: -100vmax;
+	bottom: 0;
+	height: 1px;
+	background: $sch-rule;
 }
 
 /* The filters: one control, each option a button with its count. */
@@ -273,8 +285,10 @@ body:has(.wcblr-sch) main::after {
 	grid-template-columns: $sch-timecol minmax(0, 1fr) minmax(0, 1fr);
 	column-gap: clamp(14px, 1.6vw, 24px);
 	align-items: end;
-	margin-top: 14px !important;
-	padding-bottom: 14px;
+	margin-top: 26px !important;
+	padding-top: 22px;
+	padding-bottom: 16px;
+	box-shadow: 0 -1px 0 $sch-rule;
 }
 
 .wcblr-sch-bar-time {
@@ -389,7 +403,7 @@ $sch-gap: 12px;
 	row-gap: $sch-gap;
 	padding: 28px 0 !important;
 	box-shadow: 0 1px 0 $sch-rule;
-	scroll-margin-top: 200px;
+	scroll-margin-top: 250px;
 }
 
 @for $n from 1 through 8 {
@@ -409,7 +423,7 @@ $sch-gap: 12px;
 
 .wcblr-sch-time > * {
 	position: sticky;
-	top: 196px;
+	top: 252px;
 }
 
 .wcblr-sch-start {
@@ -423,7 +437,7 @@ $sch-gap: 12px;
 }
 
 .wcblr-sch-dur {
-	top: 250px !important;
+	top: 306px !important;
 	margin-top: 10px !important;
 	font-family: $sch-mono !important;
 	font-size: 10.5px !important;
@@ -581,7 +595,7 @@ $sch-gap: 12px;
 	align-items: baseline;
 	padding: 18px 0 !important;
 	box-shadow: 0 1px 0 $sch-rule;
-	scroll-margin-top: 200px;
+	scroll-margin-top: 250px;
 }
 
 .wcblr-sch-bt {
@@ -798,6 +812,268 @@ a.wcblr-sch-person:hover .wcblr-sch-face {
 	.wcblr-sch-day > :nth-child(1) { animation: wcblr-sch-in 0.7s $sch-ease 0.6s both; }
 	.wcblr-sch-day > :nth-child(2) { animation: wcblr-sch-in 0.7s $sch-ease 0.7s both; }
 	.wcblr-sch-day > :nth-child(3) { animation: wcblr-sch-in 0.7s $sch-ease 0.8s both; }
+}
+
+/* ---- 8b. Favourites ---------------------------------------------------------------
+   Arun, 20 Oct: WordCamp sites let attendees star sessions. That is
+   wc-post-types' favourite-sessions.js, enqueued by the [schedule] shortcode,
+   which this page carries for that reason and hides (it is given a date with
+   no sessions, so it prints only an empty table and the share form). Each card
+   carries a .wordcamp-schedule__session span with the live session ID and a
+   .fav-session-button; the script toggles .wcb-favourite-session on that span
+   and aria-pressed on the button, and everything below keys off those. */
+
+.wcblr-sch-meta .wcblr-sch-kind {
+	margin-left: auto;
+}
+
+.wcblr-sch-fav {
+	position: relative !important;
+	z-index: 2;
+	margin: -6px -8px -6px 2px;
+}
+
+.wcblr-sch-fav .fav-session-button,
+.wcblr-sch-fav .fav-session-button:focus {
+	outline: 0;
+	background: transparent !important;
+	box-shadow: none;
+}
+
+.wcblr-sch-fav .fav-session-button:focus-visible {
+	box-shadow: 0 0 0 2px $sch-gold;
+}
+
+.wcblr-sch-fav .fav-session-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	color: $sch-muted;
+	transition: background 0.2s $sch-ease, color 0.2s $sch-ease, transform 0.45s $sch-spring;
+}
+
+.wcblr-sch-fav .fav-session-button::before {
+	content: "\2606";
+	font-family: $sch-sans;
+	font-size: 19px;
+	line-height: 1;
+}
+
+.wcblr-sch-fav .fav-session-button:hover {
+	background: rgba(224, 165, 38, 0.18) !important;
+	color: $sch-gold-deep;
+	transform: scale(1.1);
+}
+
+.wcblr-sch-fav .fav-session-button[aria-pressed="true"] {
+	color: $sch-gold;
+	animation: wcblr-sch-pop 0.5s $sch-spring;
+}
+
+.wcblr-sch-fav .fav-session-button[aria-pressed="true"]::before {
+	content: "\2605";
+}
+
+@keyframes wcblr-sch-pop {
+	0% { transform: scale(0.6); }
+	60% { transform: scale(1.25); }
+	100% { transform: none; }
+}
+
+/* A starred card wears a gold ring. */
+.wcblr-sch-card:has(.wcb-favourite-session) {
+	box-shadow: 0 0 0 2px $sch-gold, 0 18px 36px -26px rgba(168, 118, 15, 0.6);
+}
+
+.wcblr-sch:has(#f-mine:target) .wcblr-sch-card:not(:has(.wcb-favourite-session)),
+.wcblr-sch:has(#f-mine:target) .wcblr-sch-quiet {
+	opacity: 0.2;
+	filter: grayscale(1);
+	transform: scale(0.98);
+	pointer-events: none;
+}
+
+.wcblr-sch-filter a.is-mine span {
+	font-size: 14px;
+	line-height: 1.1;
+	background: rgba(224, 165, 38, 0.22);
+	color: $sch-gold-deep;
+}
+
+.wcblr-sch:has(#f-mine:target) .wcblr-sch-filter a.is-mine {
+	background: $sch-espresso;
+	color: $sch-cream;
+	box-shadow: 0 12px 24px -14px rgba(36, 26, 18, 0.7);
+}
+
+.wcblr-sch:has(#f-mine:target) .wcblr-sch-filter a.is-mine span {
+	background: rgba(224, 165, 38, 0.3);
+	color: $sch-gold;
+}
+
+/* The note and WordCamp's own share form (email, link, print). */
+.wcblr-sch-favbox {
+	margin-top: 40px !important;
+	padding: 28px 30px !important;
+	border-radius: 24px;
+	background: $sch-espresso;
+	color: $sch-cream;
+}
+
+.wcblr-sch-favnote {
+	max-width: 62ch !important;
+	font-size: 16px !important;
+	line-height: 1.6 !important;
+	color: rgba(242, 236, 224, 0.78);
+
+	strong {
+		font-family: $sch-serif;
+		font-size: 22px;
+		font-weight: 400;
+		color: $sch-cream;
+	}
+
+	em {
+		font-style: normal;
+		color: $sch-gold;
+	}
+}
+
+.wcblr-sch-favbox table.wcpt-schedule {
+	display: none !important;
+}
+
+/* WordCamp floats its share button bottom right once anything is starred,
+   and slides the Email / Link / Print panel up above it. Kept, restyled. */
+.wcblr-sch .show-email-form {
+	right: 24px !important;
+	bottom: 24px !important;
+	z-index: 60 !important;
+	align-items: center;
+	gap: 8px;
+	padding: 13px 20px !important;
+	border: 0 !important;
+	border-radius: 999px !important;
+	background: $sch-espresso !important;
+	color: $sch-gold !important;
+	box-shadow: 0 18px 40px -16px rgba(36, 26, 18, 0.65);
+	font-family: $sch-sans;
+	font-weight: 600;
+	text-decoration: none !important;
+	transition: transform 0.4s $sch-spring;
+}
+
+.wcblr-sch .show-email-form[style*="inline"],
+.wcblr-sch .show-email-form[style*="block"] {
+	display: inline-flex !important;
+}
+
+.wcblr-sch .show-email-form .dashicons {
+	display: none;
+}
+
+.wcblr-sch .show-email-form::before {
+	content: "\2605";
+	font-size: 16px;
+}
+
+.wcblr-sch .show-email-form::after {
+	content: "Share my picks";
+	font-size: 14.5px;
+	color: $sch-cream;
+}
+
+.wcblr-sch .show-email-form:focus {
+	outline: 0;
+}
+
+.wcblr-sch .show-email-form:hover {
+	transform: translateY(-2px);
+}
+
+.wcblr-sch .email-form {
+	right: 24px !important;
+	bottom: 84px !important;
+	z-index: 60 !important;
+	width: min(360px, calc(100vw - 48px)) !important;
+	border-radius: 20px !important;
+	background: $sch-espresso !important;
+	color: $sch-cream;
+	font-size: 14.5px !important;
+	box-shadow: 0 30px 60px -24px rgba(36, 26, 18, 0.7);
+}
+
+.wcblr-sch .email-form.fav-session-email-form-show {
+	padding: 16px !important;
+}
+
+.wcblr-sch .fav-session-share-tab {
+	display: flex !important;
+	gap: 6px;
+	width: auto !important;
+	border: 0 !important;
+	background: transparent !important;
+}
+
+.wcblr-sch .fav-session-share-tab div {
+	display: block !important;
+	padding: 8px 14px !important;
+	border-radius: 999px;
+	background: rgba(242, 236, 224, 0.1) !important;
+	font-size: 13.5px !important;
+	font-weight: 600;
+}
+
+.wcblr-sch .fav-session-share-tab div.active,
+.wcblr-sch .fav-session-share-tab div:hover {
+	background: $sch-gold !important;
+	color: $sch-espresso;
+}
+
+.wcblr-sch .fav-session-share-tabcontent {
+	min-height: 0 !important;
+	padding: 14px 2px 2px !important;
+	border: 0 !important;
+	background: transparent !important;
+}
+
+.wcblr-sch #fav-session-email-form {
+	margin: 0 !important;
+}
+
+.wcblr-sch #fav-sessions-email-address {
+	box-sizing: border-box;
+	width: 100% !important;
+	margin: 10px 0 8px !important;
+	padding: 11px 14px !important;
+	border: 0;
+	border-radius: 10px;
+	background: $sch-cream;
+	color: $sch-ink;
+	font-size: 15px;
+}
+
+.wcblr-sch .email-form input[type="submit"],
+.wcblr-sch #fav-session-print {
+	padding: 10px 18px;
+	border: 0;
+	border-radius: 999px;
+	background: $sch-gold;
+	color: $sch-espresso;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.wcblr-sch #fav-sessions-link {
+	color: $sch-gold;
+}
+
+/* The highlight WordCamp paints on a favourite's cell; the card's ring does that job here. */
+.wcblr-sch-fav.wcb-favourite-session {
+	background: transparent !important;
 }
 
 /* ---- 9. Tablet: the facts under the title ------------------------------------ */
