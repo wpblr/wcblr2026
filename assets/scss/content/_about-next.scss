@@ -825,16 +825,50 @@ body:has(.wcblr-ab) main::after {
 }
 
 @media (max-width: 781px) {
+	/* The three editions become a row to swipe through. */
 	.wcblr-ab-years {
-		flex-direction: column;
-		height: auto;
+		height: 300px;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: none;
 		margin-left: 0 !important;
-		margin-right: 0 !important;
+		margin-right: calc(#{$ab-pad} * -1) !important;
+		padding-right: $ab-pad;
 	}
 
-	.wcblr-ab-year {
-		height: 240px;
-		flex: none;
+	.wcblr-ab-year,
+	.wcblr-ab-years:hover .wcblr-ab-year,
+	.wcblr-ab-years .wcblr-ab-year:hover {
+		flex: 0 0 82%;
+		scroll-snap-align: start;
+	}
+
+	/* A QR code is no use on the phone that would have to scan it. */
+	.wcblr-ab-qr {
+		display: none !important;
+	}
+
+	.wcblr-ab-pillar-i {
+		font-size: 30px !important;
+	}
+
+	.wcblr-ab-pillar-t {
+		margin-top: 10px !important;
+		font-size: 19px !important;
+	}
+
+	.wcblr-ab-pillar-b {
+		font-size: 14.5px !important;
+	}
+
+	.wcblr-ab-shot-cap {
+		left: 10px;
+		right: 10px;
+		bottom: 10px;
+		width: fit-content;
+		max-width: calc(100% - 20px);
+		font-size: 9.5px !important;
+		letter-spacing: 0.04em;
 	}
 
 	.wcblr-ab-card.is-meetup {
@@ -847,12 +881,13 @@ body:has(.wcblr-ab) main::after {
 	}
 
 	.wcblr-ab-pillars {
-		grid-template-columns: 1fr;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		column-gap: 18px;
 	}
 
 	.wcblr-ab-pillar,
 	.wcblr-ab-pillar + .wcblr-ab-pillar {
-		padding: 24px 0 0;
+		padding: 22px 0 0;
 		box-shadow: none;
 	}
 

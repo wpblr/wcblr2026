@@ -71,6 +71,8 @@ body:has(.wcblr-sch) main::after {
 	padding: clamp(36px, 1rem + 4vw, 88px) $sch-pad clamp(72px, 2rem + 5vw, 140px) !important;
 	color: $sch-ink;
 	font-family: $sch-sans;
+	/* clip, not hidden: it makes no scroll container, so the sticky bar still sticks. */
+	overflow-x: clip;
 }
 
 /* Zero WordPress's flow gaps and the theme's prose measure, at single-class
@@ -371,18 +373,10 @@ body:has(.wcblr-sch) main::after {
 	/* The cream runs to the window's edges so nothing scrolls past beside it.
 	   It must not run upwards: that band sat over the hero's last lines while
 	   the bar was still in place below them, and hid the subline (20 Oct). */
-	box-shadow: 0 0 0 100vmax $sch-cream;
-	clip-path: inset(0 -100vmax 0 -100vmax);
-}
-
-.wcblr-sch-bar::after {
-	content: "";
-	position: absolute;
-	left: -100vmax;
-	right: -100vmax;
-	bottom: 0;
-	height: 1px;
-	background: $sch-rule;
+	/* Hairline first, then the cream spread. A pseudo-element stretched
+	   100vmax each side made the page 1214px wide on phones (20 Oct). */
+	box-shadow: 0 1px 0 0 $sch-rule, 0 0 0 100vmax $sch-cream;
+	clip-path: inset(0 -100vmax -1px -100vmax);
 }
 
 /* The filters: one control, each option a button with its count. */
@@ -1332,6 +1326,17 @@ a.wcblr-sch-person:hover .wcblr-sch-face {
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
 		color: $sch-muted;
+	}
+
+	/* The day pass on a phone: date, venue and the ticket. The rooms are
+	   labelled on every block below, so the room tiles and hours go. */
+	.wcblr-sch-pass-rooms,
+	.wcblr-sch-pass-hours {
+		display: none !important;
+	}
+
+	.wcblr-sch-pass {
+		padding: 24px 22px 22px !important;
 	}
 
 	.wcblr-sch-break {
