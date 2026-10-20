@@ -820,9 +820,9 @@ $sch-gap: 12px;
 .wcblr-sch-person {
 	display: inline-flex;
 	align-items: center;
-	gap: 9px;
+	gap: 11px;
 	min-width: 0;
-	font-size: 14.5px;
+	font-size: 15.5px;
 	font-weight: 500;
 	line-height: 1.25;
 	color: $sch-soft;
@@ -830,8 +830,8 @@ $sch-gap: 12px;
 
 .wcblr-sch-face {
 	flex: 0 0 auto;
-	width: 30px;
-	height: 30px;
+	width: 40px;
+	height: 40px;
 	border-radius: 50%;
 	object-fit: cover;
 	background: rgba(42, 29, 20, 0.08);
@@ -857,7 +857,7 @@ $sch-gap: 12px;
 }
 
 .wcblr-sch-role {
-	font-size: 12.5px;
+	font-size: 13px;
 	font-weight: 400;
 	color: $sch-muted;
 }
@@ -875,12 +875,12 @@ a.wcblr-sch-person:hover .wcblr-sch-face {
 }
 
 .wcblr-sch-card.is-lightning .wcblr-sch-face {
-	width: 26px;
-	height: 26px;
+	width: 36px;
+	height: 36px;
 }
 
 .wcblr-sch-card.is-lightning .wcblr-sch-person {
-	font-size: 14px;
+	font-size: 15px;
 }
 
 /* The cast of a panel or the workshop: face chips. */
@@ -890,17 +890,17 @@ a.wcblr-sch-person:hover .wcblr-sch-face {
 }
 
 .wcblr-sch-cast .wcblr-sch-person {
-	padding: 4px 14px 4px 4px;
+	padding: 4px 16px 4px 4px;
 	border-radius: 999px;
 	background: rgba(251, 248, 241, 0.92);
-	font-size: 13.5px;
+	font-size: 15px;
 	color: $sch-ink;
 	transition: transform 0.4s $sch-spring, box-shadow 0.25s $sch-ease, background 0.2s $sch-ease;
 }
 
 .wcblr-sch-cast .wcblr-sch-face {
-	width: 32px;
-	height: 32px;
+	width: 38px;
+	height: 38px;
 	box-shadow: none;
 }
 
