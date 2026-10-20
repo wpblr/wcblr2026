@@ -1351,3 +1351,17 @@ a.wcblr-sch-person:hover .wcblr-sch-face {
 		row-gap: 4px;
 	}
 }
+
+/* Speaker names are links, and `.wcblr-sch a { font: inherit }` resets their
+   size to the 14.5px of the line they sit in. Set it on the link itself. */
+.wcblr-sch .wcblr-sch-who a.wcblr-sch-person,
+.wcblr-sch .wcblr-sch-who span.wcblr-sch-person {
+	font-size: 15.5px;
+}
+
+.wcblr-sch .wcblr-sch-card.is-lightning .wcblr-sch-who a.wcblr-sch-person,
+.wcblr-sch .wcblr-sch-card.is-lightning .wcblr-sch-who span.wcblr-sch-person,
+.wcblr-sch .wcblr-sch-cast a.wcblr-sch-person,
+.wcblr-sch .wcblr-sch-cast span.wcblr-sch-person {
+	font-size: 15px;
+}
