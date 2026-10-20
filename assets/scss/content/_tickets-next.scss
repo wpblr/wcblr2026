@@ -832,7 +832,9 @@ body:has(.wcblr-tixn) .wp-site-blocks > main {
 .wcblr-tixn .wcblr-tixn-watch-in {
 	position: relative;
 	display: grid !important;
-	grid-template-columns: minmax(0, 210px) minmax(0, 1fr);
+	/* 270px, not 210: below about 250px YouTube drops into its "tiny" player,
+	   which strips the controls, the full-screen button among them (20 Oct). */
+	grid-template-columns: minmax(0, 270px) minmax(0, 1fr);
 	gap: clamp(18px, 2vw, 28px);
 	align-items: center;
 	padding: 14px !important;
@@ -947,6 +949,35 @@ body:has(.wcblr-tixn) .wp-site-blocks > main {
 	strong {
 		font-weight: 500;
 		color: $tn-cream;
+	}
+}
+
+/* Our own way to full screen: the video on YouTube itself (the app, on a
+   phone), which works wherever the embedded player hides its button. */
+.wcblr-tixn p.wcblr-tixn-watch-fs {
+	margin: 18px 0 0 !important;
+
+	a {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		padding: 12px 20px;
+		border-radius: 999px;
+		background: $tn-gold;
+		color: $tn-espresso;
+		font-size: 14.5px;
+		font-weight: 600;
+		text-decoration: none;
+		transition: transform 0.4s $tn-spring;
+	}
+
+	a::before {
+		content: "\2922";
+		font-size: 15px;
+	}
+
+	a:hover {
+		transform: translateY(-2px);
 	}
 }
 
@@ -1069,7 +1100,7 @@ body:has(.wcblr-tixn) .wp-site-blocks > main {
 	}
 
 	.wcblr-tixn figure.wcblr-tixn-video {
-		width: min(100%, 280px);
+		width: min(100%, 300px);
 		margin: 0 auto !important;
 	}
 
