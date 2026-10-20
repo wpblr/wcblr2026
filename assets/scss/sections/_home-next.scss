@@ -1050,8 +1050,8 @@ body.home .wcblr-home-sponsors .wcblr-sponsors-row .wp-block-post-template {
 
 body.home .t-suvarna.wcblr-sponsors-row .wp-block-post-template { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
 body.home .t-belli.wcblr-sponsors-row .wp-block-post-template { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
-body.home .t-silver.wcblr-sponsors-row .wp-block-post-template { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; }
-body.home .t-comm.wcblr-sponsors-row .wp-block-post-template { grid-template-columns: repeat(6, minmax(0, 1fr)) !important; }
+body.home .t-silver.wcblr-sponsors-row .wp-block-post-template { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+body.home .t-comm.wcblr-sponsors-row .wp-block-post-template { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; }
 
 body.home .wcblr-home-sponsors .wp-block-post-featured-image {
 	margin: 0 !important;
@@ -1061,6 +1061,12 @@ body.home .t-suvarna .wp-block-post-featured-image { padding: clamp(22px, 2.6vw,
 body.home .t-belli .wp-block-post-featured-image { padding: clamp(18px, 2vw, 30px) clamp(22px, 2.6vw, 44px) !important; }
 body.home .t-silver .wp-block-post-featured-image { padding: clamp(14px, 1.4vw, 22px) clamp(16px, 1.8vw, 28px) !important; }
 body.home .t-comm .wp-block-post-featured-image { padding: clamp(12px, 1.1vw, 18px) clamp(12px, 1.3vw, 20px) !important; }
+
+/* 20 Oct 2026: Kanchu and Hitaishi read too small at five and six up, so each
+   lost a column and the /sponsors/ 172px cap is lifted here. The caps keep the
+   steps under Suvarna's ~194px logo. */
+body.home .t-silver .wp-block-post-featured-image img { max-width: 176px !important; }
+body.home .t-comm .wp-block-post-featured-image img { max-width: 150px !important; }
 
 @media (max-width: 781px) {
 	body.home .t-suvarna.wcblr-sponsors-row .wp-block-post-template { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
