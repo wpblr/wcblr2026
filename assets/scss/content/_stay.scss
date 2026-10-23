@@ -6,14 +6,14 @@
    inside the default post template.
 
    THE IDEA
-   Everything is measured from the school gate. So the one device is distance:
-   the dark band is a ruler from the gate to 2 km with real places on it, and
+   Everything is measured from the venue. So the one device is distance:
+   the dark band is a ruler from the venue to 2 km with real places on it, and
    every hotel row carries the same ruler as a meter. The five budget bands
-   each keep one colour, used only on their own number, chip and meter.
+   each keep one colour, used only on their own number, range and meter.
 
    THE SHAPE
-   Hero (lede + intro, Church Street photo) · From the gate (dark: ruler +
-   four numbers) · By budget (five bands: sticky side, rows) · On the metro
+   Hero (lede + intro, Church Street photo) · From the venue (dark: ruler +
+   four numbers) · By budget (a five-step ladder, then one card per band) · On the metro
    (photo split, area notes, the Contributor Day line) · Flats (two cards,
    four checks) · Before you book (2x2 notes, closing card) · credits.
 
@@ -289,7 +289,7 @@ body:has(.wcblr-stay) main::after {
 	border-radius: 28px;
 }
 
-/* ---- 2. From the gate: the ruler band ------------------------------------------------ */
+/* ---- 2. From the venue: the ruler band ------------------------------------------------ */
 
 .wcblr-stay-band {
 	position: relative;
@@ -345,7 +345,7 @@ body:has(.wcblr-stay) main::after {
 	margin-top: clamp(40px, 4vw, 72px) !important;
 }
 
-.wcblr-stay-gate {
+.wcblr-stay-origin {
 	display: flex !important;
 	flex-direction: column;
 	gap: 4px;
@@ -544,18 +544,62 @@ body:has(.wcblr-stay) main::after {
 	color: $st-muted;
 }
 
-.wcblr-stay-tier {
+// The ladder: the five bands as one price scale, each step jumps to its card.
+.wcblr-stay-ladder {
 	display: grid !important;
-	grid-template-columns: minmax(0, 0.36fr) minmax(0, 0.64fr);
-	gap: clamp(24px, 4vw, 72px);
-	padding: clamp(28px, 3vw, 44px) 0;
-	box-shadow: 0 -1px 0 $st-rule;
+	grid-template-columns: repeat(5, minmax(0, 1fr));
+	gap: 8px;
+	margin-bottom: 22px !important;
+
+	a {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		padding: 18px 18px 16px;
+		border-radius: 18px;
+		background: $st-paper;
+		color: $st-ink;
+		text-decoration: none;
+		overflow: hidden;
+		transition: transform 0.3s $st-spring, background 0.25s $st-ease;
+	}
+
+	// Each step's bar is a little shorter than the last: the scale reads before the words do.
+	a::before {
+		content: "";
+		display: block;
+		height: 6px;
+		margin-bottom: 12px;
+		border-radius: 3px;
+	}
+
+	a:hover { transform: translateY(-3px); background: #fff; }
+
+	em { font-family: $st-mono; font-size: 11px; font-style: normal; font-weight: 600; letter-spacing: 0.08em; }
+	strong { font-family: $st-serif; font-size: clamp(19px, 0.9rem + 0.5vw, 24px); font-weight: 400; line-height: 1.1; letter-spacing: -0.015em; }
+	span { font-family: $st-mono; font-size: 12px; font-weight: 600; }
+	small { font-size: 13px; line-height: 1.4; color: $st-muted; }
+	span + small { margin-top: 8px; }
 }
 
-.wcblr-stay-tier-side {
-	position: sticky;
-	top: 110px;
-	align-self: start;
+.wcblr-stay-tiers { display: flex !important; flex-direction: column; gap: 14px; margin-top: clamp(28px, 3vw, 48px) !important; }
+
+.wcblr-stay-tier {
+	scroll-margin-top: 110px;
+	padding: clamp(24px, 3vw, 44px) clamp(24px, 3vw, 44px) clamp(10px, 1.4vw, 24px);
+	border-radius: 28px;
+	background: $st-paper;
+}
+
+.wcblr-stay-tier-head {
+	display: flex !important;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 16px 32px;
+	flex-wrap: wrap;
+	padding-bottom: 20px;
+	box-shadow: 0 1px 0 $st-rule;
 }
 
 .wcblr-stay-tier-n {
@@ -563,38 +607,59 @@ body:has(.wcblr-stay) main::after {
 	font-size: 12px !important;
 	font-weight: 600;
 	letter-spacing: 0.08em;
+
+	span { color: $st-muted; font-weight: 500; }
 }
 
 .wcblr-post.wcblr-stay .wcblr-stay-tier-t {
-	margin-top: 10px !important;
+	margin-top: 8px !important;
 	font-family: $st-serif !important;
-	font-size: clamp(32px, 1rem + 2vw, 52px) !important;
+	font-size: clamp(34px, 1rem + 2.4vw, 60px) !important;
 	font-weight: 400 !important;
-	line-height: 1 !important;
-	letter-spacing: -0.03em;
+	line-height: 0.95 !important;
+	letter-spacing: -0.035em;
 	color: $st-ink;
 }
 
+.wcblr-stay-tier-meta { text-align: right; }
+
 .wcblr-stay-tier-r {
-	display: inline-flex !important;
-	margin-top: 14px !important;
-	padding: 6px 12px;
-	border-radius: 999px;
+	font-family: $st-serif !important;
+	font-size: clamp(22px, 1rem + 0.9vw, 32px) !important;
+	line-height: 1.05 !important;
+	letter-spacing: -0.02em;
+}
+
+.wcblr-stay-tier-c {
+	margin-top: 6px !important;
 	font-family: $st-mono !important;
-	font-size: 12.5px !important;
-	font-weight: 600;
-	color: $st-paper;
+	font-size: 11.5px !important;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: $st-muted;
 }
 
 .wcblr-stay-tier-note {
-	margin-top: 16px !important;
-	max-width: 36ch !important;
-	font-size: 15px !important;
+	max-width: 68ch !important;
+	margin-top: 18px !important;
+	font-size: 15.5px !important;
 	line-height: 1.6 !important;
 	color: $st-soft;
 }
 
-.wcblr-stay-tier-frame { margin-top: 24px !important; }
+.wcblr-stay-tier-body { margin-top: 10px !important; }
+
+.wcblr-stay-tier-body.has-photo {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 0.72fr);
+	gap: clamp(24px, 3vw, 48px);
+	align-items: start;
+
+	.wcblr-stay-rows { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-stay-row:nth-child(2) { box-shadow: 0 -1px 0 $st-rule; }
+}
+
+.wcblr-stay-tier-frame { margin-top: 18px !important; }
 
 .wcblr-stay-tier-photo img {
 	display: block;
@@ -602,44 +667,32 @@ body:has(.wcblr-stay) main::after {
 	aspect-ratio: 4 / 3;
 	height: auto;
 	object-fit: cover;
-	border-radius: 20px;
+	border-radius: 18px;
 }
 
-.wcblr-stay-rows { display: flex !important; flex-direction: column; }
+// Two columns of rows, read left to right; a hairline above every row after the first pair.
+.wcblr-stay-rows {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	column-gap: clamp(28px, 4vw, 64px);
+}
 
 .wcblr-stay-row {
 	display: grid !important;
-	grid-template-columns: minmax(0, 1fr) minmax(150px, 0.5fr) 130px;
-	gap: 20px;
-	align-items: center;
-	padding: 18px 14px;
-	margin: 0 -14px !important;
-	border-radius: 14px;
-	transition: background 0.25s $st-ease;
+	grid-template-columns: minmax(0, 1fr) auto;
+	grid-template-areas: "name price" "dist dist";
+	gap: 12px 16px;
+	align-items: start;
+	padding: 20px 0;
 }
 
-.wcblr-stay-row { position: relative; }
-
-// The divider is a hairline inset to the text, so the hover card's corners never bend it.
-.wcblr-stay-row + .wcblr-stay-row::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	left: 14px;
-	right: 14px;
-	height: 1px;
-	background: $st-rule;
-	transition: opacity 0.25s $st-ease;
-}
-
-.wcblr-stay-row:hover { background: $st-paper; }
-.wcblr-stay-row:hover::before,
-.wcblr-stay-row:hover + .wcblr-stay-row::before { opacity: 0; }
+.wcblr-stay-row:nth-child(n + 3) { box-shadow: 0 -1px 0 $st-rule; }
 
 .wcblr-stay-row-name {
+	grid-area: name;
 	display: flex !important;
 	flex-direction: column;
-	gap: 3px;
+	gap: 4px;
 	font-family: $st-serif !important;
 	font-size: clamp(19px, 1rem + 0.4vw, 23px) !important;
 	line-height: 1.2 !important;
@@ -652,11 +705,12 @@ body:has(.wcblr-stay) main::after {
 }
 
 .wcblr-stay-row-dist {
+	grid-area: dist;
 	display: flex !important;
 	align-items: center;
 	gap: 12px;
 	font-family: $st-mono !important;
-	font-size: 12.5px !important;
+	font-size: 12px !important;
 	white-space: nowrap;
 	color: $st-soft;
 }
@@ -666,7 +720,7 @@ body:has(.wcblr-stay) main::after {
 	position: relative;
 	flex: 1 1 auto;
 	min-width: 60px;
-	height: 6px;
+	height: 5px;
 	border-radius: 3px;
 	background: $st-sand;
 	overflow: hidden;
@@ -687,20 +741,21 @@ body:has(.wcblr-stay) main::after {
 }
 
 .wcblr-stay-row-price {
+	grid-area: price;
 	text-align: right;
 	font-family: $st-serif !important;
 	font-size: clamp(20px, 1rem + 0.5vw, 25px) !important;
 	line-height: 1.1 !important;
 	letter-spacing: -0.02em;
 
-	small { display: block; margin-bottom: 2px; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; }
+	small { display: block; margin-bottom: 2px; font-family: $st-mono; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
 }
 
 .wcblr-stay-more {
-	margin-top: 18px !important;
+	margin: 8px 0 clamp(14px, 1.6vw, 20px) !important;
 	padding: 20px 22px;
 	border-radius: 18px;
-	background: $st-paper;
+	background: $st-cream;
 }
 
 .wcblr-stay-more-l {
@@ -721,13 +776,13 @@ body:has(.wcblr-stay) main::after {
 		gap: 8px;
 		padding: 8px 14px;
 		border-radius: 999px;
-		background: $st-cream;
+		background: $st-paper;
 		font-size: 14.5px;
 		font-weight: 600;
 		transition: background 0.2s $st-ease;
 	}
 
-	> span:hover { background: $st-sand; }
+	> span:hover { background: #fff; }
 
 	em { font-family: $st-mono; font-size: 11px; font-style: normal; font-weight: 500; color: $st-muted; }
 }
@@ -737,12 +792,18 @@ body:has(.wcblr-stay) main::after {
 .wcblr-stay-row-price.is-sep small { color: $st-gold-deep; }
 .wcblr-stay-mini-row small { margin-left: 4px; color: $st-gold-deep; }
 
+$st-steps: (top: 100%, upper: 80%, mid: 60%, cheap: 40%, dorm: 20%);
+
 @each $key, $c in $st-bands {
 	.wcblr-stay-tier.is-#{$key} {
-		.wcblr-stay-tier-n { color: $c; }
-		.wcblr-stay-tier-r { background: $c; }
-		.wcblr-stay-row-dist { color: $c; }
-		.wcblr-stay-row-dist { -webkit-text-fill-color: $st-soft; }
+		.wcblr-stay-tier-n,
+		.wcblr-stay-tier-r { color: $c; }
+		.wcblr-stay-row-dist { color: $c; -webkit-text-fill-color: $st-soft; }
+	}
+
+	.wcblr-stay-ladder a.is-#{$key} {
+		em { color: $c; }
+		&::before { width: map-get($st-steps, $key); background: $c; }
 	}
 }
 
@@ -1044,13 +1105,17 @@ body:has(.wcblr-stay) main::after {
 	a:hover { color: $st-ink; }
 }
 
+// Five steps stop fitting one row well before the tablet break.
+@media (max-width: 1100px) {
+	.wcblr-stay-ladder { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.wcblr-stay-ladder a:last-child { grid-column: 1 / -1; }
+}
+
 /* ---- Tablet ---------------------------------------------------------------------------- */
 
 @media (max-width: 1024px) {
 	.wcblr-stay-hero { grid-template-columns: minmax(0, 1fr); align-items: start; }
-	.wcblr-stay-tier { grid-template-columns: minmax(0, 1fr); }
-	.wcblr-stay-tier-side { position: static; }
-	.wcblr-stay-tier-note { max-width: 60ch !important; }
+	.wcblr-stay-tier-body.has-photo { grid-template-columns: minmax(0, 1fr); }
 	.wcblr-stay-tier-frame { max-width: 520px; }
 	.wcblr-stay-stats,
 	.wcblr-stay-checks { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 32px; }
@@ -1062,7 +1127,7 @@ body:has(.wcblr-stay) main::after {
 
 @media (max-width: 781px) {
 	.wcblr-stay-ruler { grid-template-columns: minmax(0, 1fr); row-gap: 20px; }
-	.wcblr-stay-gate { flex-direction: row; align-items: baseline; justify-content: space-between; }
+	.wcblr-stay-origin { flex-direction: row; align-items: baseline; justify-content: space-between; }
 	.wcblr-stay-ruler-key { grid-column: 1; }
 
 	.wcblr-stay-track { height: 460px; margin-left: 64px; }
@@ -1115,25 +1180,20 @@ body:has(.wcblr-stay) main::after {
 	.wcblr-stay-stat,
 	.wcblr-stay-stat + .wcblr-stay-stat { padding: 0 14px 0 0; box-shadow: none; }
 
-	.wcblr-stay-row {
-		grid-template-columns: minmax(0, 1fr) auto;
-		grid-template-areas: "name price" "dist dist";
-		row-gap: 10px;
-		padding: 16px 0;
-		margin: 0 !important;
-	}
-
-	.wcblr-stay-row:hover { background: none; }
-	.wcblr-stay-row-name { grid-area: name; }
-	.wcblr-stay-row-price { grid-area: price; }
-	.wcblr-stay-row-dist { grid-area: dist; }
+	.wcblr-stay-ladder a { padding: 14px 14px 12px; border-radius: 14px; }
+	.wcblr-stay-tier { padding: 22px 18px 8px; border-radius: 22px; }
+	.wcblr-stay-tier-head { flex-direction: column; align-items: flex-start; }
+	.wcblr-stay-tier-meta { text-align: left; }
+	.wcblr-stay-rows { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-stay-row { padding: 16px 0; }
+	.wcblr-stay-row:nth-child(2) { box-shadow: 0 -1px 0 $st-rule; }
+	.wcblr-stay-more { padding: 16px; }
 
 	.wcblr-stay-split,
 	.wcblr-stay-flats,
 	.wcblr-stay-notes { grid-template-columns: minmax(0, 1fr); }
 
 	.wcblr-stay-frame { position: relative; top: auto; margin-left: 0 !important; }
-	.wcblr-stay-row + .wcblr-stay-row::before { left: 0; right: 0; }
 	.wcblr-stay-chips { flex-direction: column; gap: 6px; }
 	.wcblr-stay-chips > span { justify-content: space-between; border-radius: 12px; }
 	.wcblr-stay-checks { row-gap: 0; }
