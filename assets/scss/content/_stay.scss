@@ -733,6 +733,11 @@ body:has(.wcblr-stay) main::after {
 	em { font-family: $st-mono; font-size: 11px; font-style: normal; font-weight: 500; color: $st-muted; }
 }
 
+// A September figure, kept where Booking had no rate for 21 November: muted, labelled.
+.wcblr-stay-row-price.is-sep { color: $st-muted; }
+.wcblr-stay-row-price.is-sep small { color: $st-gold-deep; }
+.wcblr-stay-mini-row small { margin-left: 4px; color: $st-gold-deep; }
+
 @each $key, $c in $st-bands {
 	.wcblr-stay-tier.is-#{$key} {
 		.wcblr-stay-tier-n { color: $c; }
