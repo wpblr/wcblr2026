@@ -245,6 +245,7 @@ body:has(.wcblr-stay) main::after {
 .wcblr-stay-lede {
 	margin-top: clamp(16px, 1.6vw, 28px) !important;
 	max-width: 15ch !important;
+	text-wrap: balance;
 	font-family: $st-serif !important;
 	font-size: clamp(44px, 1.4rem + 4.6vw, 104px) !important;
 	line-height: 0.95 !important;
@@ -272,21 +273,19 @@ body:has(.wcblr-stay) main::after {
 
 .wcblr-stay-hero-side .wcblr-stay-actions { margin-top: 26px !important; }
 
+/* The photo stays inside the frame at its own 16:9, so the street and the
+   people walking down it are never cropped to a strip on a wide screen. */
 .wcblr-stay-hero-frame {
 	position: relative;
-	margin: clamp(48px, 5vw, 88px) calc(#{$st-pad} * -1 + #{$st-edge}) 0 !important;
+	margin-top: clamp(48px, 5vw, 88px) !important;
 }
-
-.wcblr-stay-hero-frame .wcblr-stay-tag { left: calc(#{$st-pad} - #{$st-edge}); }
-
-.wcblr-stay-hero-frame .wcblr-stay-credit { padding: 0 calc(#{$st-pad} - #{$st-edge}); }
 
 .wcblr-stay-hero-photo img {
 	display: block;
 	width: 100%;
-	height: clamp(260px, 38vw, 560px);
+	aspect-ratio: 16 / 9;
+	height: auto;
 	object-fit: cover;
-	object-position: center 55%;
 	border-radius: 28px;
 }
 
@@ -1141,10 +1140,8 @@ body:has(.wcblr-stay) main::after {
 	.wcblr-stay-frame .wcblr-stay-credit { padding-left: 0; }
 	.wcblr-stay-frame .wcblr-stay-tag { left: 20px; }
 
-	.wcblr-stay-hero-frame { margin-left: calc(#{$st-pad} * -1 + 8px) !important; margin-right: calc(#{$st-pad} * -1 + 8px) !important; }
-	.wcblr-stay-hero-frame .wcblr-stay-tag,
-	.wcblr-stay-hero-frame .wcblr-stay-credit { left: auto; padding: 0 calc(#{$st-pad} - 8px); }
-	.wcblr-stay-hero-frame .wcblr-stay-tag { margin-left: calc(#{$st-pad} - 8px) !important; padding: 7px 14px; }
+	.wcblr-stay-hero-photo img { aspect-ratio: 4 / 3; border-radius: 20px; }
+	.wcblr-stay-hero-frame .wcblr-stay-tag { left: 16px; }
 
 	.wcblr-stay-areas,
 	.wcblr-stay-checks { grid-template-columns: minmax(0, 1fr); }
