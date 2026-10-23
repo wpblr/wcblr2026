@@ -591,6 +591,29 @@ body.home .wcblr-calls__closed > .wcblr-calls__lbl {
 	grid-column: 1 / -1;
 }
 
+/* 24 Oct: table leads closed, leaving one open call and four closed ones.
+   The lone open call takes the full row, shorter so it does not read as a
+   hero; four closed tiles sit in one row, or two by two on a tablet. */
+body.home .wcblr-calls__grid.wcblr-calls__grid--one {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+body.home .wcblr-calls__grid--one .wcblr-call {
+	min-height: clamp(400px, 32vw, 520px);
+}
+
+@media (min-width: 782px) {
+	body.home .wcblr-calls__closed.wcblr-calls__closed--four {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (min-width: 1100px) {
+	body.home .wcblr-calls__closed.wcblr-calls__closed--four {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+}
+
 body.home .wcblr-calls__closed .wcblr-closed-row {
 	position: relative;
 	display: flex !important;
