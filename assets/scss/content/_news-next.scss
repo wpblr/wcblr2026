@@ -89,6 +89,12 @@ body:has(.wcblr-nw) main::after {
 	padding: 0 !important;
 }
 
+/* The flow layout gives every list item after the first a top margin, which
+   staggers the cards in a grid row; the grids set their own gaps. */
+.wcblr-nw .wp-block-post-template > li {
+	margin: 0 !important;
+}
+
 /* The frame: everything but the dark band and the rail sits in 1280px. */
 .wcblr-nw > .wcblr-nw-hero,
 .wcblr-nw > .wcblr-nw-also,
