@@ -780,9 +780,7 @@ body.admin-bar .wcblr-nw > .wcblr-nw-bar {
 }
 
 @media (max-width: 781px) {
-	.wcblr-nw .wcblr-nw-alsolist .wp-block-post-template,
-	.wcblr-nw .wcblr-nw-grid--two .wp-block-post-template,
-	.wcblr-nw .wcblr-nw-grid--three .wp-block-post-template {
+	.wcblr-nw .wcblr-nw-alsolist .wp-block-post-template {
 		grid-template-columns: 1fr;
 	}
 
@@ -817,5 +815,28 @@ body.admin-bar .wcblr-nw > .wcblr-nw-bar {
 
 	.wcblr-nw .wcblr-nw-rail .wp-block-post-template {
 		grid-auto-columns: 78vw;
+	}
+
+	/* On a phone every card shelf is a row to swipe, like the speakers, so a
+	   shelf costs one screen rather than five. */
+	.wcblr-nw .wcblr-nw-grid {
+		margin-left: calc(#{$nw-pad} * -1) !important;
+		margin-right: calc(#{$nw-pad} * -1) !important;
+	}
+
+	.wcblr-nw .wcblr-nw-grid--two .wp-block-post-template,
+	.wcblr-nw .wcblr-nw-grid--three .wp-block-post-template {
+		grid-template-columns: none;
+		grid-auto-flow: column;
+		grid-auto-columns: 78vw;
+		gap: 14px;
+		padding: 4px $nw-pad 8px !important;
+		overflow-x: auto;
+		overscroll-behavior-x: contain;
+		scroll-padding-left: $nw-pad;
+	}
+
+	.wcblr-nw .wcblr-nw-grid .wp-block-post-template > li {
+		scroll-snap-align: start;
 	}
 }
