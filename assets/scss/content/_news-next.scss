@@ -344,17 +344,34 @@ body:has(.wcblr-nw) main::after {
 	background: $nw-gold;
 }
 
-/* ---- 2. Just in: the ticker --------------------------------------------------------- */
+/* ---- 2. Just in: the ticker ---------------------------------------------------------
+   24 Oct, round 2 (Arun: "that just in looks a bit off"): it was a dark slab
+   glued to the window's left edge with rules above and below. Now a dark
+   capsule inside the frame, the label a gold pill, the headlines fading out
+   at the right edge rather than being cut. */
 
 .wcblr-nw > .wcblr-nw-ticker {
 	position: relative;
 	display: flex !important;
-	align-items: stretch;
-	margin-top: clamp(48px, 1.5rem + 4vw, 96px) !important;
-	border-top: 1px solid $nw-rule;
-	border-bottom: 1px solid $nw-rule;
-	background: $nw-paper;
+	align-items: center;
+	margin: clamp(44px, 1.5rem + 3.5vw, 88px) $nw-pad 0 !important;
+	padding: 6px;
+	border-radius: 999px;
+	background: $nw-espresso;
 	overflow: hidden;
+	box-shadow: 0 24px 50px -32px rgba(36, 26, 18, 0.7);
+}
+
+.wcblr-nw > .wcblr-nw-ticker::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 2;
+	width: clamp(60px, 10vw, 160px);
+	background: linear-gradient(to right, rgba(36, 26, 18, 0), $nw-espresso 85%);
+	pointer-events: none;
 }
 
 .wcblr-nw p.wcblr-nw-ticklabel {
@@ -363,16 +380,18 @@ body:has(.wcblr-nw) main::after {
 	display: flex;
 	flex: none;
 	align-items: center;
-	gap: 10px;
-	padding: 0 clamp(16px, 2vw, 28px) 0 $nw-pad;
-	background: $nw-espresso;
-	color: $nw-gold;
+	gap: 9px;
+	padding: 11px 18px 11px 16px;
+	border-radius: 999px;
+	background: $nw-gold;
+	color: $nw-ink;
 	font-family: $nw-mono;
 	font-size: 12px !important;
 	font-weight: 700;
 	letter-spacing: 0.14em;
 	text-transform: uppercase;
 	white-space: nowrap;
+	box-shadow: 10px 0 18px 4px $nw-espresso;
 }
 
 .wcblr-nw p.wcblr-nw-ticklabel::before {
@@ -397,22 +416,37 @@ body:has(.wcblr-nw) main::after {
 	position: relative;
 	display: flex !important;
 	align-items: baseline;
-	gap: 14px;
-	padding: 18px clamp(22px, 2.4vw, 40px);
+	gap: 12px;
+	padding: 10px clamp(18px, 2vw, 30px);
 	white-space: nowrap;
-	border-right: 1px solid $nw-rule;
-	transition: background 0.25s $nw-ease;
+}
+
+.wcblr-nw .wcblr-nw-tickitem::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 50%;
+	width: 5px;
+	height: 5px;
+	border-radius: 50%;
+	background: rgba(224, 165, 38, 0.55);
+	transform: translate(-50%, -50%);
+}
+
+.wcblr-nw .wcblr-nw-tickitem .wcblr-nw-date {
+	color: $nw-gold;
+	font-size: 11px !important;
 }
 
 .wcblr-nw .wcblr-nw-tickitem h3.wcblr-nw-ticktitle {
 	font-family: $nw-serif !important;
-	font-size: 19px !important;
+	font-size: 18px !important;
 	font-weight: 400 !important;
 	letter-spacing: -0.01em;
 	line-height: 1.2 !important;
+	color: $nw-paper;
+	transition: color 0.25s $nw-ease;
 }
-
-/* Without motion, the strip is the first few headlines, cut at the edge. */
 
 /* ---- 3. The chip bar ------------------------------------------------------------------ */
 
@@ -505,26 +539,28 @@ body.admin-bar .wcblr-nw > .wcblr-nw-bar {
 }
 
 .wcblr-nw .wcblr-nw-card h3.wcblr-nw-title {
-	padding-right: 52px;
 	font-size: clamp(20px, 0.9rem + 0.6vw, 25px) !important;
 	line-height: 1.18 !important;
 }
 
-/* The round arrow in the card's corner. */
-.wcblr-nw .wcblr-nw-card::after {
-	content: "\2192";
-	position: absolute;
-	right: 20px;
-	bottom: 20px;
-	display: grid;
-	place-items: center;
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	border: 1.5px solid $nw-rule;
-	color: $nw-ink;
-	font-size: 17px;
-	transition: background 0.3s $nw-ease, color 0.3s $nw-ease, border-color 0.3s $nw-ease, transform 0.45s $nw-spring;
+/* The card's foot: a plain "Read the post" line, the arrow nudging on hover.
+   (A circled arrow sat in the corner first; Arun: it "looks off".) */
+.wcblr-nw .wcblr-nw-card .wcblr-nw-body::after {
+	content: "Read the post \2192";
+	margin-top: auto;
+	padding-top: 6px;
+	color: $nw-red;
+	font-family: $nw-mono;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	transition: transform 0.4s $nw-spring;
+}
+
+/* Guides lead the feed in "All": they are what a visitor needs first. */
+.wcblr-nw .wcblr-nw-grid .wp-block-post-template > li.category-guides {
+	order: -1;
 }
 
 /* In "All" the newest post is already the lead, so the feed starts at the next. */
@@ -569,19 +605,12 @@ body.admin-bar .wcblr-nw > .wcblr-nw-bar {
 		box-shadow: 0 30px 50px -30px rgba(36, 26, 18, 0.45);
 	}
 
-	.wcblr-nw .wcblr-nw-card:hover::after {
-		border-color: $nw-red;
-		background: $nw-red;
-		color: $nw-paper;
-		transform: rotate(-45deg);
-	}
-
-	.wcblr-nw .wcblr-nw-tickitem:hover {
-		background: $nw-cream;
+	.wcblr-nw .wcblr-nw-card:hover .wcblr-nw-body::after {
+		transform: translateX(6px);
 	}
 
 	.wcblr-nw .wcblr-nw-tickitem:hover .wcblr-nw-ticktitle {
-		color: $nw-red;
+		color: $nw-gold;
 	}
 }
 
@@ -689,8 +718,17 @@ body.admin-bar .wcblr-nw > .wcblr-nw-bar {
 		font-size: 13.5px;
 	}
 
+	.wcblr-nw > .wcblr-nw-ticker {
+		margin-left: 16px !important;
+		margin-right: 16px !important;
+	}
+
+	.wcblr-nw p.wcblr-nw-ticklabel {
+		padding: 10px 14px 10px 12px;
+	}
+
 	.wcblr-nw .wcblr-nw-tickitem h3.wcblr-nw-ticktitle {
-		font-size: 17px !important;
+		font-size: 16px !important;
 	}
 
 	/* A phone shows one card per row, so the newest few could be long: smaller titles. */
