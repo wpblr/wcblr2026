@@ -1,0 +1,815 @@
+/* ==== News, next ============================================================
+   24 Oct 2026. Arun: make /news/ "next-gen, modern, sleek ... like the home
+   page", "really easy to find things", with "really good animations".
+
+   THE SHAPE
+   Hero: "News" set huge, the newest post as the lead story on the right,
+   the next three as an "Also new" strip under it · a sticky shelf bar ·
+   six shelves: Speakers (a dark band with a rail to scroll), Sponsors (two
+   big cards), Guides (three), Calls (dated rows), Community (three), and
+   Every post (an index of the lot).
+
+   FINDING THINGS WITHOUT SCRIPT. There is no JavaScript on WordCamp.org, so
+   the shelf bar filters with :target. Each shelf is a direct child of
+   .wcblr-nw with an id; a chip links to it, and while one shelf is the
+   target the others step out and its chip lights up. "All" targets the
+   wrapper itself, which brings every shelf back. Only `>` inside :has():
+   clean-css deletes a descendant space there.
+
+   Every featured image on the site is a 1.9:1 banner with words on it, so
+   nothing here sets type over a picture; the banner is always shown whole.
+
+   Motion: a staged entrance in the hero on load, and under the pointer
+   everywhere else (references/motion.md). Scoped to .wcblr-nw. No custom
+   properties, no url(): the Remote CSS sanitiser drops both. Markup:
+   website/tools/build-news.py. */
+
+$nw-ink: #2a1d14;
+$nw-espresso: #241a12;
+$nw-red: #c8344b;
+$nw-gold: #e0a526;
+$nw-gold-deep: #a8760f;
+$nw-cream: #f2ece0;
+$nw-paper: #fbf8f1;
+$nw-muted: #7a6757;
+$nw-soft: #5c4a3b;
+$nw-rule: rgba(42, 29, 20, 0.12);
+$nw-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+$nw-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+$nw-serif: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif;
+$nw-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif;
+$nw-mono: var(--wp--preset--font-family--jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
+$nw-frame: 1280px;
+$nw-gutter: clamp(20px, 5vw, 96px);
+$nw-pad: max(#{$nw-gutter}, calc((100vw - #{$nw-frame}) / 2));
+$nw-sec: clamp(80px, 2.5rem + 5vw, 150px);
+$nw-banner: unquote("1200 / 630");
+$nw-stick: 86px;
+
+/* ---- The ground ------------------------------------------------------------------ */
+
+body:has(.wcblr-nw),
+body:has(.wcblr-nw) .wp-site-blocks > main {
+	background-color: $nw-cream !important;
+}
+
+body:has(.wcblr-nw) main::before,
+body:has(.wcblr-nw) main::after {
+	display: none !important;
+}
+
+.entry-content:has(> .wcblr-nw) {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+	margin-top: 0 !important;
+}
+
+.entry-content > .wcblr-nw.alignfull {
+	width: auto !important;
+	max-width: none !important;
+	margin: 0 !important;
+	padding: clamp(36px, 1rem + 4vw, 88px) 0 clamp(80px, 2rem + 5vw, 150px) !important;
+	color: $nw-ink;
+	font-family: $nw-sans;
+	overflow-x: clip;
+}
+
+.wcblr-nw :where(p, h1, h2, h3, .wp-block-group, .wp-block-query, .wp-block-post-template, .wp-block-post-title, .wp-block-post-date, .wp-block-post-excerpt, .wp-block-post-terms, .wp-block-post-featured-image) {
+	margin: 0 !important;
+	max-width: none !important;
+}
+
+.wcblr-nw a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.wcblr-nw .wp-block-post-template {
+	list-style: none;
+	padding: 0 !important;
+}
+
+/* The frame: everything but the dark band and the rail sits in 1280px. */
+.wcblr-nw > .wcblr-nw-hero,
+.wcblr-nw > .wcblr-nw-also,
+.wcblr-nw > .wcblr-nw-bar,
+.wcblr-nw > .wcblr-nw-sec {
+	padding-left: $nw-pad !important;
+	padding-right: $nw-pad !important;
+}
+
+/* ---- Shared pieces: the banner, the meta row, the title ------------------------ */
+
+.wcblr-nw .wcblr-nw-img {
+	position: relative;
+	overflow: hidden;
+	border-radius: clamp(14px, 1.2vw, 20px);
+	background: $nw-espresso;
+	aspect-ratio: $nw-banner;
+}
+
+.wcblr-nw .wcblr-nw-img a,
+.wcblr-nw .wcblr-nw-img img {
+	display: block;
+	width: 100% !important;
+	height: 100% !important;
+}
+
+.wcblr-nw .wcblr-nw-img img {
+	object-fit: cover;
+	border-radius: 0 !important;
+	transition: transform 0.9s $nw-ease;
+}
+
+.wcblr-nw .wcblr-nw-meta {
+	display: flex !important;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px 14px;
+	font-family: $nw-mono;
+	font-size: 12px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: $nw-muted;
+}
+
+.wcblr-nw .wcblr-nw-date {
+	font-family: $nw-mono !important;
+	font-size: 12px !important;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: $nw-muted;
+}
+
+.wcblr-nw .wcblr-nw-terms {
+	font-family: $nw-mono !important;
+	font-size: 12px !important;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: $nw-red;
+}
+
+/* The category archives are the bare stock template, so the chips on this
+   page are labels, not doors; the shelf bar is the way in. */
+.wcblr-nw .wcblr-nw-terms a {
+	pointer-events: none;
+	color: inherit !important;
+}
+
+.wcblr-nw .wcblr-nw-terms .wp-block-post-terms__separator {
+	opacity: 0.5;
+}
+
+.wcblr-nw h2.wcblr-nw-title,
+.wcblr-nw h3.wcblr-nw-title {
+	font-family: $nw-serif !important;
+	font-weight: 400 !important;
+	letter-spacing: -0.02em;
+	line-height: 1.12 !important;
+	color: $nw-ink;
+}
+
+.wcblr-nw .wcblr-nw-title a {
+	background-image: linear-gradient(currentColor, currentColor);
+	background-repeat: no-repeat;
+	background-position: 0 100%;
+	background-size: 0 1px;
+	transition: background-size 0.45s $nw-ease;
+}
+
+.wcblr-nw .wcblr-nw-excerpt,
+.wcblr-nw .wcblr-nw-excerpt p {
+	font-size: 16px !important;
+	line-height: 1.6 !important;
+	color: $nw-soft;
+}
+
+.wcblr-nw .wcblr-nw-excerpt .wp-block-post-excerpt__more-link {
+	display: none;
+}
+
+/* ---- 1. The hero ------------------------------------------------------------------ */
+
+.wcblr-nw .wcblr-nw-hero {
+	display: grid !important;
+	grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+	gap: clamp(28px, 1rem + 4vw, 88px);
+	align-items: end;
+}
+
+.wcblr-nw .wcblr-nw-intro {
+	display: flex !important;
+	flex-direction: column;
+	gap: clamp(16px, 0.6rem + 1vw, 26px);
+	padding-bottom: clamp(4px, 1vw, 18px);
+}
+
+.wcblr-nw p.wcblr-nw-kicker {
+	font-family: $nw-mono;
+	font-size: 12.5px !important;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: $nw-gold-deep;
+}
+
+.wcblr-nw h1.wcblr-nw-h1 {
+	font-family: $nw-serif !important;
+	font-size: clamp(88px, 2rem + 11vw, 220px) !important;
+	font-weight: 400 !important;
+	line-height: 0.82 !important;
+	letter-spacing: -0.055em !important;
+	color: $nw-ink;
+}
+
+.wcblr-nw p.wcblr-nw-lede {
+	max-width: 34ch !important;
+	font-size: clamp(17px, 0.95rem + 0.35vw, 21px) !important;
+	line-height: 1.55;
+	color: $nw-soft;
+}
+
+/* The lead story: the banner large, slightly turned, settling straight under
+   the pointer, with the newest-post badge stamped on its corner. */
+.wcblr-nw .wcblr-nw-lead .wp-block-post-template > li {
+	margin: 0;
+}
+
+.wcblr-nw .wcblr-nw-leadcard {
+	position: relative;
+	display: flex !important;
+	flex-direction: column;
+	gap: clamp(18px, 0.8rem + 1vw, 28px);
+}
+
+.wcblr-nw .wcblr-nw-leadcard .wcblr-nw-img {
+	border-radius: clamp(18px, 1.6vw, 28px);
+	box-shadow: 0 30px 60px -28px rgba(36, 26, 18, 0.55), 0 2px 0 rgba(36, 26, 18, 0.06);
+	transform: rotate(-1.2deg);
+	transition: transform 0.7s $nw-spring, box-shadow 0.7s $nw-ease;
+}
+
+.wcblr-nw p.wcblr-nw-badge {
+	position: absolute;
+	top: clamp(-14px, -1vw, -8px);
+	right: clamp(10px, 2vw, 28px);
+	z-index: 3;
+	display: inline-flex;
+	align-items: center;
+	gap: 9px;
+	padding: 9px 16px 9px 14px;
+	border-radius: 999px;
+	background: $nw-red;
+	color: $nw-paper;
+	font-family: $nw-mono;
+	font-size: 12px !important;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	box-shadow: 0 10px 24px -10px rgba(200, 52, 75, 0.7);
+	transform: rotate(4deg);
+}
+
+.wcblr-nw p.wcblr-nw-badge::before {
+	content: "";
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: $nw-gold;
+}
+
+.wcblr-nw .wcblr-nw-leadcard .wcblr-nw-body {
+	display: flex !important;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.wcblr-nw .wcblr-nw-leadcard h2.wcblr-nw-title {
+	font-size: clamp(30px, 1rem + 2.2vw, 54px) !important;
+	line-height: 1.02 !important;
+	letter-spacing: -0.035em;
+}
+
+/* ---- 2. Also new ------------------------------------------------------------------- */
+
+.wcblr-nw .wcblr-nw-also {
+	margin-top: clamp(48px, 1.5rem + 4vw, 96px) !important;
+}
+
+.wcblr-nw p.wcblr-nw-label {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	margin-bottom: 18px !important;
+	font-family: $nw-mono;
+	font-size: 12px !important;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: $nw-gold-deep;
+}
+
+.wcblr-nw p.wcblr-nw-label::after {
+	content: "";
+	flex: 1;
+	height: 1px;
+	background: $nw-rule;
+}
+
+.wcblr-nw .wcblr-nw-alsolist .wp-block-post-template {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: clamp(12px, 1.4vw, 22px);
+}
+
+.wcblr-nw .wcblr-nw-mini {
+	display: grid !important;
+	grid-template-columns: minmax(0, 44%) minmax(0, 1fr);
+	gap: 16px;
+	align-items: center;
+	height: 100%;
+	padding: 12px;
+	border-radius: 18px;
+	background: $nw-paper;
+	transition: transform 0.45s $nw-spring, box-shadow 0.45s $nw-ease;
+}
+
+.wcblr-nw .wcblr-nw-mini .wcblr-nw-img {
+	border-radius: 10px;
+}
+
+.wcblr-nw .wcblr-nw-mini .wcblr-nw-body {
+	display: flex !important;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.wcblr-nw .wcblr-nw-mini h3.wcblr-nw-title {
+	font-size: clamp(16px, 0.9rem + 0.3vw, 19px) !important;
+	line-height: 1.25 !important;
+	letter-spacing: -0.01em;
+}
+
+/* ---- 3. The shelf bar -------------------------------------------------------------- */
+
+.wcblr-nw > .wcblr-nw-bar {
+	position: sticky;
+	top: $nw-stick;
+	z-index: 40;
+	margin-top: clamp(56px, 2rem + 4vw, 112px) !important;
+	padding-top: 10px !important;
+	padding-bottom: 10px !important;
+	pointer-events: none;
+}
+
+body.admin-bar .wcblr-nw > .wcblr-nw-bar {
+	top: $nw-stick + 32px;
+}
+
+.wcblr-nw p.wcblr-nw-chips {
+	display: flex;
+	gap: 4px;
+	width: max-content;
+	max-width: 100% !important;
+	padding: 5px;
+	overflow-x: auto;
+	scrollbar-width: none;
+	border-radius: 999px;
+	background: $nw-espresso;
+	box-shadow: 0 18px 40px -22px rgba(36, 26, 18, 0.65);
+	pointer-events: auto;
+}
+
+.wcblr-nw p.wcblr-nw-chips a {
+	flex: none;
+	padding: 10px 18px;
+	border-radius: 999px;
+	color: rgba(251, 248, 241, 0.72);
+	font-size: 14.5px;
+	font-weight: 600;
+	white-space: nowrap;
+	transition: background 0.25s $nw-ease, color 0.25s $nw-ease, transform 0.35s $nw-spring;
+}
+
+.wcblr-nw p.wcblr-nw-chips a:hover {
+	color: $nw-paper;
+	background: rgba(251, 248, 241, 0.1);
+}
+
+.wcblr-nw p.wcblr-nw-chips a:active {
+	transform: scale(0.94);
+}
+
+/* Which chip is lit: "All" until a shelf is the target, then that shelf's. */
+.wcblr-nw:not(:has(> .wcblr-nw-sec:target)) p.wcblr-nw-chips a[href="#nw-top"],
+.wcblr-nw:has(> #nw-speakers:target) p.wcblr-nw-chips a[href="#nw-speakers"],
+.wcblr-nw:has(> #nw-sponsors:target) p.wcblr-nw-chips a[href="#nw-sponsors"],
+.wcblr-nw:has(> #nw-guides:target) p.wcblr-nw-chips a[href="#nw-guides"],
+.wcblr-nw:has(> #nw-calls:target) p.wcblr-nw-chips a[href="#nw-calls"],
+.wcblr-nw:has(> #nw-community:target) p.wcblr-nw-chips a[href="#nw-community"],
+.wcblr-nw:has(> #nw-index:target) p.wcblr-nw-chips a[href="#nw-index"] {
+	background: $nw-gold;
+	color: $nw-ink;
+}
+
+/* The filter itself. */
+.wcblr-nw:has(> .wcblr-nw-sec:target) > .wcblr-nw-sec:not(:target) {
+	display: none !important;
+}
+
+/* ---- 4. The shelves ---------------------------------------------------------------- */
+
+.wcblr-nw > .wcblr-nw-sec {
+	padding-top: $nw-sec !important;
+	scroll-margin-top: $nw-stick + 40px;
+}
+
+.wcblr-nw > .wcblr-nw-bar + .wcblr-nw-sec {
+	padding-top: clamp(40px, 1rem + 3vw, 72px) !important;
+}
+
+.wcblr-nw .wcblr-nw-head {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 30ch);
+	gap: 12px 40px;
+	align-items: end;
+	margin-bottom: clamp(28px, 1rem + 2vw, 52px) !important;
+}
+
+.wcblr-nw h2.wcblr-nw-h2 {
+	font-family: $nw-serif !important;
+	font-size: clamp(52px, 1.6rem + 6vw, 128px) !important;
+	font-weight: 400 !important;
+	line-height: 0.9 !important;
+	letter-spacing: -0.05em !important;
+	color: $nw-ink;
+}
+
+.wcblr-nw p.wcblr-nw-sub {
+	padding-bottom: 0.6em;
+	font-size: clamp(16px, 0.9rem + 0.25vw, 18px) !important;
+	line-height: 1.5;
+	color: $nw-soft;
+}
+
+/* Cards: banner on top, meta and title under it. */
+.wcblr-nw .wcblr-nw-card {
+	display: flex !important;
+	flex-direction: column;
+	gap: 16px;
+	height: 100%;
+}
+
+.wcblr-nw .wcblr-nw-card .wcblr-nw-body {
+	display: flex !important;
+	flex-direction: column;
+	gap: 10px;
+	padding: 0 4px;
+}
+
+.wcblr-nw .wcblr-nw-card h3.wcblr-nw-title {
+	font-size: clamp(21px, 0.9rem + 0.9vw, 30px) !important;
+}
+
+.wcblr-nw .wcblr-nw-grid .wp-block-post-template {
+	display: grid !important;
+	gap: clamp(28px, 1rem + 2vw, 48px) clamp(16px, 1.6vw, 28px);
+}
+
+.wcblr-nw .wcblr-nw-grid--two .wp-block-post-template {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wcblr-nw .wcblr-nw-grid--three .wp-block-post-template {
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.wcblr-nw .wcblr-nw-grid--two .wcblr-nw-card h3.wcblr-nw-title {
+	font-size: clamp(24px, 1rem + 1.2vw, 38px) !important;
+}
+
+/* Speakers: a dark band, the rail running the window's width. */
+.wcblr-nw > .wcblr-nw-sec--dark {
+	margin-top: $nw-sec !important;
+	padding-top: clamp(64px, 2rem + 4vw, 120px) !important;
+	padding-bottom: clamp(64px, 2rem + 4vw, 120px) !important;
+	background: $nw-espresso;
+	color: $nw-paper;
+}
+
+.wcblr-nw > .wcblr-nw-bar + .wcblr-nw-sec--dark {
+	margin-top: clamp(28px, 1rem + 2vw, 48px) !important;
+	padding-top: clamp(64px, 2rem + 4vw, 120px) !important;
+}
+
+.wcblr-nw .wcblr-nw-sec--dark h2.wcblr-nw-h2,
+.wcblr-nw .wcblr-nw-sec--dark h3.wcblr-nw-title {
+	color: $nw-paper;
+}
+
+.wcblr-nw .wcblr-nw-sec--dark p.wcblr-nw-sub {
+	color: rgba(251, 248, 241, 0.66);
+}
+
+.wcblr-nw .wcblr-nw-sec--dark .wcblr-nw-date {
+	color: $nw-gold;
+}
+
+.wcblr-nw .wcblr-nw-rail {
+	margin-left: calc(#{$nw-pad} * -1) !important;
+	margin-right: calc(#{$nw-pad} * -1) !important;
+}
+
+.wcblr-nw .wcblr-nw-rail .wp-block-post-template {
+	display: grid !important;
+	grid-auto-flow: column;
+	grid-auto-columns: clamp(270px, 24vw, 380px);
+	gap: clamp(14px, 1.4vw, 24px);
+	padding: 8px $nw-pad 28px !important;
+	overflow-x: auto;
+	overscroll-behavior-x: contain;
+	scroll-snap-type: x mandatory;
+	scroll-padding-left: $nw-pad;
+	scrollbar-width: thin;
+	scrollbar-color: rgba(224, 165, 38, 0.6) transparent;
+}
+
+.wcblr-nw .wcblr-nw-rail .wp-block-post-template > li {
+	scroll-snap-align: start;
+}
+
+.wcblr-nw .wcblr-nw-rail h3.wcblr-nw-title {
+	font-size: clamp(19px, 0.9rem + 0.5vw, 23px) !important;
+	line-height: 1.2 !important;
+}
+
+/* Calls: dated rows, the banner small on the left. */
+.wcblr-nw .wcblr-nw-rows .wp-block-post-template {
+	display: grid !important;
+	border-top: 1px solid $nw-rule;
+}
+
+.wcblr-nw .wcblr-nw-row {
+	position: relative;
+	display: grid !important;
+	grid-template-columns: clamp(120px, 14vw, 200px) minmax(0, 1fr);
+	gap: clamp(16px, 2vw, 36px);
+	align-items: center;
+	padding: clamp(14px, 1.2vw, 20px) 56px clamp(14px, 1.2vw, 20px) 0;
+	border-bottom: 1px solid $nw-rule;
+	transition: background 0.3s $nw-ease;
+}
+
+.wcblr-nw .wcblr-nw-row .wcblr-nw-img {
+	border-radius: 10px;
+}
+
+.wcblr-nw .wcblr-nw-row .wcblr-nw-body {
+	display: grid !important;
+	grid-template-columns: 12ch minmax(0, 1fr);
+	gap: 20px;
+	align-items: baseline;
+}
+
+.wcblr-nw .wcblr-nw-row h3.wcblr-nw-title {
+	font-size: clamp(20px, 0.9rem + 0.9vw, 30px) !important;
+}
+
+.wcblr-nw .wcblr-nw-row::after {
+	content: "\2192";
+	position: absolute;
+	right: 8px;
+	top: 50%;
+	font-size: 22px;
+	color: $nw-red;
+	transform: translateY(-50%);
+	transition: transform 0.4s $nw-spring;
+}
+
+/* Every post: one line each, the whole row a link. */
+.wcblr-nw .wcblr-nw-index .wp-block-post-template {
+	display: grid !important;
+	border-top: 1px solid $nw-rule;
+}
+
+.wcblr-nw .wcblr-nw-irow {
+	position: relative;
+	display: grid !important;
+	grid-template-columns: 12ch 16ch minmax(0, 1fr) 24px;
+	gap: 20px;
+	align-items: baseline;
+	padding: 16px 4px;
+	border-bottom: 1px solid $nw-rule;
+	transition: background 0.25s $nw-ease, padding 0.35s $nw-ease;
+}
+
+.wcblr-nw .wcblr-nw-irow::after {
+	content: "\2197";
+	color: $nw-muted;
+	transition: transform 0.35s $nw-spring, color 0.25s $nw-ease;
+}
+
+.wcblr-nw .wcblr-nw-irow h3.wcblr-nw-title {
+	font-size: clamp(17px, 0.9rem + 0.3vw, 20px) !important;
+	line-height: 1.35 !important;
+	letter-spacing: -0.01em;
+}
+
+/* The title's link covers the whole card or row. */
+.wcblr-nw .wcblr-nw-row .wcblr-nw-title a::before,
+.wcblr-nw .wcblr-nw-irow .wcblr-nw-title a::before,
+.wcblr-nw .wcblr-nw-mini .wcblr-nw-title a::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+}
+
+.wcblr-nw .wcblr-nw-row,
+.wcblr-nw .wcblr-nw-irow,
+.wcblr-nw .wcblr-nw-mini {
+	position: relative;
+}
+
+/* ---- 5. Under the pointer ---------------------------------------------------------- */
+
+@media (hover: hover) and (pointer: fine) {
+	.wcblr-nw .wcblr-nw-leadcard:hover .wcblr-nw-img {
+		transform: rotate(0deg) translateY(-4px);
+		box-shadow: 0 40px 70px -30px rgba(36, 26, 18, 0.6), 0 2px 0 rgba(36, 26, 18, 0.06);
+	}
+
+	.wcblr-nw .wcblr-nw-leadcard:hover .wcblr-nw-img img,
+	.wcblr-nw .wcblr-nw-card:hover .wcblr-nw-img img,
+	.wcblr-nw .wcblr-nw-mini:hover .wcblr-nw-img img,
+	.wcblr-nw .wcblr-nw-row:hover .wcblr-nw-img img {
+		transform: scale(1.045);
+	}
+
+	.wcblr-nw .wcblr-nw-leadcard:hover .wcblr-nw-title a,
+	.wcblr-nw .wcblr-nw-card:hover .wcblr-nw-title a {
+		background-size: 100% 1px;
+	}
+
+	.wcblr-nw .wcblr-nw-mini:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 22px 40px -26px rgba(36, 26, 18, 0.45);
+	}
+
+	.wcblr-nw .wcblr-nw-card .wcblr-nw-img {
+		transition: transform 0.5s $nw-spring, box-shadow 0.5s $nw-ease;
+	}
+
+	.wcblr-nw .wcblr-nw-card:hover .wcblr-nw-img {
+		transform: translateY(-6px);
+		box-shadow: 0 26px 46px -28px rgba(36, 26, 18, 0.55);
+	}
+
+	.wcblr-nw .wcblr-nw-sec--dark .wcblr-nw-card:hover .wcblr-nw-img {
+		box-shadow: 0 26px 50px -24px rgba(0, 0, 0, 0.8);
+	}
+
+	.wcblr-nw .wcblr-nw-row:hover {
+		background: rgba(251, 248, 241, 0.7);
+	}
+
+	.wcblr-nw .wcblr-nw-row:hover::after {
+		transform: translate(6px, -50%);
+	}
+
+	.wcblr-nw .wcblr-nw-irow:hover {
+		padding-left: 14px;
+		background: $nw-paper;
+	}
+
+	.wcblr-nw .wcblr-nw-irow:hover::after {
+		color: $nw-red;
+		transform: translate(3px, -3px);
+	}
+}
+
+/* ---- 6. The opening, on load ------------------------------------------------------- */
+
+@keyframes wcblr-nw-in {
+	from {
+		opacity: 0;
+		transform: translateY(18px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@keyframes wcblr-nw-lift {
+	from {
+		transform: translateY(0.18em);
+	}
+	to {
+		transform: none;
+	}
+}
+
+@keyframes wcblr-nw-deal {
+	from {
+		opacity: 0;
+		transform: translateY(40px) rotate(3deg) scale(0.96);
+	}
+	to {
+		opacity: 1;
+		transform: rotate(-1.2deg);
+	}
+}
+
+@keyframes wcblr-nw-stamp {
+	from {
+		opacity: 0;
+		transform: rotate(-12deg) scale(0.6);
+	}
+	to {
+		opacity: 1;
+		transform: rotate(4deg);
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-nw p.wcblr-nw-kicker { animation: wcblr-nw-in 0.7s $nw-ease 0.05s backwards; }
+	.wcblr-nw h1.wcblr-nw-h1 { animation: wcblr-nw-lift 1.1s $nw-ease backwards; }
+	.wcblr-nw p.wcblr-nw-lede { animation: wcblr-nw-in 0.8s $nw-ease 0.2s backwards; }
+	.wcblr-nw .wcblr-nw-leadcard .wcblr-nw-img { animation: wcblr-nw-deal 1s $nw-ease 0.15s backwards; }
+	.wcblr-nw .wcblr-nw-leadcard .wcblr-nw-body { animation: wcblr-nw-in 0.8s $nw-ease 0.45s backwards; }
+	.wcblr-nw p.wcblr-nw-badge { animation: wcblr-nw-stamp 0.6s $nw-spring 0.95s backwards; }
+	.wcblr-nw p.wcblr-nw-badge::before { animation: wcblr-pulse 3.5s ease-in-out 1.6s infinite; }
+	.wcblr-nw .wcblr-nw-alsolist li:nth-child(1) { animation: wcblr-nw-in 0.7s $nw-ease 0.55s backwards; }
+	.wcblr-nw .wcblr-nw-alsolist li:nth-child(2) { animation: wcblr-nw-in 0.7s $nw-ease 0.65s backwards; }
+	.wcblr-nw .wcblr-nw-alsolist li:nth-child(3) { animation: wcblr-nw-in 0.7s $nw-ease 0.75s backwards; }
+	.wcblr-nw p.wcblr-nw-chips { animation: wcblr-nw-in 0.7s $nw-ease 0.85s backwards; }
+
+	/* Picking a shelf: it rises into place, so the filter reads as a change. */
+	.wcblr-nw > .wcblr-nw-sec:target { animation: wcblr-nw-in 0.6s $nw-ease backwards; }
+}
+
+/* ---- 7. Smaller screens --------------------------------------------------------------- */
+
+@media (max-width: 1023px) {
+	.wcblr-nw .wcblr-nw-hero {
+		grid-template-columns: 1fr;
+		align-items: start;
+	}
+
+	.wcblr-nw .wcblr-nw-alsolist .wp-block-post-template,
+	.wcblr-nw .wcblr-nw-grid--three .wp-block-post-template {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.wcblr-nw .wcblr-nw-head {
+		grid-template-columns: 1fr;
+	}
+
+	.wcblr-nw .wcblr-nw-irow {
+		grid-template-columns: 11ch minmax(0, 1fr) 20px;
+	}
+
+	.wcblr-nw .wcblr-nw-irow .wcblr-nw-terms {
+		display: none;
+	}
+}
+
+@media (max-width: 781px) {
+	.wcblr-nw .wcblr-nw-alsolist .wp-block-post-template,
+	.wcblr-nw .wcblr-nw-grid--two .wp-block-post-template,
+	.wcblr-nw .wcblr-nw-grid--three .wp-block-post-template {
+		grid-template-columns: 1fr;
+	}
+
+	.wcblr-nw > .wcblr-nw-bar {
+		padding-left: 10px !important;
+		padding-right: 10px !important;
+	}
+
+	.wcblr-nw p.wcblr-nw-chips a {
+		padding: 9px 14px;
+		font-size: 14px;
+	}
+
+	.wcblr-nw .wcblr-nw-row {
+		grid-template-columns: 96px minmax(0, 1fr);
+		padding-right: 32px;
+	}
+
+	.wcblr-nw .wcblr-nw-row .wcblr-nw-body {
+		grid-template-columns: 1fr;
+		gap: 6px;
+	}
+
+	.wcblr-nw .wcblr-nw-irow {
+		grid-template-columns: minmax(0, 1fr) 18px;
+		gap: 4px 12px;
+	}
+
+	.wcblr-nw .wcblr-nw-irow .wcblr-nw-date {
+		grid-column: 1 / -1;
+	}
+
+	.wcblr-nw .wcblr-nw-rail .wp-block-post-template {
+		grid-auto-columns: 78vw;
+	}
+}
