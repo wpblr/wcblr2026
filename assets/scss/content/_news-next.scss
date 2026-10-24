@@ -362,6 +362,20 @@ body:has(.wcblr-nw) main::after {
 	box-shadow: 0 24px 50px -32px rgba(36, 26, 18, 0.7);
 }
 
+/* The capsule's inner edge left of the pill: headlines slide under the pill,
+   so this strip covers the few pixels where they would show past it. */
+.wcblr-nw > .wcblr-nw-ticker::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	z-index: 2;
+	width: 12px;
+	background: $nw-espresso;
+	pointer-events: none;
+}
+
 .wcblr-nw > .wcblr-nw-ticker::after {
 	content: "";
 	position: absolute;
