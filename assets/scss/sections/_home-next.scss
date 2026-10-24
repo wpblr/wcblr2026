@@ -602,6 +602,42 @@ body.home .wcblr-calls__grid--one .wcblr-call {
 	min-height: clamp(400px, 32vw, 520px);
 }
 
+/* 24 Oct: the section became "Plan your visit", three guide cards in the
+   call-card treatment, so the titles step down to fit a third of the row.
+   Their foot stacks; the divider is a wrapping full-basis flex item, which in
+   a column wraps the label and button into a second column, so it stops
+   wrapping and the divider takes the width instead. */
+body.home .wcblr-calls__grid--three .wcblr-call > .wcblr-call__foot {
+	flex-wrap: nowrap;
+}
+
+body.home .wcblr-calls__grid--three .wcblr-call__foot::before {
+	flex: 0 0 auto;
+	align-self: stretch;
+}
+
+@media (min-width: 782px) {
+	body.home .wcblr-calls__grid.wcblr-calls__grid--three {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	body.home .wcblr-calls__grid--three .wcblr-call {
+		min-height: clamp(420px, 36vw, 560px);
+		padding: clamp(22px, 0.8rem + 1.2vw, 36px) !important;
+	}
+
+	body.home .wcblr-calls__grid--three .wcblr-call h3.wcblr-call__title {
+		font-size: clamp(34px, 1rem + 2.2vw, 58px) !important;
+		line-height: 0.98 !important;
+	}
+
+	body.home .wcblr-calls__grid--three .wcblr-call > .wcblr-call__foot {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 14px;
+	}
+}
+
 @media (min-width: 782px) {
 	body.home .wcblr-calls__closed.wcblr-calls__closed--four {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
