@@ -259,6 +259,16 @@ body:has(.wcblr-wknd) main::after {
 
 .wcblr-wknd-hero-main .wcblr-wknd-actions { margin-top: 28px !important; }
 
+// The pointer to the first-timer post, under the intro.
+.wcblr-wknd-intro.is-aside {
+	margin-top: 14px !important;
+	padding: 12px 16px;
+	border-radius: 14px;
+	background: $wk-paper;
+	font-size: 15.5px !important;
+	color: $wk-soft;
+}
+
 .wcblr-wknd-glance-k {
 	display: flex !important;
 	justify-content: space-between;
