@@ -779,110 +779,211 @@ body:has(.wcblr-first) main::after {
 	border-radius: 22px;
 }
 
-/* 09:00: session lengths, who is on stage, the law of two feet. */
-.wcblr-first-bars,
-.wcblr-first-who {
-	padding: 26px;
-	border-radius: 24px;
-	background: $fw-paper;
-	box-shadow: 0 0 0 1px rgba(42, 29, 20, 0.05);
+/* 09:00: four routes through the day, then the law of two feet.
+   Each route is a line on a transit map: one colour, a station per session.
+   A ring is Xavier Hall, a filled dot is Concert Hall. */
+$fw-routes: (build: $fw-red, business: $fw-green, publish: $fw-gold-deep, curious: $fw-purple);
+
+.wcblr-first-routes-top {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: 12px clamp(24px, 3vw, 48px);
+	align-items: end;
+	margin-bottom: 20px !important;
+
+	.wcblr-first-card-k { grid-column: 1 / -1; }
 }
 
-.wcblr-first-bar {
+.wcblr-first-routes-t {
+	font-family: $fw-serif !important;
+	font-size: clamp(32px, 1rem + 2vw, 52px) !important;
+	line-height: 0.98 !important;
+	letter-spacing: -0.04em;
+	color: $fw-ink;
+}
+
+.wcblr-first-halls {
+	display: flex !important;
+	flex-direction: column;
+	gap: 8px;
+	font-size: 14px !important;
+	line-height: 1.45 !important;
+	color: $fw-soft;
+
+	span { position: relative; padding-left: 26px; }
+	strong { margin-right: 8px; color: $fw-ink; }
+
+	span::before {
+		content: "";
+		position: absolute;
+		left: 0;
+		top: 2px;
+		width: 14px;
+		height: 14px;
+		box-sizing: border-box;
+		border-radius: 50%;
+	}
+
+	.is-x::before { box-shadow: inset 0 0 0 3px $fw-ink; }
+	.is-c::before { background: $fw-ink; }
+	span:last-child { padding-left: 0; font-family: $fw-mono; font-size: 12px; color: $fw-muted; }
+	span:last-child::before { display: none; }
+}
+
+.wcblr-first-route-grid {
 	display: grid !important;
-	grid-template-columns: 2.2em minmax(0, 1fr);
-	grid-template-areas: "n name" "bar bar";
-	column-gap: 12px;
-	row-gap: 8px;
-	align-items: baseline;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 16px;
+}
+
+.wcblr-first-route {
+	display: flex !important;
+	flex-direction: column;
+	padding: 26px 24px 18px;
+	border-radius: 26px;
+	background: $fw-paper;
+	box-shadow: 0 0 0 1px rgba(42, 29, 20, 0.05);
+	transition: transform 0.4s $fw-spring, box-shadow 0.3s $fw-ease;
+
+	&:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 0 0 1px rgba(42, 29, 20, 0.05), $fw-shadow;
+	}
+}
+
+.wcblr-first-route-k {
+	font-family: $fw-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 600;
+}
+
+.wcblr-post.wcblr-first .wcblr-first-route-t {
+	margin-top: 12px !important;
+	font-family: $fw-serif !important;
+	font-size: clamp(26px, 0.9rem + 1vw, 32px) !important;
+	font-weight: 400 !important;
+	line-height: 1.02 !important;
+	letter-spacing: -0.03em !important;
+	color: $fw-ink;
+}
+
+.wcblr-first-route-b {
+	margin-top: 8px !important;
+	font-size: 15px !important;
+	line-height: 1.5 !important;
+	color: $fw-muted;
+}
+
+.wcblr-first-route-stops {
+	position: relative;
+	display: flex !important;
+	flex-direction: column;
 	margin-top: 18px !important;
 
-	strong {
-		grid-area: n;
-		font-family: $fw-serif;
-		font-size: 34px;
-		font-weight: 400;
-		line-height: 1;
-		letter-spacing: -0.04em;
+	// The line.
+	&::before {
+		content: "";
+		position: absolute;
+		left: 8px;
+		top: 18px;
+		bottom: 26px;
+		width: 3px;
+		border-radius: 3px;
+	}
+
+	a {
+		position: relative;
+		display: grid;
+		grid-template-columns: 3.4em minmax(0, 1fr);
+		grid-template-areas: "time title" "time who" "time hall";
+		column-gap: 10px;
+		margin-left: 26px;
+		padding: 11px 12px 12px;
+		border-radius: 14px;
+		transition: background 0.2s $fw-ease, transform 0.35s $fw-spring;
+	}
+
+	// The station: a ring for Xavier Hall, a filled dot for Concert Hall.
+	a::before {
+		content: "";
+		position: absolute;
+		left: -26px;
+		top: 13px;
+		width: 19px;
+		height: 19px;
+		box-sizing: border-box;
+		border-radius: 50%;
+		background: $fw-paper;
+		transition: transform 0.35s $fw-spring;
+	}
+
+	a:hover { background: $fw-cream; transform: translateX(4px); }
+	a:hover::before { transform: translateX(-4px) scale(1.2); }
+
+	time {
+		grid-area: time;
+		padding-top: 2px;
+		font-family: $fw-mono;
+		font-size: 13px;
+		font-weight: 600;
 		color: $fw-ink;
 	}
 
-	span {
-		grid-area: name;
-		display: flex;
-		justify-content: space-between;
-		gap: 10px;
+	strong {
+		grid-area: title;
 		font-size: 15.5px;
 		font-weight: 600;
+		line-height: 1.35;
+		color: $fw-ink;
+		transition: color 0.2s $fw-ease;
+	}
+
+	span {
+		grid-area: who;
+		margin-top: 3px;
+		font-size: 13.5px;
+		line-height: 1.4;
+		color: $fw-soft;
 	}
 
 	small {
+		grid-area: hall;
+		margin-top: 4px;
 		font-family: $fw-mono;
-		font-size: 12px;
-		font-weight: 500;
+		font-size: 11px;
 		color: $fw-muted;
 	}
+}
 
-	// A minute is a fixed width: a workshop is four lightning talks long.
-	i {
-		grid-area: bar;
-		display: block;
-		height: 8px;
-		border-radius: 8px;
-		background: $fw-red;
+@each $key, $c in $fw-routes {
+	.wcblr-first-route.is-#{$key} {
+		.wcblr-first-route-k { color: $c; }
+		.wcblr-first-route-stops::before { background: $c; }
+		.wcblr-first-route-stops a.is-x::before { box-shadow: inset 0 0 0 4px $c; }
+		.wcblr-first-route-stops a.is-c::before { background: $c; box-shadow: 0 0 0 3px $fw-paper; }
+		.wcblr-first-route-stops a:hover strong { color: $c; }
 	}
-
-	&.w-15 i { width: 25%; background: $fw-gold; }
-	&.w-30 i { width: 50%; }
-	&.w-45 i { width: 75%; background: $fw-green; }
-	&.w-60 i { width: 100%; background: $fw-purple; }
 }
 
-.wcblr-first-bars-note {
-	margin-top: 20px !important;
-	padding-top: 16px;
-	box-shadow: inset 0 1px 0 $fw-rule;
-	font-size: 14.5px !important;
+.wcblr-first-swipe {
+	display: none !important;
+	font-family: $fw-mono !important;
+	font-size: 12px !important;
+	font-weight: 600;
+	color: $fw-red;
+
+	&::after { content: " \2192"; }
+}
+
+.wcblr-first-routes-note {
+	margin-top: 16px !important;
+	font-family: $fw-mono !important;
+	font-size: 12.5px !important;
 	line-height: 1.55 !important;
-	color: $fw-soft;
-}
-
-.wcblr-first-who {
-	display: flex !important;
-	flex-direction: column;
-	background: $fw-sand;
-	box-shadow: none;
-}
-
-.wcblr-first-who-note {
-	margin-top: auto !important;
-	padding-top: 22px;
-	font-size: 15.5px !important;
-	line-height: 1.6 !important;
-	color: $fw-soft;
+	color: $fw-muted;
 
 	a { color: $fw-ink; box-shadow: inset 0 -1.5px 0 rgba(200, 52, 75, 0.5); }
 	a:hover { color: $fw-red; }
-}
-
-.wcblr-first-chips {
-	display: flex !important;
-	flex-wrap: wrap;
-	gap: 8px;
-	margin-top: 16px !important;
-
-	span {
-		padding: 10px 15px;
-		border-radius: 999px;
-		background: $fw-paper;
-		font-size: 15px;
-		font-weight: 600;
-		line-height: 1.3;
-		transition: transform 0.35s $fw-spring, background 0.2s $fw-ease, color 0.2s $fw-ease;
-	}
-
-	span:nth-child(odd):hover { transform: rotate(-3deg) scale(1.04); background: $fw-red; color: $fw-paper; }
-	span:nth-child(even):hover { transform: rotate(3deg) scale(1.04); background: $fw-espresso; color: $fw-gold; }
 }
 
 .wcblr-first-feet {
@@ -1468,8 +1569,25 @@ body:has(.wcblr-first) main::after {
 @media (max-width: 1100px) {
 	.wcblr-first-next { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 	.wcblr-first-end { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-	.wcblr-first-pair,
-	.wcblr-first-pair.is-talks { grid-template-columns: minmax(0, 1fr); }
+
+	// Four routes become a row you swipe through, one card at a time.
+	.wcblr-first-route-grid {
+		grid-template-columns: none;
+		grid-auto-flow: column;
+		grid-auto-columns: min(86%, 440px);
+		align-items: start;
+		gap: 12px;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: none;
+		padding-bottom: 6px;
+	}
+
+	.wcblr-first-route { scroll-snap-align: start; }
+	.wcblr-first-route:hover { transform: none; box-shadow: 0 0 0 1px rgba(42, 29, 20, 0.05); }
+	.wcblr-first-swipe { display: block !important; }
+	.wcblr-first-routes-top { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-first-pair { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media (max-width: 1024px) {
@@ -1563,6 +1681,7 @@ body:has(.wcblr-first) main::after {
 	.wcblr-first-code-src > span { white-space: pre-wrap; }
 	.wcblr-first-code-src i { width: 1.8em; }
 	.wcblr-first-price { grid-template-columns: minmax(0, 1fr); grid-template-areas: "n" "name" "note"; row-gap: 6px; }
-	.wcblr-first-who-note { padding-top: 18px; }
+	.wcblr-first-route { padding: 22px 16px 14px; }
+	.wcblr-first-route-stops a { padding: 10px 8px 11px; }
 	.wcblr-first-body { font-size: 17px !important; }
 }
