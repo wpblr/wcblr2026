@@ -1,0 +1,1074 @@
+/* ==== First WordCamp? Here's how the weekend works =============================
+   25 Oct 2026. Arun: the First-WordCamp-Weekend-Guide PDF as a next-gen post,
+   "very modern, and good like the other blog posts and the homepage". Same
+   ground as Where to stay and Your first WordCamp (one cream page, the 1280px
+   frame, huge plain section names, mono labels, one dark band), its own device.
+
+   THE IDEA
+   Two days, two venues, one ticket. The hero is that ticket torn into its two
+   halves, gold for Saturday and red for Sunday. "One ticket or two?" is a pair
+   of equations. Each day's section then wears its half's colour.
+
+   THE SHAPE
+   Hero (lede, the two-half ticket) · One ticket (two equations, two flags) ·
+   Saturday (gold: copy + photo, the morning, five table cards, the question,
+   getting there) · Sunday (red: the two halls, the run of day + photo, getting
+   there) · The hallway track (a speech bubble on a photo) · Your ticket
+   (included / bring) · See you there (dark: prices, more guides) · credits.
+
+   Scoped to .wcblr-wknd. No custom properties, no url(): the Remote CSS
+   sanitiser drops both. Markup: website/tools/build-weekend.py. */
+
+$wk-ink: #2a1d14;
+$wk-espresso: #241a12;
+$wk-red: #c8344b;
+$wk-red-deep: #a3263b;
+$wk-green: #136451;
+$wk-gold: #e0a526;
+$wk-gold-deep: #a8760f;
+$wk-cream: #f2ece0;
+$wk-paper: #fbf8f1;
+$wk-sand: #e8dfcf;
+$wk-muted: #7a6757;
+$wk-soft: #5c4a3b;
+$wk-rule: rgba(42, 29, 20, 0.12);
+$wk-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+$wk-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+$wk-serif: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif;
+$wk-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif;
+$wk-mono: var(--wp--preset--font-family--jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
+$wk-frame: 1280px;
+$wk-gutter: clamp(20px, 5vw, 96px);
+$wk-pad: max(#{$wk-gutter}, calc((100vw - #{$wk-frame}) / 2));
+$wk-sec: clamp(88px, 2.5rem + 6vw, 160px);
+$wk-shadow: 0 24px 48px -28px rgba(36, 26, 18, 0.45);
+
+/* ---- The ground ---------------------------------------------------------------------- */
+
+body:has(.wcblr-wknd),
+body:has(.wcblr-wknd) .wp-site-blocks > main {
+	background-color: $wk-cream !important;
+}
+
+body:has(.wcblr-wknd) main::before,
+body:has(.wcblr-wknd) main::after {
+	display: none !important;
+}
+
+.entry-content:has(> .wcblr-wknd) {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+	max-width: none !important;
+}
+
+.entry-content > .wcblr-wknd.alignfull {
+	width: 100vw !important;
+	max-width: none !important;
+	margin: 0 0 0 calc(50% - 50vw) !important;
+	box-sizing: border-box;
+	padding: clamp(8px, 1vw, 24px) $wk-pad clamp(80px, 2rem + 5vw, 140px) !important;
+	color: $wk-ink;
+	font-family: $wk-sans;
+	overflow-x: clip;
+}
+
+.wcblr-wknd :where(p, h2, h3, .wp-block-group, .wp-block-buttons) {
+	margin: 0 !important;
+	max-width: none !important;
+}
+
+.wcblr-wknd a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.wcblr-wknd em {
+	color: $wk-red;
+	font-style: italic;
+}
+
+.wcblr-wknd img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+// In-copy links: one red underline everywhere.
+.wcblr-wknd-body a,
+.wcblr-wknd-intro a,
+.wcblr-wknd-eq small a,
+.wcblr-wknd-where a,
+.wcblr-wknd-flow-more a,
+.wcblr-wknd-bring-note a,
+.wcblr-wknd-table-need a {
+	color: $wk-ink;
+	box-shadow: inset 0 -1.5px 0 rgba(200, 52, 75, 0.5);
+	transition: color 0.2s $wk-ease, box-shadow 0.2s $wk-ease;
+
+	&:hover { color: $wk-red; box-shadow: inset 0 -2px 0 $wk-red; }
+}
+
+.wcblr-wknd-body {
+	max-width: 62ch !important;
+	font-size: 18px !important;
+	line-height: 1.7 !important;
+	color: $wk-soft;
+}
+
+.wcblr-wknd-body + .wcblr-wknd-body { margin-top: 1em !important; }
+
+.wcblr-wknd-card-k {
+	font-family: $wk-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	color: $wk-red;
+}
+
+.wcblr-wknd-credit {
+	margin-top: 10px !important;
+	font-family: $wk-mono !important;
+	font-size: 12px !important;
+	color: $wk-muted;
+}
+
+.wcblr-wknd-tag {
+	position: absolute !important;
+	top: -14px;
+	left: 22px;
+	z-index: 2;
+	padding: 7px 14px;
+	border-radius: 999px;
+	background: $wk-gold;
+	color: $wk-espresso;
+	font-family: $wk-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 600;
+	transform: rotate(-4deg);
+	box-shadow: 0 10px 20px -12px rgba(36, 26, 18, 0.6);
+}
+
+.wcblr-wknd-tag.is-red { background: $wk-red; color: $wk-paper; }
+
+/* Buttons. */
+.wcblr-wknd-actions {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.wcblr-wknd-actions .wp-block-button__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 14px 22px !important;
+	border-radius: 999px !important;
+	font-family: $wk-sans !important;
+	font-size: 15px !important;
+	font-weight: 600 !important;
+	transition: transform 0.4s $wk-spring, background 0.2s $wk-ease, box-shadow 0.2s $wk-ease;
+}
+
+.wcblr-wknd-actions .wp-block-button__link::after {
+	content: "\2192";
+	transition: transform 0.4s $wk-spring;
+}
+
+.wcblr-wknd-actions .wp-block-button__link:hover { transform: translateY(-2px); }
+.wcblr-wknd-actions .wp-block-button__link:hover::after { transform: translateX(4px); }
+.wcblr-wknd-actions .is-primary .wp-block-button__link { background: $wk-espresso !important; color: $wk-cream !important; }
+.wcblr-wknd-actions .is-primary .wp-block-button__link:hover { background: $wk-red !important; }
+.wcblr-wknd-actions .is-primary .wp-block-button__link::after { content: "\2193"; }
+.wcblr-wknd-actions .is-ghost .wp-block-button__link { background: transparent !important; color: $wk-ink !important; box-shadow: inset 0 0 0 1.5px rgba(42, 29, 20, 0.3); }
+.wcblr-wknd-actions .is-ghost .wp-block-button__link:hover { box-shadow: inset 0 0 0 1.5px $wk-ink; }
+.wcblr-wknd-actions .is-gold .wp-block-button__link { background: $wk-gold !important; color: $wk-espresso !important; }
+.wcblr-wknd-actions .is-gold .wp-block-button__link:hover { background: $wk-cream !important; }
+
+/* ---- Section titles -------------------------------------------------------------------- */
+
+.wcblr-wknd-sec {
+	padding-top: $wk-sec;
+	scroll-margin-top: 100px;
+}
+
+.wcblr-wknd-hero-sec { padding-top: 0; }
+
+.wcblr-wknd-titles,
+.wcblr-wknd-day-head { margin-bottom: clamp(32px, 1rem + 2.6vw, 64px) !important; }
+
+.wcblr-post.wcblr-wknd .wcblr-wknd-bt {
+	margin: 0 !important;
+	font-family: $wk-serif !important;
+	font-size: clamp(56px, 1.6rem + 6vw, 128px) !important;
+	font-weight: 400 !important;
+	line-height: 0.86 !important;
+	letter-spacing: -0.055em !important;
+	color: $wk-ink;
+}
+
+.wcblr-wknd-sub {
+	margin-top: clamp(14px, 1.2vw, 22px) !important;
+	font-family: $wk-serif !important;
+	font-size: clamp(26px, 1rem + 1.8vw, 46px) !important;
+	line-height: 1.08 !important;
+	letter-spacing: -0.025em;
+	color: $wk-soft;
+}
+
+/* ---- 1. Hero: the lede and the two-half ticket ------------------------------------------ */
+
+.wcblr-wknd-hero {
+	display: grid !important;
+	grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+	gap: clamp(28px, 4vw, 72px);
+	align-items: center;
+}
+
+.wcblr-wknd-kicker {
+	display: flex !important;
+	align-items: center;
+	gap: 14px;
+	font-family: $wk-mono;
+	font-size: 12.5px !important;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: $wk-red;
+
+	span + span { padding-left: 14px; box-shadow: inset 1px 0 0 rgba(42, 29, 20, 0.2); color: $wk-ink; }
+}
+
+.wcblr-wknd-lede {
+	margin-top: clamp(16px, 1.6vw, 28px) !important;
+	max-width: 12ch !important;
+	text-wrap: balance;
+	font-family: $wk-serif !important;
+	font-size: clamp(46px, 1.4rem + 4.4vw, 100px) !important;
+	line-height: 0.94 !important;
+	letter-spacing: -0.05em;
+	color: $wk-ink;
+}
+
+.wcblr-wknd-intro {
+	max-width: 44ch !important;
+	margin-top: clamp(20px, 2vw, 30px) !important;
+	font-size: 18px !important;
+	line-height: 1.65 !important;
+	color: $wk-soft;
+}
+
+.wcblr-wknd-hero-main .wcblr-wknd-actions { margin-top: 28px !important; }
+
+.wcblr-wknd-glance-k {
+	display: flex !important;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 12px !important;
+	font-family: $wk-mono;
+	font-size: 11.5px !important;
+	font-weight: 600;
+	color: $wk-red;
+
+	span + span { color: $wk-muted; font-weight: 500; }
+}
+
+// The ticket: two halves with a perforated tear between them, tilted a touch.
+.wcblr-wknd-halves {
+	position: relative;
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	transform: rotate(-2deg);
+	filter: drop-shadow(0 30px 40px rgba(36, 26, 18, 0.22));
+
+	a {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		min-height: 360px;
+		box-sizing: border-box;
+		padding: 28px 26px 26px;
+		transition: transform 0.5s $wk-spring;
+	}
+
+	a.is-sat { border-radius: 28px 0 0 28px; background: $wk-gold; color: $wk-espresso; }
+	a.is-sun { border-radius: 0 28px 28px 0; background: $wk-red; color: $wk-paper; }
+
+	// The tear: a dashed line, with a notch top and bottom.
+	a.is-sun {
+		background-image: linear-gradient(180deg, rgba(251, 248, 241, 0.6) 50%, transparent 0);
+		background-size: 2px 14px;
+		background-repeat: repeat-y;
+		background-position: 0 0;
+	}
+
+	a.is-sun::before,
+	a.is-sun::after {
+		content: "";
+		position: absolute;
+		left: -16px;
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		background: $wk-cream;
+	}
+
+	a.is-sun::before { top: -16px; }
+	a.is-sun::after { bottom: -16px; }
+
+	a.is-sat:hover { transform: translate(-6px, -4px) rotate(-2deg); }
+	a.is-sun:hover { transform: translate(6px, -4px) rotate(2deg); }
+
+	em {
+		font-family: $wk-mono;
+		font-size: 13px;
+		font-style: normal;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: inherit;
+		opacity: 0.8;
+	}
+
+	strong {
+		margin-top: auto;
+		font-family: $wk-serif;
+		font-size: clamp(34px, 1rem + 2vw, 50px);
+		font-weight: 400;
+		line-height: 0.95;
+		letter-spacing: -0.04em;
+	}
+
+	span {
+		margin-top: 12px;
+		font-size: 15px;
+		line-height: 1.45;
+		opacity: 0.88;
+	}
+
+	// The stamp each half carries.
+	b {
+		align-self: flex-start;
+		margin-top: 20px;
+		padding: 7px 12px;
+		border-radius: 999px;
+		font-family: $wk-mono;
+		font-size: 11.5px;
+		font-weight: 700;
+		box-shadow: inset 0 0 0 1.5px currentColor;
+		transform: rotate(-3deg);
+	}
+}
+
+/* ---- 2. One ticket: the equations -------------------------------------------------------- */
+
+.wcblr-wknd-eqs {
+	display: flex !important;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.wcblr-wknd-eq {
+	display: flex !important;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 14px 18px;
+	padding: clamp(22px, 2.4vw, 34px);
+	border-radius: 28px;
+	background: $wk-paper;
+	box-shadow: 0 0 0 1px rgba(42, 29, 20, 0.05);
+
+	span {
+		padding: 14px 22px;
+		border-radius: 999px;
+		font-family: $wk-serif;
+		font-size: clamp(24px, 0.9rem + 1.4vw, 38px);
+		line-height: 1;
+		letter-spacing: -0.03em;
+	}
+
+	.t { background: $wk-espresso; color: $wk-gold; }
+	.s { background: $wk-gold; color: $wk-espresso; }
+	.d { box-shadow: inset 0 0 0 2px currentColor; }
+
+	i {
+		font-family: $wk-mono;
+		font-size: clamp(28px, 1rem + 1.6vw, 44px);
+		font-style: normal;
+		font-weight: 500;
+		color: $wk-muted;
+	}
+
+	small {
+		flex: 1 1 100%;
+		max-width: 64ch;
+		margin-top: 6px;
+		font-size: 16.5px;
+		line-height: 1.6;
+		color: $wk-soft;
+	}
+}
+
+.wcblr-wknd-eq.is-sun .d { color: $wk-red; }
+.wcblr-wknd-eq.is-sat .d { color: $wk-gold-deep; }
+
+.wcblr-wknd-flags {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: 14px;
+	margin-top: 14px !important;
+}
+
+.wcblr-wknd-flag {
+	padding: 20px 22px;
+	border-radius: 20px;
+	font-size: 16px !important;
+	line-height: 1.55 !important;
+
+	strong { display: block; margin-bottom: 4px; font-size: 17px; }
+}
+
+.wcblr-wknd-flag.is-no { background: rgba(200, 52, 75, 0.1); box-shadow: inset 4px 0 0 $wk-red; color: $wk-soft; }
+.wcblr-wknd-flag.is-no strong { color: $wk-red-deep; }
+.wcblr-wknd-flag.is-ok { background: rgba(19, 100, 81, 0.09); box-shadow: inset 4px 0 0 $wk-green; color: $wk-soft; }
+.wcblr-wknd-flag.is-ok strong { color: $wk-green; }
+
+/* ---- 3 + 4. The two days ------------------------------------------------------------------- */
+
+.wcblr-wknd-day-tag {
+	display: inline-flex !important;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 18px !important;
+	padding: 8px 14px;
+	border-radius: 999px;
+	font-family: $wk-mono;
+	font-size: 12px !important;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+
+	span + span { padding-left: 10px; box-shadow: inset 1px 0 0 currentColor; }
+}
+
+.wcblr-wknd-day.is-sat .wcblr-wknd-day-tag { background: $wk-gold; color: $wk-espresso; }
+.wcblr-wknd-day.is-sun .wcblr-wknd-day-tag { background: $wk-red; color: $wk-paper; }
+.wcblr-wknd-day.is-sat .wcblr-wknd-sub em { color: $wk-gold-deep; }
+
+.wcblr-wknd-day > * + * { margin-top: clamp(28px, 3vw, 44px) !important; }
+.wcblr-wknd-day > .wcblr-wknd-day-head + * { margin-top: 0 !important; }
+
+.wcblr-wknd-split {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: clamp(28px, 4vw, 64px);
+	align-items: center;
+}
+
+.wcblr-wknd-frame { position: relative; }
+
+.wcblr-wknd-photo img {
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+	border-radius: 26px;
+}
+
+.wcblr-wknd-frame.is-tall .wcblr-wknd-photo img { aspect-ratio: 4 / 5; }
+
+// The morning at BIC: five stops in a row.
+.wcblr-wknd-run {
+	padding: 24px;
+	border-radius: 26px;
+	background: $wk-paper;
+	box-shadow: 0 0 0 1px rgba(42, 29, 20, 0.05);
+}
+
+.wcblr-wknd-run-row {
+	display: grid !important;
+	grid-template-columns: 0.7fr 1.1fr 1.1fr 1.5fr 0.7fr;
+	gap: 8px;
+	margin-top: 16px !important;
+
+	span {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		padding: 16px;
+		border-radius: 18px;
+		background: $wk-cream;
+	}
+
+	span:nth-child(3) { background: $wk-gold; }
+	time { font-family: $wk-mono; font-size: 13px; font-weight: 600; color: $wk-gold-deep; }
+	span:nth-child(3) time { color: $wk-espresso; }
+	strong { font-size: 16px; line-height: 1.25; }
+	small { font-size: 13.5px; line-height: 1.45; color: $wk-soft; }
+	span:nth-child(3) small { color: $wk-espresso; }
+}
+
+// The tables.
+.wcblr-wknd-tables-top {
+	display: flex !important;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 8px 24px;
+	margin-bottom: 16px !important;
+}
+
+.wcblr-wknd-tables-note {
+	max-width: 56ch !important;
+	font-size: 15px !important;
+	line-height: 1.55 !important;
+	color: $wk-muted;
+}
+
+.wcblr-wknd-table-grid {
+	display: grid !important;
+	grid-template-columns: repeat(5, minmax(0, 1fr));
+	gap: 10px;
+}
+
+.wcblr-wknd-table {
+	display: flex !important;
+	flex-direction: column;
+	padding: 20px 18px 18px;
+	border-radius: 22px;
+	background: $wk-paper;
+	box-shadow: 0 0 0 1px rgba(42, 29, 20, 0.05);
+	transition: transform 0.4s $wk-spring, box-shadow 0.3s $wk-ease;
+
+	&:hover { transform: translateY(-4px); box-shadow: 0 0 0 1px rgba(42, 29, 20, 0.05), $wk-shadow; }
+}
+
+.wcblr-wknd-table.is-code { background: $wk-espresso; color: $wk-cream; }
+
+.wcblr-wknd-table-n {
+	font-family: $wk-mono !important;
+	font-size: 12px !important;
+	color: $wk-gold-deep;
+}
+
+.wcblr-wknd-table.is-code .wcblr-wknd-table-n { color: $wk-gold; }
+
+.wcblr-post.wcblr-wknd .wcblr-wknd-table-t {
+	margin-top: 18px !important;
+	font-family: $wk-serif !important;
+	font-size: 25px !important;
+	font-weight: 400 !important;
+	line-height: 1.05 !important;
+	letter-spacing: -0.03em !important;
+	color: inherit;
+}
+
+.wcblr-wknd-table-b {
+	margin-top: 8px !important;
+	font-size: 14px !important;
+	line-height: 1.5 !important;
+	color: $wk-soft;
+}
+
+.wcblr-wknd-table.is-code .wcblr-wknd-table-b { color: rgba(242, 236, 224, 0.7); }
+
+.wcblr-wknd-table-need {
+	margin-top: auto !important;
+	padding-top: 18px;
+	font-size: 13.5px !important;
+	font-weight: 600;
+	line-height: 1.45 !important;
+
+	span {
+		display: block;
+		margin-bottom: 4px;
+		font-family: $wk-mono;
+		font-size: 10.5px;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: $wk-muted;
+	}
+}
+
+.wcblr-wknd-table.is-code .wcblr-wknd-table-need {
+	color: $wk-gold;
+
+	span { color: rgba(242, 236, 224, 0.55); }
+	a { color: $wk-cream; box-shadow: inset 0 -1.5px 0 rgba(224, 165, 38, 0.7); }
+	a:hover { color: $wk-gold; box-shadow: inset 0 -2px 0 $wk-gold; }
+}
+
+// The one question, set as a sticker.
+.wcblr-wknd-ask {
+	display: flex !important;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 16px 28px;
+	padding: clamp(24px, 3vw, 40px);
+	border-radius: 28px;
+	background: $wk-gold;
+	color: $wk-espresso;
+}
+
+.wcblr-wknd-ask-k {
+	flex: 1 1 260px;
+	max-width: 34ch !important;
+	font-size: 17px !important;
+	line-height: 1.5 !important;
+}
+
+.wcblr-wknd-ask-q {
+	flex: 0 1 auto;
+	padding: 18px 28px;
+	border-radius: 999px 999px 999px 8px;
+	background: $wk-espresso;
+	color: $wk-gold;
+	font-family: $wk-serif !important;
+	font-size: clamp(28px, 1rem + 2vw, 48px) !important;
+	font-style: italic;
+	line-height: 1.05 !important;
+	letter-spacing: -0.03em;
+	transform: rotate(-2deg);
+}
+
+// Getting there: a single line with a label.
+.wcblr-wknd-where {
+	padding-top: 18px;
+	box-shadow: inset 0 1px 0 $wk-rule;
+	font-size: 16.5px !important;
+	line-height: 1.6 !important;
+	color: $wk-soft;
+
+	> span {
+		display: inline-block;
+		margin-right: 14px;
+		font-family: $wk-mono;
+		font-size: 11.5px;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: $wk-red;
+	}
+}
+
+.wcblr-wknd-day.is-sat .wcblr-wknd-where > span { color: $wk-gold-deep; }
+
+// Sunday's two halls, a minute apart.
+.wcblr-wknd-halls {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+	align-items: stretch;
+}
+
+.wcblr-wknd-hall {
+	display: flex !important;
+	flex-direction: column;
+	gap: 8px;
+	padding: 24px 26px;
+	border-radius: 26px;
+
+	em {
+		font-family: $wk-mono;
+		font-size: 12px;
+		font-style: normal;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: inherit;
+		opacity: 0.8;
+	}
+
+	strong { font-family: $wk-serif; font-size: clamp(26px, 1rem + 1.2vw, 36px); font-weight: 400; line-height: 1.02; letter-spacing: -0.03em; }
+	span { font-size: 14.5px; line-height: 1.5; opacity: 0.85; }
+}
+
+.wcblr-wknd-hall.is-x { background: $wk-red; color: $wk-paper; }
+.wcblr-wknd-hall.is-c { background: $wk-espresso; color: $wk-cream; }
+
+.wcblr-wknd-hall-gap {
+	display: flex !important;
+	align-items: center;
+	padding: 0 10px;
+
+	span {
+		position: relative;
+		padding: 8px 12px;
+		border-radius: 999px;
+		background: $wk-paper;
+		font-family: $wk-mono;
+		font-size: 11.5px;
+		font-weight: 600;
+		white-space: nowrap;
+		color: $wk-ink;
+		box-shadow: 0 0 0 1px rgba(42, 29, 20, 0.08);
+	}
+
+	span::before { content: "\2190  "; color: $wk-red; }
+	span::after { content: "  \2192"; color: $wk-red; }
+}
+
+// How the day flows, beside the hall photo.
+.wcblr-wknd-flow {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
+	gap: 16px;
+	align-items: stretch;
+}
+
+.wcblr-wknd-flow-copy {
+	padding: 24px 26px;
+	border-radius: 26px;
+	background: $wk-paper;
+	box-shadow: 0 0 0 1px rgba(42, 29, 20, 0.05);
+}
+
+.wcblr-wknd-flow-list {
+	display: flex !important;
+	flex-direction: column;
+	margin-top: 10px !important;
+
+	span {
+		display: grid;
+		grid-template-columns: 4em minmax(0, 1fr);
+		grid-template-areas: "t n" "t s";
+		column-gap: 12px;
+		padding: 11px 0;
+		box-shadow: inset 0 -1px 0 $wk-rule;
+	}
+
+	span:last-child { box-shadow: none; }
+	time { grid-area: t; padding-top: 2px; font-family: $wk-mono; font-size: 13.5px; font-weight: 600; color: $wk-red; }
+	strong { grid-area: n; font-size: 16px; line-height: 1.35; }
+	small { grid-area: s; margin-top: 2px; font-size: 13.5px; color: $wk-muted; }
+}
+
+.wcblr-wknd-flow-more {
+	margin-top: 14px !important;
+	font-size: 15px !important;
+	line-height: 1.55 !important;
+	color: $wk-soft;
+}
+
+.wcblr-wknd-frame.is-tall,
+.wcblr-wknd-frame.is-tall .wcblr-wknd-photo,
+.wcblr-wknd-frame.is-tall .wcblr-wknd-photo img { height: 100%; }
+.wcblr-wknd-frame.is-tall .wcblr-wknd-photo img { min-height: 320px; object-fit: cover; }
+
+/* ---- 5. The hallway track --------------------------------------------------------------------- */
+
+.wcblr-wknd-hallway {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+	gap: clamp(28px, 4vw, 64px);
+	align-items: center;
+}
+
+.wcblr-post.wcblr-wknd .wcblr-wknd-hallway-t {
+	margin: 14px 0 22px !important;
+	max-width: 14ch !important;
+	font-family: $wk-serif !important;
+	font-size: clamp(40px, 1.2rem + 3vw, 72px) !important;
+	font-weight: 400 !important;
+	line-height: 0.95 !important;
+	letter-spacing: -0.045em !important;
+	color: $wk-ink;
+}
+
+.wcblr-wknd-bubble-wrap { position: relative; }
+
+.wcblr-wknd-bubble-img img {
+	aspect-ratio: 1;
+	object-fit: cover;
+	border-radius: 28px;
+}
+
+// The opener, as a chat bubble over the photo.
+.wcblr-wknd-bubble {
+	position: absolute !important;
+	left: -18px;
+	bottom: 52px;
+	max-width: 78%;
+	padding: 18px 24px;
+	border-radius: 26px 26px 26px 6px;
+	background: $wk-paper;
+	font-family: $wk-serif !important;
+	font-size: clamp(24px, 0.9rem + 1.4vw, 36px) !important;
+	line-height: 1.08 !important;
+	letter-spacing: -0.03em;
+	color: $wk-ink;
+	box-shadow: $wk-shadow;
+	transform: rotate(-3deg);
+}
+
+/* ---- 6. Your ticket: included and bring -------------------------------------------------------- */
+
+.wcblr-wknd-kit {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: 16px;
+}
+
+.wcblr-wknd-inc,
+.wcblr-wknd-bring {
+	padding: 26px;
+	border-radius: 26px;
+}
+
+.wcblr-wknd-inc { background: $wk-paper; box-shadow: 0 0 0 1px rgba(42, 29, 20, 0.05); }
+.wcblr-wknd-bring { background: $wk-sand; }
+
+.wcblr-wknd-inc-list,
+.wcblr-wknd-bring-list {
+	display: flex !important;
+	flex-direction: column;
+	margin-top: 12px !important;
+
+	span {
+		position: relative;
+		padding: 13px 0 13px 36px;
+		font-size: 16px;
+		line-height: 1.5;
+		color: $wk-soft;
+	}
+
+	span + span { box-shadow: inset 0 1px 0 $wk-rule; }
+}
+
+// A tick for what is included.
+.wcblr-wknd-inc-list span::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 14px;
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	background: $wk-green;
+}
+
+.wcblr-wknd-inc-list span::after {
+	content: "";
+	position: absolute;
+	left: 8px;
+	top: 18px;
+	width: 5px;
+	height: 10px;
+	border: solid $wk-paper;
+	border-width: 0 2.5px 2.5px 0;
+	transform: rotate(45deg);
+}
+
+.wcblr-wknd-bring-list span { padding-left: 0; }
+
+.wcblr-wknd-bring-list strong {
+	display: block;
+	margin-bottom: 2px;
+	font-family: $wk-mono;
+	font-size: 11.5px;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: $wk-red;
+}
+
+.wcblr-wknd-bring-note {
+	margin-top: 10px !important;
+	font-size: 14.5px !important;
+	color: $wk-soft;
+}
+
+/* ---- 7. See you there: the dark band -------------------------------------------------------------- */
+
+.wcblr-wknd-close {
+	position: relative;
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+	gap: clamp(28px, 4vw, 64px);
+	align-items: center;
+	margin: 0 calc(#{$wk-pad} * -1) !important;
+	padding: clamp(64px, 7vw, 112px) $wk-pad !important;
+	background: $wk-espresso;
+	color: $wk-cream;
+	overflow: hidden;
+
+	em { color: $wk-gold; }
+}
+
+.wcblr-wknd-close::before {
+	content: "";
+	position: absolute;
+	right: -10%;
+	top: -40%;
+	width: 60%;
+	height: 140%;
+	background: radial-gradient(closest-side, rgba(224, 165, 38, 0.16), rgba(224, 165, 38, 0));
+	pointer-events: none;
+}
+
+.wcblr-wknd-close > * { position: relative; z-index: 1; }
+
+.wcblr-wknd-close-k { font-family: $wk-mono !important; font-size: 12px !important; color: $wk-gold; }
+
+.wcblr-wknd-close-t {
+	margin-top: 16px !important;
+	font-family: $wk-serif !important;
+	font-size: clamp(52px, 1.6rem + 5vw, 112px) !important;
+	line-height: 0.9 !important;
+	letter-spacing: -0.05em;
+}
+
+.wcblr-wknd-close-b {
+	margin-top: 22px !important;
+	max-width: 46ch !important;
+	font-size: 17px !important;
+	line-height: 1.65 !important;
+	color: rgba(242, 236, 224, 0.75);
+
+	a { color: $wk-cream; box-shadow: inset 0 -1.5px 0 rgba(224, 165, 38, 0.6); }
+	a:hover { color: $wk-gold; }
+}
+
+.wcblr-wknd-close-b.is-last {
+	margin-top: 16px !important;
+	font-family: $wk-serif !important;
+	font-size: clamp(20px, 0.8rem + 0.8vw, 26px) !important;
+	font-style: italic;
+	line-height: 1.3 !important;
+	color: $wk-gold;
+}
+
+.wcblr-wknd-close-side {
+	display: flex !important;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.wcblr-wknd-price {
+	display: grid !important;
+	grid-template-columns: auto minmax(0, 1fr);
+	grid-template-areas: "n name" "n note";
+	column-gap: 18px;
+	align-items: center;
+	padding: 18px 20px;
+	border-radius: 20px;
+	background: rgba(242, 236, 224, 0.07);
+	box-shadow: inset 0 0 0 1px rgba(242, 236, 224, 0.12);
+
+	strong { grid-area: n; font-family: $wk-serif; font-size: 42px; font-weight: 400; letter-spacing: -0.04em; line-height: 1; color: $wk-gold; }
+	span { grid-area: name; font-size: 16px; font-weight: 700; }
+	small { grid-area: note; font-size: 13.5px; line-height: 1.45; color: rgba(242, 236, 224, 0.68); }
+}
+
+.wcblr-wknd-close-side .wcblr-wknd-actions { margin-top: 6px !important; }
+
+.wcblr-wknd-more { margin-top: clamp(48px, 5vw, 80px) !important; }
+
+.wcblr-wknd-more-row {
+	display: grid !important;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 10px;
+	margin-top: 14px !important;
+
+	a {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		padding: 18px 44px 18px 20px;
+		border-radius: 20px;
+		background: $wk-paper;
+		box-shadow: 0 0 0 1px rgba(42, 29, 20, 0.05);
+		transition: transform 0.4s $wk-spring, box-shadow 0.3s $wk-ease;
+	}
+
+	a::after {
+		content: "\2192";
+		position: absolute;
+		right: 18px;
+		top: 50%;
+		transform: translateY(-50%);
+		color: $wk-red;
+		transition: transform 0.35s $wk-spring;
+	}
+
+	a:hover { transform: translateY(-3px); box-shadow: 0 0 0 1px rgba(42, 29, 20, 0.05), $wk-shadow; }
+	a:hover::after { transform: translate(4px, -50%); }
+	strong { font-size: 16px; }
+	span { font-family: $wk-mono; font-size: 11.5px; color: $wk-muted; }
+}
+
+.wcblr-wknd-credits {
+	margin-top: clamp(56px, 6vw, 96px) !important;
+	padding-top: 22px;
+	box-shadow: inset 0 1px 0 $wk-rule;
+}
+
+.wcblr-wknd-credits-k { font-family: $wk-mono !important; font-size: 12px !important; color: $wk-red; }
+
+.wcblr-wknd-credits-p {
+	margin-top: 8px !important;
+	font-family: $wk-mono !important;
+	font-size: 12px !important;
+	line-height: 1.6 !important;
+	color: $wk-muted;
+
+	a { box-shadow: inset 0 -1px 0 rgba(122, 103, 87, 0.45); }
+	a:hover { color: $wk-ink; }
+}
+
+/* ---- Responsive ---------------------------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+	.wcblr-wknd-table-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+	.wcblr-wknd-run-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+	.wcblr-wknd-run-row span:nth-child(4) { grid-column: span 2; }
+	.wcblr-wknd-more-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 1024px) {
+	.wcblr-wknd-hero { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-wknd-glance { max-width: 640px; }
+	.wcblr-wknd-split,
+	.wcblr-wknd-hallway,
+	.wcblr-wknd-close { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-wknd-flow { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-wknd-frame.is-tall .wcblr-wknd-photo img { aspect-ratio: 16 / 9; min-height: 0; height: auto; }
+	.wcblr-wknd-frame.is-tall,
+	.wcblr-wknd-frame.is-tall .wcblr-wknd-photo { height: auto; }
+}
+
+@media (max-width: 781px) {
+	.wcblr-wknd-halves {
+		transform: none;
+
+		a { min-height: 280px; padding: 22px 16px 20px; }
+		strong { font-size: 25px; overflow-wrap: anywhere; }
+		span { font-size: 13.5px; }
+		b { font-size: 10.5px; }
+		a.is-sat:hover,
+		a.is-sun:hover { transform: none; }
+	}
+
+	.wcblr-wknd-flags,
+	.wcblr-wknd-kit { grid-template-columns: minmax(0, 1fr); }
+
+	.wcblr-wknd-eq { padding: 20px; gap: 10px 12px; }
+	.wcblr-wknd-eq span { padding: 11px 16px; }
+
+	.wcblr-wknd-run-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+	.wcblr-wknd-run-row span:nth-child(3),
+	.wcblr-wknd-run-row span:nth-child(4) { grid-column: 1 / -1; }
+	.wcblr-wknd-run-row span:nth-child(5) { grid-column: 1 / -1; }
+
+	.wcblr-wknd-table-grid { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-post.wcblr-wknd .wcblr-wknd-table-t { margin-top: 10px !important; }
+	.wcblr-wknd-table-need { padding-top: 14px; }
+
+	.wcblr-wknd-halls { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-wknd-hall-gap { justify-content: center; padding: 8px 0; }
+	.wcblr-wknd-hall-gap span::before { content: "\2191  "; }
+	.wcblr-wknd-hall-gap span::after { content: "  \2193"; }
+
+	.wcblr-wknd-bubble { left: 12px; bottom: 16px; }
+	.wcblr-wknd-more-row { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-wknd-price strong { font-size: 34px; }
+	.wcblr-wknd-body { font-size: 17px !important; }
+}
