@@ -326,17 +326,26 @@ body:has(.wcblr-first) main::after {
 .wcblr-first-stack:hover .wcblr-first-snap.is-b { transform: rotate(8deg) translate(10px, -4px); }
 .wcblr-first-stack:hover .wcblr-first-snap.is-c { transform: rotate(-4deg) translate(-6px, 8px); }
 
-// The day strip: every chapter at its real time on one line.
-.wcblr-first-strip {
-	margin-top: clamp(48px, 5vw, 88px) !important;
-	padding: 22px clamp(20px, 2.4vw, 36px) 26px;
-	border-radius: 28px;
-	background: $fw-paper;
-}
+// The day bar: one block per part of the day, each as wide as that part is long.
+// The same colours mark each chapter's time card further down.
+$fw-parts: (
+	sat: ($fw-paper, $fw-ink, $fw-gold-deep),
+	"0800": ($fw-gold, $fw-espresso, $fw-espresso),
+	"0900": ($fw-red, $fw-paper, $fw-paper),
+	"1100": ($fw-espresso, $fw-cream, $fw-gold),
+	"1330": ($fw-green, $fw-cream, $fw-gold),
+	"1630": ($fw-purple, $fw-paper, $fw-gold),
+	after: ($fw-paper, $fw-ink, $fw-red),
+);
+$fw-grow: (sat: 1.15, "0800": 1, "0900": 2, "1100": 2.5, "1330": 1, "1630": 3, after: 1.15);
+
+.wcblr-first-strip { margin-top: clamp(48px, 5vw, 88px) !important; }
 
 .wcblr-first-strip-k {
 	display: flex !important;
 	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 12px !important;
 	font-family: $fw-mono;
 	font-size: 11.5px !important;
 	font-weight: 600;
@@ -346,110 +355,95 @@ body:has(.wcblr-first) main::after {
 }
 
 .wcblr-first-stops {
-	position: relative;
-	height: 112px;
-	margin: 6px 14px 0 !important;
-
-	// The line, gold from Saturday night, red through Sunday.
-	&::before {
-		content: "";
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: 50%;
-		height: 3px;
-		margin-top: -1.5px;
-		border-radius: 3px;
-		background: linear-gradient(90deg, $fw-gold 0 12%, $fw-red 12% 89%, $fw-gold 89%);
-	}
+	display: flex !important;
+	gap: 6px;
 
 	a {
-		position: absolute;
-		top: 50%;
-		width: 0;
+		position: relative;
+		flex: 1 1 0;
+		min-width: 0;
+		height: 148px;
+		box-sizing: border-box;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		white-space: nowrap;
+		padding: 16px 16px 15px;
+		border-radius: 22px;
+		overflow: hidden;
+		transition: transform 0.45s $fw-spring, box-shadow 0.3s $fw-ease;
 	}
 
-	// The stop: a ring that fills on hover.
-	a::before {
-		content: "";
+	a:hover {
+		transform: translateY(-5px);
+		box-shadow: $fw-shadow;
+	}
+
+	// An arrow slides up into the corner on hover.
+	a::after {
+		content: "\2193";
 		position: absolute;
-		top: -9px;
-		width: 18px;
-		height: 18px;
-		border-radius: 50%;
-		background: $fw-paper;
-		box-shadow: inset 0 0 0 3px $fw-red;
-		transition: transform 0.35s $fw-spring, background 0.2s $fw-ease;
+		right: 14px;
+		bottom: 12px;
+		font-size: 17px;
+		opacity: 0;
+		transform: translateY(8px);
+		transition: opacity 0.2s $fw-ease, transform 0.35s $fw-spring;
 	}
 
-	a.at-sat::before,
-	a.at-after::before { box-shadow: inset 0 0 0 3px $fw-gold-deep; }
-
-	a:hover::before {
-		transform: scale(1.35);
-		background: $fw-red;
-	}
-
-	time,
-	span { position: absolute; left: 50%; transform: translateX(-50%); }
+	a:hover::after { opacity: 1; transform: none; }
 
 	time {
-		bottom: 18px;
 		font-family: $fw-mono;
-		font-size: 15px;
+		font-size: 14px;
 		font-weight: 600;
 		letter-spacing: -0.02em;
-		color: $fw-ink;
+	}
+
+	strong {
+		margin-top: auto;
+		font-size: 16px;
+		font-weight: 700;
+		line-height: 1.15;
 	}
 
 	span {
-		top: 18px;
-		font-size: 13px;
-		font-weight: 600;
-		color: $fw-muted;
-		transition: color 0.2s $fw-ease;
+		margin-top: 4px;
+		font-size: 12.5px;
+		line-height: 1.35;
+		opacity: 0.78;
 	}
 
-	a:hover span { color: $fw-red; }
+	small {
+		position: absolute;
+		top: 17px;
+		right: 15px;
+		font-family: $fw-mono;
+		font-size: 11px;
+		opacity: 0.7;
+	}
 
-	// Positions: Saturday at the left edge, Monday at the right, Sunday's
-	// stops at their real times between 08:00 (13%) and 17:30 (88%).
-	.at-sat { left: 0; }
-	.at-0800 { left: 13%; }
-	.at-0900 { left: 20.9%; }
-	.at-1100 { left: 36.7%; }
-	.at-1330 { left: 56.4%; }
-	.at-1630 { left: 80.1%; }
-	.at-after { left: 100%; }
-
-	.at-sat time,
-	.at-sat span { left: 0; transform: none; }
-	.at-after time,
-	.at-after span { left: auto; right: 0; transform: none; }
+	// Saturday and after sit outside the day, so they are outlined, not filled.
+	a.is-sat,
+	a.is-after { box-shadow: inset 0 0 0 1.5px rgba(42, 29, 20, 0.16); }
+	a.is-sat:hover,
+	a.is-after:hover { box-shadow: inset 0 0 0 1.5px rgba(42, 29, 20, 0.16), $fw-shadow; }
 }
 
-/* ---- 2. The day: chapters on a sticky rail ------------------------------------------------- */
+@each $key, $c in $fw-parts {
+	.wcblr-first-stops a.is-#{$key} {
+		flex-grow: map-get($fw-grow, $key);
+		background: nth($c, 1);
+		color: nth($c, 2);
+
+		time { color: nth($c, 3); }
+	}
+}
+
+/* ---- 2. The day: chapters, each with a sticky time card ---------------------------------- */
 
 .wcblr-first-chapters {
-	position: relative;
 	display: flex !important;
 	flex-direction: column;
 	gap: clamp(72px, 2rem + 5vw, 132px);
-
-	// The spine, behind every rail.
-	&::before {
-		content: "";
-		position: absolute;
-		top: 12px;
-		bottom: 0;
-		left: calc(#{$fw-rail} - 26px);
-		width: 2px;
-		background: linear-gradient(180deg, $fw-red, rgba(200, 52, 75, 0.15));
-	}
 }
 
 .wcblr-first-ch {
@@ -462,48 +456,44 @@ body:has(.wcblr-first) main::after {
 
 .wcblr-first-rail { position: relative; }
 
+// The time card: the chapter's block from the day bar, pinned while you read.
 .wcblr-first-clock {
 	position: sticky !important;
 	top: 120px;
 	display: flex !important;
 	flex-direction: column;
-	gap: 8px;
-	padding-right: 40px;
+	gap: 10px;
+	padding: 18px 18px 16px;
+	border-radius: 22px;
 
 	time {
 		font-family: $fw-mono;
-		font-size: clamp(34px, 1rem + 2.2vw, 56px);
+		font-size: clamp(30px, 0.9rem + 1.8vw, 46px);
 		font-weight: 500;
 		line-height: 1;
 		letter-spacing: -0.06em;
-		color: $fw-ink;
 	}
 
 	span {
 		font-family: $fw-mono;
 		font-size: 11.5px;
 		font-weight: 500;
-		letter-spacing: 0.04em;
+		letter-spacing: 0.03em;
 		line-height: 1.4;
-		color: $fw-muted;
-	}
-
-	// The dot on the spine.
-	&::after {
-		content: "";
-		position: absolute;
-		top: 12px;
-		right: 18px;
-		width: 18px;
-		height: 18px;
-		border-radius: 50%;
-		background: $fw-cream;
-		box-shadow: inset 0 0 0 4px $fw-red, 0 0 0 6px $fw-cream;
+		opacity: 0.8;
 	}
 }
 
-.wcblr-first-ch:first-child .wcblr-first-clock time { color: $fw-gold-deep; }
-.wcblr-first-ch:first-child .wcblr-first-clock::after { box-shadow: inset 0 0 0 4px $fw-gold-deep, 0 0 0 6px $fw-cream; }
+@each $key, $c in $fw-parts {
+	.wcblr-first-ch.is-#{$key} .wcblr-first-clock {
+		background: nth($c, 1);
+		color: nth($c, 2);
+
+		time { color: nth($c, 3); }
+	}
+}
+
+.wcblr-first-ch.is-sat .wcblr-first-clock { box-shadow: inset 0 0 0 1.5px rgba(42, 29, 20, 0.16); }
 
 .wcblr-post.wcblr-first .wcblr-first-ch-t {
 	margin-bottom: 22px !important;
@@ -1601,56 +1591,41 @@ $fw-routes: (build: $fw-red, business: $fw-green, publish: $fw-gold-deep, curiou
 	.wcblr-first-lunch-row { grid-template-columns: minmax(0, 1fr); }
 	.wcblr-first-story { transform: none; }
 
-	// The strip turns into a row of chips you can swipe.
+	// The day bar becomes a row you swipe, every block the same width.
 	.wcblr-first-stops {
-		height: auto;
-		margin: 14px -4px 0 !important;
-		display: flex !important;
-		gap: 8px;
+		margin: 0 -4px !important;
+		padding: 4px 4px 8px;
 		overflow-x: auto;
+		scroll-snap-type: x mandatory;
 		scrollbar-width: none;
-		padding-bottom: 4px;
 
-		&::before { display: none; }
-
-		a,
-		a.at-sat,
-		a.at-after {
-			position: static;
-			width: auto;
-			flex: 0 0 auto;
-			align-items: flex-start;
-			gap: 4px;
-			padding: 12px 16px;
-			border-radius: 16px;
-			background: $fw-cream;
+		a {
+			flex: 0 0 148px !important;
+			height: 136px;
+			scroll-snap-align: start;
 		}
 
-		a::before { display: none; }
-
-		time,
-		span,
-		.at-sat time,
-		.at-sat span,
-		.at-after time,
-		.at-after span { position: static; transform: none; }
+		a:hover { transform: none; box-shadow: none; }
+		a.is-sat:hover,
+		a.is-after:hover { box-shadow: inset 0 0 0 1.5px rgba(42, 29, 20, 0.16); }
 	}
 }
 
 @media (max-width: 781px) {
-	.wcblr-first-chapters::before { display: none; }
-
 	.wcblr-first-ch { grid-template-columns: minmax(0, 1fr); }
 
 	// The rail becomes a label above the chapter.
 	.wcblr-first-clock {
 		position: static !important;
+		display: inline-flex !important;
 		flex-direction: row;
 		align-items: baseline;
 		gap: 12px;
-		padding: 0 0 14px;
+		margin-bottom: 16px !important;
+		padding: 12px 16px;
+		border-radius: 16px;
 
-		&::after { display: none; }
+		time { font-size: 26px; }
 	}
 
 	.wcblr-first-wide,
