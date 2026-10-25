@@ -1494,6 +1494,8 @@ $fw-routes: (build: $fw-red, business: $fw-green, publish: $fw-gold-deep, curiou
 	a:hover { color: $fw-gold !important; box-shadow: inset 0 -2px 0 $fw-gold !important; }
 }
 
+.wcblr-first-stub-b + .wcblr-first-stub-b { margin-top: 12px !important; }
+
 .wcblr-first-stub-side {
 	display: flex !important;
 	flex-direction: column;
