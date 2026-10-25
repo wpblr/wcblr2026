@@ -474,6 +474,18 @@ body:has(.wcblr-wknd) main::after {
 
 .wcblr-wknd-frame.is-tall .wcblr-wknd-photo img { aspect-ratio: 4 / 5; }
 
+// A letterbox strip, for the lanyards over the ticket section.
+.wcblr-wknd-frame.is-strip { margin-bottom: 16px !important; }
+.wcblr-wknd-frame.is-strip .wcblr-wknd-photo img { aspect-ratio: 16 / 5; object-position: 50% 55%; }
+
+// One wide photo, full width of the frame.
+.wcblr-wknd-wide-img img {
+	aspect-ratio: 16 / 7;
+	object-fit: cover;
+	object-position: 50% 60%;
+	border-radius: 28px;
+}
+
 // The morning at BIC: five stops in a row.
 .wcblr-wknd-run {
 	padding: 24px;
@@ -1067,7 +1079,9 @@ body:has(.wcblr-wknd) main::after {
 	.wcblr-wknd-hall-gap span::before { content: "\2191  "; }
 	.wcblr-wknd-hall-gap span::after { content: "  \2193"; }
 
-	.wcblr-wknd-bubble { left: 12px; bottom: 16px; }
+	.wcblr-wknd-bubble { left: 12px; bottom: 48px; }
+	.wcblr-wknd-frame.is-strip .wcblr-wknd-photo img { aspect-ratio: 16 / 7; }
+	.wcblr-wknd-wide-img img { aspect-ratio: 4 / 3; border-radius: 22px; }
 	.wcblr-wknd-more-row { grid-template-columns: minmax(0, 1fr); }
 	.wcblr-wknd-price strong { font-size: 34px; }
 	.wcblr-wknd-body { font-size: 17px !important; }
