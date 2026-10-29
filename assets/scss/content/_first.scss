@@ -1657,7 +1657,7 @@ $fw-routes: (build: $fw-red, business: $fw-green, publish: $fw-gold-deep, curiou
 	.wcblr-first-stack { aspect-ratio: 1 / 1.08; }
 	.wcblr-first-code-src > span { white-space: pre-wrap; }
 	.wcblr-first-code-src i { width: 1.8em; }
-	.wcblr-first-price { grid-template-columns: minmax(0, 1fr); grid-template-areas: "n" "name" "note"; row-gap: 6px; }
+	.wcblr-first-price { display: flex !important; flex-direction: column; align-items: flex-start; gap: 6px; }
 	.wcblr-first-route { padding: 22px 16px 14px; }
 	.wcblr-first-route-stops a { padding: 10px 8px 11px; }
 	.wcblr-first-body { font-size: 17px !important; }
