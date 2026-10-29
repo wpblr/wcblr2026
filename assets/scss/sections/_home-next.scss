@@ -105,6 +105,12 @@ body.home .wcblr-home-sec {
 	padding-bottom: 0 !important;
 }
 
+/* Each band's gap comes from the next band's top padding, so the last one
+   (Plan your visit) sat flush on the footer. */
+body.home .wcblr-home-sec:last-child {
+	padding-bottom: $hn-sec !important;
+}
+
 body.home .wcblr-home-gi > .wp-block-group,
 body.home .wcblr-home-sponsors > .wp-block-group {
 	max-width: none !important;
