@@ -471,15 +471,15 @@ body:has(.wcblr-ai) main::after {
 	align-items: flex-start;
 	gap: 8px;
 	min-width: 0;
+	position: relative;
 	padding: 8px 10px;
 	border-radius: 10px;
-	overflow: hidden;
 	transition: opacity 0.35s $ai-ease, transform 0.35s $ai-spring, filter 0.35s $ai-ease, box-shadow 0.2s $ai-ease;
 
 	&.is-x { grid-column: 2; }
 	&.is-c { grid-column: 3; }
 
-	b {
+	> b {
 		flex: none;
 		padding: 3px 6px;
 		border-radius: 6px;
@@ -489,7 +489,7 @@ body:has(.wcblr-ai) main::after {
 		line-height: 1.2;
 	}
 
-	strong {
+	> strong {
 		flex: 1;
 		min-width: 0;
 		overflow: hidden;
@@ -500,7 +500,7 @@ body:has(.wcblr-ai) main::after {
 		line-height: 1.5;
 	}
 
-	small {
+	> small {
 		flex: none;
 		font-family: $ai-mono;
 		font-size: 10.5px;
@@ -508,11 +508,12 @@ body:has(.wcblr-ai) main::after {
 		opacity: 0.7;
 	}
 
-	&:hover { transform: translateY(-2px) scale(1.01); z-index: 2; }
+	&:hover,
+	&:focus-visible { transform: translateY(-2px); z-index: 5; }
 }
 
 // Tiles of two rows or more have room for the title to wrap.
-.wcblr-ai-tile:not(.s-1) strong { white-space: normal; }
+.wcblr-ai-tile:not(.s-1) > strong { white-space: normal; overflow: visible; }
 
 @each $n, $c in $ai-q {
 	.wcblr-ai-tile.is-q#{$n} { background: rgba(nth($c, 1), 0.13); box-shadow: inset 4px 0 0 nth($c, 1); }
@@ -525,7 +526,7 @@ body:has(.wcblr-ai) main::after {
 	border: 1.5px dashed rgba(42, 29, 20, 0.28);
 	color: $ai-soft;
 
-	b { color: $ai-muted; }
+	> b { color: $ai-muted; }
 }
 
 // The filters: everything that does not match fades back.
@@ -550,6 +551,133 @@ body:has(.wcblr-ai) main::after {
 		color: nth($c, 2);
 		box-shadow: none;
 	}
+}
+
+// Pointing at a faded tile brings it back, card and all, so a filtered map can still be read.
+.wcblr-ai-grid .wcblr-ai-tile:hover,
+.wcblr-ai-grid .wcblr-ai-tile:focus-visible {
+	opacity: 1 !important;
+	filter: none !important;
+}
+
+// Starred: the sessions starred on the cards below (or on the schedule page; one list).
+.wcblr-ai-mapsec:has(#m-mine:target) .wcblr-ai-tile:not(.wcb-favourite-session) {
+	opacity: 0.16;
+	filter: grayscale(1);
+}
+
+.wcblr-ai-filter a.is-mine { color: $ai-gold-deep; }
+
+.wcblr-ai-mapsec:has(#m-mine:target) .wcblr-ai-filter a.is-mine {
+	background: $ai-gold;
+	color: $ai-espresso;
+	box-shadow: none;
+}
+
+// A starred tile wears a gold star badge on its corner.
+.wcblr-ai-tile-star {
+	display: none;
+	position: absolute;
+	top: -8px;
+	right: -6px;
+	z-index: 2;
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	background: $ai-gold;
+	box-shadow: 0 0 0 2px $ai-paper;
+	color: $ai-espresso;
+	font-style: normal;
+	font-size: 13px;
+	line-height: 22px;
+	text-align: center;
+
+	&::before { content: "\2605"; }
+}
+
+.wcblr-ai-tile.wcb-favourite-session {
+	outline: 2px solid $ai-gold;
+	outline-offset: 1px;
+
+	.wcblr-ai-tile-star {
+		display: block;
+		animation: wcblr-ai-pop 0.5s $ai-spring;
+	}
+}
+
+@keyframes wcblr-ai-pop {
+	0% { transform: scale(0.4); }
+	60% { transform: scale(1.25); }
+	100% { transform: none; }
+}
+
+/* The card a tile opens on hover, keyboard focus, or a first tap on iOS (which
+   treats a visibility change on :hover as a reason to hold the tap): the full
+   title the tile cuts off, when, where, how long, and who. */
+.wcblr-ai-pop {
+	position: absolute;
+	bottom: calc(100% + 10px);
+	left: 0;
+	z-index: 20;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	width: min(310px, 78vw);
+	padding: 16px 18px;
+	border-radius: 16px;
+	background: $ai-espresso;
+	color: $ai-cream;
+	box-shadow: 0 22px 40px -18px rgba(36, 26, 18, 0.7);
+	text-align: left;
+	white-space: normal;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(8px) scale(0.98);
+	transform-origin: bottom left;
+	transition: opacity 0.2s $ai-ease, transform 0.3s $ai-spring, visibility 0.2s;
+	pointer-events: none;
+
+	em {
+		font-family: $ai-mono;
+		font-size: 11px;
+		font-style: normal;
+		font-weight: 600;
+		color: $ai-gold;
+	}
+
+	strong {
+		font-family: $ai-serif;
+		font-size: 18px;
+		font-weight: 500;
+		line-height: 1.22;
+		letter-spacing: -0.01em;
+	}
+
+	span { display: flex; padding-left: 7px; }
+
+	img {
+		width: 30px !important;
+		height: 30px !important;
+		margin-left: -7px;
+		border-radius: 50%;
+		object-fit: cover;
+		box-shadow: 0 0 0 2px $ai-espresso;
+	}
+
+	small { font-size: 12.5px; line-height: 1.45; color: rgba(242, 236, 224, 0.72); }
+}
+
+.wcblr-ai-tile.is-c .wcblr-ai-pop {
+	left: auto;
+	right: 0;
+	transform-origin: bottom right;
+}
+
+.wcblr-ai-tile:hover .wcblr-ai-pop,
+.wcblr-ai-tile:focus-visible .wcblr-ai-pop {
+	opacity: 1;
+	visibility: visible;
+	transform: none;
 }
 
 /* ---- 3. Five questions --------------------------------------------------------------- */
@@ -671,8 +799,55 @@ body:has(.wcblr-ai) main::after {
 		font-weight: 700;
 	}
 
-	span + span::before { content: "\00b7"; margin-right: 14px; }
+	> span + span:not(.wcblr-ai-fav)::before { content: "\00b7"; margin-right: 14px; }
 }
+
+.wcblr-ai-fav {
+	position: relative;
+	margin: -6px -8px -6px auto !important;
+}
+
+.wcblr-ai-fav .fav-session-button,
+.wcblr-ai-fav .fav-session-button:focus {
+	outline: 0;
+	background: transparent !important;
+	box-shadow: none;
+}
+
+.wcblr-ai-fav .fav-session-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	height: 34px;
+	padding: 0 12px;
+	border-radius: 999px;
+	color: $ai-muted;
+	font-family: $ai-mono;
+	font-size: 12px;
+	font-weight: 600;
+	transition: background 0.2s $ai-ease, color 0.2s $ai-ease, transform 0.45s $ai-spring;
+
+	&::before { content: "\2606"; font-family: $ai-sans; font-size: 19px; line-height: 1; }
+	&::after { content: "Star"; }
+	&:hover { background: rgba(224, 165, 38, 0.18) !important; color: $ai-gold-deep; transform: scale(1.06); }
+	&:focus-visible { box-shadow: 0 0 0 2px $ai-gold; }
+}
+
+// Keyed on the class WordCamp's script toggles, not aria-pressed (live strips that attribute).
+.wcblr-ai-fav.wcb-favourite-session .fav-session-button {
+	background: rgba(224, 165, 38, 0.2) !important;
+	color: $ai-gold-deep;
+	animation: wcblr-ai-pop 0.5s $ai-spring;
+
+	&::before { content: "\2605"; color: $ai-gold; }
+	&::after { content: "Starred"; }
+}
+
+.wcblr-ai-ses:has(.wcb-favourite-session) { outline: 2px solid $ai-gold; outline-offset: 2px; }
+
+// The [schedule] shortcode is only here to load WordCamp's favourites script.
+.wcblr-ai-favbox { display: none !important; }
 
 .wcblr-post.wcblr-ai .wcblr-ai-ses-t {
 	margin-top: 14px !important;
@@ -1091,9 +1266,9 @@ body:has(.wcblr-ai) main::after {
 		gap: 5px;
 		padding: 6px 7px;
 
-		b { padding: 2px 4px; font-size: 9.5px; }
-		strong { font-size: 11.5px; line-height: 1.55; }
-		small { display: none; }
+		> b { padding: 2px 4px; font-size: 9.5px; }
+		> strong { font-size: 11.5px; line-height: 1.55; }
+		> small { display: none; }
 	}
 
 	.wcblr-ai-fork-pair {
