@@ -1,0 +1,1105 @@
+/* ==== WordPress and AI: five questions =========================================
+   30 Oct 2026. Arun: the B-002 draft as a draft post, "similar to how the home
+   page is", modern, fun, easy to read and interact with, same palette. Same
+   ground as the other guides (one cream page, the 1280px frame, a huge plain
+   section name, mono labels), a different device.
+
+   THE IDEA
+   The reader brings a question, so the device is the question. Five
+   questions, five colours, spent only on the questions: the hero switchboard,
+   the day map's tiles and filters, each chapter's number, bar and to-do card.
+   Sessions that are not about AI are dashed and colourless everywhere.
+
+   THE SHAPE
+   Hero (the count, the five-question switchboard) · The day (a time-scaled
+   two-hall map, filterable by question, CSS only) · Five questions (a sticky
+   question card beside its sessions) · Two clashes (forks) · Not AI + #core-ai
+   (paper card beside a dark Slack window) · the close.
+
+   Scoped to .wcblr-ai. No custom properties, no url(): the Remote CSS
+   sanitiser drops both. Markup: website/tools/build-ai.py. */
+
+$ai-ink: #2a1d14;
+$ai-espresso: #241a12;
+$ai-red: #c8344b;
+$ai-green: #136451;
+$ai-gold: #e0a526;
+$ai-gold-deep: #a8760f;
+$ai-purple: #6d3b8e;
+$ai-cream: #f2ece0;
+$ai-paper: #fbf8f1;
+$ai-sand: #e8dfcf;
+$ai-muted: #7a6757;
+$ai-soft: #5c4a3b;
+$ai-line: #dad5cd;
+$ai-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+$ai-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+$ai-serif: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif;
+$ai-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif;
+$ai-mono: var(--wp--preset--font-family--jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
+$ai-frame: 1280px;
+$ai-gutter: clamp(20px, 5vw, 96px);
+$ai-pad: max(#{$ai-gutter}, calc((100vw - #{$ai-frame}) / 2));
+$ai-sec: clamp(88px, 2.5rem + 6vw, 160px);
+$ai-shadow: 0 24px 48px -28px rgba(36, 26, 18, 0.45);
+
+// The five questions: (fill, text on fill, text on cream).
+$ai-q: (
+	1: ($ai-green, #fff, $ai-green),
+	2: ($ai-red, #fff, $ai-red),
+	3: ($ai-gold, $ai-espresso, $ai-gold-deep),
+	4: ($ai-purple, #fff, $ai-purple),
+	5: ($ai-ink, $ai-gold, $ai-ink),
+);
+
+/* ---- The ground ---------------------------------------------------------------------- */
+
+body:has(.wcblr-ai),
+body:has(.wcblr-ai) .wp-site-blocks > main {
+	background-color: $ai-cream !important;
+}
+
+body:has(.wcblr-ai) main::before,
+body:has(.wcblr-ai) main::after {
+	display: none !important;
+}
+
+.entry-content:has(> .wcblr-ai) {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+	max-width: none !important;
+}
+
+.entry-content > .wcblr-ai.alignfull {
+	width: 100vw !important;
+	max-width: none !important;
+	margin: 0 0 0 calc(50% - 50vw) !important;
+	box-sizing: border-box;
+	padding: clamp(8px, 1vw, 24px) $ai-pad clamp(80px, 2rem + 5vw, 140px) !important;
+	color: $ai-ink;
+	font-family: $ai-sans;
+	overflow-x: clip;
+}
+
+.wcblr-ai :where(p, h2, h3, h4, .wp-block-group, .wp-block-buttons) {
+	margin: 0 !important;
+	max-width: none !important;
+}
+
+.wcblr-ai a {
+	color: inherit;
+	text-decoration: none;
+	font: inherit;
+}
+
+.wcblr-ai em {
+	color: $ai-red;
+	font-style: italic;
+}
+
+.wcblr-ai img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+// In-copy links: one red underline everywhere.
+.wcblr-ai-intro a,
+.wcblr-ai-ch-b a,
+.wcblr-ai-small a,
+.wcblr-ai-notai-b a,
+.wcblr-ai-stub-b a,
+.wcblr-ai-price a {
+	box-shadow: inset 0 -1.5px 0 rgba(200, 52, 75, 0.5);
+	transition: color 0.2s $ai-ease, box-shadow 0.2s $ai-ease;
+
+	&:hover {
+		color: $ai-red;
+		box-shadow: inset 0 -2px 0 $ai-red;
+	}
+}
+
+.wcblr-ai-k {
+	font-family: $ai-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	color: $ai-red;
+}
+
+.wcblr-ai-k.is-gold { color: $ai-gold; }
+
+/* Buttons. */
+.wcblr-ai-actions {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.wcblr-ai-actions .wp-block-button__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 14px 22px !important;
+	border-radius: 999px !important;
+	font-family: $ai-sans !important;
+	font-size: 15px !important;
+	font-weight: 600 !important;
+	transition: transform 0.4s $ai-spring, background 0.2s $ai-ease, box-shadow 0.2s $ai-ease, color 0.2s $ai-ease;
+}
+
+.wcblr-ai-actions .wp-block-button__link::after {
+	content: "\2192";
+	transition: transform 0.4s $ai-spring;
+}
+
+.wcblr-ai-actions .wp-block-button__link:hover { transform: translateY(-2px); }
+.wcblr-ai-actions .wp-block-button__link:hover::after { transform: translateX(4px); }
+.wcblr-ai-actions .is-primary .wp-block-button__link { background: $ai-espresso !important; color: $ai-cream !important; }
+.wcblr-ai-actions .is-primary .wp-block-button__link:hover { background: $ai-red !important; }
+.wcblr-ai-actions .is-primary .wp-block-button__link::after { content: "\2193"; }
+.wcblr-ai-actions .is-ghost .wp-block-button__link { background: transparent !important; color: $ai-ink !important; box-shadow: inset 0 0 0 1.5px rgba(42, 29, 20, 0.3); }
+.wcblr-ai-actions .is-ghost .wp-block-button__link:hover { box-shadow: inset 0 0 0 1.5px $ai-ink; }
+.wcblr-ai-actions .is-gold .wp-block-button__link { background: $ai-gold !important; color: $ai-espresso !important; }
+.wcblr-ai-actions .is-gold .wp-block-button__link:hover { background: $ai-espresso !important; color: $ai-gold !important; }
+
+/* ---- Section titles -------------------------------------------------------------------- */
+
+.wcblr-ai-sec {
+	padding-top: $ai-sec;
+	scroll-margin-top: 100px;
+}
+
+.wcblr-ai-hero-sec { padding-top: 0; }
+
+.wcblr-ai-titles { margin-bottom: clamp(32px, 1rem + 3vw, 64px) !important; }
+
+.wcblr-post.wcblr-ai .wcblr-ai-bt {
+	margin: 0 !important;
+	font-family: $ai-serif !important;
+	font-size: clamp(56px, 1.6rem + 6vw, 128px) !important;
+	font-weight: 400 !important;
+	line-height: 0.86 !important;
+	letter-spacing: -0.055em !important;
+	color: $ai-ink;
+}
+
+.wcblr-ai-sub {
+	margin-top: clamp(14px, 1.2vw, 22px) !important;
+	font-family: $ai-serif !important;
+	font-size: clamp(26px, 1rem + 1.8vw, 46px) !important;
+	line-height: 1.08 !important;
+	letter-spacing: -0.025em;
+	color: $ai-soft;
+}
+
+/* ---- 1. Hero ----------------------------------------------------------------------------- */
+
+.wcblr-ai-hero {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: clamp(28px, 4vw, 72px);
+	align-items: center;
+}
+
+.wcblr-ai-kicker {
+	display: flex !important;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 14px;
+	font-family: $ai-mono;
+	font-size: 12.5px !important;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: $ai-red;
+
+	span + span {
+		padding-left: 14px;
+		box-shadow: inset 1px 0 0 rgba(42, 29, 20, 0.2);
+		color: $ai-ink;
+	}
+
+	a:hover { color: $ai-red; }
+}
+
+.wcblr-ai-lede {
+	margin-top: clamp(16px, 1.6vw, 28px) !important;
+	font-family: $ai-serif !important;
+	font-size: clamp(52px, 1.4rem + 5vw, 112px) !important;
+	line-height: 0.92 !important;
+	letter-spacing: -0.05em;
+	color: $ai-ink;
+
+	em {
+		display: block;
+		font-style: normal;
+		font-size: 1.9em;
+		line-height: 0.82;
+		letter-spacing: -0.06em;
+	}
+}
+
+.wcblr-ai-intro {
+	max-width: 50ch !important;
+	margin-top: clamp(20px, 2vw, 32px) !important;
+	font-size: 18px !important;
+	line-height: 1.65 !important;
+	color: $ai-soft;
+}
+
+.wcblr-ai-intro + .wcblr-ai-intro { margin-top: 12px !important; }
+.wcblr-ai-hero-main .wcblr-ai-actions { margin-top: 28px !important; }
+
+// The switchboard: the five questions as five plugs, each in its colour.
+.wcblr-ai-switch {
+	padding: clamp(20px, 2vw, 28px);
+	border-radius: 24px;
+	background: $ai-paper;
+	box-shadow: $ai-shadow, 0 0 0 1px rgba(42, 29, 20, 0.06);
+	transform: rotate(1.2deg);
+}
+
+.wcblr-ai-switch-list {
+	display: flex !important;
+	flex-direction: column;
+	gap: 8px;
+	margin-top: 14px !important;
+
+	a {
+		display: grid;
+		grid-template-columns: 52px minmax(0, 1fr);
+		grid-template-rows: auto auto;
+		column-gap: 16px;
+		align-items: center;
+		padding: 14px 18px 14px 14px;
+		border-radius: 16px;
+		background: $ai-cream;
+		transition: transform 0.4s $ai-spring, background 0.25s $ai-ease;
+	}
+
+	b {
+		grid-row: 1 / 3;
+		display: grid;
+		place-items: center;
+		width: 52px;
+		height: 52px;
+		border-radius: 14px;
+		font-family: $ai-mono;
+		font-size: 17px;
+		font-weight: 700;
+		transition: transform 0.4s $ai-spring;
+	}
+
+	strong {
+		font-family: $ai-serif;
+		font-size: clamp(17px, 0.9rem + 0.5vw, 21px);
+		font-weight: 500;
+		line-height: 1.2;
+		letter-spacing: -0.01em;
+	}
+
+	span {
+		margin-top: 4px;
+		font-family: $ai-mono;
+		font-size: 11.5px;
+		color: $ai-muted;
+	}
+
+	a:hover { transform: translateX(6px); }
+	a:hover b { transform: rotate(-8deg) scale(1.06); }
+}
+
+@each $n, $c in $ai-q {
+	.wcblr-ai-switch-list a.is-q#{$n} b { background: nth($c, 1); color: nth($c, 2); }
+	.wcblr-ai-switch-list a.is-q#{$n}:hover { background: rgba(nth($c, 1), 0.12); }
+}
+
+.wcblr-ai-switch-key {
+	display: flex !important;
+	gap: 18px;
+	margin-top: 14px !important;
+	font-family: $ai-mono;
+	font-size: 11.5px !important;
+	color: $ai-muted;
+
+	i {
+		margin-right: 6px;
+		font-style: normal;
+		font-weight: 700;
+		color: $ai-ink;
+	}
+}
+
+/* ---- 2. The day map ------------------------------------------------------------------ */
+
+// The fixed, empty targets the filters point at. Always in view, so a click never scrolls.
+.wcblr-ai-f {
+	position: fixed !important;
+	top: 0;
+	left: 0;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	pointer-events: none;
+}
+
+.wcblr-ai-map {
+	padding: clamp(18px, 2.4vw, 36px);
+	border-radius: 28px;
+	background: $ai-paper;
+	box-shadow: 0 0 0 1.5px $ai-line;
+}
+
+.wcblr-ai-map-bar {
+	display: flex !important;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 14px 24px;
+	margin-bottom: 22px !important;
+}
+
+.wcblr-ai-filter {
+	display: flex !important;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+
+	span {
+		margin-right: 6px;
+		font-family: $ai-mono;
+		font-size: 11.5px;
+		font-weight: 600;
+		color: $ai-muted;
+	}
+
+	a {
+		padding: 9px 15px;
+		border-radius: 999px;
+		background: $ai-cream;
+		box-shadow: inset 0 0 0 1.5px rgba(42, 29, 20, 0.12);
+		font-family: $ai-mono;
+		font-size: 13px;
+		font-weight: 700;
+		cursor: pointer;
+		transition: transform 0.3s $ai-spring, background 0.2s $ai-ease, color 0.2s $ai-ease, box-shadow 0.2s $ai-ease;
+	}
+
+	a:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1.5px rgba(42, 29, 20, 0.35); }
+}
+
+@each $n, $c in $ai-q {
+	.wcblr-ai-filter a.is-#{$n} { color: nth($c, 3); }
+}
+
+.wcblr-ai-map-note {
+	font-family: $ai-mono;
+	font-size: 11.5px !important;
+	color: $ai-muted;
+}
+
+.wcblr-ai-rooms,
+.wcblr-ai-grid {
+	display: grid !important;
+	grid-template-columns: 64px minmax(0, 1fr) minmax(0, 1fr);
+	column-gap: 10px;
+}
+
+.wcblr-ai-rooms {
+	margin-bottom: 10px !important;
+
+	span {
+		font-family: $ai-serif;
+		font-size: 20px;
+		font-weight: 500;
+		letter-spacing: -0.01em;
+	}
+
+	small {
+		display: block;
+		font-family: $ai-mono;
+		font-size: 11px;
+		color: $ai-muted;
+	}
+}
+
+.wcblr-ai-grid {
+	// Rows 8-9 are the coffee break and 17-21 the photo and lunch: shorter, so the gaps
+	// read as gaps rather than as the biggest things on the map.
+	grid-template-rows: repeat(7, 38px) repeat(2, 20px) repeat(7, 38px) repeat(5, 16px) repeat(8, 38px);
+	row-gap: 4px;
+	position: relative;
+}
+
+@for $i from 1 through 29 {
+	.wcblr-ai-grid .r-#{$i} { grid-row-start: $i; }
+}
+
+@for $i from 1 through 5 {
+	.wcblr-ai-grid .s-#{$i} { grid-row-end: span $i; }
+}
+
+.wcblr-ai-hh {
+	grid-column: 1;
+	padding-top: 10px;
+	font-family: $ai-mono;
+	font-size: 12px;
+	font-weight: 600;
+	color: $ai-muted;
+}
+
+.wcblr-ai-brk,
+.wcblr-ai-end {
+	grid-column: 2 / 4;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 10px;
+	background: $ai-sand;
+	font-family: $ai-serif;
+	font-size: 15px;
+	font-style: italic;
+	color: $ai-soft;
+}
+
+.wcblr-ai-end { grid-column: 1 / 4; background: transparent; box-shadow: inset 0 0 0 1.5px $ai-sand; }
+
+.wcblr-ai-tile {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	min-width: 0;
+	padding: 8px 10px;
+	border-radius: 10px;
+	overflow: hidden;
+	transition: opacity 0.35s $ai-ease, transform 0.35s $ai-spring, filter 0.35s $ai-ease, box-shadow 0.2s $ai-ease;
+
+	&.is-x { grid-column: 2; }
+	&.is-c { grid-column: 3; }
+
+	b {
+		flex: none;
+		padding: 3px 6px;
+		border-radius: 6px;
+		font-family: $ai-mono;
+		font-size: 10.5px;
+		font-weight: 700;
+		line-height: 1.2;
+	}
+
+	strong {
+		flex: 1;
+		min-width: 0;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		font-size: 13.5px;
+		font-weight: 600;
+		line-height: 1.5;
+	}
+
+	small {
+		flex: none;
+		font-family: $ai-mono;
+		font-size: 10.5px;
+		line-height: 1.9;
+		opacity: 0.7;
+	}
+
+	&:hover { transform: translateY(-2px) scale(1.01); z-index: 2; }
+}
+
+// Tiles of two rows or more have room for the title to wrap.
+.wcblr-ai-tile:not(.s-1) strong { white-space: normal; }
+
+@each $n, $c in $ai-q {
+	.wcblr-ai-tile.is-q#{$n} { background: rgba(nth($c, 1), 0.13); box-shadow: inset 4px 0 0 nth($c, 1); }
+	.wcblr-ai-tile.is-q#{$n} b { background: nth($c, 1); color: nth($c, 2); }
+	.wcblr-ai-tile.is-q#{$n}:hover { background: rgba(nth($c, 1), 0.22); }
+}
+
+.wcblr-ai-tile.is-q0 {
+	background: transparent;
+	border: 1.5px dashed rgba(42, 29, 20, 0.28);
+	color: $ai-soft;
+
+	b { color: $ai-muted; }
+}
+
+// The filters: everything that does not match fades back.
+@each $n in (1, 2, 3, 4, 5, 0) {
+	.wcblr-ai-mapsec:has(#m-#{$n}:target) .wcblr-ai-tile:not(.is-q#{$n}) {
+		opacity: 0.16;
+		filter: grayscale(1);
+	}
+}
+
+.wcblr-ai-mapsec:not(:has(.wcblr-ai-f:target)) .wcblr-ai-filter a.is-all,
+.wcblr-ai-mapsec:has(#m-all:target) .wcblr-ai-filter a.is-all,
+.wcblr-ai-mapsec:has(#m-0:target) .wcblr-ai-filter a.is-0 {
+	background: $ai-ink;
+	color: $ai-cream;
+	box-shadow: none;
+}
+
+@each $n, $c in $ai-q {
+	.wcblr-ai-mapsec:has(#m-#{$n}:target) .wcblr-ai-filter a.is-#{$n} {
+		background: nth($c, 1);
+		color: nth($c, 2);
+		box-shadow: none;
+	}
+}
+
+/* ---- 3. Five questions --------------------------------------------------------------- */
+
+.wcblr-ai-chapters {
+	display: flex !important;
+	flex-direction: column;
+	gap: clamp(56px, 2rem + 4vw, 112px);
+}
+
+.wcblr-ai-ch {
+	display: grid !important;
+	grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+	gap: clamp(24px, 3vw, 56px);
+	align-items: start;
+	scroll-margin-top: 100px;
+}
+
+.wcblr-ai-ch-side {
+	position: sticky !important;
+	top: 104px;
+}
+
+.wcblr-ai-ch-n {
+	font-family: $ai-serif !important;
+	font-size: clamp(88px, 3rem + 6vw, 168px) !important;
+	font-weight: 400;
+	line-height: 0.8 !important;
+	letter-spacing: -0.06em;
+}
+
+.wcblr-post.wcblr-ai .wcblr-ai-ch-q {
+	margin-top: 18px !important;
+	font-family: $ai-serif !important;
+	font-size: clamp(30px, 1rem + 2vw, 46px) !important;
+	font-weight: 500 !important;
+	line-height: 1.04 !important;
+	letter-spacing: -0.03em !important;
+	text-wrap: balance;
+	color: $ai-ink;
+}
+
+.wcblr-ai-ch-b {
+	max-width: 52ch !important;
+	margin-top: 16px !important;
+	font-size: 17px !important;
+	line-height: 1.68 !important;
+	color: $ai-soft;
+}
+
+.wcblr-ai-todo {
+	position: relative;
+	margin-top: 24px !important;
+	padding: 18px 20px 18px 58px;
+	border-radius: 16px;
+	background: $ai-espresso;
+	color: $ai-cream;
+
+	// The checkbox, waiting for Sunday.
+	&::before {
+		content: "";
+		position: absolute;
+		top: 20px;
+		left: 20px;
+		width: 20px;
+		height: 20px;
+		border-radius: 6px;
+		box-shadow: inset 0 0 0 2px $ai-gold;
+		transition: background 0.3s $ai-ease;
+	}
+
+	&:hover::before { background: rgba(224, 165, 38, 0.3); }
+}
+
+.wcblr-ai-todo-k {
+	font-family: $ai-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 600;
+	color: $ai-gold;
+}
+
+.wcblr-ai-todo-b {
+	margin-top: 6px !important;
+	font-size: 16px !important;
+	line-height: 1.55 !important;
+
+	b { color: $ai-gold; font-weight: 600; }
+}
+
+.wcblr-ai-ch-list {
+	display: flex !important;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.wcblr-ai-ses {
+	padding: clamp(20px, 2vw, 28px) clamp(20px, 2vw, 30px);
+	border-radius: 18px;
+	background: $ai-paper;
+	box-shadow: 0 0 0 1.5px $ai-line;
+	transition: transform 0.4s $ai-spring, box-shadow 0.25s $ai-ease;
+
+	&:hover { transform: translateY(-3px); }
+}
+
+.wcblr-ai-ses-when {
+	display: flex !important;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 6px 14px;
+	font-family: $ai-mono;
+	font-size: 12px !important;
+	color: $ai-muted;
+
+	time {
+		padding: 4px 10px;
+		border-radius: 8px;
+		font-size: 14px;
+		font-weight: 700;
+	}
+
+	span + span::before { content: "\00b7"; margin-right: 14px; }
+}
+
+.wcblr-post.wcblr-ai .wcblr-ai-ses-t {
+	margin-top: 14px !important;
+	font-family: $ai-serif !important;
+	font-size: clamp(21px, 1rem + 0.6vw, 25px) !important;
+	font-weight: 500 !important;
+	line-height: 1.18 !important;
+	letter-spacing: -0.015em !important;
+	color: $ai-ink;
+
+	a { transition: color 0.2s $ai-ease; }
+	a::after { content: " \2197"; font-family: $ai-sans; font-size: 0.7em; opacity: 0.45; }
+}
+
+.wcblr-ai-ses-b {
+	margin-top: 10px !important;
+	font-size: 15.5px !important;
+	line-height: 1.62 !important;
+	color: $ai-soft;
+}
+
+.wcblr-ai-ses-who {
+	display: flex !important;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 12px;
+	margin-top: 16px !important;
+	font-size: 14px !important;
+	font-weight: 600;
+
+	span { display: flex; padding-left: 8px; }
+
+	a {
+		margin-left: -8px;
+		border-radius: 50%;
+		box-shadow: 0 0 0 2.5px $ai-paper;
+		transition: transform 0.35s $ai-spring;
+	}
+
+	a:hover { transform: translateY(-3px) scale(1.08); z-index: 1; }
+
+	img {
+		width: 36px !important;
+		height: 36px !important;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+}
+
+.wcblr-ai-stay {
+	padding: 16px 20px;
+	border-radius: 16px;
+	background: rgba(224, 165, 38, 0.16);
+	font-size: 15.5px !important;
+	line-height: 1.55 !important;
+	color: $ai-ink;
+}
+
+@each $n, $c in $ai-q {
+	.wcblr-ai-ch.is-q#{$n} .wcblr-ai-ch-n { color: nth($c, 3); }
+	.wcblr-ai-ch.is-q#{$n} .wcblr-ai-ses { box-shadow: 0 0 0 1.5px $ai-line, inset 5px 0 0 nth($c, 1); }
+	.wcblr-ai-ch.is-q#{$n} .wcblr-ai-ses:hover { box-shadow: 0 0 0 1.5px nth($c, 1), inset 5px 0 0 nth($c, 1), $ai-shadow; }
+	.wcblr-ai-ch.is-q#{$n} .wcblr-ai-ses-when time { background: nth($c, 1); color: nth($c, 2); }
+	.wcblr-ai-ch.is-q#{$n} .wcblr-ai-ses-t a:hover { color: nth($c, 3); }
+}
+
+/* ---- 4. Two clashes ------------------------------------------------------------------ */
+
+.wcblr-ai-forks {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: clamp(16px, 2vw, 28px);
+}
+
+.wcblr-ai-fork {
+	padding: clamp(22px, 2.4vw, 34px);
+	border-radius: 24px;
+	background: $ai-paper;
+	box-shadow: 0 0 0 1.5px $ai-line;
+}
+
+.wcblr-ai-fork-t {
+	display: flex !important;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 6px 16px;
+
+	time {
+		font-family: $ai-serif;
+		font-size: clamp(52px, 2rem + 3vw, 84px);
+		line-height: 0.9;
+		letter-spacing: -0.05em;
+		color: $ai-red;
+	}
+
+	span {
+		font-family: $ai-mono;
+		font-size: 12px;
+		font-weight: 600;
+		color: $ai-muted;
+	}
+}
+
+.wcblr-ai-fork-pair {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+	align-items: stretch;
+	gap: 10px;
+	margin-top: 22px !important;
+
+	a {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding: 18px;
+		border-radius: 16px;
+		background: $ai-cream;
+		transition: transform 0.4s $ai-spring, background 0.25s $ai-ease;
+	}
+
+	a:hover { transform: translateY(-3px) rotate(-0.6deg); background: $ai-sand; }
+	a:last-child:hover { transform: translateY(-3px) rotate(0.6deg); }
+
+	small {
+		font-family: $ai-mono;
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: $ai-red;
+	}
+
+	strong {
+		font-family: $ai-serif;
+		font-size: 19px;
+		font-weight: 500;
+		line-height: 1.2;
+	}
+
+	span { font-size: 13.5px; line-height: 1.5; color: $ai-muted; }
+
+	i {
+		align-self: center;
+		display: grid;
+		place-items: center;
+		width: 42px;
+		height: 42px;
+		border-radius: 50%;
+		background: $ai-ink;
+		color: $ai-gold;
+		font-family: $ai-serif;
+		font-size: 17px;
+	}
+}
+
+.wcblr-ai-fork-b {
+	margin-top: 18px !important;
+	font-family: $ai-serif;
+	font-size: 19px !important;
+	font-style: italic;
+	line-height: 1.4 !important;
+	color: $ai-ink;
+}
+
+.wcblr-ai-small {
+	max-width: 70ch !important;
+	margin-top: 28px !important;
+	font-size: 16px !important;
+	line-height: 1.65 !important;
+	color: $ai-soft;
+}
+
+/* ---- 5. Not AI, and #core-ai ------------------------------------------------------------ */
+
+.wcblr-ai-split {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+	gap: clamp(16px, 2vw, 28px);
+	align-items: start;
+}
+
+.wcblr-ai-notai {
+	padding: clamp(24px, 2.6vw, 38px);
+	border-radius: 24px;
+	background: $ai-paper;
+	box-shadow: 0 0 0 1.5px $ai-line;
+}
+
+.wcblr-post.wcblr-ai .wcblr-ai-notai-t {
+	margin-top: 14px !important;
+	font-family: $ai-serif !important;
+	font-size: clamp(30px, 1rem + 2vw, 44px) !important;
+	font-weight: 500 !important;
+	line-height: 1.05 !important;
+	letter-spacing: -0.03em !important;
+	color: $ai-ink;
+}
+
+.wcblr-ai-notai-b {
+	max-width: 60ch !important;
+	margin-top: 14px !important;
+	font-size: 16.5px !important;
+	line-height: 1.65 !important;
+	color: $ai-soft;
+}
+
+.wcblr-ai-chips {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 22px !important;
+
+	a {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 8px;
+		padding: 9px 14px;
+		border: 1.5px dashed rgba(42, 29, 20, 0.3);
+		border-radius: 999px;
+		font-size: 14px;
+		font-weight: 600;
+		transition: transform 0.3s $ai-spring, border-color 0.2s $ai-ease, background 0.2s $ai-ease;
+	}
+
+	a:hover { transform: translateY(-2px); border-style: solid; border-color: $ai-ink; background: $ai-cream; }
+
+	time { font-family: $ai-mono; font-size: 11.5px; color: $ai-muted; }
+}
+
+.wcblr-ai-slack {
+	position: relative;
+	padding: 0 clamp(24px, 2.6vw, 36px) clamp(26px, 2.6vw, 36px);
+	border-radius: 24px;
+	background: $ai-espresso;
+	color: $ai-cream;
+	overflow: hidden;
+}
+
+.wcblr-ai-slack-bar {
+	display: flex !important;
+	align-items: center;
+	gap: 7px;
+	margin: 0 calc(-1 * clamp(24px, 2.6vw, 36px)) 24px !important;
+	padding: 14px 18px;
+	background: rgba(255, 255, 255, 0.06);
+
+	span { width: 11px; height: 11px; border-radius: 50%; background: rgba(242, 236, 224, 0.25); }
+	span:first-child { background: $ai-red; }
+	span:nth-child(2) { background: $ai-gold; }
+	span:nth-child(3) { background: #1d8b6e; }
+
+	em {
+		margin-left: 10px;
+		font-family: $ai-mono;
+		font-size: 12.5px;
+		font-style: normal;
+		font-weight: 600;
+		color: rgba(242, 236, 224, 0.7);
+	}
+}
+
+.wcblr-ai-slack-t {
+	margin-top: 12px !important;
+	font-family: $ai-serif !important;
+	font-size: clamp(30px, 1rem + 2vw, 44px) !important;
+	line-height: 1.04 !important;
+	letter-spacing: -0.03em;
+
+	em { color: $ai-gold; font-style: normal; font-family: $ai-mono; font-size: 0.82em; letter-spacing: -0.04em; }
+}
+
+.wcblr-ai-slack-b {
+	margin-top: 16px !important;
+	font-size: 16px !important;
+	line-height: 1.65 !important;
+	color: rgba(242, 236, 224, 0.78);
+
+	a { color: $ai-cream; box-shadow: inset 0 -1.5px 0 $ai-gold; transition: color 0.2s $ai-ease; }
+	a:hover { color: $ai-gold; }
+}
+
+/* ---- 6. The close ------------------------------------------------------------------------ */
+
+.wcblr-ai-stub {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr);
+	border-radius: 28px;
+	background: $ai-paper;
+	box-shadow: 0 0 0 1.5px $ai-line, $ai-shadow;
+	overflow: hidden;
+}
+
+.wcblr-ai-stub-main {
+	padding: clamp(28px, 3.4vw, 56px);
+
+	.wcblr-ai-k { color: $ai-red; }
+}
+
+.wcblr-ai-stub-t {
+	margin-top: 14px !important;
+	max-width: 16ch !important;
+	font-family: $ai-serif !important;
+	font-size: clamp(36px, 1.2rem + 3vw, 68px) !important;
+	line-height: 0.98 !important;
+	letter-spacing: -0.045em;
+	text-wrap: balance;
+}
+
+.wcblr-ai-stub-b {
+	max-width: 56ch !important;
+	margin-top: 16px !important;
+	font-size: 16.5px !important;
+	line-height: 1.65 !important;
+	color: $ai-soft;
+}
+
+.wcblr-ai-stub-side {
+	display: flex !important;
+	flex-direction: column;
+	justify-content: center;
+	gap: 22px;
+	padding: clamp(28px, 3vw, 48px);
+	background: $ai-gold;
+	color: $ai-espresso;
+}
+
+.wcblr-ai-price {
+	strong {
+		display: block;
+		font-family: $ai-serif;
+		font-size: clamp(56px, 2rem + 3vw, 88px);
+		font-weight: 500;
+		line-height: 0.9;
+		letter-spacing: -0.05em;
+	}
+
+	span {
+		display: block;
+		margin-top: 10px;
+		font-family: $ai-mono;
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	small { display: block; margin-top: 8px; font-size: 14.5px; line-height: 1.5; }
+
+	a { box-shadow: inset 0 -1.5px 0 $ai-espresso; }
+	a:hover { color: $ai-espresso; box-shadow: inset 0 -2.5px 0 $ai-espresso; }
+}
+
+.wcblr-ai-stub-side .wcblr-ai-actions .is-gold .wp-block-button__link { background: $ai-espresso !important; color: $ai-gold !important; }
+.wcblr-ai-stub-side .wcblr-ai-actions .is-gold .wp-block-button__link:hover { background: $ai-red !important; color: #fff !important; }
+
+/* ---- Motion: the opening screen only ------------------------------------------------- */
+
+@keyframes wcblr-ai-rise {
+	from { opacity: 0; transform: translateY(18px); }
+}
+
+@keyframes wcblr-ai-plug {
+	from { opacity: 0; transform: translateX(28px); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-ai-hero-main > * { animation: wcblr-ai-rise 0.7s $ai-ease backwards; }
+	.wcblr-ai-hero-main > :nth-child(2) { animation-delay: 0.08s; }
+	.wcblr-ai-hero-main > :nth-child(3) { animation-delay: 0.16s; }
+	.wcblr-ai-hero-main > :nth-child(4) { animation-delay: 0.22s; }
+	.wcblr-ai-hero-main > :nth-child(5) { animation-delay: 0.28s; }
+	.wcblr-ai-switch-list a { animation: wcblr-ai-plug 0.6s $ai-spring backwards; }
+
+	@for $i from 1 through 5 {
+		.wcblr-ai-switch-list a:nth-child(#{$i}) { animation-delay: #{0.25 + $i * 0.08}s; }
+	}
+}
+
+/* ---- Narrow screens -------------------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+	.wcblr-ai-forks { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 900px) {
+	.wcblr-ai-hero,
+	.wcblr-ai-ch,
+	.wcblr-ai-split,
+	.wcblr-ai-stub { grid-template-columns: minmax(0, 1fr); }
+
+	.wcblr-ai-switch { transform: none; }
+	.wcblr-ai-ch-side { position: static !important; }
+	.wcblr-ai-ch-n { font-size: 96px !important; }
+}
+
+@media (max-width: 600px) {
+	.wcblr-ai-map { padding: 14px 10px; border-radius: 20px; }
+	.wcblr-ai-map-bar { margin-bottom: 16px !important; }
+	.wcblr-ai-filter a { padding: 8px 11px; font-size: 12px; }
+
+	.wcblr-ai-rooms,
+	.wcblr-ai-grid {
+		grid-template-columns: 38px minmax(0, 1fr) minmax(0, 1fr);
+		column-gap: 6px;
+	}
+
+	.wcblr-ai-rooms span { font-size: 15px; }
+	.wcblr-ai-rooms small { display: none; }
+	.wcblr-ai-grid { grid-template-rows: repeat(7, 34px) repeat(2, 18px) repeat(7, 34px) repeat(5, 14px) repeat(8, 34px); row-gap: 3px; }
+	.wcblr-ai-hh { padding-top: 8px; font-size: 10.5px; }
+	.wcblr-ai-brk { font-size: 13px; }
+	.wcblr-ai-end { font-size: 12px; }
+
+	.wcblr-ai-tile {
+		gap: 5px;
+		padding: 6px 7px;
+
+		b { padding: 2px 4px; font-size: 9.5px; }
+		strong { font-size: 11.5px; line-height: 1.55; }
+		small { display: none; }
+	}
+
+	.wcblr-ai-fork-pair {
+		grid-template-columns: minmax(0, 1fr);
+
+		i { justify-self: center; }
+	}
+
+	.wcblr-ai-switch-list a { grid-template-columns: 44px minmax(0, 1fr); padding: 12px; }
+	.wcblr-ai-switch-list b { width: 44px; height: 44px; font-size: 15px; }
+}
