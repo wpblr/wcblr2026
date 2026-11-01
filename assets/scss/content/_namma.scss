@@ -261,7 +261,7 @@ body:has(.wcblr-kn) main::after {
 	color: $kn-soft;
 }
 
-.wcblr-kn-hero > .wcblr-kn-shares { grid-column: 1; grid-row: 2; max-width: 620px; }
+.wcblr-kn-hero > .wcblr-kn-shares { grid-column: 1; grid-row: 2; width: 100%; max-width: 640px !important; }
 
 .wcblr-kn-kicker {
 	display: flex !important;
