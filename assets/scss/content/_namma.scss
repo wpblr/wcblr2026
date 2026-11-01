@@ -1077,7 +1077,7 @@ body:has(.wcblr-kn) main::after {
 
 .wcblr-kn-close {
 	display: grid !important;
-	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.72fr);
 	border-radius: 30px;
 	overflow: hidden;
 	box-shadow: $kn-shadow;
@@ -1113,6 +1113,42 @@ body:has(.wcblr-kn) main::after {
 		line-height: 1.45;
 		letter-spacing: 0;
 	}
+}
+
+// The organisers' reel stands down the right edge, beside the masthead and the ticket.
+.wcblr-kn-close-reel {
+	display: flex !important;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 14px;
+	grid-column: 3;
+	grid-row: 1 / 3;
+	padding: clamp(20px, 2.4vw, 36px);
+	background: $kn-espresso;
+}
+
+.wcblr-kn figure.wcblr-kn-reel {
+	aspect-ratio: 9 / 16;
+	width: min(100%, 320px);
+	margin: 0 !important;
+	border-radius: 18px;
+	overflow: hidden;
+	background: #000;
+
+	// Jetpack wraps the iframe in span.embed-youtube, which has no height of its own
+	.wp-block-embed__wrapper,
+	.embed-youtube { display: block; height: 100%; }
+	.wp-block-embed__wrapper::before { display: none; }
+	iframe { display: block; width: 100% !important; height: 100% !important; }
+}
+
+.wcblr-kn-reel-cap {
+	max-width: 320px !important;
+	font-size: 14px !important;
+	line-height: 1.5 !important;
+	text-align: center;
+	color: rgba(251, 248, 241, 0.72);
 }
 
 .wcblr-kn-close-mid {
@@ -1228,6 +1264,12 @@ body:has(.wcblr-kn) main::after {
 
 	.wcblr-kn-stop.is-sun { grid-column: auto; grid-row: auto; }
 
+	// Tablet: masthead across, copy and ticket down the left, the reel down the right.
+	.wcblr-kn-close { grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr); }
+	.wcblr-kn-close-mid { grid-column: 1; grid-row: 2; }
+	.wcblr-kn-close-foot { grid-column: 1; grid-row: 3; }
+	.wcblr-kn-close-reel { grid-column: 2; grid-row: 2 / 4; }
+
 	.wcblr-kn-lead { grid-row: auto; }
 	.wcblr-kn-around-main { position: static !important; }
 	.wcblr-kn-shares,
@@ -1238,7 +1280,11 @@ body:has(.wcblr-kn) main::after {
 	.wcblr-kn-jump { grid-template-columns: minmax(0, 1fr); }
 	.wcblr-kn-steps,
 	.wcblr-kn-close { grid-template-columns: minmax(0, 1fr); }
-	.wcblr-kn-close-top { grid-column: auto; }
+	.wcblr-kn-close-top,
+	.wcblr-kn-close-mid,
+	.wcblr-kn-close-foot,
+	.wcblr-kn-close-reel { grid-column: auto; grid-row: auto; }
+	.wcblr-kn figure.wcblr-kn-reel { width: min(100%, 300px); }
 	.wcblr-kn-steps { padding-top: 0; row-gap: 22px; }
 	.wcblr-kn-step::before { display: none; }
 	.wcblr-kn-step.is-big { margin-top: 0; }
