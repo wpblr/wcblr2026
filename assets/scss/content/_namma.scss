@@ -1248,4 +1248,10 @@ body:has(.wcblr-kn) main::after {
 	.wcblr-kn-dash-main { padding: 12px; }
 	.wcblr-kn-dash-post { padding: 14px; }
 	.wcblr-kn-addrs span { display: none; }
+
+	// Two ledger cards a row: the numbers scale with the screen so 62,000 fits a half-width card.
+	.wcblr-kn-ledger span { padding: 16px; }
+	.wcblr-kn-ledger b { font-size: clamp(30px, 9vw, 44px); }
+	.wcblr-kn-bar.is-kn b { font-size: 46px; }
+	.wcblr-kn-bar small { font-size: 14px; }
 }
