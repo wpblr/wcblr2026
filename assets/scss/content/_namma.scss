@@ -216,10 +216,52 @@ body:has(.wcblr-kn) main::after {
 
 .wcblr-kn-hero {
 	display: grid !important;
-	grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
-	gap: clamp(28px, 4vw, 72px);
-	align-items: center;
+	grid-template-columns: minmax(0, 1fr) minmax(240px, 0.42fr);
+	column-gap: clamp(28px, 4vw, 72px);
+	row-gap: clamp(32px, 3vw, 48px);
+	align-items: start;
 }
+
+.wcblr-kn-hero-main { grid-column: 1; grid-row: 1; }
+
+// The organisers' reel, up in the first screen beside the greeting.
+.wcblr-kn-hero-reel {
+	display: flex !important;
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
+	grid-column: 2;
+	grid-row: 1 / 3;
+	margin-top: clamp(10px, 1.6vw, 30px) !important;
+}
+
+.wcblr-kn figure.wcblr-kn-reel {
+	aspect-ratio: 9 / 16;
+	width: min(100%, 330px);
+	margin: 0 !important;
+	border-radius: 22px;
+	overflow: hidden;
+	background: $kn-espresso;
+	box-shadow: $kn-shadow, 0 0 0 6px $kn-paper, 0 0 0 7px rgba(42, 29, 20, 0.08);
+	transform: rotate(1.2deg);
+
+	// Jetpack wraps the iframe in span.embed-youtube, which has no height of its own
+	.wp-block-embed__wrapper,
+	.embed-youtube { display: block; height: 100%; }
+	.wp-block-embed__wrapper::before { display: none; }
+	iframe { display: block; width: 100% !important; height: 100% !important; }
+}
+
+.wcblr-kn-reel-cap {
+	max-width: 300px !important;
+	margin-top: 10px !important;
+	font-size: 14px !important;
+	line-height: 1.5 !important;
+	text-align: center;
+	color: $kn-soft;
+}
+
+.wcblr-kn-hero > .wcblr-kn-shares { grid-column: 1; grid-row: 2; max-width: 620px; }
 
 .wcblr-kn-kicker {
 	display: flex !important;
@@ -1077,7 +1119,7 @@ body:has(.wcblr-kn) main::after {
 
 .wcblr-kn-close {
 	display: grid !important;
-	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.72fr);
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 	border-radius: 30px;
 	overflow: hidden;
 	box-shadow: $kn-shadow;
@@ -1113,42 +1155,6 @@ body:has(.wcblr-kn) main::after {
 		line-height: 1.45;
 		letter-spacing: 0;
 	}
-}
-
-// The organisers' reel stands down the right edge, beside the masthead and the ticket.
-.wcblr-kn-close-reel {
-	display: flex !important;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	gap: 14px;
-	grid-column: 3;
-	grid-row: 1 / 3;
-	padding: clamp(20px, 2.4vw, 36px);
-	background: $kn-espresso;
-}
-
-.wcblr-kn figure.wcblr-kn-reel {
-	aspect-ratio: 9 / 16;
-	width: min(100%, 320px);
-	margin: 0 !important;
-	border-radius: 18px;
-	overflow: hidden;
-	background: #000;
-
-	// Jetpack wraps the iframe in span.embed-youtube, which has no height of its own
-	.wp-block-embed__wrapper,
-	.embed-youtube { display: block; height: 100%; }
-	.wp-block-embed__wrapper::before { display: none; }
-	iframe { display: block; width: 100% !important; height: 100% !important; }
-}
-
-.wcblr-kn-reel-cap {
-	max-width: 320px !important;
-	font-size: 14px !important;
-	line-height: 1.5 !important;
-	text-align: center;
-	color: rgba(251, 248, 241, 0.72);
 }
 
 .wcblr-kn-close-mid {
@@ -1264,11 +1270,13 @@ body:has(.wcblr-kn) main::after {
 
 	.wcblr-kn-stop.is-sun { grid-column: auto; grid-row: auto; }
 
-	// Tablet: masthead across, copy and ticket down the left, the reel down the right.
-	.wcblr-kn-close { grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr); }
-	.wcblr-kn-close-mid { grid-column: 1; grid-row: 2; }
-	.wcblr-kn-close-foot { grid-column: 1; grid-row: 3; }
-	.wcblr-kn-close-reel { grid-column: 2; grid-row: 2 / 4; }
+	// Phones and tablets: the reel comes straight after the greeting, before the intro.
+	.wcblr-kn-hero { display: flex !important; flex-direction: column; gap: 0; }
+	.wcblr-kn-hero-main { display: contents !important; }
+	.wcblr-kn-hero-main > * { order: 1; }
+	.wcblr-kn-hero-main > .wcblr-kn-intro { order: 3; }
+	.wcblr-kn-hero-reel { order: 2; grid-column: auto; grid-row: auto; margin-top: 28px !important; }
+	.wcblr-kn-shares { order: 4; margin-top: 36px !important; }
 
 	.wcblr-kn-lead { grid-row: auto; }
 	.wcblr-kn-around-main { position: static !important; }
@@ -1280,11 +1288,7 @@ body:has(.wcblr-kn) main::after {
 	.wcblr-kn-jump { grid-template-columns: minmax(0, 1fr); }
 	.wcblr-kn-steps,
 	.wcblr-kn-close { grid-template-columns: minmax(0, 1fr); }
-	.wcblr-kn-close-top,
-	.wcblr-kn-close-mid,
-	.wcblr-kn-close-foot,
-	.wcblr-kn-close-reel { grid-column: auto; grid-row: auto; }
-	.wcblr-kn figure.wcblr-kn-reel { width: min(100%, 300px); }
+	.wcblr-kn-close-top { grid-column: auto; }
 	.wcblr-kn-steps { padding-top: 0; row-gap: 22px; }
 	.wcblr-kn-step::before { display: none; }
 	.wcblr-kn-step.is-big { margin-top: 0; }
