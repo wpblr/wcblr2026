@@ -1094,16 +1094,25 @@ body:has(.wcblr-kn) main::after {
 
 .wcblr-kn-mast {
 	display: flex !important;
-	flex-wrap: wrap;
-	align-items: baseline;
-	gap: 0 0.4em;
+	flex-direction: column;
+	gap: clamp(10px, 1.2vw, 20px);
 	margin-top: 14px !important;
 	font-family: $kn-serif !important;
-	font-size: clamp(38px, 1rem + 4vw, 92px) !important;
-	line-height: 1.15 !important;
+	font-size: clamp(36px, 1rem + 4vw, 92px) !important;
+	line-height: 1 !important;
 	letter-spacing: -0.045em;
 
-	span[lang="kn"] { color: $kn-red-deep; font-weight: 700; letter-spacing: 0; }
+	// Kannada carries tall vowel signs above and conjuncts below the line, so it gets its own
+	// line and the room the script needs, never the Latin line-height.
+	span[lang="kn"] {
+		display: block;
+		padding: 0.08em 0 0.12em;
+		color: $kn-red-deep;
+		font-size: 0.82em;
+		font-weight: 700;
+		line-height: 1.45;
+		letter-spacing: 0;
+	}
 }
 
 .wcblr-kn-close-mid {
