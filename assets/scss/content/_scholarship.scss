@@ -382,12 +382,14 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 
 	b {
 		font-family: $ps-serif;
-		font-size: clamp(30px, 0.4rem + 2.5vw, 44px);
+		// "Complimentary" must stay one word on one line: sized to the narrowest three-column card.
+		font-size: clamp(30px, 0.2rem + 2.2vw, 38px);
 		font-weight: 400;
 		line-height: 1.08;
 		letter-spacing: -0.03em;
 		color: $ps-ink;
-		overflow-wrap: anywhere;
+		overflow-wrap: normal;
+		hyphens: none;
 	}
 
 	> span { font-size: 15.5px; line-height: 1.6; color: $ps-soft; }
@@ -637,6 +639,10 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 
 /* ---- Narrower screens ------------------------------------------------------------------- */
 
+@media (max-width: 1100px) {
+	.wcblr-ps-covers { grid-template-columns: minmax(0, 1fr); }
+}
+
 @media (max-width: 1000px) {
 	.wcblr-ps-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 32px; }
 }
@@ -648,7 +654,6 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 	.wcblr-ps-who,
 	.wcblr-ps-apply { grid-template-columns: minmax(0, 1fr); }
 	.wcblr-ps-apply-head { position: static; }
-	.wcblr-ps-covers { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media (max-width: 640px) {
