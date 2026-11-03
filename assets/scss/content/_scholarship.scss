@@ -1015,3 +1015,21 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 	.wcblr-ps-form { padding: 22px 16px !important; }
 	.wcblr-ps-form .grunion-radio-options > label.contact-form-field { width: 100%; }
 }
+
+// The site's form styles out-rank the plain selectors above, so these two go up a level.
+.wcblr-post.wcblr-ps .wcblr-ps-form .wp-block-jetpack-button button.wp-block-button__link {
+	padding: 18px 34px !important;
+	border-radius: 999px !important;
+	background: $ps-gold-deep !important;
+	color: $ps-paper !important;
+	font-size: 16.5px !important;
+	font-weight: 700 !important;
+
+	&:hover { background: $ps-espresso !important; }
+}
+
+.wcblr-post.wcblr-ps .wcblr-ps-form .grunion-radio-options input[type="radio"] {
+	transform: none !important;
+	vertical-align: middle !important;
+	flex: none;
+}
