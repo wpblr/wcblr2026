@@ -146,7 +146,8 @@ body:has(.wcblr-bw) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 /* ---- Sections and titles ------------------------------------------------------------ */
 
 .wcblr-bw-sec { padding-top: $bw-sec; }
-.wcblr-bw-sec.wcblr-bw-hero-sec { padding-top: clamp(24px, 4vw, 64px); }
+.wcblr-bw-sec.wcblr-bw-hero-sec { padding-top: 0; }
+body:has(.wcblr-bw) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px) !important; }
 
 .wcblr-bw-titles { margin-bottom: clamp(24px, 1rem + 2vw, 48px) !important; }
 
