@@ -340,7 +340,7 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 
 	> span {
 		display: grid;
-		grid-template-columns: 132px minmax(0, 1fr);
+		grid-template-columns: 150px minmax(0, 1fr);
 		gap: 14px;
 		padding: 16px 0;
 		border-bottom: 1px solid $ps-line;
