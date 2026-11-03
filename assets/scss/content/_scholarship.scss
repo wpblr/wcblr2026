@@ -395,7 +395,7 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 
 .wcblr-ps-cover:nth-child(3) { background: $ps-espresso; }
 .wcblr-ps-cover:nth-child(3) small { color: $ps-gold-soft; }
-.wcblr-ps-cover:nth-child(3) b { color: $ps-gold-soft; font-size: clamp(30px, 0.4rem + 2.5vw, 44px); }
+.wcblr-ps-cover:nth-child(3) b { color: $ps-gold-soft; font-size: clamp(48px, 1rem + 3.4vw, 80px); line-height: 0.95; }
 .wcblr-ps-cover:nth-child(3) > span { color: rgba(251, 248, 241, 0.8); }
 
 .wcblr-ps-note {
