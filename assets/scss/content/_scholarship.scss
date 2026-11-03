@@ -781,7 +781,7 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 	}
 
 	> span:first-child { border-left: 0; }
-	b { font-family: $ps-serif; font-size: clamp(24px, 1rem + 0.8vw, 30px); font-weight: 400; line-height: 1; letter-spacing: -0.03em; color: $ps-gold-deep; }
+	b { font-family: $ps-serif; font-size: clamp(24px, 1rem + 0.8vw, 30px); font-weight: 400; line-height: 1; letter-spacing: -0.03em; color: $ps-gold-deep; white-space: nowrap; }
 	small { font-family: $ps-mono; font-size: 11px; line-height: 1.35; color: $ps-muted; }
 }
 
