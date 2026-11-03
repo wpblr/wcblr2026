@@ -711,3 +711,307 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 @media (max-width: 760px) {
 	.wcblr-ps-fund { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* ==== Design pass 2 (3 Nov) ================================================================
+   Arun: "looks very plain, not modern and next-gen", and the form "seems crushed together".
+   Same quiet palette; more depth. Each section gets a lamp on the gold line, the rail becomes
+   a lit timeline, steps become cards with outlined numerals, and the application gets its
+   own dark panel the full width of the page, the form inside it on two roomy columns. */
+
+// A lamp on the line at every section number.
+.wcblr-ps-sec:not(.wcblr-ps-hero):not(:last-child)::before {
+	content: "";
+	position: absolute;
+	left: -5px;
+	top: calc(#{$ps-sec} + 4px);
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+	background: $ps-gold;
+	box-shadow: 0 0 0 5px rgba(201, 154, 46, 0.16), 0 0 18px 4px rgba(201, 154, 46, 0.3);
+}
+
+.wcblr-ps-n {
+	display: inline-flex !important;
+	align-items: center;
+	gap: 10px;
+
+	&::after {
+		content: "";
+		width: 56px;
+		height: 1px;
+		background: linear-gradient(90deg, $ps-gold, rgba(201, 154, 46, 0));
+	}
+}
+
+/* Hero: a glow behind his photo and a strip of the three facts. */
+
+.wcblr-ps-hero { position: relative; }
+
+.wcblr-ps .wcblr-ps-portrait {
+	position: relative;
+	z-index: 1;
+
+	&::before {
+		content: "";
+		position: absolute;
+		z-index: -1;
+		inset: -14% -18% -10% -18%;
+		border-radius: 50%;
+		background: radial-gradient(closest-side, rgba(233, 214, 168, 0.75), rgba(233, 214, 168, 0));
+		pointer-events: none;
+	}
+}
+
+.wcblr-ps-facts {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	max-width: 620px !important;
+	margin-top: 30px !important;
+	border-radius: 18px;
+	background: rgba(251, 248, 241, 0.7);
+	box-shadow: inset 0 0 0 1px rgba(201, 154, 46, 0.3);
+
+	> span {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		padding: 16px 20px;
+		border-left: 1px solid rgba(201, 154, 46, 0.25);
+	}
+
+	> span:first-child { border-left: 0; }
+	b { font-family: $ps-serif; font-size: clamp(24px, 1rem + 0.8vw, 30px); font-weight: 400; line-height: 1; letter-spacing: -0.03em; color: $ps-gold-deep; }
+	small { font-family: $ps-mono; font-size: 11px; line-height: 1.35; color: $ps-muted; }
+}
+
+/* 01: the rail becomes a lit timeline. */
+
+.wcblr-ps-rail {
+	position: relative;
+	background:
+		linear-gradient(180deg, rgba(201, 154, 46, 0.12), rgba(201, 154, 46, 0)) top / 100% 120px no-repeat,
+		$ps-paper;
+	box-shadow: inset 0 0 0 1px rgba(201, 154, 46, 0.22), 0 24px 48px -36px rgba(36, 26, 18, 0.45);
+
+	> span { position: relative; padding-left: 24px; border-bottom-color: rgba(201, 154, 46, 0.18); }
+
+	> span::before {
+		content: "";
+		position: absolute;
+		left: 0;
+		top: 25px;
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+		background: $ps-gold;
+	}
+
+	> span::after {
+		content: "";
+		position: absolute;
+		left: 3px;
+		top: 32px;
+		bottom: -25px;
+		width: 1px;
+		background: rgba(201, 154, 46, 0.35);
+	}
+
+	> span:first-child::before { top: 9px; }
+	> span:first-child::after { top: 16px; }
+	> span:last-child::after { display: none; }
+}
+
+/* 02: cards with a lit top edge, and they lift. */
+
+.wcblr-ps-cover {
+	position: relative;
+	overflow: hidden;
+	box-shadow: inset 0 0 0 1px rgba(201, 154, 46, 0.18);
+	transition: transform 0.45s $ps-ease, box-shadow 0.45s $ps-ease;
+
+	&::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 3px;
+		background: linear-gradient(90deg, $ps-gold, rgba(201, 154, 46, 0));
+	}
+
+	&:hover { transform: translateY(-4px); box-shadow: inset 0 0 0 1px rgba(201, 154, 46, 0.35), 0 24px 40px -28px rgba(36, 26, 18, 0.5); }
+}
+
+.wcblr-ps-cover:nth-child(3) {
+	background: radial-gradient(120% 90% at 100% 0%, rgba(201, 154, 46, 0.28), rgba(201, 154, 46, 0) 60%), $ps-espresso;
+}
+
+/* 03: chips carry a gold dot; the conditions panel gets depth. */
+
+.wcblr-ps-chips span {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+
+	&::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: $ps-gold; }
+}
+
+.wcblr-ps-terms {
+	background: linear-gradient(160deg, #efe5d1, $ps-sand) !important;
+	box-shadow: inset 0 0 0 1px rgba(201, 154, 46, 0.25);
+}
+
+/* 04: steps as cards with outlined numerals. */
+
+.wcblr-ps-step {
+	padding: 26px 24px 28px !important;
+	border-top: 0 !important;
+	border-radius: $ps-radius;
+	background: $ps-paper;
+	box-shadow: inset 0 0 0 1px rgba(201, 154, 46, 0.18);
+
+	&::before { top: 0 !important; left: 24px !important; right: 24px; width: auto !important; height: 3px !important; border-radius: 0 0 3px 3px !important; background: $ps-gold !important; }
+
+	b {
+		margin: 6px 0 4px;
+		font-size: 64px !important;
+		line-height: 0.9 !important;
+		letter-spacing: -0.04em;
+		color: rgba(201, 154, 46, 0.22) !important;
+		-webkit-text-stroke: 1px $ps-gold;
+	}
+}
+
+/* 05: the application, in its own dark panel, the form across the full width. */
+
+.wcblr-ps-apply {
+	display: block !important;
+	padding: clamp(28px, 4.4vw, 64px);
+	border-radius: 28px;
+	background:
+		radial-gradient(70% 60% at 100% 0%, rgba(201, 154, 46, 0.22), rgba(201, 154, 46, 0) 70%),
+		$ps-espresso;
+	color: $ps-paper;
+}
+
+.wcblr-ps-apply-head {
+	position: static !important;
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: 12px clamp(28px, 4vw, 64px);
+	align-items: end;
+	margin-bottom: clamp(28px, 3.4vw, 48px) !important;
+
+	.wcblr-ps-titles { grid-row: 1 / 3; margin-bottom: 0 !important; }
+	.wcblr-ps-n { color: $ps-gold-soft; }
+	.wcblr-ps-bt { color: $ps-paper !important; }
+	.wcblr-ps-body { margin-top: 0 !important; color: rgba(251, 248, 241, 0.78); }
+	.wcblr-ps-meta span { color: rgba(251, 248, 241, 0.6); }
+	.wcblr-ps-meta b { color: $ps-gold-soft; }
+}
+
+.wcblr-ps-form {
+	padding: clamp(24px, 3.6vw, 52px) !important;
+	border-radius: 22px !important;
+	color: $ps-ink;
+	box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.6) !important;
+}
+
+.wcblr-ps-form .wp-block-jetpack-contact-form { gap: 28px 24px !important; }
+
+.wcblr-ps-form label,
+.wcblr-ps-form .grunion-field-label,
+.wcblr-ps-form legend {
+	margin-bottom: 10px !important;
+	font-size: 15.5px !important;
+	font-weight: 600 !important;
+	letter-spacing: 0 !important;
+	text-transform: none !important;
+	line-height: 1.4 !important;
+}
+
+.wcblr-ps-form .grunion-label-required {
+	margin-left: 6px;
+	font-family: $ps-mono !important;
+	font-size: 11px !important;
+	text-transform: lowercase;
+}
+
+.wcblr-ps-form input[type="text"],
+.wcblr-ps-form input[type="email"],
+.wcblr-ps-form input[type="tel"],
+.wcblr-ps-form input[type="url"],
+.wcblr-ps-form textarea {
+	min-height: 54px;
+	padding: 15px 18px !important;
+	border-radius: 14px !important;
+	background: #fff !important;
+	font-size: 16.5px !important;
+}
+
+.wcblr-ps-form textarea { min-height: 140px !important; line-height: 1.55 !important; }
+
+// Radio choices as pills; the chosen one fills.
+.wcblr-ps-form fieldset { margin: 0 !important; padding: 0 !important; border: 0 !important; min-width: 0; }
+
+.wcblr-ps-form .grunion-radio-options {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.wcblr-ps-form .grunion-radio-options > label.contact-form-field {
+	display: inline-flex !important;
+	align-items: center;
+	gap: 10px;
+	margin: 0 !important;
+	padding: 12px 18px !important;
+	border-radius: 999px;
+	background: #fff;
+	box-shadow: inset 0 0 0 1px $ps-line;
+	cursor: pointer;
+	transition: background 0.2s $ps-ease, box-shadow 0.2s $ps-ease, color 0.2s $ps-ease;
+
+	input { margin: 0 !important; }
+	&:hover { box-shadow: inset 0 0 0 1px $ps-gold; }
+}
+
+.wcblr-ps-form .grunion-radio-options > label.contact-form-field:has(input:checked) {
+	background: $ps-espresso;
+	box-shadow: none;
+
+	.grunion-radio-label, .grunion-field-text { color: $ps-paper !important; }
+	input { accent-color: $ps-gold; }
+}
+
+.wcblr-ps-form button[type="submit"] {
+	padding: 18px 34px !important;
+	background: $ps-gold-deep !important;
+	font-size: 16.5px !important;
+
+	&:hover { background: $ps-espresso !important; }
+}
+
+/* 06 and the close pick up the same edge light. */
+
+.wcblr-ps-fund-c { box-shadow: inset 3px 0 0 $ps-gold, inset 0 0 0 1px rgba(201, 154, 46, 0.18); }
+
+.wcblr-ps-close {
+	background: radial-gradient(80% 70% at 0% 100%, rgba(201, 154, 46, 0.2), rgba(201, 154, 46, 0) 70%), $ps-espresso;
+}
+
+@media (max-width: 900px) {
+	.wcblr-ps-apply-head { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-ps-apply-head .wcblr-ps-titles { grid-row: auto; }
+}
+
+@media (max-width: 640px) {
+	.wcblr-ps-sec:not(.wcblr-ps-hero):not(:last-child)::before { left: -5px; }
+	.wcblr-ps-facts { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-ps-facts > span { flex-direction: row; align-items: baseline; gap: 12px; border-left: 0; border-top: 1px solid rgba(201, 154, 46, 0.25); }
+	.wcblr-ps-facts > span:first-child { border-top: 0; }
+	.wcblr-ps-apply { margin-left: -6px; margin-right: 0; padding: 22px 14px; border-radius: 22px; }
+	.wcblr-ps-form { padding: 22px 16px !important; }
+	.wcblr-ps-form .grunion-radio-options > label.contact-form-field { width: 100%; }
+}
