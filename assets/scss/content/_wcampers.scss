@@ -57,6 +57,12 @@ body:has(.wcblr-bw) main::after {
 	display: none !important;
 }
 
+// The hero carries the title (as the page's h1) and Dulcea's byline, so the template's own
+// centred title, author and date row would print the title twice.
+body:has(.wcblr-bw) .wp-block-group.alignwide:has(> .wp-block-post-title) {
+	display: none !important;
+}
+
 .entry-content:has(> .wcblr-bw) {
 	padding-left: 0 !important;
 	padding-right: 0 !important;
@@ -487,9 +493,10 @@ body:has(.wcblr-bw) main::after {
 	font-size: 10.5px;
 	color: $bw-muted;
 
-	i { font-style: normal; width: 0; white-space: nowrap; transform: translateX(-50%); }
-	i:first-child { transform: none; }
-	i:last-child { transform: translateX(-100%); }
+	// Zero-width flex boxes: centred text overflows both sides, the end labels hang inward.
+	i { display: flex; justify-content: center; font-style: normal; width: 0; white-space: nowrap; }
+	i:first-child { justify-content: flex-start; }
+	i:last-child { justify-content: flex-end; }
 }
 
 .wcblr-bw-row small {
@@ -1087,6 +1094,22 @@ body:has(.wcblr-bw) main::after {
 	}
 
 	a:hover { transform: translateY(-3px); }
+}
+
+// Where the browser can tie animation to scroll, the pill stays out of the way on the opening
+// screen (the hero has its own ticket button) and slides in once the reader starts scrolling.
+// Elsewhere it is simply always there.
+@keyframes wcblr-bw-pill-in {
+	from { opacity: 0; transform: translateY(24px); }
+	to { opacity: 1; transform: none; }
+}
+
+@supports (animation-timeline: scroll()) {
+	.wcblr-bw-pill a {
+		animation: wcblr-bw-pill-in linear both;
+		animation-timeline: scroll(root);
+		animation-range: 280px 520px;
+	}
 }
 
 /* ---- Motion: the opening screen only ------------------------------------------------- */
