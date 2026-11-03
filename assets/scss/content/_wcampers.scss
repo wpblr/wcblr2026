@@ -59,7 +59,7 @@ body:has(.wcblr-bw) main::after {
 
 // The hero carries the title (as the page's h1) and Dulcea's byline, so the template's own
 // centred title, author and date row would print the title twice.
-body:has(.wcblr-bw) .wp-block-group.alignwide:has(> .wp-block-post-title) {
+body:has(.wcblr-bw) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-post-title) {
 	display: none !important;
 }
 
