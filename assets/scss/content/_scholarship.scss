@@ -340,7 +340,7 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 
 	> span {
 		display: grid;
-		grid-template-columns: 96px minmax(0, 1fr);
+		grid-template-columns: 132px minmax(0, 1fr);
 		gap: 14px;
 		padding: 16px 0;
 		border-bottom: 1px solid $ps-line;
@@ -659,7 +659,7 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 @media (max-width: 640px) {
 	.wcblr-ps-sec { padding-left: 18px; }
 	.wcblr-ps-steps { grid-template-columns: minmax(0, 1fr); }
-	.wcblr-ps-rail > span { grid-template-columns: 80px minmax(0, 1fr); gap: 12px; }
+	.wcblr-ps-rail > span { grid-template-columns: minmax(0, 1fr); gap: 4px; }
 	.wcblr-ps-rail b { font-size: 18px; }
 	.wcblr-ps-actions .wp-block-button { flex: 1 1 auto; }
 	.wcblr-ps-actions .wp-block-button__link { width: 100%; justify-content: center; }
