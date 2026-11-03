@@ -8,7 +8,7 @@
    name to the form, like one line of light, and it marks the numbers.
 
    THE SHAPE
-   Hero (centred left, his name, one lede, apply) · 01 prose beside a short rail
+   Hero (his name, one lede, apply, beside his photo in a paper mount) · 01 prose beside a short rail
    of four moments, one pull line · 02 three cover cards · 03 prose + chips beside
    the two conditions · 04 four steps on a line · 05 the form in a paper card ·
    a close of thanks.
@@ -231,10 +231,50 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 	span:first-child { background: $ps-espresso; color: $ps-gold-soft; box-shadow: none; }
 }
 
+.wcblr-ps-hero {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.5fr) minmax(240px, 0.72fr);
+	gap: clamp(32px, 4.4vw, 76px);
+	align-items: center;
+}
+
+.wcblr-ps-hero-main { min-width: 0; }
+
+// His photo, from WordCamp Rajasthan's post. A paper mount with a hairline of gold,
+// the way a framed photograph sits on a shelf.
+.wcblr-ps .wcblr-ps-portrait {
+	position: relative;
+	padding: 12px 12px 0 !important;
+	border-radius: 22px;
+	background: $ps-paper;
+	box-shadow: inset 0 0 0 1px rgba(201, 154, 46, 0.35), 0 30px 60px -36px rgba(36, 26, 18, 0.55);
+
+	img {
+		display: block;
+		width: 100% !important;
+		height: auto !important;
+		aspect-ratio: 4 / 5;
+		object-fit: cover;
+		border-radius: 14px;
+	}
+
+	figcaption {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		margin: 0 !important;
+		padding: 16px 6px 18px;
+		text-align: left;
+
+		b { font-family: $ps-serif; font-size: 21px; font-weight: 400; letter-spacing: -0.02em; color: $ps-ink; }
+		span { font-family: $ps-mono; font-size: 11px; color: $ps-muted; }
+	}
+}
+
 .wcblr-post.wcblr-ps .wcblr-ps-h1 {
 	margin-top: clamp(22px, 2.4vw, 34px) !important;
 	font-family: $ps-serif !important;
-	font-size: clamp(42px, 1rem + 5vw, 104px) !important;
+	font-size: clamp(42px, 1rem + 3.9vw, 86px) !important;
 	font-weight: 400 !important;
 	line-height: 1.04 !important;
 	letter-spacing: -0.045em !important;
@@ -300,7 +340,7 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 
 	> span {
 		display: grid;
-		grid-template-columns: 84px minmax(0, 1fr);
+		grid-template-columns: 96px minmax(0, 1fr);
 		gap: 14px;
 		padding: 16px 0;
 		border-bottom: 1px solid $ps-line;
@@ -330,6 +370,7 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 }
 
 .wcblr-ps-cover {
+	min-width: 0;
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
@@ -341,11 +382,12 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 
 	b {
 		font-family: $ps-serif;
-		font-size: clamp(36px, 1rem + 2vw, 54px);
+		font-size: clamp(30px, 0.4rem + 2.5vw, 44px);
 		font-weight: 400;
-		line-height: 1.05;
-		letter-spacing: -0.035em;
+		line-height: 1.08;
+		letter-spacing: -0.03em;
 		color: $ps-ink;
+		overflow-wrap: anywhere;
 	}
 
 	> span { font-size: 15.5px; line-height: 1.6; color: $ps-soft; }
@@ -353,7 +395,7 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 
 .wcblr-ps-cover:nth-child(3) { background: $ps-espresso; }
 .wcblr-ps-cover:nth-child(3) small { color: $ps-gold-soft; }
-.wcblr-ps-cover:nth-child(3) b { color: $ps-gold-soft; font-size: clamp(56px, 2rem + 3vw, 88px); }
+.wcblr-ps-cover:nth-child(3) b { color: $ps-gold-soft; font-size: clamp(30px, 0.4rem + 2.5vw, 44px); }
 .wcblr-ps-cover:nth-child(3) > span { color: rgba(251, 248, 241, 0.8); }
 
 .wcblr-ps-note {
@@ -497,6 +539,17 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 
 .wcblr-ps-form textarea { min-height: 120px; }
 
+// The phone field wraps its input in a bordered box of its own; the input carries the border here.
+.wcblr-ps-form .jetpack-field__input-phone-wrapper {
+	display: block !important;
+	padding: 0 !important;
+	border: 0 !important;
+	background: transparent !important;
+	box-shadow: none !important;
+}
+
+.wcblr-ps-form .jetpack-field__input-prefix { display: none !important; }
+
 .wcblr-ps-form .grunion-radio-label,
 .wcblr-ps-form .contact-form-field label.grunion-radio-label {
 	font-weight: 500 !important;
@@ -506,7 +559,7 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 
 .wcblr-ps-form input[type="radio"] { accent-color: $ps-gold-deep; }
 
-.wcblr-ps-form button,
+.wcblr-ps-form button[type="submit"],
 .wcblr-ps-form .wp-block-button__link,
 .wcblr-ps-form input[type="submit"] {
 	padding: 15px 26px !important;
@@ -574,11 +627,12 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 }
 
 @media (prefers-reduced-motion: no-preference) {
-	.wcblr-ps-hero > * { animation: wcblr-ps-fade 0.9s $ps-ease backwards; }
-	.wcblr-ps-hero > :nth-child(2) { animation-delay: 0.1s; }
-	.wcblr-ps-hero > :nth-child(3) { animation-delay: 0.2s; }
-	.wcblr-ps-hero > :nth-child(4) { animation-delay: 0.3s; }
-	.wcblr-ps-hero > :nth-child(5) { animation-delay: 0.36s; }
+	.wcblr-ps-hero-main > *, .wcblr-ps-portrait { animation: wcblr-ps-fade 0.9s $ps-ease backwards; }
+	.wcblr-ps-hero-main > :nth-child(2) { animation-delay: 0.1s; }
+	.wcblr-ps-hero-main > :nth-child(3) { animation-delay: 0.2s; }
+	.wcblr-ps-hero-main > :nth-child(4) { animation-delay: 0.3s; }
+	.wcblr-ps-hero-main > :nth-child(5) { animation-delay: 0.36s; }
+	.wcblr-ps-portrait { animation-delay: 0.24s; }
 }
 
 /* ---- Narrower screens ------------------------------------------------------------------- */
@@ -588,6 +642,8 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 }
 
 @media (max-width: 900px) {
+	.wcblr-ps-hero { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-ps .wcblr-ps-portrait { max-width: 340px; }
 	.wcblr-ps-remember,
 	.wcblr-ps-who,
 	.wcblr-ps-apply { grid-template-columns: minmax(0, 1fr); }
@@ -598,7 +654,8 @@ body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 @media (max-width: 640px) {
 	.wcblr-ps-sec { padding-left: 18px; }
 	.wcblr-ps-steps { grid-template-columns: minmax(0, 1fr); }
-	.wcblr-ps-rail > span { grid-template-columns: 70px minmax(0, 1fr); }
+	.wcblr-ps-rail > span { grid-template-columns: 80px minmax(0, 1fr); gap: 12px; }
+	.wcblr-ps-rail b { font-size: 18px; }
 	.wcblr-ps-actions .wp-block-button { flex: 1 1 auto; }
 	.wcblr-ps-actions .wp-block-button__link { width: 100%; justify-content: center; }
 	.wcblr-ps-form { padding: 20px 16px; border-radius: 18px; }
