@@ -268,10 +268,10 @@ body:has(.wcblr-bw) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 .wcblr-post.wcblr-bw .wcblr-bw-h1 {
 	margin-top: clamp(18px, 2vw, 28px) !important;
 	font-family: $bw-serif !important;
-	// Sized to its own column (container units on .wcblr-bw-hero-main), so "WordCampers" never
-	// outgrows it; the vw line is the fallback. Never break inside a word.
-	font-size: clamp(48px, 6.4vw, 96px) !important;
-	font-size: clamp(44px, 16.5cqi, 116px) !important;
+	// Sized so "WordCampers" (about 5em) always fits its column: in two columns the column is
+	// about 41% of the viewport and at most 585px, so 6.2vw capped at 92px. The sanitiser drops
+	// container-type, so container units are not an option. Never break inside a word.
+	font-size: clamp(48px, 6.2vw, 92px) !important;
 	overflow-wrap: normal;
 	word-break: keep-all;
 	hyphens: none;
@@ -299,7 +299,7 @@ body:has(.wcblr-bw) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	color: $bw-soft;
 }
 
-.wcblr-bw-hero-main { container-type: inline-size; min-width: 0; }
+.wcblr-bw-hero-main { min-width: 0; }
 
 .wcblr-bw-hero-side { position: relative; }
 
@@ -1150,6 +1150,7 @@ body:has(.wcblr-bw) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 }
 
 @media (max-width: 900px) {
+	.wcblr-post.wcblr-bw .wcblr-bw-h1 { font-size: clamp(44px, 13vw, 96px) !important; }
 	.wcblr-bw-hero,
 	.wcblr-bw-why,
 	.wcblr-bw-tix,
