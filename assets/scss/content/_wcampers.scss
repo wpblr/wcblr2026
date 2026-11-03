@@ -41,7 +41,7 @@ $bw-mono: var(--wp--preset--font-family--jetbrains-mono), "JetBrains Mono", ui-m
 $bw-frame: 1280px;
 $bw-gutter: clamp(16px, 5vw, 96px);
 $bw-pad: max(#{$bw-gutter}, calc((100vw - #{$bw-frame}) / 2));
-$bw-sec: clamp(80px, 2.5rem + 6vw, 150px);
+$bw-sec: clamp(56px, 1.5rem + 4.2vw, 104px);
 $bw-shadow: 0 24px 48px -28px rgba(36, 26, 18, 0.45);
 $bw-radius: 22px;
 
@@ -149,7 +149,7 @@ body:has(.wcblr-bw) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-
 .wcblr-bw-sec.wcblr-bw-hero-sec { padding-top: 0; }
 body:has(.wcblr-bw) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px) !important; }
 
-.wcblr-bw-titles { margin-bottom: clamp(24px, 1rem + 2vw, 48px) !important; }
+.wcblr-bw-titles { margin-bottom: clamp(22px, 0.8rem + 1.6vw, 40px) !important; }
 
 .wcblr-bw-n {
 	font-family: $bw-mono !important;
@@ -594,7 +594,7 @@ body:has(.wcblr-bw) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	display: grid !important;
 	grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
 	gap: clamp(32px, 5vw, 88px);
-	align-items: center;
+	align-items: start;
 }
 
 .wcblr-bw-bill {
@@ -898,14 +898,13 @@ body:has(.wcblr-bw) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
-	min-height: 220px;
 	padding: clamp(22px, 2.4vw, 30px);
 	border-radius: $bw-radius;
 	background: $bw-paper;
 	transition: transform 0.45s $bw-spring, background 0.25s $bw-ease, color 0.25s $bw-ease;
 
 	small { font-family: $bw-mono; font-size: 11px; font-weight: 600; color: $bw-red; }
-	b { margin-top: auto; font-family: $bw-serif; font-size: clamp(26px, 1rem + 1vw, 34px); font-weight: 400; line-height: 1.12; letter-spacing: -0.03em; }
+	b { margin-top: 18px; padding-right: 24px; font-family: $bw-serif; font-size: clamp(26px, 1rem + 1vw, 34px); font-weight: 400; line-height: 1.12; letter-spacing: -0.03em; }
 	span { font-size: 15px; line-height: 1.55; color: $bw-soft; }
 	i { position: absolute; top: 20px; right: 22px; font-style: normal; font-size: 20px; transition: transform 0.4s $bw-spring; }
 
@@ -915,8 +914,6 @@ body:has(.wcblr-bw) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	&:hover i { transform: translate(3px, -3px); }
 }
 
-.wcblr-bw-extra:nth-child(2) { transform: translateY(18px); }
-.wcblr-bw-extra:nth-child(2):hover { transform: translateY(14px); }
 
 /* ---- 10. 09 Tips ----------------------------------------------------------------------- */
 
@@ -1165,7 +1162,6 @@ body:has(.wcblr-bw) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	.wcblr-bw-extras { grid-template-columns: minmax(0, 1fr); }
 	.wcblr-bw-extra { min-height: 0; }
 	.wcblr-bw-extra b { margin-top: 10px; }
-	.wcblr-bw-extra:nth-child(2), .wcblr-bw-extra:nth-child(2):hover { transform: none; }
 	.wcblr-bw-close-foot { transform: none; }
 }
 
