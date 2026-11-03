@@ -1,0 +1,607 @@
+/* ==== The Puneet Sahalot Memorial Scholarship ====================================
+   3 Nov 2026. Arun: modern like the recent posts, but respectful, because the
+   scholarship is in memory of someone who has passed away.
+
+   THE IDEA
+   A quiet page. One cream ground, no red, motion only as the opening fade. Gold
+   is the one accent: a single thin rule runs down the left of the page from his
+   name to the form, like one line of light, and it marks the numbers.
+
+   THE SHAPE
+   Hero (centred left, his name, one lede, apply) · 01 prose beside a short rail
+   of four moments, one pull line · 02 three cover cards · 03 prose + chips beside
+   the two conditions · 04 four steps on a line · 05 the form in a paper card ·
+   a close of thanks.
+
+   Scoped to .wcblr-ps. No custom properties, no url(), no place-items, no
+   container-type: the Remote CSS sanitiser drops them. Markup:
+   website/tools/build-scholarship.py. */
+
+$ps-ink: #2a1d14;
+$ps-espresso: #241a12;
+$ps-gold: #c99a2e;
+$ps-gold-soft: #e9d6a8;
+$ps-gold-deep: #8f6a12;
+$ps-cream: #f2ece0;
+$ps-paper: #fbf8f1;
+$ps-sand: #e8dfcf;
+$ps-muted: #7a6757;
+$ps-soft: #5c4a3b;
+$ps-line: #dad5cd;
+$ps-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+$ps-serif: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif;
+$ps-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif;
+$ps-mono: var(--wp--preset--font-family--jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
+$ps-frame: 1180px;
+$ps-gutter: clamp(16px, 5vw, 96px);
+$ps-pad: max(#{$ps-gutter}, calc((100vw - #{$ps-frame}) / 2));
+$ps-sec: clamp(72px, 2rem + 5.5vw, 136px);
+$ps-rail: clamp(20px, 3.4vw, 56px);
+$ps-radius: 20px;
+
+/* ---- The ground ---------------------------------------------------------------------- */
+
+body:has(.wcblr-ps),
+body:has(.wcblr-ps) .wp-site-blocks > main {
+	background-color: $ps-cream !important;
+}
+
+body:has(.wcblr-ps) main::before,
+body:has(.wcblr-ps) main::after {
+	display: none !important;
+}
+
+body:has(.wcblr-ps) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px) !important; }
+
+// The hero carries the title as the page's h1, so the template's own title band goes.
+body:has(.wcblr-ps) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-post-title) {
+	display: none !important;
+}
+
+.entry-content:has(> .wcblr-ps) {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+	max-width: none !important;
+}
+
+.entry-content > .wcblr-ps.alignfull {
+	width: 100vw !important;
+	max-width: none !important;
+	margin: 0 0 0 calc(50% - 50vw) !important;
+	box-sizing: border-box;
+	padding: clamp(8px, 1vw, 24px) $ps-pad clamp(72px, 2rem + 5vw, 140px) !important;
+	color: $ps-ink;
+	font-family: $ps-sans;
+	overflow-x: clip;
+}
+
+.wcblr-ps :where(p, h1, h2, h3, h4, figure, .wp-block-group, .wp-block-buttons) {
+	margin: 0 !important;
+	max-width: none !important;
+}
+
+.wcblr-ps *, .wcblr-ps *::before, .wcblr-ps *::after { box-sizing: border-box; }
+
+.wcblr-ps a { color: inherit; text-decoration: none; }
+
+.wcblr-ps em {
+	color: $ps-gold-deep;
+	font-style: italic;
+}
+
+.wcblr-ps-body a,
+.wcblr-ps-rail a,
+.wcblr-ps-close-b a {
+	box-shadow: inset 0 -1.5px 0 rgba(201, 154, 46, 0.6);
+	transition: box-shadow 0.2s $ps-ease, color 0.2s $ps-ease;
+
+	&:hover { color: $ps-gold-deep; box-shadow: inset 0 -2px 0 $ps-gold-deep; }
+}
+
+/* ---- The lamp line: one gold rule from the name down to the form ------------------------ */
+
+.wcblr-ps-sec {
+	position: relative;
+	padding-top: $ps-sec;
+	padding-left: $ps-rail;
+	border-left: 1px solid rgba(201, 154, 46, 0.55);
+}
+
+.wcblr-ps-sec.wcblr-ps-hero {
+	padding-top: clamp(28px, 4vw, 64px);
+	border-left-color: transparent;
+	background: linear-gradient(180deg, transparent 0, transparent 34px, rgba(201, 154, 46, 0.55) 34px) left / 1px 100% no-repeat;
+
+	// A small gold lamp at the top of the line.
+	&::before {
+		content: "";
+		position: absolute;
+		left: -6px;
+		top: clamp(28px, 4vw, 64px);
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		background: $ps-gold;
+		box-shadow: 0 0 0 6px rgba(201, 154, 46, 0.18), 0 0 24px 6px rgba(201, 154, 46, 0.35);
+	}
+}
+
+.wcblr-ps-sec:last-child { border-left-color: transparent; }
+
+.wcblr-ps-k {
+	font-family: $ps-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	color: $ps-gold-deep;
+}
+
+.wcblr-ps-body {
+	max-width: 60ch !important;
+	margin-top: 16px !important;
+	font-size: 17.5px !important;
+	line-height: 1.72 !important;
+	color: $ps-soft;
+}
+
+.wcblr-ps-titles + .wcblr-ps-body,
+.wcblr-ps-remember-main > .wcblr-ps-body:first-child,
+.wcblr-ps-who-main > .wcblr-ps-body:first-child { margin-top: 0 !important; }
+
+.wcblr-ps-small {
+	margin-top: 14px !important;
+	font-size: 14px !important;
+	line-height: 1.55 !important;
+	color: $ps-muted;
+}
+
+.wcblr-ps-titles { margin-bottom: clamp(24px, 1rem + 1.6vw, 44px) !important; }
+
+.wcblr-ps-n {
+	font-family: $ps-mono !important;
+	font-size: 13px !important;
+	font-weight: 600;
+	color: $ps-gold-deep;
+}
+
+.wcblr-post.wcblr-ps .wcblr-ps-bt {
+	margin-top: 12px !important;
+	font-family: $ps-serif !important;
+	font-size: clamp(38px, 1rem + 3.4vw, 80px) !important;
+	font-weight: 400 !important;
+	line-height: 1.06 !important;
+	letter-spacing: -0.04em !important;
+	color: $ps-ink;
+	text-wrap: balance;
+}
+
+/* ---- Buttons ------------------------------------------------------------------------- */
+
+.wcblr-ps-actions {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 32px !important;
+}
+
+.wcblr-ps-actions .wp-block-button__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 15px 24px !important;
+	border-radius: 999px !important;
+	background: $ps-espresso !important;
+	color: $ps-paper !important;
+	font-family: $ps-sans !important;
+	font-size: 15.5px !important;
+	font-weight: 700 !important;
+	transition: background 0.25s $ps-ease, color 0.25s $ps-ease;
+
+	&::after { content: "\2193"; }
+	&:hover { background: $ps-gold-deep !important; }
+}
+
+.wcblr-ps-actions .is-ghost .wp-block-button__link {
+	background: transparent !important;
+	color: $ps-ink !important;
+	box-shadow: inset 0 0 0 1.5px rgba(42, 29, 20, 0.28);
+
+	&:hover { background: $ps-paper !important; }
+}
+
+/* ---- 1. Hero ------------------------------------------------------------------------- */
+
+.wcblr-ps-kicker {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 8px;
+	padding-left: 6px;
+
+	span {
+		padding: 6px 12px;
+		border-radius: 999px;
+		background: $ps-paper;
+		box-shadow: inset 0 0 0 1px $ps-line;
+		font-family: $ps-mono;
+		font-size: 11.5px;
+		font-weight: 600;
+		color: $ps-soft;
+	}
+
+	span:first-child { background: $ps-espresso; color: $ps-gold-soft; box-shadow: none; }
+}
+
+.wcblr-post.wcblr-ps .wcblr-ps-h1 {
+	margin-top: clamp(22px, 2.4vw, 34px) !important;
+	font-family: $ps-serif !important;
+	font-size: clamp(42px, 1rem + 5vw, 104px) !important;
+	font-weight: 400 !important;
+	line-height: 1.04 !important;
+	letter-spacing: -0.045em !important;
+	color: $ps-ink;
+	overflow-wrap: normal;
+	hyphens: none;
+}
+
+.wcblr-ps-lede {
+	max-width: 52ch !important;
+	margin-top: clamp(20px, 2vw, 30px) !important;
+	font-size: clamp(17.5px, 0.9rem + 0.4vw, 21px) !important;
+	line-height: 1.65 !important;
+	color: $ps-soft;
+}
+
+.wcblr-ps-meta {
+	display: flex !important;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 6px 12px;
+	margin-top: 20px !important;
+
+	span { font-family: $ps-mono; font-size: 11.5px; font-weight: 600; color: $ps-muted; }
+	b { font-family: $ps-serif; font-size: 20px; font-weight: 400; color: $ps-ink; }
+}
+
+/* ---- 2. 01 Remembering ---------------------------------------------------------------- */
+
+.wcblr-ps-remember {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+	gap: clamp(32px, 5vw, 80px);
+	align-items: start;
+}
+
+.wcblr-ps-quote {
+	display: flex !important;
+	flex-direction: column;
+	gap: 10px;
+	margin-top: clamp(28px, 3vw, 44px) !important;
+	padding-left: 22px;
+	border-left: 3px solid $ps-gold;
+
+	span {
+		font-family: $ps-serif;
+		font-size: clamp(26px, 1rem + 1.4vw, 38px);
+		font-style: italic;
+		line-height: 1.2;
+		letter-spacing: -0.02em;
+		color: $ps-ink;
+	}
+
+	small { font-family: $ps-mono; font-size: 11.5px; color: $ps-muted; }
+}
+
+.wcblr-ps-rail {
+	display: flex !important;
+	flex-direction: column;
+	padding: clamp(22px, 2.6vw, 32px);
+	border-radius: $ps-radius;
+	background: $ps-paper;
+
+	> span {
+		display: grid;
+		grid-template-columns: 84px minmax(0, 1fr);
+		gap: 14px;
+		padding: 16px 0;
+		border-bottom: 1px solid $ps-line;
+		font-size: 15.5px;
+		line-height: 1.55;
+		color: $ps-soft;
+	}
+
+	> span:first-child { padding-top: 0; }
+	> span:last-child { padding-bottom: 0; border-bottom: 0; }
+
+	b {
+		font-family: $ps-serif;
+		font-size: 22px;
+		font-weight: 400;
+		line-height: 1.2;
+		color: $ps-gold-deep;
+	}
+}
+
+/* ---- 3. 02 What it covers --------------------------------------------------------------- */
+
+.wcblr-ps-covers {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 14px;
+}
+
+.wcblr-ps-cover {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: clamp(22px, 2.6vw, 34px);
+	border-radius: $ps-radius;
+	background: $ps-paper;
+
+	small { font-family: $ps-mono; font-size: 11.5px; font-weight: 600; color: $ps-gold-deep; }
+
+	b {
+		font-family: $ps-serif;
+		font-size: clamp(36px, 1rem + 2vw, 54px);
+		font-weight: 400;
+		line-height: 1.05;
+		letter-spacing: -0.035em;
+		color: $ps-ink;
+	}
+
+	> span { font-size: 15.5px; line-height: 1.6; color: $ps-soft; }
+}
+
+.wcblr-ps-cover:nth-child(3) { background: $ps-espresso; }
+.wcblr-ps-cover:nth-child(3) small { color: $ps-gold-soft; }
+.wcblr-ps-cover:nth-child(3) b { color: $ps-gold-soft; font-size: clamp(56px, 2rem + 3vw, 88px); }
+.wcblr-ps-cover:nth-child(3) > span { color: rgba(251, 248, 241, 0.8); }
+
+.wcblr-ps-note {
+	margin-top: 16px !important;
+	font-size: 15px !important;
+	color: $ps-muted;
+}
+
+/* ---- 4. 03 Who can apply ---------------------------------------------------------------- */
+
+.wcblr-ps-who {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+	gap: clamp(32px, 5vw, 72px);
+	align-items: start;
+}
+
+.wcblr-ps-chips {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 22px !important;
+
+	span {
+		padding: 8px 14px;
+		border-radius: 999px;
+		background: $ps-paper;
+		box-shadow: inset 0 0 0 1px $ps-line;
+		font-size: 14px;
+		font-weight: 600;
+	}
+}
+
+.wcblr-ps-terms {
+	padding: clamp(22px, 2.6vw, 34px);
+	border-radius: $ps-radius;
+	background: $ps-sand;
+}
+
+.wcblr-ps-term {
+	display: grid !important;
+	grid-template-columns: 40px minmax(0, 1fr);
+	gap: 12px;
+	margin-top: 18px !important;
+	font-size: 16px !important;
+	line-height: 1.6 !important;
+	color: $ps-soft;
+
+	b { font-family: $ps-serif; font-size: 26px; font-weight: 400; line-height: 1.1; color: $ps-gold-deep; }
+	strong { color: $ps-ink; }
+}
+
+/* ---- 5. 04 Steps on one line ------------------------------------------------------------- */
+
+.wcblr-ps-steps {
+	display: grid !important;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 14px;
+	position: relative;
+}
+
+.wcblr-ps-step {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding-top: 28px;
+	border-top: 1px solid rgba(201, 154, 46, 0.55);
+
+	&::before {
+		content: "";
+		position: absolute;
+		top: -5px;
+		left: 0;
+		width: 9px;
+		height: 9px;
+		border-radius: 50%;
+		background: $ps-gold;
+	}
+
+	small { font-family: $ps-mono; font-size: 11.5px; font-weight: 600; color: $ps-gold-deep; }
+	b { font-family: $ps-serif; font-size: 34px; font-weight: 400; line-height: 1; color: rgba(42, 29, 20, 0.25); }
+	strong { font-family: $ps-serif; font-size: 23px; font-weight: 400; line-height: 1.2; letter-spacing: -0.02em; }
+	> span { font-size: 15.5px; line-height: 1.6; color: $ps-soft; }
+}
+
+/* ---- 6. 05 Apply ------------------------------------------------------------------------- */
+
+.wcblr-ps-apply {
+	display: grid !important;
+	grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+	gap: clamp(28px, 4vw, 64px);
+	align-items: start;
+	scroll-margin-top: 110px;
+}
+
+.wcblr-ps-apply-head { position: sticky; top: 120px; }
+
+.wcblr-ps-form {
+	padding: clamp(22px, 3vw, 40px);
+	border-radius: 24px;
+	background: $ps-paper;
+	box-shadow: 0 24px 48px -32px rgba(36, 26, 18, 0.45);
+}
+
+.wcblr-ps-form .wp-block-jetpack-contact-form {
+	gap: 18px 16px !important;
+	margin: 0 !important;
+}
+
+.wcblr-ps-form label,
+.wcblr-ps-form .grunion-field-label,
+.wcblr-ps-form legend {
+	font-family: $ps-sans !important;
+	font-size: 14.5px !important;
+	font-weight: 700 !important;
+	color: $ps-ink !important;
+}
+
+.wcblr-ps-form .grunion-label-required,
+.wcblr-ps-form .required { font-weight: 400 !important; color: $ps-muted !important; }
+
+.wcblr-ps-form input[type="text"],
+.wcblr-ps-form input[type="email"],
+.wcblr-ps-form input[type="tel"],
+.wcblr-ps-form input[type="url"],
+.wcblr-ps-form textarea,
+.wcblr-ps-form select {
+	width: 100% !important;
+	padding: 13px 15px !important;
+	border: 1px solid $ps-line !important;
+	border-radius: 12px !important;
+	background: #fff !important;
+	font-family: $ps-sans !important;
+	font-size: 16px !important;
+	color: $ps-ink !important;
+	transition: border-color 0.2s $ps-ease, box-shadow 0.2s $ps-ease;
+
+	&:focus { outline: none; border-color: $ps-gold !important; box-shadow: 0 0 0 3px rgba(201, 154, 46, 0.22); }
+}
+
+.wcblr-ps-form textarea { min-height: 120px; }
+
+.wcblr-ps-form .grunion-radio-label,
+.wcblr-ps-form .contact-form-field label.grunion-radio-label {
+	font-weight: 500 !important;
+	font-size: 15px !important;
+	color: $ps-soft !important;
+}
+
+.wcblr-ps-form input[type="radio"] { accent-color: $ps-gold-deep; }
+
+.wcblr-ps-form button,
+.wcblr-ps-form .wp-block-button__link,
+.wcblr-ps-form input[type="submit"] {
+	padding: 15px 26px !important;
+	border: 0 !important;
+	border-radius: 999px !important;
+	background: $ps-espresso !important;
+	color: $ps-paper !important;
+	font-family: $ps-sans !important;
+	font-size: 15.5px !important;
+	font-weight: 700 !important;
+	cursor: pointer;
+	transition: background 0.25s $ps-ease;
+
+	&:hover { background: $ps-gold-deep !important; }
+}
+
+.wcblr-ps-form > .wcblr-ps-small {
+	margin-top: 18px !important;
+	font-family: $ps-mono !important;
+	font-size: 11.5px !important;
+}
+
+/* ---- 7. Close ---------------------------------------------------------------------------- */
+
+.wcblr-ps-close {
+	padding: clamp(28px, 4.4vw, 64px);
+	border-radius: 26px;
+	background: $ps-espresso;
+	color: $ps-paper;
+
+	.wcblr-ps-k { color: $ps-gold-soft; }
+}
+
+.wcblr-ps-close-t {
+	max-width: 30ch !important;
+	margin-top: 16px !important;
+	font-family: $ps-serif !important;
+	font-size: clamp(28px, 1rem + 2.2vw, 52px) !important;
+	line-height: 1.18 !important;
+	letter-spacing: -0.025em;
+}
+
+.wcblr-ps-close-b {
+	max-width: 58ch !important;
+	margin-top: 20px !important;
+	font-size: 17px !important;
+	line-height: 1.7 !important;
+	color: rgba(251, 248, 241, 0.8);
+
+	a { box-shadow: inset 0 -1.5px 0 rgba(233, 214, 168, 0.6); }
+	a:hover { color: $ps-gold-soft; box-shadow: inset 0 -2px 0 $ps-gold-soft; }
+}
+
+.wcblr-ps-sign {
+	margin-top: 22px !important;
+	font-family: $ps-mono !important;
+	font-size: 12.5px !important;
+	color: $ps-gold-soft;
+}
+
+/* ---- Motion: one gentle fade on the opening screen ---------------------------------------- */
+
+@keyframes wcblr-ps-fade {
+	from { opacity: 0; transform: translateY(12px); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-ps-hero > * { animation: wcblr-ps-fade 0.9s $ps-ease backwards; }
+	.wcblr-ps-hero > :nth-child(2) { animation-delay: 0.1s; }
+	.wcblr-ps-hero > :nth-child(3) { animation-delay: 0.2s; }
+	.wcblr-ps-hero > :nth-child(4) { animation-delay: 0.3s; }
+	.wcblr-ps-hero > :nth-child(5) { animation-delay: 0.36s; }
+}
+
+/* ---- Narrower screens ------------------------------------------------------------------- */
+
+@media (max-width: 1000px) {
+	.wcblr-ps-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 32px; }
+}
+
+@media (max-width: 900px) {
+	.wcblr-ps-remember,
+	.wcblr-ps-who,
+	.wcblr-ps-apply { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-ps-apply-head { position: static; }
+	.wcblr-ps-covers { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 640px) {
+	.wcblr-ps-sec { padding-left: 18px; }
+	.wcblr-ps-steps { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-ps-rail > span { grid-template-columns: 70px minmax(0, 1fr); }
+	.wcblr-ps-actions .wp-block-button { flex: 1 1 auto; }
+	.wcblr-ps-actions .wp-block-button__link { width: 100%; justify-content: center; }
+	.wcblr-ps-form { padding: 20px 16px; border-radius: 18px; }
+	.wcblr-ps-form .wp-block-jetpack-contact-form > * { flex-basis: 100% !important; max-width: 100% !important; }
+	.wcblr-ps-close { padding: 26px 20px; border-radius: 20px; }
+}
