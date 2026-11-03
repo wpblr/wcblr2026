@@ -74,7 +74,7 @@ body:has(.wcblr-bw) .wp-block-group.alignwide:has(> .wp-block-post-title) {
 	max-width: none !important;
 	margin: 0 0 0 calc(50% - 50vw) !important;
 	box-sizing: border-box;
-	padding: clamp(8px, 1vw, 24px) $bw-pad 0 !important;
+	padding: clamp(8px, 1vw, 24px) $bw-pad clamp(64px, 2rem + 4vw, 120px) !important;
 	color: $bw-ink;
 	font-family: $bw-sans;
 	overflow-x: clip;
@@ -1058,16 +1058,19 @@ body:has(.wcblr-bw) .wp-block-group.alignwide:has(> .wp-block-post-title) {
 	color: $bw-muted;
 }
 
-// The pill is the last child of the wrapper, so position: sticky at the bottom keeps it on screen
-// from the first section down, and it settles into place at the end of the post.
+// The pill sits in the flow straight after the hero, so it is below the fold on the opening
+// screen (the hero has its own ticket button). Once the reader scrolls down to it, sticky
+// holds it at the bottom of the screen until the end of the post. A negative margin gives
+// its slot back. (The sanitiser drops animation-timeline, so this is done with position alone.)
 .wcblr-bw-pill {
 	position: sticky;
-	bottom: 16px;
+	top: calc(100vh - 76px);
+	top: calc(100svh - 76px);
 	z-index: 20;
 	display: flex !important;
 	justify-content: center;
-	margin: 28px 0 0 !important;
-	padding-bottom: clamp(48px, 4vw, 80px);
+	height: 60px;
+	margin: 0 0 -60px !important;
 	pointer-events: none;
 
 	a {
@@ -1075,7 +1078,8 @@ body:has(.wcblr-bw) .wp-block-group.alignwide:has(> .wp-block-post-title) {
 		display: inline-flex;
 		align-items: center;
 		gap: 14px;
-		padding: 10px 12px 10px 22px;
+		height: 56px;
+		padding: 8px 8px 8px 22px;
 		border-radius: 999px;
 		background: $bw-espresso;
 		color: $bw-paper;
@@ -1086,7 +1090,7 @@ body:has(.wcblr-bw) .wp-block-group.alignwide:has(> .wp-block-post-title) {
 	}
 
 	b {
-		padding: 8px 14px;
+		padding: 9px 14px;
 		border-radius: 999px;
 		background: $bw-red;
 		color: #fff;
@@ -1094,22 +1098,6 @@ body:has(.wcblr-bw) .wp-block-group.alignwide:has(> .wp-block-post-title) {
 	}
 
 	a:hover { transform: translateY(-3px); }
-}
-
-// Where the browser can tie animation to scroll, the pill stays out of the way on the opening
-// screen (the hero has its own ticket button) and slides in once the reader starts scrolling.
-// Elsewhere it is simply always there.
-@keyframes wcblr-bw-pill-in {
-	from { opacity: 0; transform: translateY(24px); }
-	to { opacity: 1; transform: none; }
-}
-
-@supports (animation-timeline: scroll()) {
-	.wcblr-bw-pill a {
-		animation: wcblr-bw-pill-in linear both;
-		animation-timeline: scroll(root);
-		animation-range: 280px 520px;
-	}
 }
 
 /* ---- Motion: the opening screen only ------------------------------------------------- */
@@ -1225,6 +1213,5 @@ body:has(.wcblr-bw) .wp-block-group.alignwide:has(> .wp-block-post-title) {
 	}
 
 	.wcblr-bw-close { padding: 28px 22px; border-radius: 22px; }
-	.wcblr-bw-pill { bottom: 12px; }
 	.wcblr-bw-pill a { padding: 8px 8px 8px 18px; font-size: 14.5px; }
 }
