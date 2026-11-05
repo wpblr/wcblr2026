@@ -1,0 +1,770 @@
+/* ==== Is WordCamp Bengaluru for you? (B-02) =========================================
+   6 Nov 2026. The approved B-02 draft as a post, for the design team to review.
+
+   THE IDEA
+   The reader's doubt, answered like a reply. The hero is a picker of the fourteen
+   doubts as speech bubbles, one colour per group (green fit in, gold worth my time,
+   purple my platform); each bubble jumps to its answer. Each chapter is a thread:
+   the doubt as the reader's bubble on the right, our reply card on the left, and
+   the small step as a ticked line at its foot. On wide screens a sticky side card
+   holds the chapter title and its doubts.
+
+   THE SHAPE
+   Hero (title beside the bubble picker) · five reason tiles beside the 2024 group
+   photo with a pull line · three chapters (sticky side card + thread) · dark close
+   with a General Admission stub.
+
+   Scoped to .wcblr-fm. No custom properties, no url(), no place-items, no
+   background-image: the Remote CSS sanitiser drops all four.
+   Markup: website/tools/build-forme.py. */
+
+$fm-ink: #2a1d14;
+$fm-espresso: #241a12;
+$fm-red: #c8344b;
+$fm-red-deep: #a32a3d;
+$fm-gold: #e0a526;
+$fm-gold-deep: #8f640c;
+$fm-green: #136451;
+$fm-purple: #6b3fa0;
+$fm-cream: #f2ece0;
+$fm-paper: #fbf8f1;
+$fm-sand: #e8dfcf;
+$fm-muted: #7a6757;
+$fm-soft: #5c4a3b;
+$fm-line: #dad5cd;
+$fm-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+$fm-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+$fm-serif: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif;
+$fm-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif;
+$fm-mono: var(--wp--preset--font-family--jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
+$fm-frame: 1280px;
+$fm-gutter: clamp(16px, 5vw, 96px);
+$fm-pad: max(#{$fm-gutter}, calc((100vw - #{$fm-frame}) / 2));
+$fm-sec: clamp(56px, 1.5rem + 4.2vw, 104px);
+$fm-shadow: 0 24px 48px -28px rgba(36, 26, 18, 0.45);
+$fm-radius: 22px;
+
+// one tint per group: [solid, text on cream, soft bubble fill]
+$fm-groups: (
+	"fit": ($fm-green, $fm-green, #dcebe3),
+	"time": ($fm-gold, $fm-gold-deep, #f6e7c2),
+	"platform": ($fm-purple, $fm-purple, #e7def2),
+);
+
+/* ---- The ground ---------------------------------------------------------------------- */
+
+body:has(.wcblr-fm),
+body:has(.wcblr-fm) .wp-site-blocks > main {
+	background-color: $fm-cream !important;
+}
+
+body:has(.wcblr-fm) main::before,
+body:has(.wcblr-fm) main::after {
+	display: none !important;
+}
+
+// The hero carries the title as the page's h1, so hide the template's title row.
+body:has(.wcblr-fm) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-post-title) {
+	display: none !important;
+}
+
+body:has(.wcblr-fm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px) !important; }
+
+.entry-content:has(> .wcblr-fm) {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+	max-width: none !important;
+}
+
+.entry-content > .wcblr-fm.alignfull {
+	width: 100vw !important;
+	max-width: none !important;
+	margin: 0 0 0 calc(50% - 50vw) !important;
+	box-sizing: border-box;
+	padding: clamp(8px, 1vw, 24px) $fm-pad clamp(64px, 2rem + 4vw, 120px) !important;
+	color: $fm-ink;
+	font-family: $fm-sans;
+	overflow-x: clip;
+}
+
+.wcblr-fm :where(p, h1, h2, h3, h4, figure, .wp-block-group, .wp-block-buttons) {
+	margin: 0 !important;
+	max-width: none !important;
+}
+
+.wcblr-fm *, .wcblr-fm *::before, .wcblr-fm *::after { box-sizing: border-box; }
+
+.wcblr-fm a { color: inherit; text-decoration: none; font: inherit; }
+.wcblr-fm em { color: $fm-red; font-style: italic; }
+.wcblr-fm img { display: block; max-width: 100%; height: auto; }
+
+.wcblr-fm-body a,
+.wcblr-fm-step a,
+.wcblr-fm-intro a {
+	box-shadow: inset 0 -1.5px 0 rgba(200, 52, 75, 0.5);
+	transition: color 0.2s $fm-ease, box-shadow 0.2s $fm-ease;
+
+	&:hover { color: $fm-red; box-shadow: inset 0 -2px 0 $fm-red; }
+}
+
+.wcblr-fm-k,
+.wcblr-fm-n {
+	font-family: $fm-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	color: $fm-red;
+}
+
+.wcblr-fm-k.is-gold { color: $fm-gold; }
+
+.wcblr-fm-body {
+	max-width: 60ch !important;
+	font-size: 17px !important;
+	line-height: 1.68 !important;
+	color: $fm-soft;
+}
+
+.wcblr-fm-body + .wcblr-fm-body { margin-top: 14px !important; }
+
+.wcblr-fm-sec { padding-top: $fm-sec; }
+.wcblr-fm-sec.wcblr-fm-hero-sec { padding-top: 0; }
+
+.wcblr-fm-titles { margin-bottom: clamp(22px, 0.8rem + 1.6vw, 40px) !important; }
+
+.wcblr-post.wcblr-fm .wcblr-fm-bt {
+	margin-top: 12px !important;
+	font-family: $fm-serif !important;
+	font-size: clamp(40px, 1.1rem + 4vw, 88px) !important;
+	font-weight: 400 !important;
+	line-height: 1.04 !important;
+	padding-bottom: 0.06em;
+	letter-spacing: -0.045em !important;
+	color: $fm-ink;
+	text-wrap: balance;
+	scroll-margin-top: 90px;
+}
+
+/* ---- Buttons ------------------------------------------------------------------------- */
+
+.wcblr-fm-actions {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 28px !important;
+}
+
+.wcblr-fm-actions .wp-block-button__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 15px 24px !important;
+	border-radius: 999px !important;
+	background: $fm-red !important;
+	color: #fff !important;
+	font-family: $fm-sans !important;
+	font-size: 15.5px !important;
+	font-weight: 700 !important;
+	transition: transform 0.4s $fm-spring, background 0.2s $fm-ease, color 0.2s $fm-ease;
+
+	&::after { content: "\2192"; transition: transform 0.4s $fm-spring; }
+	&:hover { transform: translateY(-2px); background: $fm-red-deep !important; }
+	&:hover::after { transform: translateX(4px); }
+}
+
+.wcblr-fm-actions .is-ghost .wp-block-button__link {
+	background: transparent !important;
+	color: $fm-ink !important;
+	box-shadow: inset 0 0 0 1.5px rgba(42, 29, 20, 0.3);
+
+	&::after { content: "\2193"; }
+	&:hover { background: $fm-ink !important; color: $fm-paper !important; }
+	&:hover::after { transform: translateY(3px); }
+}
+
+/* ---- 1. Hero ------------------------------------------------------------------------- */
+
+.wcblr-fm-hero {
+	display: grid !important;
+	grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+	gap: clamp(28px, 4vw, 64px);
+	align-items: center;
+	padding-top: clamp(16px, 3vw, 48px);
+}
+
+.wcblr-fm-kicker {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 8px;
+	font-family: $fm-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 600;
+
+	span {
+		padding: 6px 12px;
+		border-radius: 999px;
+		background: $fm-paper;
+		box-shadow: inset 0 0 0 1px $fm-line;
+	}
+
+	span:first-child { background: $fm-ink; color: $fm-paper; box-shadow: none; }
+}
+
+.wcblr-post.wcblr-fm .wcblr-fm-h1 {
+	margin-top: 22px !important;
+	font-family: $fm-serif !important;
+	font-size: clamp(48px, 1.2rem + 5.2vw, 112px) !important;
+	font-weight: 400 !important;
+	line-height: 0.98 !important;
+	letter-spacing: -0.05em !important;
+	color: $fm-ink;
+	text-wrap: balance;
+}
+
+.wcblr-fm-sub {
+	margin-top: 20px !important;
+	font-family: $fm-serif !important;
+	font-size: clamp(22px, 0.9rem + 1vw, 30px) !important;
+	font-style: italic;
+	line-height: 1.25 !important;
+	color: $fm-soft;
+}
+
+.wcblr-fm-intro {
+	max-width: 46ch !important;
+	margin-top: 16px !important;
+	font-size: 17.5px !important;
+	line-height: 1.6 !important;
+	color: $fm-soft;
+}
+
+.wcblr-fm-picker {
+	padding: clamp(20px, 2.4vw, 32px);
+	border-radius: 28px;
+	background: $fm-paper;
+	box-shadow: inset 0 0 0 1px $fm-line, $fm-shadow;
+}
+
+.wcblr-fm-picker-k {
+	display: flex !important;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 6px 16px;
+	font-family: $fm-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 600;
+	color: $fm-red;
+
+	span + span { color: $fm-muted; font-weight: 500; }
+}
+
+.wcblr-fm-picks {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 9px;
+	margin-top: 18px !important;
+}
+
+.wcblr-fm-pick {
+	position: relative;
+	display: inline-block;
+	padding: 10px 15px;
+	border-radius: 18px 18px 18px 5px;
+	font-size: 15px;
+	font-weight: 600;
+	line-height: 1.3;
+	transition: transform 0.35s $fm-spring, background 0.2s $fm-ease, color 0.2s $fm-ease;
+
+	&:hover { transform: translateY(-3px) rotate(-1deg); }
+}
+
+@each $g, $c in $fm-groups {
+	.wcblr-fm-pick.is-#{$g} { background: nth($c, 3); color: nth($c, 2); }
+	.wcblr-fm-pick.is-#{$g}:hover { background: nth($c, 1); color: if($g == "time", $fm-ink, #fff); }
+	.wcblr-fm-legend .is-#{$g}::before { background: nth($c, 1); }
+}
+
+.wcblr-fm-legend {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 8px 18px;
+	margin-top: 20px !important;
+	padding-top: 16px;
+	border-top: 1px dashed $fm-line;
+	font-size: 13px !important;
+	color: $fm-muted;
+
+	span { display: inline-flex; align-items: center; gap: 8px; }
+	span::before { content: ""; width: 10px; height: 10px; border-radius: 50%; }
+}
+
+/* ---- 2. Why people come -------------------------------------------------------------- */
+
+.wcblr-fm-why {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: clamp(28px, 4vw, 64px);
+	align-items: start;
+}
+
+.wcblr-fm-reasons {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px;
+	margin-top: 28px !important;
+}
+
+.wcblr-fm-reason {
+	display: grid;
+	grid-template-columns: 52px minmax(0, 1fr);
+	column-gap: 14px;
+	align-items: start;
+	padding: 16px;
+	border-radius: 18px;
+	background: $fm-paper;
+	box-shadow: inset 0 0 0 1px $fm-line;
+
+	b {
+		grid-row: span 2;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 52px;
+		height: 52px;
+		border-radius: 14px;
+		background: $fm-ink;
+		color: $fm-paper;
+		font-family: $fm-serif;
+		font-size: 22px;
+		font-weight: 400;
+		letter-spacing: -0.03em;
+	}
+
+	strong { font-size: 16px; font-weight: 700; line-height: 1.3; }
+	small { margin-top: 3px; font-size: 14px; line-height: 1.45; color: $fm-soft; }
+}
+
+.wcblr-fm-reason.is-learn b { background: $fm-red; }
+.wcblr-fm-reason.is-contribute b { background: $fm-green; }
+.wcblr-fm-reason.is-meet b { background: $fm-purple; }
+.wcblr-fm-reason.is-hallway b { background: $fm-gold; color: $fm-ink; }
+.wcblr-fm-reason.is-lunch { grid-column: 1 / -1; }
+
+.wcblr-fm-photo {
+	position: relative;
+	border-radius: 26px;
+	overflow: hidden;
+	background: $fm-espresso;
+	box-shadow: $fm-shadow;
+}
+
+.wcblr-fm-photo-img img {
+	width: 100%;
+	aspect-ratio: 4 / 3.4;
+	object-fit: cover;
+}
+
+.wcblr-fm-quote {
+	padding: clamp(20px, 2.2vw, 30px) clamp(20px, 2.4vw, 32px) 8px;
+	font-family: $fm-serif !important;
+	font-size: clamp(20px, 0.8rem + 0.9vw, 26px) !important;
+	line-height: 1.32 !important;
+	color: $fm-paper;
+
+	&::before { content: "\201C"; display: block; height: 0.5em; font-size: 2.4em; line-height: 1; color: $fm-gold; }
+}
+
+.wcblr-fm-cap {
+	padding: 8px clamp(20px, 2.4vw, 32px) clamp(20px, 2.2vw, 28px);
+	font-family: $fm-mono !important;
+	font-size: 11px !important;
+	color: rgba(251, 248, 241, 0.55);
+}
+
+/* ---- 3. Chapters: sticky side card + thread ------------------------------------------- */
+
+.wcblr-fm-chapter {
+	display: grid !important;
+	grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+	gap: clamp(28px, 4vw, 72px);
+	align-items: start;
+}
+
+.wcblr-fm-side {
+	position: sticky;
+	top: 96px;
+	padding: clamp(20px, 2.2vw, 30px);
+	border-radius: 24px;
+	background: $fm-paper;
+	box-shadow: inset 0 0 0 1px $fm-line;
+}
+
+.wcblr-fm-side-n {
+	display: flex !important;
+	align-items: center;
+	justify-content: space-between;
+	font-family: $fm-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 600;
+
+	b {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		color: #fff;
+		font-size: 13px;
+	}
+
+	span { color: $fm-muted; }
+}
+
+.wcblr-post.wcblr-fm .wcblr-fm-side .wcblr-fm-bt {
+	margin-top: 18px !important;
+	font-size: clamp(36px, 1rem + 2.6vw, 60px) !important;
+}
+
+.wcblr-fm-jumps {
+	display: flex !important;
+	flex-direction: column;
+	margin-top: 20px !important;
+	border-top: 1px solid $fm-line;
+
+	a {
+		position: relative;
+		padding: 11px 26px 11px 0;
+		border-bottom: 1px solid $fm-line;
+		font-size: 14.5px;
+		line-height: 1.35;
+		color: $fm-soft;
+		transition: color 0.2s $fm-ease, padding 0.3s $fm-ease;
+
+		&::after { content: "\2192"; position: absolute; right: 2px; top: 11px; opacity: 0.4; transition: transform 0.3s $fm-spring, opacity 0.2s; }
+		&:hover { color: $fm-ink; padding-left: 6px; }
+		&:hover::after { opacity: 1; transform: translateX(3px); }
+	}
+}
+
+.wcblr-fm-thread {
+	display: flex !important;
+	flex-direction: column;
+	gap: clamp(36px, 3.4vw, 56px);
+}
+
+.wcblr-fm-item {
+	display: flex !important;
+	flex-direction: column;
+	gap: 12px;
+	scroll-margin-top: 90px;
+}
+
+// the reader's doubt: a right-hand bubble, the way your own messages sit
+.wcblr-fm-ask {
+	align-self: flex-end;
+	max-width: min(88%, 560px) !important;
+	padding: 14px 20px;
+	border-radius: 24px 24px 6px 24px;
+	text-align: right;
+
+	span {
+		display: block;
+		font-family: $fm-serif;
+		font-size: clamp(21px, 0.9rem + 0.9vw, 28px);
+		line-height: 1.22;
+		letter-spacing: -0.02em;
+	}
+
+	small {
+		display: block;
+		margin-top: 6px;
+		font-family: $fm-mono;
+		font-size: 11px;
+		font-weight: 600;
+		opacity: 0.85;
+	}
+}
+
+@each $g, $c in $fm-groups {
+	.wcblr-fm-chapter.is-#{$g} .wcblr-fm-side-n b { background: nth($c, 1); color: if($g == "time", $fm-ink, #fff); }
+	.wcblr-fm-ask.is-#{$g} { background: nth($c, 1); color: if($g == "time", $fm-ink, #fff); }
+	.wcblr-fm-item.is-#{$g} .wcblr-fm-step::before { background: nth($c, 1); color: if($g == "time", $fm-ink, #fff); }
+	.wcblr-fm-item.is-#{$g}:target .wcblr-fm-reply { box-shadow: inset 0 0 0 2px nth($c, 1), $fm-shadow; }
+}
+
+// our answer: a left-hand reply card
+.wcblr-fm-reply {
+	align-self: flex-start;
+	width: min(100%, 680px);
+	padding: clamp(20px, 2.2vw, 30px);
+	border-radius: 6px 26px 26px 26px;
+	background: $fm-paper;
+	box-shadow: inset 0 0 0 1px $fm-line;
+	transition: box-shadow 0.3s $fm-ease;
+}
+
+.wcblr-fm-from {
+	display: flex !important;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 12px !important;
+	font-family: $fm-mono !important;
+	font-size: 11px !important;
+	color: $fm-muted;
+
+	&::before {
+		content: "W";
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 22px;
+		height: 22px;
+		border-radius: 50%;
+		background: $fm-ink;
+		color: $fm-paper;
+		font-family: $fm-serif;
+		font-size: 12px;
+	}
+
+	b { font-weight: 700; color: $fm-ink; }
+}
+
+.wcblr-fm-reply .wcblr-fm-body { font-size: 16.5px !important; }
+
+.wcblr-fm-step {
+	position: relative;
+	display: flex !important;
+	flex-direction: column;
+	gap: 3px;
+	margin-top: 20px !important;
+	padding: 14px 16px 14px 56px;
+	border-radius: 16px;
+	background: $fm-cream;
+	font-size: 15.5px !important;
+	line-height: 1.5 !important;
+
+	&::before {
+		content: "\2713";
+		position: absolute;
+		left: 14px;
+		top: 14px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 28px;
+		height: 28px;
+		border-radius: 50%;
+		font-size: 14px;
+		font-weight: 700;
+	}
+
+	b { font-family: $fm-mono; font-size: 11px; font-weight: 600; color: $fm-muted; }
+	span { color: $fm-ink; font-weight: 500; }
+}
+
+.wcblr-fm-trip {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 10px;
+	margin-top: 16px !important;
+
+	a {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		padding: 14px 40px 14px 16px;
+		border-radius: 16px;
+		background: $fm-cream;
+		transition: background 0.2s $fm-ease, transform 0.35s $fm-spring;
+
+		&:hover { background: $fm-sand; transform: translateY(-2px); }
+	}
+
+	b { font-size: 15px; font-weight: 700; }
+	span { font-size: 13.5px; line-height: 1.45; color: $fm-soft; }
+	i { position: absolute; right: 16px; top: 14px; font-style: normal; color: $fm-red; }
+}
+
+/* ---- 4. Close: dark band with the stub ------------------------------------------------- */
+
+.wcblr-fm-close {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+	gap: clamp(28px, 4vw, 64px);
+	align-items: center;
+	padding: clamp(28px, 4.4vw, 72px);
+	border-radius: 32px;
+	background: $fm-espresso;
+	color: $fm-paper;
+}
+
+.wcblr-post.wcblr-fm .wcblr-fm-close-t {
+	margin-top: 14px !important;
+	font-family: $fm-serif !important;
+	font-size: clamp(38px, 1rem + 3.6vw, 76px) !important;
+	font-weight: 400 !important;
+	line-height: 1.02 !important;
+	letter-spacing: -0.045em !important;
+	color: $fm-paper;
+	text-wrap: balance;
+}
+
+.wcblr-fm-close em { color: $fm-gold; }
+
+.wcblr-fm-close-b {
+	max-width: 52ch !important;
+	margin-top: 16px !important;
+	font-size: 17px !important;
+	line-height: 1.65 !important;
+	color: rgba(251, 248, 241, 0.82);
+
+	strong { color: $fm-gold; }
+}
+
+.wcblr-fm-close-s {
+	margin-top: 16px !important;
+	font-size: 13.5px !important;
+	line-height: 1.5 !important;
+	color: rgba(251, 248, 241, 0.55);
+}
+
+.wcblr-fm-stub {
+	position: relative;
+	padding: 24px 24px 22px;
+	border-radius: 22px;
+	background: $fm-paper;
+	color: $fm-ink;
+	transform: rotate(1.5deg);
+	box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.7);
+
+	// the perforation: two notches cut into the stub above the price
+	&::before, &::after {
+		content: "";
+		position: absolute;
+		bottom: 92px;
+		width: 22px;
+		height: 22px;
+		border-radius: 50%;
+		background: $fm-espresso;
+	}
+
+	&::before { left: -11px; }
+	&::after { right: -11px; }
+}
+
+.wcblr-fm-stub-head {
+	display: flex !important;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 10px;
+	padding-bottom: 14px;
+	border-bottom: 1px solid $fm-line;
+
+	b { font-size: 16px; font-weight: 800; }
+	small { font-family: $fm-mono; font-size: 11px; color: $fm-muted; }
+}
+
+.wcblr-fm-gets {
+	display: flex !important;
+	flex-direction: column;
+	gap: 12px;
+	padding: 16px 0 20px;
+
+	span {
+		display: grid;
+		grid-template-columns: 22px minmax(0, 1fr);
+		column-gap: 10px;
+	}
+
+	i {
+		grid-row: span 2;
+		width: 20px;
+		height: 20px;
+		margin-top: 1px;
+		border-radius: 50%;
+		background: $fm-green;
+
+		&::after { content: "\2713"; display: block; color: #fff; font-size: 11px; font-style: normal; font-weight: 700; line-height: 20px; text-align: center; }
+	}
+
+	b { font-size: 15px; font-weight: 700; line-height: 1.35; }
+	small { font-size: 13.5px; line-height: 1.4; color: $fm-soft; }
+}
+
+.wcblr-fm-price {
+	display: flex !important;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 12px;
+	padding-top: 18px;
+	border-top: 2px dashed $fm-line;
+
+	strong {
+		font-family: $fm-serif;
+		font-size: 52px;
+		font-weight: 400;
+		line-height: 1;
+		letter-spacing: -0.04em;
+		color: $fm-red;
+	}
+
+	span { font-family: $fm-mono; font-size: 11.5px; font-weight: 600; color: $fm-muted; text-align: right; }
+}
+
+/* ---- Motion: the first screen only --------------------------------------------------- */
+
+@keyframes wcblr-fm-rise {
+	from { opacity: 0; transform: translateY(14px); }
+	to { opacity: 1; transform: none; }
+}
+
+@keyframes wcblr-fm-pop {
+	from { opacity: 0; transform: translateY(8px) scale(0.94); }
+	to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-fm-hero-main > * { animation: wcblr-fm-rise 0.7s $fm-ease backwards; }
+	.wcblr-fm-hero-main > :nth-child(2) { animation-delay: 0.06s; }
+	.wcblr-fm-hero-main > :nth-child(3) { animation-delay: 0.14s; }
+	.wcblr-fm-hero-main > :nth-child(4) { animation-delay: 0.2s; }
+	.wcblr-fm-hero-main > :nth-child(5) { animation-delay: 0.26s; }
+	.wcblr-fm-picker { animation: wcblr-fm-rise 0.8s $fm-ease 0.1s backwards; }
+	.wcblr-fm-pick { animation: wcblr-fm-pop 0.5s $fm-spring backwards; }
+
+	@for $i from 1 through 14 {
+		.wcblr-fm-pick:nth-child(#{$i}) { animation-delay: #{0.25 + $i * 0.04}s; }
+	}
+}
+
+/* ---- Breakpoints ---------------------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+	.wcblr-fm-hero { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-fm-why { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-fm-photo { max-width: 720px; }
+	.wcblr-fm-chapter { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-fm-side { position: static; }
+	.wcblr-fm-jumps { flex-direction: row; flex-wrap: wrap; gap: 8px; border-top: 0; }
+	.wcblr-fm-jumps a { padding: 8px 14px; border: 0; border-radius: 999px; background: $fm-cream; font-size: 13.5px; }
+	.wcblr-fm-jumps a::after { display: none; }
+	.wcblr-fm-jumps a:hover { padding-left: 14px; background: $fm-sand; }
+	.wcblr-fm-close { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-fm-stub { max-width: 460px; }
+}
+
+@media (max-width: 640px) {
+	.wcblr-fm-actions .wp-block-button { flex: 1 1 auto; }
+	.wcblr-fm-actions .wp-block-button__link { width: 100%; justify-content: center; }
+	.wcblr-fm-picker { padding: 18px; border-radius: 22px; }
+	.wcblr-fm-pick { font-size: 14px; padding: 9px 13px; }
+	.wcblr-fm-reasons { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-fm-ask { max-width: 94% !important; padding: 12px 16px; }
+	.wcblr-fm-reply { padding: 18px; }
+	.wcblr-fm-reply .wcblr-fm-body { font-size: 16px !important; }
+	.wcblr-fm-trip { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-fm-close { padding: 26px 20px; border-radius: 24px; }
+	.wcblr-fm-stub { transform: none; }
+}

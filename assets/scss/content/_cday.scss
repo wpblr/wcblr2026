@@ -1,0 +1,1033 @@
+/* ==== What is a Contributor Day? (B-03) ==============================================
+   6 Nov 2026. The B-03 draft as a post, for the design team to review.
+
+   THE IDEA
+   The Credits screen. The hero is the screen the post sends you to, with its three
+   real numbers and an empty row waiting for "You". Every table card answers the
+   same three questions as a route (You > It goes > Your name) and ends on the badge
+   it can earn. A release track puts Saturday between 7.2's text freeze and its ship
+   date; a four-step seat strip and a dark ticket band close it.
+
+   THE SHAPE
+   Hero (title beside the Credits window) + numbered index · 01 prose beside a run
+   sheet · 02 six route cards, then badge medals beside a review note · 03 release
+   track, prose beside a 95% meter · 04 three stats, two story cards, a pull line ·
+   05 three numbered moves + AI note · 06 four steps, two next cards · dark close.
+
+   Scoped to .wcblr-cd. No custom properties, no url(), no place-items, no
+   background-image. Markup: website/tools/build-cday.py. */
+
+$cd-ink: #2a1d14;
+$cd-espresso: #241a12;
+$cd-red: #c8344b;
+$cd-red-deep: #a32a3d;
+$cd-gold: #e0a526;
+$cd-gold-deep: #8f640c;
+$cd-green: #136451;
+$cd-purple: #6b3fa0;
+$cd-sky: #2f7d9a;
+$cd-cream: #f2ece0;
+$cd-paper: #fbf8f1;
+$cd-sand: #e8dfcf;
+$cd-muted: #7a6757;
+$cd-soft: #5c4a3b;
+$cd-line: #dad5cd;
+$cd-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+$cd-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+$cd-serif: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif;
+$cd-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif;
+$cd-mono: var(--wp--preset--font-family--jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
+$cd-frame: 1280px;
+$cd-gutter: clamp(16px, 5vw, 96px);
+$cd-pad: max(#{$cd-gutter}, calc((100vw - #{$cd-frame}) / 2));
+$cd-sec: clamp(56px, 1.5rem + 4.2vw, 104px);
+$cd-shadow: 0 24px 48px -28px rgba(36, 26, 18, 0.45);
+
+// one colour per table: [solid, text on solid, soft fill]
+$cd-tables: (
+	"polyglots": ($cd-red, #fff, #f6dfe2),
+	"core": ($cd-ink, $cd-paper, #e6ddd1),
+	"photos": ($cd-sky, #fff, #dcebf1),
+	"patterns": ($cd-purple, #fff, #e7def2),
+	"community": ($cd-gold, $cd-ink, #f6e7c2),
+	"education": ($cd-green, #fff, #dcebe3),
+);
+
+/* ---- The ground ---------------------------------------------------------------------- */
+
+body:has(.wcblr-cd),
+body:has(.wcblr-cd) .wp-site-blocks > main {
+	background-color: $cd-cream !important;
+}
+
+body:has(.wcblr-cd) main::before,
+body:has(.wcblr-cd) main::after {
+	display: none !important;
+}
+
+body:has(.wcblr-cd) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-post-title) {
+	display: none !important;
+}
+
+body:has(.wcblr-cd) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px) !important; }
+
+.entry-content:has(> .wcblr-cd) {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+	max-width: none !important;
+}
+
+.entry-content > .wcblr-cd.alignfull {
+	width: 100vw !important;
+	max-width: none !important;
+	margin: 0 0 0 calc(50% - 50vw) !important;
+	box-sizing: border-box;
+	padding: clamp(8px, 1vw, 24px) $cd-pad clamp(64px, 2rem + 4vw, 120px) !important;
+	color: $cd-ink;
+	font-family: $cd-sans;
+	overflow-x: clip;
+}
+
+.wcblr-cd :where(p, h1, h2, h3, h4, figure, .wp-block-group, .wp-block-buttons) {
+	margin: 0 !important;
+	max-width: none !important;
+}
+
+.wcblr-cd *, .wcblr-cd *::before, .wcblr-cd *::after { box-sizing: border-box; }
+
+.wcblr-cd a { color: inherit; text-decoration: none; font: inherit; }
+.wcblr-cd em { color: $cd-red; font-style: italic; }
+
+.wcblr-cd-body a,
+.wcblr-cd-route a,
+.wcblr-cd-ai a {
+	box-shadow: inset 0 -1.5px 0 rgba(200, 52, 75, 0.5);
+	transition: color 0.2s $cd-ease, box-shadow 0.2s $cd-ease;
+
+	&:hover { color: $cd-red; box-shadow: inset 0 -2px 0 $cd-red; }
+}
+
+.wcblr-cd-k,
+.wcblr-cd-n {
+	font-family: $cd-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	color: $cd-red;
+}
+
+.wcblr-cd-k.is-gold { color: $cd-gold-deep; }
+
+.wcblr-cd-body {
+	max-width: 60ch !important;
+	margin-top: 14px !important;
+	font-size: 17px !important;
+	line-height: 1.68 !important;
+	color: $cd-soft;
+}
+
+.wcblr-cd-body.is-lead { margin: 0 0 clamp(24px, 2.4vw, 36px) !important; font-size: 18px !important; }
+
+.wcblr-cd-small {
+	margin-top: 14px !important;
+	font-size: 14.5px !important;
+	line-height: 1.55 !important;
+	color: $cd-muted;
+}
+
+.wcblr-cd-sec { padding-top: $cd-sec; }
+.wcblr-cd-sec.wcblr-cd-hero-sec { padding-top: 0; }
+
+.wcblr-cd-titles { margin-bottom: clamp(20px, 0.8rem + 1.4vw, 36px) !important; }
+
+.wcblr-post.wcblr-cd .wcblr-cd-bt {
+	margin-top: 12px !important;
+	font-family: $cd-serif !important;
+	font-size: clamp(40px, 1.1rem + 4vw, 88px) !important;
+	font-weight: 400 !important;
+	line-height: 1.04 !important;
+	padding-bottom: 0.06em;
+	letter-spacing: -0.045em !important;
+	color: $cd-ink;
+	text-wrap: balance;
+	scroll-margin-top: 90px;
+}
+
+/* ---- Buttons ------------------------------------------------------------------------- */
+
+.wcblr-cd-actions {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 28px !important;
+}
+
+.wcblr-cd-actions .wp-block-button__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 15px 24px !important;
+	border-radius: 999px !important;
+	background: $cd-red !important;
+	color: #fff !important;
+	font-family: $cd-sans !important;
+	font-size: 15.5px !important;
+	font-weight: 700 !important;
+	transition: transform 0.4s $cd-spring, background 0.2s $cd-ease;
+
+	&::after { content: "\2192"; transition: transform 0.4s $cd-spring; }
+	&:hover { transform: translateY(-2px); background: $cd-red-deep !important; }
+	&:hover::after { transform: translateX(4px); }
+}
+
+/* ---- 1. Hero: the Credits window ------------------------------------------------------ */
+
+.wcblr-cd-hero {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: clamp(28px, 4vw, 64px);
+	align-items: center;
+	padding-top: clamp(16px, 3vw, 48px);
+}
+
+.wcblr-cd-kicker {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 8px;
+	font-family: $cd-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 600;
+
+	span { padding: 6px 12px; border-radius: 999px; background: $cd-paper; box-shadow: inset 0 0 0 1px $cd-line; }
+	span:first-child { background: $cd-ink; color: $cd-paper; box-shadow: none; }
+}
+
+.wcblr-post.wcblr-cd .wcblr-cd-h1 {
+	margin-top: 22px !important;
+	font-family: $cd-serif !important;
+	font-size: clamp(48px, 1.2rem + 5vw, 108px) !important;
+	font-weight: 400 !important;
+	line-height: 0.98 !important;
+	letter-spacing: -0.05em !important;
+	color: $cd-ink;
+	text-wrap: balance;
+}
+
+.wcblr-cd-sub {
+	margin-top: 20px !important;
+	font-family: $cd-serif !important;
+	font-size: clamp(22px, 0.9rem + 1vw, 30px) !important;
+	font-style: italic;
+	line-height: 1.25 !important;
+	color: $cd-soft;
+}
+
+.wcblr-cd-intro {
+	max-width: 48ch !important;
+	margin-top: 16px !important;
+	font-size: 17.5px !important;
+	line-height: 1.6 !important;
+	color: $cd-soft;
+}
+
+.wcblr-cd-screen {
+	display: flex !important;
+	flex-direction: column;
+	border-radius: 20px;
+	overflow: hidden;
+	background: #fff;
+	box-shadow: inset 0 0 0 1px $cd-line, $cd-shadow;
+}
+
+.wcblr-cd-bar {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	padding: 12px 16px;
+	background: #1d2327; // the wp-admin bar
+
+	i { width: 10px; height: 10px; border-radius: 50%; background: #50575e; }
+	small { margin-left: 10px; font-family: $cd-mono; font-size: 11px; color: #c3c4c7; }
+}
+
+.wcblr-cd-path {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	padding: 16px 20px;
+	border-bottom: 1px solid #e7e3dc;
+	font-size: 13.5px;
+	font-weight: 600;
+
+	b { padding: 5px 10px; border-radius: 8px; background: #f0f0f1; color: #2c3338; }
+	b.is-w {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 28px;
+		height: 28px;
+		padding: 0;
+		border-radius: 50%;
+		background: #1d2327;
+		color: #fff;
+		font-family: $cd-serif;
+	}
+	b.is-on { background: #2271b1; color: #fff; }
+	em { color: #8c8f94; font-style: normal; }
+}
+
+.wcblr-cd-stat,
+.wcblr-cd-you {
+	display: grid;
+	grid-template-columns: 112px minmax(0, 1fr);
+	gap: 16px;
+	align-items: center;
+	padding: 16px 20px;
+	border-bottom: 1px solid #efebe4;
+
+	strong {
+		font-family: $cd-serif;
+		font-size: 40px;
+		font-weight: 400;
+		line-height: 1;
+		letter-spacing: -0.04em;
+		color: $cd-ink;
+	}
+
+	> span { font-size: 15px; line-height: 1.4; color: $cd-soft; }
+}
+
+.wcblr-cd-you {
+	margin: 12px;
+	border: 2px dashed $cd-gold;
+	border-radius: 14px;
+	background: #fdf6e3;
+
+	strong { color: $cd-red; font-style: italic; }
+	> span { color: $cd-ink; font-weight: 600; }
+}
+
+.wcblr-cd-caret {
+	display: inline-block;
+	width: 2px;
+	height: 1.1em;
+	margin-left: 4px;
+	vertical-align: -0.2em;
+	background: $cd-red;
+}
+
+.wcblr-cd-lede {
+	max-width: 34ch !important;
+	margin-top: clamp(36px, 4vw, 64px) !important;
+	font-family: $cd-serif !important;
+	font-size: clamp(26px, 1rem + 1.6vw, 42px) !important;
+	line-height: 1.2 !important;
+	letter-spacing: -0.02em;
+	color: $cd-ink;
+}
+
+.wcblr-cd-index {
+	display: grid !important;
+	grid-template-columns: repeat(6, minmax(0, 1fr));
+	gap: 8px;
+	margin-top: 28px !important;
+
+	a {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding: 14px;
+		border-radius: 16px;
+		background: $cd-paper;
+		box-shadow: inset 0 0 0 1px $cd-line;
+		font-size: 14.5px;
+		font-weight: 600;
+		line-height: 1.3;
+		transition: transform 0.35s $cd-spring, background 0.2s $cd-ease;
+
+		&:hover { transform: translateY(-3px); background: #fff; }
+	}
+
+	b { font-family: $cd-mono; font-size: 11px; color: $cd-red; }
+}
+
+/* ---- 2. 01 What it is: run sheet ------------------------------------------------------ */
+
+.wcblr-cd-what {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+	gap: clamp(28px, 4vw, 72px);
+	align-items: start;
+}
+
+.wcblr-cd-need {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 22px !important;
+
+	span {
+		flex: 1 1 220px;
+		padding: 14px 16px;
+		border-radius: 16px;
+		background: $cd-paper;
+		box-shadow: inset 0 0 0 1px $cd-line;
+		font-size: 14.5px;
+		line-height: 1.45;
+		color: $cd-soft;
+	}
+
+	b { display: block; margin-bottom: 4px; font-family: $cd-serif; font-size: 24px; font-weight: 400; color: $cd-ink; }
+}
+
+.wcblr-cd-run {
+	display: flex !important;
+	flex-direction: column;
+	padding: 8px 22px 14px;
+	border-radius: 24px;
+	background: $cd-paper;
+	box-shadow: inset 0 0 0 1px $cd-line;
+}
+
+.wcblr-cd-run-h {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	padding: 14px 0;
+	border-bottom: 2px solid $cd-ink;
+
+	b { font-size: 15px; font-weight: 800; }
+	small { font-family: $cd-mono; font-size: 11px; color: $cd-muted; }
+}
+
+.wcblr-cd-slot {
+	display: grid;
+	grid-template-columns: 58px minmax(0, 1fr);
+	column-gap: 14px;
+	padding: 12px 0;
+	border-bottom: 1px solid $cd-line;
+
+	&:last-child { border-bottom: 0; }
+
+	time { grid-row: span 2; font-family: $cd-mono; font-size: 13px; font-weight: 600; color: $cd-red; padding-top: 2px; }
+	b { font-size: 15.5px; font-weight: 700; }
+	small { margin-top: 2px; font-size: 14px; line-height: 1.45; color: $cd-soft; }
+}
+
+.wcblr-cd-slot.is-work {
+	margin: 4px -12px;
+	padding: 14px 12px;
+	border-radius: 14px;
+	border-bottom: 0;
+	background: $cd-ink;
+	color: $cd-paper;
+
+	time { color: $cd-gold; }
+	small { color: rgba(251, 248, 241, 0.75); }
+}
+
+.wcblr-cd-slot.is-close b { color: $cd-red; }
+
+/* ---- 3. 02 Six route cards ------------------------------------------------------------ */
+
+.wcblr-cd-tables {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 16px;
+}
+
+.wcblr-cd-table {
+	display: flex !important;
+	flex-direction: column;
+	border-radius: 24px;
+	overflow: hidden;
+	background: $cd-paper;
+	box-shadow: inset 0 0 0 1px $cd-line;
+	transition: transform 0.4s $cd-spring, box-shadow 0.3s $cd-ease;
+
+	&:hover { transform: translateY(-4px); box-shadow: inset 0 0 0 1px $cd-line, $cd-shadow; }
+}
+
+.wcblr-cd-table-h {
+	display: flex !important;
+	justify-content: space-between;
+	align-items: center;
+	gap: 10px;
+	padding: 18px 20px;
+
+	b { font-family: $cd-serif; font-size: 28px; font-weight: 400; letter-spacing: -0.03em; }
+	small { padding: 5px 10px; border-radius: 999px; background: rgba(255, 255, 255, 0.2); font-family: $cd-mono; font-size: 10.5px; font-weight: 600; }
+}
+
+.wcblr-cd-route {
+	position: relative;
+	display: flex !important;
+	flex-direction: column;
+	gap: 14px;
+	padding: 20px 20px 4px 46px;
+
+	// the line the work travels down
+	&::before {
+		content: "";
+		position: absolute;
+		left: 25px;
+		top: 26px;
+		bottom: 18px;
+		width: 2px;
+		background: $cd-line;
+	}
+
+	> span { position: relative; display: flex; flex-direction: column; gap: 3px; }
+
+	> span::before {
+		content: "";
+		position: absolute;
+		left: -27px;
+		top: 3px;
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		background: $cd-paper;
+		box-shadow: inset 0 0 0 2px $cd-muted;
+	}
+
+	> span.is-name::before { box-shadow: none; }
+
+	b { font-family: $cd-mono; font-size: 10.5px; font-weight: 600; letter-spacing: 0.04em; color: $cd-muted; text-transform: uppercase; }
+	> span > span { font-size: 15px; line-height: 1.5; color: $cd-ink; }
+}
+
+.wcblr-cd-bring {
+	display: flex !important;
+	flex-direction: column;
+	gap: 3px;
+	margin: 14px 20px 0 !important;
+	padding: 12px 14px;
+	border-radius: 14px;
+	background: $cd-cream;
+	font-size: 13.5px !important;
+	line-height: 1.45 !important;
+	color: $cd-soft;
+
+	b { font-family: $cd-mono; font-size: 10.5px; font-weight: 600; color: $cd-ink; text-transform: uppercase; }
+}
+
+.wcblr-cd-badge {
+	display: flex !important;
+	align-items: center;
+	gap: 12px;
+	margin-top: auto !important;
+	padding: 16px 20px;
+	border-top: 1px dashed $cd-line;
+
+	i {
+		flex: 0 0 auto;
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.55);
+
+		&::after { content: "\2605"; display: block; font-style: normal; font-size: 17px; line-height: 40px; text-align: center; }
+	}
+
+	i.is-none { background: $cd-sand !important; box-shadow: none; }
+	i.is-none::after { content: "\2026"; color: $cd-muted; }
+
+	span { display: flex; flex-direction: column; }
+	small { font-family: $cd-mono; font-size: 10.5px; color: $cd-muted; }
+	b { font-size: 15px; font-weight: 700; }
+}
+
+.wcblr-cd-table .wcblr-cd-badge { margin-top: auto !important; padding-top: 16px; }
+.wcblr-cd-table .wcblr-cd-route { padding-bottom: 18px; }
+
+@each $t, $c in $cd-tables {
+	.wcblr-cd-table.is-#{$t} .wcblr-cd-table-h { background: nth($c, 1); color: nth($c, 2); }
+	.wcblr-cd-table.is-#{$t} .wcblr-cd-route > span.is-name::before { background: nth($c, 1); }
+	.wcblr-cd-table.is-#{$t} .wcblr-cd-badge i { background: nth($c, 1); color: nth($c, 2); }
+	.wcblr-cd-medals .is-#{$t} i { background: nth($c, 1); color: nth($c, 2); }
+}
+
+.wcblr-cd-table.is-community .wcblr-cd-table-h small { background: rgba(42, 29, 20, 0.12); }
+
+.wcblr-cd-after {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+	gap: 16px;
+	margin-top: 16px !important;
+}
+
+.wcblr-cd-badges,
+.wcblr-cd-review {
+	padding: clamp(20px, 2.4vw, 32px);
+	border-radius: 24px;
+	background: $cd-paper;
+	box-shadow: inset 0 0 0 1px $cd-line;
+}
+
+.wcblr-cd-review { background: $cd-sand; box-shadow: none; }
+
+.wcblr-cd-medals {
+	display: grid !important;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 12px;
+	margin-top: 18px !important;
+
+	span { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+
+	i {
+		width: 64px;
+		height: 64px;
+		border-radius: 50%;
+		box-shadow: 0 0 0 4px $cd-paper, 0 0 0 5px $cd-line;
+		transition: transform 0.5s $cd-spring;
+
+		&::after { content: "\2605"; display: block; font-style: normal; font-size: 26px; line-height: 64px; }
+	}
+
+	span:hover i { transform: rotate(-12deg) scale(1.06); }
+	b { margin-top: 6px; font-size: 14.5px; font-weight: 700; line-height: 1.25; }
+	small { font-family: $cd-mono; font-size: 10.5px; color: $cd-muted; }
+}
+
+/* ---- 4. 03 Release track -------------------------------------------------------------- */
+
+.wcblr-cd-track {
+	position: relative;
+	display: grid !important;
+	// 17 Nov to 21 Nov is 4 days, 21 Nov to 8 Dec is 17: the stops sit on that scale
+	grid-template-columns: 4fr 17fr 0fr;
+	margin-bottom: clamp(28px, 3vw, 44px) !important;
+	padding: 34px 0 0;
+}
+
+.wcblr-cd-line {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 40px;
+	height: 4px;
+	border-radius: 4px;
+	background: $cd-line;
+
+	i { position: absolute; left: 0; top: 0; bottom: 0; width: 19%; border-radius: 4px; background: $cd-red; }
+}
+
+.wcblr-cd-stop {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	padding-top: 30px;
+	min-width: 0;
+
+	&::before {
+		content: "";
+		position: absolute;
+		left: 0;
+		top: -1px;
+		width: 16px;
+		height: 16px;
+		border-radius: 50%;
+		background: $cd-paper;
+		box-shadow: inset 0 0 0 3px $cd-ink;
+	}
+
+	time { font-family: $cd-mono; font-size: 12px; font-weight: 600; color: $cd-red; }
+	b { font-size: 16px; font-weight: 700; }
+	small { max-width: 22ch; font-size: 14px; line-height: 1.4; color: $cd-soft; }
+}
+
+.wcblr-cd-stop.is-day {
+	&::before { left: -6px; top: -7px; width: 28px; height: 28px; background: $cd-red; box-shadow: 0 0 0 6px rgba(200, 52, 75, 0.18); }
+	b { color: $cd-red; }
+}
+
+.wcblr-cd-stop.is-ship {
+	align-items: flex-end;
+	text-align: right;
+	width: max-content;
+	justify-self: end;
+	margin-left: -220px;
+
+	&::before { left: auto; right: 0; background: $cd-green; box-shadow: none; }
+	small { margin-left: auto; }
+}
+
+.wcblr-cd-ships {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+	gap: clamp(24px, 4vw, 64px);
+	align-items: start;
+}
+
+.wcblr-cd-ships-main > .wcblr-cd-body:first-child { margin-top: 0 !important; }
+
+.wcblr-cd-kn {
+	padding: clamp(20px, 2.4vw, 30px);
+	border-radius: 24px;
+	background: $cd-espresso;
+	color: $cd-paper;
+
+	.wcblr-cd-k.is-gold { color: $cd-gold; }
+	.wcblr-cd-small { color: rgba(251, 248, 241, 0.7); }
+}
+
+.wcblr-cd-kn-n {
+	display: flex !important;
+	align-items: baseline;
+	flex-wrap: wrap;
+	gap: 6px 14px;
+	margin-top: 10px !important;
+
+	b { font-family: $cd-serif; font-size: 76px; font-weight: 400; line-height: 1; letter-spacing: -0.05em; color: $cd-gold; }
+	span { font-size: 15px; color: rgba(251, 248, 241, 0.85); }
+}
+
+.wcblr-cd-meter {
+	height: 10px;
+	margin-top: 16px !important;
+	border-radius: 10px;
+	background: rgba(251, 248, 241, 0.15);
+	overflow: hidden;
+
+	i { display: block; width: 95%; height: 100%; border-radius: 10px; background: $cd-gold; }
+}
+
+/* ---- 5. 04 It starts small ------------------------------------------------------------- */
+
+.wcblr-cd-facts {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 16px;
+
+	> span {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding: clamp(20px, 2.2vw, 28px);
+		border-radius: 22px;
+		background: $cd-paper;
+		box-shadow: inset 0 0 0 1px $cd-line;
+	}
+
+	strong { font-family: $cd-serif; font-size: clamp(48px, 1.4rem + 2.6vw, 72px); font-weight: 400; line-height: 1; letter-spacing: -0.05em; color: $cd-red; }
+	> span > span { font-size: 15px; line-height: 1.5; color: $cd-soft; }
+}
+
+.wcblr-cd-stories {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 16px;
+	margin-top: 16px !important;
+}
+
+.wcblr-cd-story {
+	padding: clamp(20px, 2.4vw, 32px);
+	border-radius: 24px;
+	background: $cd-sand;
+
+	.wcblr-cd-body { margin-top: 16px !important; color: $cd-ink; }
+}
+
+.wcblr-cd-years {
+	display: flex !important;
+	align-items: center;
+	gap: 12px;
+
+	b { font-family: $cd-mono; font-size: 15px; font-weight: 700; }
+	i { flex: 1 1 auto; height: 2px; background: $cd-ink; position: relative; }
+	i::after { content: "\2192"; position: absolute; right: -4px; top: -11px; font-style: normal; font-size: 16px; }
+	b:last-child { padding: 4px 10px; border-radius: 999px; background: $cd-ink; color: $cd-paper; }
+}
+
+.wcblr-cd-jump-bar {
+	position: relative;
+	display: block;
+	height: 12px;
+	border-radius: 12px;
+	background: rgba(42, 29, 20, 0.12);
+	overflow: hidden;
+
+	b { position: absolute; left: 0; top: 0; bottom: 0; width: 82%; border-radius: 12px; background: $cd-gold; }
+	i { position: absolute; left: 0; top: 0; bottom: 0; width: 31%; border-radius: 12px; background: $cd-red; z-index: 1; }
+}
+
+.wcblr-cd-jump-n {
+	display: flex;
+	align-items: baseline;
+	gap: 10px;
+	margin-top: 12px;
+
+	b { font-family: $cd-serif; font-size: 34px; font-weight: 400; color: $cd-red; }
+	em { color: $cd-muted; font-style: normal; }
+	strong { font-family: $cd-serif; font-size: 34px; font-weight: 400; color: $cd-gold-deep; }
+}
+
+.wcblr-cd-pull {
+	max-width: 30ch !important;
+	margin: clamp(32px, 3.4vw, 52px) auto 0 !important;
+	font-family: $cd-serif !important;
+	font-size: clamp(26px, 1rem + 1.6vw, 42px) !important;
+	font-style: italic;
+	line-height: 1.2 !important;
+	text-align: center;
+	color: $cd-ink;
+}
+
+/* ---- 6. 05 Three moves ----------------------------------------------------------------- */
+
+.wcblr-cd-moves {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 16px;
+
+	> span {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding: clamp(20px, 2.2vw, 28px);
+		border-radius: 22px;
+		background: $cd-paper;
+		box-shadow: inset 0 0 0 1px $cd-line;
+	}
+
+	b {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 44px;
+		height: 44px;
+		border-radius: 14px;
+		background: $cd-ink;
+		color: $cd-gold;
+		font-family: $cd-mono;
+		font-size: 14px;
+	}
+
+	strong { font-family: $cd-serif; font-size: 26px; font-weight: 400; line-height: 1.15; letter-spacing: -0.02em; }
+	> span > span { font-size: 15px; line-height: 1.6; color: $cd-soft; }
+}
+
+.wcblr-cd-ai {
+	display: flex !important;
+	gap: 8px 18px;
+	flex-wrap: wrap;
+	margin-top: 16px !important;
+	padding: 16px 20px;
+	border-radius: 18px;
+	box-shadow: inset 0 0 0 1.5px $cd-ink;
+	font-size: 15px !important;
+	line-height: 1.55 !important;
+
+	b { font-family: $cd-mono; font-size: 11.5px; font-weight: 600; color: $cd-red; padding-top: 2px; }
+	span { flex: 1 1 320px; color: $cd-ink; }
+}
+
+/* ---- 7. 06 Seat steps, next cards, close ------------------------------------------------ */
+
+.wcblr-cd-steps {
+	display: grid !important;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 12px;
+	counter-reset: none;
+
+	> span {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		padding: 20px;
+		border-radius: 20px;
+		background: $cd-paper;
+		box-shadow: inset 0 0 0 1px $cd-line;
+	}
+
+	> span:not(:last-child)::after {
+		content: "\2192";
+		position: absolute;
+		right: -13px;
+		top: 22px;
+		z-index: 1;
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		background: $cd-cream;
+		font-size: 14px;
+		line-height: 26px;
+		text-align: center;
+		color: $cd-red;
+	}
+
+	b { font-family: $cd-serif; font-size: 40px; font-weight: 400; line-height: 1; color: $cd-red; }
+	strong { margin-top: 6px; font-size: 16.5px; font-weight: 700; }
+	small { font-size: 14px; line-height: 1.5; color: $cd-soft; }
+	> span:last-child { background: $cd-ink; color: $cd-paper; box-shadow: none; }
+	> span:last-child b { color: $cd-gold; }
+	> span:last-child small { color: rgba(251, 248, 241, 0.75); }
+}
+
+.wcblr-cd-next {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 16px;
+	margin-top: 16px !important;
+}
+
+.wcblr-cd-next-c {
+	padding: clamp(20px, 2.2vw, 28px);
+	border-radius: 22px;
+	background: $cd-sand;
+
+	.wcblr-cd-body { margin-top: 10px !important; color: $cd-ink; font-size: 16px !important; }
+}
+
+.wcblr-cd-close {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+	gap: clamp(28px, 4vw, 64px);
+	align-items: center;
+	padding: clamp(28px, 4.4vw, 72px);
+	border-radius: 32px;
+	background: $cd-espresso;
+	color: $cd-paper;
+
+	.wcblr-cd-k.is-gold { color: $cd-gold; }
+	em { color: $cd-gold; }
+}
+
+.wcblr-post.wcblr-cd .wcblr-cd-close-t {
+	margin-top: 14px !important;
+	font-family: $cd-serif !important;
+	font-size: clamp(38px, 1rem + 3.4vw, 72px) !important;
+	font-weight: 400 !important;
+	line-height: 1.03 !important;
+	letter-spacing: -0.045em !important;
+	color: $cd-paper;
+	text-wrap: balance;
+}
+
+.wcblr-cd-close-b {
+	max-width: 52ch !important;
+	margin-top: 16px !important;
+	font-size: 17px !important;
+	line-height: 1.65 !important;
+	color: rgba(251, 248, 241, 0.82);
+
+	strong { color: $cd-gold; }
+}
+
+.wcblr-cd-gets {
+	display: flex !important;
+	flex-direction: column;
+	gap: 12px;
+	padding: 24px;
+	border-radius: 22px;
+	background: $cd-paper;
+	color: $cd-ink;
+
+	> span:not(.wcblr-cd-gets-h) { display: grid; grid-template-columns: 22px minmax(0, 1fr); column-gap: 10px; }
+
+	i {
+		grid-row: span 2;
+		width: 20px;
+		height: 20px;
+		margin-top: 1px;
+		border-radius: 50%;
+		background: $cd-green;
+
+		&::after { content: "\2713"; display: block; color: #fff; font-size: 11px; font-style: normal; font-weight: 700; line-height: 20px; text-align: center; }
+	}
+
+	b { font-size: 15px; font-weight: 700; line-height: 1.35; }
+	small { font-size: 13.5px; line-height: 1.4; color: $cd-soft; }
+}
+
+.wcblr-cd-gets-h {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 12px;
+	padding-bottom: 14px;
+	margin-bottom: 4px;
+	border-bottom: 2px dashed $cd-line;
+
+	b { font-family: $cd-serif; font-size: 52px !important; font-weight: 400 !important; line-height: 1 !important; letter-spacing: -0.04em; color: $cd-red; }
+	small { font-family: $cd-mono; font-size: 11.5px !important; font-weight: 600; color: $cd-muted !important; }
+}
+
+/* ---- Motion: the first screen only --------------------------------------------------- */
+
+@keyframes wcblr-cd-rise {
+	from { opacity: 0; transform: translateY(14px); }
+	to { opacity: 1; transform: none; }
+}
+
+@keyframes wcblr-cd-blink {
+	50% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-cd-hero-main > * { animation: wcblr-cd-rise 0.7s $cd-ease backwards; }
+	.wcblr-cd-hero-main > :nth-child(2) { animation-delay: 0.06s; }
+	.wcblr-cd-hero-main > :nth-child(3) { animation-delay: 0.14s; }
+	.wcblr-cd-hero-main > :nth-child(4) { animation-delay: 0.2s; }
+	.wcblr-cd-hero-main > :nth-child(5) { animation-delay: 0.26s; }
+	.wcblr-cd-screen { animation: wcblr-cd-rise 0.8s $cd-ease 0.1s backwards; }
+	.wcblr-cd-stat { animation: wcblr-cd-rise 0.6s $cd-ease backwards; }
+	.wcblr-cd-stat:nth-child(3) { animation-delay: 0.35s; }
+	.wcblr-cd-stat:nth-child(4) { animation-delay: 0.45s; }
+	.wcblr-cd-stat:nth-child(5) { animation-delay: 0.55s; }
+	.wcblr-cd-you { animation: wcblr-cd-rise 0.6s $cd-spring 0.75s backwards; }
+	.wcblr-cd-caret { animation: wcblr-cd-blink 1.1s steps(1) infinite; }
+}
+
+/* ---- Breakpoints ---------------------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+	.wcblr-cd-hero,
+	.wcblr-cd-what,
+	.wcblr-cd-ships,
+	.wcblr-cd-close { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-cd-screen { max-width: 640px; }
+	.wcblr-cd-index { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+	.wcblr-cd-tables { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.wcblr-cd-after { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-cd-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.wcblr-cd-steps > span:nth-child(2)::after { display: none; }
+	.wcblr-cd-gets { max-width: 460px; }
+}
+
+@media (max-width: 760px) {
+	.wcblr-cd-tables,
+	.wcblr-cd-facts,
+	.wcblr-cd-stories,
+	.wcblr-cd-moves,
+	.wcblr-cd-next { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-cd-medals { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 20px; }
+
+	// the release track turns vertical on phones
+	.wcblr-cd-track { display: flex !important; flex-direction: column; gap: 22px; padding: 0 0 0 30px; }
+	.wcblr-cd-line { left: 7px; right: auto; top: 6px; bottom: 6px; width: 3px; height: auto; }
+	.wcblr-cd-line i { width: 100%; height: 22%; bottom: auto; }
+	.wcblr-cd-stop { padding-top: 0; }
+	.wcblr-cd-stop::before { left: -30px; top: 2px; }
+	.wcblr-cd-stop.is-day::before { left: -36px; top: -4px; }
+	.wcblr-cd-stop.is-ship { align-items: flex-start; text-align: left; width: auto; margin-left: 0; justify-self: auto; }
+	.wcblr-cd-stop.is-ship::before { left: -30px; right: auto; }
+	.wcblr-cd-stop.is-ship small { margin-left: 0; }
+}
+
+@media (max-width: 640px) {
+	.wcblr-cd-actions .wp-block-button { flex: 1 1 auto; }
+	.wcblr-cd-actions .wp-block-button__link { width: 100%; justify-content: center; }
+	.wcblr-cd-index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.wcblr-cd-stat,
+	.wcblr-cd-you { grid-template-columns: 78px minmax(0, 1fr); gap: 12px; padding: 14px 16px; }
+	.wcblr-cd-stat strong,
+	.wcblr-cd-you strong { font-size: 30px; }
+	.wcblr-cd-steps { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-cd-steps > span::after { display: none; }
+	.wcblr-cd-close { padding: 26px 20px; border-radius: 24px; }
+}
