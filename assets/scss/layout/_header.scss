@@ -1,4 +1,10 @@
 /* ---- Header -------------------------------------------------------------- */
+/* Where the menu goes behind its button. The desktop dropdown rules sit above
+   it and the stacked overlay rules below it; layout/_chrome-next.scss reads the
+   same value for the one-row bar. It was core's 600px until 6 Nov 2026, which
+   left 600 to 1,280px with a desktop row that did not fit. */
+$wcblr-nav-collapse: 1279px;
+
 .wcblr-header {
 	position: sticky;
 	top: 0;
@@ -12,7 +18,7 @@
 	}
 
 	/* ---- Nav submenu (desktop dropdown only) --------------------------- */
-	@media (min-width: 601px) {
+	@media (min-width: #{$wcblr-nav-collapse + 1}) {
 		.wp-block-navigation-item {
 			position: relative;
 		}
@@ -105,7 +111,7 @@
 	}
 
 	/* ---- Nav submenu (mobile overlay reset) ---------------------------- */
-	@media (max-width: 600px) {
+	@media (max-width: $wcblr-nav-collapse) {
 		/* Keep logo lockup visible above the full-screen nav overlay */
 		&:has(.wp-block-navigation__responsive-container.is-menu-open)
 			> .wp-block-group
@@ -510,7 +516,7 @@
 	   leading, so every item in the stacked menu keeps the same left edge.
 	   Must come after the base rules above: same specificity, so source
 	   order is what wins. */
-	@media (max-width: 600px) {
+	@media (max-width: $wcblr-nav-collapse) {
 		li.wcblr-nav-cta::before {
 			content: none;
 		}

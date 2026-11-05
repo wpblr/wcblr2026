@@ -25,6 +25,13 @@ $ch-cream: #f2ece0;
 $ch-paper: #fbf8f1;
 $ch-edge: clamp(10px, 1.2vw, 18px);
 $ch-strip: 37px;
+/* Below this width the header is the one-row phone bar with the menu behind
+   the button. It was 781px, the admin bar's breakpoint, but core's navigation
+   only collapses below 600px and the full desktop row needs about 1,280px:
+   from 600 to 781 the bar showed the menu button and the whole menu at once,
+   running off the right edge, and from 782 to ~1,280 the desktop row spilled
+   out of the pill (6 Nov 2026). */
+$ch-collapse: $wcblr-nav-collapse; /* set in layout/_header.scss */
 $ch-serif: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif;
 
 /* ---- Header -------------------------------------------------------------- */
@@ -113,7 +120,7 @@ body.admin-bar .wp-site-blocks > header.wp-block-template-part {
 	overflow: hidden;
 }
 
-@media (max-width: 781px) {
+@media (max-width: #{$ch-collapse}) {
 	.wcblr-header {
 		width: calc(100% - 2 * #{$ch-edge}) !important;
 		border-radius: 22px;
@@ -302,7 +309,7 @@ body.home .wcblr-home-sec.wcblr-newsletter {
    holding a third of a phone's first screen. One row now: logo and a short
    title, then the ticket button, WhatsApp and the menu, all at 40px. The
    Kannada line drops here only; the hero carries it a line below. */
-@media (max-width: 781px) {
+@media (max-width: #{$ch-collapse}) {
 	.wcblr-header {
 		width: calc(100vw - 2 * #{$ch-edge}) !important;
 		margin-left: calc(50% - 50vw + #{$ch-edge}) !important;
@@ -386,7 +393,7 @@ body.home .wcblr-home-sec.wcblr-newsletter {
 /* On a phone the title reads #WCBLR: the full name truncated to
    "WordCamp Benga..." (19 Oct). The link keeps its accessible name; the
    visible text swaps in through ::after. */
-@media (max-width: 781px) {
+@media (max-width: #{$ch-collapse}) {
 	.wcblr-header .wp-block-site-title a {
 		font-size: 0 !important;
 	}
@@ -401,7 +408,7 @@ body.home .wcblr-home-sec.wcblr-newsletter {
 	}
 }
 
-@media (max-width: 781px) {
+@media (max-width: #{$ch-collapse}) {
 	/* The right-hand group took the full row and squeezed the lockup to
 	   nothing; it takes only what it needs now. */
 	.wcblr-header .wcblr-header_right {
@@ -450,7 +457,7 @@ body.home .wcblr-home-sec.wcblr-newsletter {
    navigation expands". Closed: no command strip, the bar alone at the top.
    Open: a full-screen espresso sheet, the top links in the serif at display
    size, each submenu a gold mono label over its links, no rules, no boxes. */
-@media (max-width: 781px) {
+@media (max-width: #{$ch-collapse}) {
 	.wp-site-blocks > header.wp-block-template-part .wcblr-strip {
 		display: none !important;
 	}
@@ -611,7 +618,7 @@ body.home .wcblr-home-sec.wcblr-newsletter {
 /* Stronger selectors for three things core and _header.scss hold on to in
    the open phone sheet: the chevron buttons, the submenu's 16px left padding
    and the links' 12px. */
-@media (max-width: 781px) {
+@media (max-width: #{$ch-collapse}) {
 	.wcblr-header .wp-block-navigation__responsive-container.is-menu-open .has-child > button.wp-block-navigation__submenu-icon {
 		display: none !important;
 	}
@@ -634,7 +641,7 @@ body.home .wcblr-home-sec.wcblr-newsletter {
    right. The open sheet uses one family, Hanken Grotesk, at two sizes, with
    the group labels in small gold capitals ("the fonts ... need to be
    proper"). Everything here overrides the earlier phone rules above it. */
-@media (max-width: 781px) {
+@media (max-width: #{$ch-collapse}) {
 	.wcblr-header {
 		width: 100vw !important;
 		margin: 0 0 0 calc(50% - 50vw) !important;
@@ -729,9 +736,32 @@ body.home .wcblr-home-sec.wcblr-newsletter {
 	}
 }
 
-@media (max-width: 781px) {
+@media (max-width: #{$ch-collapse}) {
 	/* Fully solid: at 98% the copy scrolling under it showed through. */
 	.wcblr-header:not(:has(.is-menu-open)) {
 		background: #fbf8f1 !important;
+	}
+}
+
+/* ---- Collapsed bar on tablets and small laptops (6 Nov 2026) ---------------
+   With $ch-collapse above core's 600px, core still renders the menu inline
+   between 600px and the collapse width, and _header.scss stacks the bar into
+   a column below 1,040px. Keep it one row, and keep the menu behind its
+   button until it is opened. */
+@media (max-width: #{$ch-collapse}) {
+	.wcblr-header > .wp-block-group {
+		flex-direction: row !important;
+	}
+
+	.wcblr-header .wp-block-navigation__responsive-container:not(.is-menu-open) {
+		display: none !important;
+	}
+}
+
+/* The phone rules pin the bar under a 46px admin bar; from 782px WordPress's
+   admin bar is 32px. Logged-in organisers only. */
+@media (min-width: 782px) and (max-width: #{$ch-collapse}) {
+	body.admin-bar .wp-site-blocks > header.wp-block-template-part {
+		top: 32px;
 	}
 }
