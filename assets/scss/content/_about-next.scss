@@ -120,6 +120,8 @@ body:has(.wcblr-ab) main::after {
 .wcblr-ab-actions .is-ghost .wp-block-button__link { background: transparent !important; color: $ab-ink !important; box-shadow: inset 0 0 0 1.5px rgba(42, 29, 20, 0.3); }
 .wcblr-ab-actions .is-ghost .wp-block-button__link:hover { box-shadow: inset 0 0 0 1.5px $ab-ink; }
 .wcblr-ab-actions .is-gold .wp-block-button__link { background: $ab-gold !important; color: $ab-espresso !important; }
+.wcblr-ab-actions.is-dark .is-ghost .wp-block-button__link { color: $ab-cream !important; box-shadow: inset 0 0 0 1.5px rgba(242, 236, 224, 0.35); }
+.wcblr-ab-actions.is-dark .is-ghost .wp-block-button__link:hover { box-shadow: inset 0 0 0 1.5px $ab-cream; }
 .wcblr-ab-actions .is-whatsapp .wp-block-button__link { background: $ab-teal !important; color: #fff !important; }
 .wcblr-ab-actions .is-whatsapp .wp-block-button__link:hover { background: $ab-green !important; }
 
