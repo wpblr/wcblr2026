@@ -1,13 +1,12 @@
 /* ==== Volunteers page, next (9 Nov 2026) =============================================
-   THE IDEA
-   The crew pass. Every volunteer is a lanyard badge whose top strip carries their
-   crew's colour; badges are grouped into the seven crews. The hero fans three real
-   badges beside the title, a shift board lists the crews with their days and jumps to
-   each, and a dark thank-you band closes it. A badge swings on its lanyard on hover.
+   THE IDEA (revised 9 Nov evening: a plain listing)
+   A wall of identical lanyard badges, A to Z: no teams, no roles, no counts. The
+   hero is the title over two slow ribbons of everyone's first names running in
+   opposite directions, so the whole crew is up top and nobody is featured. A badge
+   swings on its lanyard on hover. A light thank-you closes it.
 
    THE SHAPE
-   Dark hero (title + stats | badge fan) · shift board (seven rows) · seven crew
-   sections (number, name, days | badge grid) · dark close with a big count.
+   Dark hero (title, lede | two name ribbons) · badge grid · light close.
 
    Scoped to .wcblr-vx. No custom properties, no url(), no place-items, no
    background-image: the Remote CSS sanitiser drops all four. `>` inside :has().
@@ -34,15 +33,14 @@ $vx-gutter: clamp(16px, 5vw, 96px);
 $vx-pad: max(#{$vx-gutter}, calc((100vw - #{$vx-frame}) / 2));
 $vx-sec: clamp(64px, 1.5rem + 5vw, 120px);
 
-// crew: [solid, text on the strip, soft tint]
-$vx-crews: (
-	"desk": ($vx-red, #fff, #f6dde1),
-	"stage": ($vx-gold, $vx-ink, #f6e7c2),
-	"cday": (#136451, #fff, #dcebe3),
-	"stories": (#6b3fa0, #fff, #e7def2),
-	"expo": (#2f7d9a, #fff, #d9eaf0),
-	"studio": ($vx-ink, $vx-gold, #e8dfcf),
-	"dining": (#c8641e, #fff, #f6e0cf),
+// badge strip tones, used in turn (decorative only): [strip, text on the strip]
+$vx-tones: (
+	"red": ($vx-red, #fff),
+	"gold": ($vx-gold, $vx-ink),
+	"green": (#136451, #fff),
+	"purple": (#6b3fa0, #fff),
+	"sky": (#2f7d9a, #fff),
+	"saffron": (#c8641e, #fff),
 );
 
 /* ---- The ground ---------------------------------------------------------------------- */
@@ -146,40 +144,27 @@ body:has(.wcblr-vx) .wp-site-blocks > main { padding-top: clamp(12px, 2vw, 28px)
 
 .wcblr-vx-hero {
 	position: relative;
-	display: grid !important;
-	grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-	gap: clamp(32px, 4vw, 72px);
-	align-items: center;
-	padding: clamp(40px, 1rem + 4vw, 88px) clamp(24px, 1rem + 3.5vw, 80px) !important;
+	padding: clamp(40px, 1rem + 4vw, 88px) 0 clamp(28px, 3vw, 44px) !important;
 	border-radius: 28px;
 	background-color: $vx-espresso;
 	color: $vx-cream;
 	overflow: hidden;
 	isolation: isolate;
 
-	// two soft glows, gradients only (background-image is stripped, background is not)
 	&::before {
 		content: "";
 		position: absolute;
-		inset: -30% -10% auto auto;
-		width: 70%;
-		aspect-ratio: 1;
-		background: radial-gradient(closest-side, rgba(224, 165, 38, 0.22), rgba(224, 165, 38, 0));
-		z-index: -1;
-	}
-
-	&::after {
-		content: "";
-		position: absolute;
-		inset: auto auto -40% -15%;
+		inset: -40% -10% auto auto;
 		width: 60%;
 		aspect-ratio: 1;
-		background: radial-gradient(closest-side, rgba(200, 52, 75, 0.2), rgba(200, 52, 75, 0));
+		background: radial-gradient(closest-side, rgba(224, 165, 38, 0.2), rgba(224, 165, 38, 0));
 		z-index: -1;
 	}
 
 	.wcblr-vx-k { color: $vx-gold; }
 }
+
+.wcblr-vx-herocopy { padding: 0 clamp(24px, 1rem + 3.5vw, 80px) !important; }
 
 .wcblr-post.wcblr-vx .wcblr-vx-title {
 	font-family: $vx-serif !important;
@@ -194,110 +179,71 @@ body:has(.wcblr-vx) .wp-site-blocks > main { padding-top: clamp(12px, 2vw, 28px)
 
 .wcblr-vx-lede {
 	margin-top: 22px !important;
-	max-width: 46ch !important;
+	max-width: 52ch !important;
 	font-size: clamp(16px, 0.9rem + 0.35vw, 19px) !important;
 	line-height: 1.6 !important;
 	color: #cfc6b8;
 }
 
-.wcblr-vx-stats {
+/* the name ribbons */
+.wcblr-vx-ribbons {
+	display: flex !important;
+	flex-direction: column;
+	gap: 6px;
+	margin-top: clamp(36px, 4vw, 64px) !important;
+	padding: 14px 0 !important;
+	border-top: 1px solid rgba(242, 236, 224, 0.12);
+	border-bottom: 1px solid rgba(242, 236, 224, 0.12);
+	overflow: hidden;
+}
+
+.wcblr-vx-ribbon {
+	display: flex !important;
+	width: max-content;
+	white-space: nowrap;
+	animation: wcblr-vx-slide 70s linear infinite;
+
+	&.is-b { animation-direction: reverse; animation-duration: 80s; }
+	&.is-b .wcblr-vx-run span { color: $vx-gold; }
+}
+
+.wcblr-vx-run {
 	display: flex;
-	flex-wrap: wrap;
-	gap: 10px;
-	margin-top: 28px !important;
 
 	span {
 		display: inline-flex;
-		align-items: baseline;
-		gap: 8px;
-		padding: 9px 16px 9px 12px;
-		border-radius: 999px;
-		background: rgba(242, 236, 224, 0.08);
-		box-shadow: inset 0 0 0 1px rgba(242, 236, 224, 0.12);
-		font-size: 13.5px;
-		line-height: 1.3;
-		color: #cfc6b8;
-	}
-
-	b {
+		align-items: center;
 		font-family: $vx-serif;
-		font-size: 22px;
-		font-weight: 500;
+		font-size: clamp(26px, 1rem + 1.8vw, 44px);
+		font-style: italic;
+		font-weight: 300;
+		line-height: 1.25;
 		color: $vx-cream;
+
+		&::after {
+			content: "";
+			width: 8px;
+			height: 8px;
+			margin: 0 clamp(16px, 2vw, 28px);
+			border-radius: 50%;
+			background: $vx-red;
+		}
 	}
 }
 
-/* the badge fan */
-.wcblr-vx-fan {
-	position: relative;
-	height: clamp(360px, 30vw, 460px);
+@keyframes wcblr-vx-slide {
+	from { transform: translateX(0); }
+	to { transform: translateX(-50%); }
 }
 
-.wcblr-vx-fancard {
-	position: absolute !important;
-	top: 34px;
-	left: 50%;
-	width: clamp(180px, 15vw, 224px);
-	padding: 0 0 16px !important;
-	border-radius: 18px;
-	background: $vx-paper;
-	color: $vx-ink;
-	box-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.6);
-	transform-origin: 50% -34px;
-	animation: wcblr-vx-drop 0.9s $vx-spring both;
-
-	// the lanyard
-	&::before {
-		content: "";
-		position: absolute;
-		left: 50%;
-		bottom: 100%;
-		width: 14px;
-		height: 300px;
-		margin-left: -7px;
-		background: linear-gradient(90deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0) 40%), $vx-red;
-		z-index: -1;
-	}
-
-	.wcblr-vx-photo { margin: 12px 12px 0 !important; }
-	.wcblr-vx-photo img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 12px; }
-
-	&.is-n1 { transform: translateX(-128%) rotate(-10deg); animation-delay: 0.15s; z-index: 1; }
-	&.is-n2 { transform: translateX(-50%) translateY(-14px) rotate(1deg); animation-delay: 0.3s; z-index: 3; }
-	&.is-n3 { transform: translateX(28%) rotate(9deg); animation-delay: 0.45s; z-index: 2; }
-	&.is-n1::before { background: linear-gradient(90deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0) 40%), #6b3fa0; }
-	&.is-n3::before { background: linear-gradient(90deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0) 40%), #136451; }
-}
-
-.wcblr-vx-fanname {
-	padding: 12px 14px 0;
-	font-family: $vx-serif !important;
-	font-size: 19px !important;
-	line-height: 1.15 !important;
-
-	small {
-		display: block;
-		margin-top: 4px;
-		font-family: $vx-mono;
-		font-size: 10.5px;
-		letter-spacing: 0.04em;
-		color: $vx-muted;
-	}
-}
-
-@keyframes wcblr-vx-drop {
-	from { opacity: 0; translate: 0 -60px; }
-	to { opacity: 1; translate: 0 0; }
-}
-
-/* ---- The badge (shared strip) -------------------------------------------------------- */
+/* ---- The badge ----------------------------------------------------------------------- */
 
 .wcblr-vx-strip {
 	position: relative;
 	display: flex !important;
 	justify-content: space-between;
 	align-items: center;
-	height: 46px;
+	height: 44px;
 	padding: 14px 14px 0 !important;
 	border-radius: 18px 18px 0 0;
 	font-family: $vx-mono !important;
@@ -316,246 +262,27 @@ body:has(.wcblr-vx) .wp-site-blocks > main { padding-top: clamp(12px, 2vw, 28px)
 		height: 8px;
 		margin-left: -17px;
 		border-radius: 99px;
-		background: $vx-espresso;
-		box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+		background: $vx-cream;
+		box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
 	}
 
 	span { opacity: 0.75; }
 }
 
-@each $k, $c in $vx-crews {
-	.wcblr-vx .is-#{$k} .wcblr-vx-strip {
-		background: nth($c, 1);
-		color: nth($c, 2);
-	}
-}
-
-.wcblr-vx-crews .wcblr-vx-strip::before { background: $vx-cream; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35); }
-
-/* ---- Shift board --------------------------------------------------------------------- */
-
-.wcblr-vx-head {
-	display: grid !important;
-	grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
-	gap: 20px clamp(24px, 4vw, 64px);
-	align-items: end;
-	margin-bottom: clamp(28px, 3vw, 44px) !important;
-}
-
-.wcblr-vx-headp {
-	max-width: 46ch !important;
-	font-size: 16.5px !important;
-	line-height: 1.65 !important;
-	color: $vx-soft;
-}
-
-.wcblr-vx-board {
-	border-radius: 24px;
-	background: $vx-paper;
-	box-shadow: 0 1px 0 $vx-line, 0 24px 48px -32px rgba(36, 26, 18, 0.35);
-	overflow: hidden;
-}
-
-.wcblr-vx-boardtop,
-.wcblr-vx-row a {
-	display: grid !important;
-	grid-template-columns: 56px minmax(0, 1fr) 220px 92px 40px;
-	gap: 16px;
-	align-items: center;
-}
-
-.wcblr-vx-boardtop {
-	padding: 14px 24px !important;
-	background: $vx-sand;
-	font-family: $vx-mono !important;
-	font-size: 10.5px !important;
-	font-weight: 700;
-	letter-spacing: 0.12em;
-	text-transform: uppercase;
-	color: $vx-muted;
-
-	span:nth-child(1) { grid-column: 2; }
-}
-
-.wcblr-vx-row {
-	border-top: 1px solid $vx-line;
-
-	a {
-		position: relative;
-		padding: 18px 24px;
-		transition: background-color 0.2s $vx-ease;
-
-		&::before {
-			content: "";
-			position: absolute;
-			left: 0;
-			top: 0;
-			bottom: 0;
-			width: 4px;
-			transform: scaleY(0);
-			transition: transform 0.25s $vx-ease;
-		}
-
-		&:hover { background: #fff; }
-		&:hover::before { transform: scaleY(1); }
-		&:hover .wcblr-vx-ra { transform: translateY(3px); }
-	}
-}
-
-.wcblr-vx-rn {
-	font-family: $vx-serif;
-	font-size: 30px;
-	line-height: 1;
-	font-style: italic;
-}
-
-.wcblr-vx-rt b {
-	display: block;
-	font-family: $vx-serif;
-	font-size: 22px;
-	font-weight: 500;
-	line-height: 1.2;
-}
-
-.wcblr-vx-rt small {
-	display: block;
-	margin-top: 3px;
-	font-size: 14px;
-	line-height: 1.45;
-	color: $vx-muted;
-}
-
-.wcblr-vx-rd {
-	display: flex;
-	gap: 6px;
-
-	i {
-		flex: 1;
-		padding: 6px 0;
-		border-radius: 8px;
-		font-family: $vx-mono;
-		font-size: 10.5px;
-		font-style: normal;
-		font-weight: 700;
-		letter-spacing: 0.04em;
-		text-align: center;
-	}
-
-	.off { color: #c4b9aa; box-shadow: inset 0 0 0 1px $vx-line; }
-}
-
-.wcblr-vx-rc {
-	font-size: 12px;
-	color: $vx-muted;
-	text-align: right;
-
-	b {
-		display: block;
-		font-family: $vx-serif;
-		font-size: 28px;
-		font-weight: 500;
-		line-height: 1;
-		color: $vx-ink;
-	}
-}
-
-.wcblr-vx-ra {
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
-	width: 36px;
-	height: 36px;
-	border-radius: 50%;
-	background: $vx-cream;
-	transition: transform 0.25s $vx-spring;
-}
-
-@each $k, $c in $vx-crews {
-	.wcblr-vx-row.is-#{$k} {
-		.wcblr-vx-rn { color: if($k == "stage", #8f640c, nth($c, 1)); }
-		a::before { background: nth($c, 1); }
-		.on { background: nth($c, 3); color: if($k == "stage", #8f640c, if($k == "studio", $vx-ink, nth($c, 1))); }
-	}
-}
-
-/* ---- Crew sections ------------------------------------------------------------------- */
-
-.wcblr-vx-crew {
-	padding-top: clamp(48px, 1rem + 4vw, 88px);
-	scroll-margin-top: 24px;
-}
-
-.wcblr-vx-crewhead {
-	display: grid !important;
-	grid-template-columns: auto minmax(0, 1fr) auto;
-	gap: 6px clamp(16px, 2.4vw, 32px);
-	align-items: end;
-	padding-bottom: 20px !important;
-	margin-bottom: clamp(20px, 2.4vw, 32px) !important;
-	border-bottom: 2px solid $vx-ink;
-}
-
-.wcblr-vx-crewn {
-	font-family: $vx-serif !important;
-	font-size: clamp(56px, 2rem + 4vw, 112px) !important;
-	font-style: italic;
-	font-weight: 300;
-	line-height: 0.8 !important;
-	letter-spacing: -0.04em;
-}
-
-.wcblr-post.wcblr-vx .wcblr-vx-crewname {
-	font-family: $vx-serif !important;
-	font-size: clamp(30px, 1rem + 2.2vw, 46px) !important;
-	font-weight: 400 !important;
-	line-height: 1.05 !important;
-	letter-spacing: -0.015em !important;
-	color: $vx-ink;
-}
-
-.wcblr-vx-crewwhat {
-	margin-top: 6px !important;
-	max-width: 56ch !important;
-	font-size: 15.5px !important;
-	line-height: 1.55 !important;
-	color: $vx-soft;
-}
-
-.wcblr-vx-crewdays {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: flex-end;
-	gap: 6px;
-
-	span {
-		padding: 7px 12px;
-		border-radius: 999px;
-		font-family: $vx-mono;
-		font-size: 11px;
-		font-weight: 700;
-		letter-spacing: 0.04em;
-		white-space: nowrap;
-	}
-}
-
-@each $k, $c in $vx-crews {
-	.wcblr-vx-crew.is-#{$k} {
-		.wcblr-vx-crewn { color: nth($c, 1); }
-		.wcblr-vx-crewhead { border-bottom-color: nth($c, 1); }
-		.wcblr-vx-crewdays span { background: nth($c, 3); color: if($k == "stage", #8f640c, if($k == "studio", $vx-ink, nth($c, 1))); }
-	}
+@each $k, $c in $vx-tones {
+	.wcblr-vx-badge.is-#{$k} .wcblr-vx-strip { background: nth($c, 1); color: nth($c, 2); }
 }
 
 .wcblr-vx-grid {
 	display: grid !important;
-	grid-template-columns: repeat(4, minmax(0, 1fr));
+	grid-template-columns: repeat(5, minmax(0, 1fr));
 	gap: clamp(14px, 1.6vw, 24px);
 }
 
 .wcblr-vx-badge {
 	display: flex !important;
 	flex-direction: column;
-	padding-bottom: 18px !important;
+	padding-bottom: 14px !important;
 	border-radius: 18px;
 	background: $vx-paper;
 	box-shadow: 0 1px 0 $vx-line, 0 18px 36px -28px rgba(36, 26, 18, 0.45);
@@ -569,7 +296,7 @@ body:has(.wcblr-vx) .wp-site-blocks > main { padding-top: clamp(12px, 2vw, 28px)
 
 	&:nth-child(even):hover { transform: rotate(1.6deg) translateY(-4px); }
 
-	.wcblr-vx-photo { margin: 14px 14px 0 !important; }
+	.wcblr-vx-photo { margin: 12px 12px 0 !important; }
 
 	.wcblr-vx-photo img {
 		width: 100%;
@@ -581,53 +308,21 @@ body:has(.wcblr-vx) .wp-site-blocks > main { padding-top: clamp(12px, 2vw, 28px)
 }
 
 .wcblr-post.wcblr-vx .wcblr-vx-name {
-	padding: 16px 16px 0;
+	padding: 14px 14px 0;
 	font-family: $vx-serif !important;
-	font-size: 21px !important;
+	font-size: 20px !important;
 	font-weight: 500 !important;
 	line-height: 1.15 !important;
 	letter-spacing: -0.01em !important;
 	color: $vx-ink;
 }
 
-.wcblr-vx-roles {
-	display: flex !important;
-	flex-direction: column;
-	gap: 6px;
-	padding: 12px 16px 0 !important;
-
-	span {
-		display: flex;
-		justify-content: space-between;
-		align-items: baseline;
-		gap: 10px;
-		padding-bottom: 6px;
-		border-bottom: 1px dashed $vx-line;
-		font-size: 13.5px;
-		line-height: 1.35;
-		color: $vx-soft;
-	}
-
-	span:last-child { border-bottom: 0; padding-bottom: 0; }
-	i { font-style: normal; }
-
-	b {
-		flex: none;
-		font-family: $vx-mono;
-		font-size: 10px;
-		font-weight: 700;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: $vx-muted;
-	}
-}
-
 .wcblr-vx .wcblr-vx-social {
 	display: flex !important;
 	flex-wrap: wrap;
-	gap: 4px !important;
+	gap: 2px !important;
 	margin: auto 0 0 !important;
-	padding: 14px 12px 0 !important;
+	padding: 10px 8px 0 !important;
 
 	.wp-social-link {
 		margin: 0 !important;
@@ -638,11 +333,11 @@ body:has(.wcblr-vx) .wp-site-blocks > main { padding-top: clamp(12px, 2vw, 28px)
 
 	.wp-social-link:hover { transform: translateY(-2px); color: $vx-red !important; }
 	.wp-social-link a { padding: 6px !important; }
-	.wp-social-link svg { width: 20px !important; height: 20px !important; }
+	.wp-social-link svg { width: 19px !important; height: 19px !important; }
 }
 
 .wcblr-vx-more {
-	margin-top: 16px !important;
+	margin-top: 22px !important;
 	font-family: $vx-mono !important;
 	font-size: 12.5px !important;
 	letter-spacing: 0.02em;
@@ -652,16 +347,10 @@ body:has(.wcblr-vx) .wp-site-blocks > main { padding-top: clamp(12px, 2vw, 28px)
 /* ---- Close (light: the site footer below it is already dark) --------------------------- */
 
 .wcblr-vx-close {
-	position: relative;
-	display: grid !important;
-	grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
-	gap: clamp(32px, 4vw, 72px);
-	align-items: center;
 	padding: clamp(40px, 1rem + 4vw, 80px) clamp(24px, 1rem + 3.5vw, 80px) !important;
 	border-radius: 28px;
 	background: #f6e7c2;
 	color: $vx-ink;
-	overflow: hidden;
 
 	.wcblr-vx-cta .is-primary .wp-block-button__link { background: $vx-ink !important; color: $vx-cream !important; }
 	.wcblr-vx-cta .is-primary .wp-block-button__link:hover { background: $vx-red !important; }
@@ -671,104 +360,38 @@ body:has(.wcblr-vx) .wp-site-blocks > main { padding-top: clamp(12px, 2vw, 28px)
 
 .wcblr-vx-closep {
 	margin-top: 18px !important;
-	max-width: 52ch !important;
+	max-width: 56ch !important;
 	font-size: 17px !important;
 	line-height: 1.65 !important;
 	color: $vx-soft;
 }
 
-.wcblr-vx-closep + .wcblr-vx-closep { margin-top: 12px !important; }
-
-.wcblr-vx-closenum {
-	display: flex !important;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 8px;
-	padding-left: clamp(0px, 3vw, 48px) !important;
-	border-left: 1px solid rgba(42, 29, 20, 0.15);
-
-	b {
-		font-family: $vx-serif;
-		font-size: clamp(96px, 3rem + 7vw, 184px);
-		font-weight: 300;
-		font-style: italic;
-		line-height: 0.85;
-		letter-spacing: -0.05em;
-		color: $vx-red;
-	}
-
-	span {
-		font-family: $vx-mono;
-		font-size: 12px;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: $vx-muted;
-	}
-
-	span:first-of-type { font-size: 14px; color: $vx-ink; margin-bottom: 8px; }
-}
-
 /* ---- Responsive ---------------------------------------------------------------------- */
 
 @media (max-width: 1100px) {
+	.wcblr-vx-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (max-width: 860px) {
 	.wcblr-vx-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-	.wcblr-vx-boardtop, .wcblr-vx-row a { grid-template-columns: 44px minmax(0, 1fr) 180px 80px 36px; }
-}
-
-@media (max-width: 900px) {
-	.wcblr-vx-hero { grid-template-columns: 1fr; }
-	// lanyards would cross the copy above: cut them at the fan's top edge
-	.wcblr-vx-fan { height: 340px; margin-top: 8px; overflow: hidden; }
-	.wcblr-vx-fancard { width: 172px; }
-	.wcblr-vx-head, .wcblr-vx-close { grid-template-columns: 1fr; }
-	.wcblr-vx-closenum { padding-left: 0 !important; border-left: 0; padding-top: 28px !important; border-top: 1px solid rgba(42, 29, 20, 0.15); width: 100%; }
-}
-
-@media (max-width: 760px) {
-	.wcblr-vx-boardtop { display: none !important; }
-
-	.wcblr-vx-row a {
-		grid-template-columns: 40px minmax(0, 1fr) auto;
-		grid-template-areas: "n t c" "n d d";
-		gap: 10px 12px;
-		padding: 16px;
-	}
-
-	.wcblr-vx-rn { grid-area: n; font-size: 24px; }
-	.wcblr-vx-rt { grid-area: t; }
-	.wcblr-vx-rd { grid-area: d; max-width: 260px; }
-	.wcblr-vx-rc { grid-area: c; }
-	.wcblr-vx-ra { display: none; }
-	.wcblr-vx-rt b { font-size: 19px; }
-	.wcblr-vx-rt small { font-size: 13.5px; }
-
-	.wcblr-vx-crewhead { grid-template-columns: auto minmax(0, 1fr); }
-	.wcblr-vx-crewdays { grid-column: 1 / -1; justify-content: flex-start; margin-top: 8px !important; }
 }
 
 @media (max-width: 640px) {
-	.wcblr-vx-hero, .wcblr-vx-close { border-radius: 22px; padding: 36px 20px !important; }
-	.wcblr-vx-stats span { font-size: 12.5px; }
-	.wcblr-vx-stats b { font-size: 19px; }
-	.wcblr-vx-fan { height: 300px; margin-left: -8px; margin-right: -8px; }
-	.wcblr-vx-fancard { width: 146px; top: 40px; }
-	.wcblr-vx-fancard.is-n1 { transform: translateX(-118%) rotate(-9deg); }
-	.wcblr-vx-fancard.is-n3 { transform: translateX(18%) rotate(8deg); }
-	.wcblr-vx-fanname { font-size: 16px !important; padding: 10px 12px 0; }
-	.wcblr-vx-fanname small { font-size: 9.5px; }
+	.wcblr-vx-hero, .wcblr-vx-close { border-radius: 22px; }
+	.wcblr-vx-hero { padding: 36px 0 22px !important; }
+	.wcblr-vx-herocopy { padding: 0 20px !important; }
+	.wcblr-vx-close { padding: 36px 20px !important; }
 	.wcblr-vx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-	.wcblr-vx-strip { height: 40px; padding: 12px 10px 0 !important; font-size: 9px !important; letter-spacing: 0.08em; }
+	.wcblr-vx-strip { height: 38px; padding: 12px 10px 0 !important; font-size: 9px !important; letter-spacing: 0.08em; }
 	.wcblr-vx-strip::before { width: 26px; margin-left: -13px; top: 8px; height: 7px; }
-	.wcblr-vx-badge { padding-bottom: 12px !important; border-radius: 16px; }
+	.wcblr-vx-badge { padding-bottom: 10px !important; border-radius: 16px; }
 	.wcblr-vx-badge .wcblr-vx-photo { margin: 10px 10px 0 !important; }
-	.wcblr-post.wcblr-vx .wcblr-vx-name { font-size: 17px !important; padding: 12px 12px 0; }
-	.wcblr-vx-roles { padding: 8px 12px 0 !important; }
-	.wcblr-vx-roles span { flex-direction: column; gap: 2px; font-size: 12.5px; }
-	.wcblr-vx .wcblr-vx-social { padding: 10px 6px 0 !important; gap: 0 !important; }
-	.wcblr-vx .wcblr-vx-social .wp-social-link svg { width: 18px !important; height: 18px !important; }
+	.wcblr-post.wcblr-vx .wcblr-vx-name { font-size: 17px !important; padding: 10px 12px 0; }
+	.wcblr-vx .wcblr-vx-social { padding: 8px 6px 0 !important; gap: 0 !important; }
+	.wcblr-vx .wcblr-vx-social .wp-social-link svg { width: 17px !important; height: 17px !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.wcblr-vx-fancard { animation: none; }
+	.wcblr-vx-ribbon { animation: none; }
 	.wcblr-vx-badge, .wcblr-vx-badge:hover, .wcblr-vx-badge:nth-child(even):hover { transition: none; transform: none; }
 }
