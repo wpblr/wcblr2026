@@ -79,7 +79,7 @@ body:has(.wcblr-tlx) .wp-site-blocks > main { padding-top: clamp(12px, 2vw, 28px
 }
 
 .wcblr-tlx *, .wcblr-tlx *::before, .wcblr-tlx *::after { box-sizing: border-box; }
-.wcblr-tlx a { color: inherit; text-decoration: none; }
+.wcblr-tlx a { color: inherit; text-decoration: none; font: inherit; }
 .wcblr-tlx em { color: $tl-red; font-style: italic; }
 .wcblr-tlx img { display: block; max-width: 100%; height: auto; }
 

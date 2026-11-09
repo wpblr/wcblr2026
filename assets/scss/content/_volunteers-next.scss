@@ -84,7 +84,7 @@ body:has(.wcblr-vx) .wp-site-blocks > main { padding-top: clamp(12px, 2vw, 28px)
 }
 
 .wcblr-vx *, .wcblr-vx *::before, .wcblr-vx *::after { box-sizing: border-box; }
-.wcblr-vx a { color: inherit; text-decoration: none; }
+.wcblr-vx a { color: inherit; text-decoration: none; font: inherit; }
 .wcblr-vx em { color: $vx-red; font-style: italic; }
 .wcblr-vx img { display: block; max-width: 100%; height: auto; }
 
