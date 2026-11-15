@@ -1397,3 +1397,133 @@ a.wcblr-sch-person:hover .wcblr-sch-face {
 .wcblr-sch .wcblr-sch-cast span.wcblr-sch-person {
 	font-size: 15px;
 }
+
+/* ---- 12. Contributor Day, Saturday --------------------------------------------
+   15 Nov 2026: registration opens, so Saturday joins the page between the hero
+   and the Sunday bar. Head on the left (sign-up button and the ticket-email rule),
+   the run of the morning on the right as quiet time rows. */
+.wcblr-sch-sat {
+	display: grid !important;
+	grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+	gap: clamp(28px, 4vw, 72px);
+	align-items: start;
+	margin-top: clamp(56px, 6vw, 96px) !important;
+	padding: clamp(24px, 3vw, 44px) !important;
+	border-radius: 28px;
+	background: #fff;
+	box-shadow: 0 0 0 1px $sch-rule;
+	scroll-margin-top: 120px;
+}
+
+.wcblr-sch-sat-h {
+	margin-top: 14px !important;
+	font-family: $sch-serif !important;
+	font-size: clamp(34px, 1rem + 2.6vw, 56px) !important;
+	font-weight: 400 !important;
+	line-height: 1 !important;
+	letter-spacing: -0.04em !important;
+	color: $sch-ink;
+
+	em {
+		color: $sch-red;
+		font-style: italic;
+	}
+}
+
+.wcblr-sch-sat-lead {
+	margin-top: 18px !important;
+	font-size: 17px !important;
+	line-height: 1.6 !important;
+	color: $sch-soft;
+
+	a {
+		color: inherit;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+}
+
+.wcblr-sch-sat-cta {
+	margin-top: 22px !important;
+}
+
+.wcblr-sch-sat-cta .wp-block-button__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 14px 26px !important;
+	border-radius: 999px !important;
+	background: $sch-red !important;
+	color: $sch-cream !important;
+	font-family: $sch-sans !important;
+	font-size: 16px !important;
+	font-weight: 600 !important;
+	text-decoration: none !important;
+}
+
+.wcblr-sch-sat-cta .wp-block-button__link::after {
+	content: "\2192";
+	transition: transform 0.4s $sch-spring;
+}
+
+.wcblr-sch-sat-cta .wp-block-button__link:hover::after {
+	transform: translateX(4px);
+}
+
+.wcblr-sch-sat-note {
+	margin-top: 14px !important;
+	font-size: 14px !important;
+	line-height: 1.55 !important;
+	color: $sch-muted;
+
+	strong {
+		color: $sch-ink;
+	}
+}
+
+.wcblr-sch-sat-rows .wcblr-sch-break {
+	grid-template-columns: 76px minmax(0, 1fr) !important;
+	padding: 14px 0 !important;
+}
+
+.wcblr-sch-sat-rows .wcblr-sch-break:last-child {
+	box-shadow: none;
+}
+
+.wcblr-sch-sat-rows .wcblr-sch-bt {
+	font-size: 20px !important;
+}
+
+.wcblr-sch-sat-rows .wcblr-sch-break-label {
+	font-size: clamp(17px, 0.8rem + 0.4vw, 21px) !important;
+
+	a {
+		color: inherit;
+		font: inherit;
+	}
+}
+
+.wcblr-sch-sat-row.is-work .wcblr-sch-break-label {
+	color: $sch-red;
+}
+
+.wcblr-sch-sat-who {
+	grid-column: 2 / -1;
+	margin-top: 4px !important;
+	font-family: $sch-sans !important;
+	font-size: 14px !important;
+	line-height: 1.4 !important;
+	color: $sch-muted;
+}
+
+@media (max-width: 1023px) {
+	.wcblr-sch-sat {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media print {
+	.wcblr-sch:has(.wcb-favourite-session) .wcblr-sch-sat {
+		display: none !important;
+	}
+}
