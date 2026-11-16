@@ -1,0 +1,1290 @@
+/* ==== B-05 WordCamp week in Bengaluru: make the most of 17 to 22 November =================
+   16 Nov 2026. Publish Tue 17 Nov by 09:00.
+
+   THE IDEA
+   A week planner. Two events share one week, so the whole post runs on one colour code:
+   Tech Summit = sky, the free Friday = green, Saturday (Contributor Day) = gold, Sunday
+   (WordCamp) = crimson. The hero is the week as a calendar with event bars; 01 puts both
+   WordCamp days on one 08:00 to 18:00 axis, so Saturday reads as a morning and Sunday as a
+   full day; 02 is the track from the summit to WordCamp; 03 the summit in numbers, a free
+   and a paid pass as lanyard badges, and the metro line to BIEC with its change; 04 two
+   Friday listings; 05 one hotel with spokes to the three venues, three steps, and three
+   plans whose dot strips show which days each one uses. A dark ticket close.
+
+   THE SHAPE
+   Hero (title beside the calendar) + lede + two event cards + index · 01 two day cards on a
+   shared axis, four numbered reasons, a cost note · 02 prose beside the track, three "if you"
+   cards, a dark to-do, a link · 03 prose beside stats, passes, three "if you" cards, metro
+   line beside prose · 04 two listings · 05 prose beside the hub, three steps, three plans,
+   a pull line · dark close with a "what you get" card.
+
+   Scoped to .wcblr-wk. No custom properties, no url(), no place-items, no background-image.
+   Markup: wordcamp/communications/blog/posts/wordcamp-week/build.py. */
+
+$wk-ink: #2a1d14;
+$wk-espresso: #241a12;
+$wk-red: #c8344b;
+$wk-red-deep: #a32a3d;
+$wk-red-soft: #f6dfe2;
+$wk-gold: #e0a526;
+$wk-gold-deep: #8f640c;
+$wk-gold-soft: #f6e7c2;
+$wk-green: #136451;
+$wk-green-soft: #dcebe3;
+$wk-sky: #2f7d9a;
+$wk-sky-deep: #1f5a70;
+$wk-sky-soft: #dcebf1;
+$wk-purple: #6b3fa0;
+$wk-cream: #f2ece0;
+$wk-paper: #fbf8f1;
+$wk-sand: #e8dfcf;
+$wk-muted: #7a6757;
+$wk-soft: #5c4a3b;
+$wk-line: #dad5cd;
+$wk-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+$wk-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+$wk-serif: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif;
+$wk-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif;
+$wk-mono: var(--wp--preset--font-family--jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
+$wk-frame: 1280px;
+$wk-gutter: clamp(16px, 5vw, 96px);
+$wk-pad: max(#{$wk-gutter}, calc((100vw - #{$wk-frame}) / 2));
+$wk-sec: clamp(56px, 1.5rem + 4.2vw, 104px);
+$wk-shadow: 0 24px 48px -28px rgba(36, 26, 18, 0.45);
+
+// the week's colour code: [solid, text on solid, soft fill]
+$wk-days: (
+	"bts": ($wk-sky, #fff, $wk-sky-soft),
+	"free": ($wk-green, #fff, $wk-green-soft),
+	"sat": ($wk-gold, $wk-ink, $wk-gold-soft),
+	"sun": ($wk-red, #fff, $wk-red-soft),
+);
+
+/* ---- The ground ---------------------------------------------------------------------- */
+
+body:has(.wcblr-wk),
+body:has(.wcblr-wk) .wp-site-blocks > main {
+	background-color: $wk-cream !important;
+}
+
+body:has(.wcblr-wk) main::before,
+body:has(.wcblr-wk) main::after {
+	display: none !important;
+}
+
+body:has(.wcblr-wk) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-post-title) {
+	display: none !important;
+}
+
+body:has(.wcblr-wk) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px) !important; }
+
+.entry-content:has(> .wcblr-wk) {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+	max-width: none !important;
+}
+
+.entry-content > .wcblr-wk.alignfull {
+	width: 100vw !important;
+	max-width: none !important;
+	margin: 0 0 0 calc(50% - 50vw) !important;
+	box-sizing: border-box;
+	padding: clamp(8px, 1vw, 24px) $wk-pad clamp(64px, 2rem + 4vw, 120px) !important;
+	color: $wk-ink;
+	font-family: $wk-sans;
+	overflow-x: clip;
+}
+
+.wcblr-wk :where(p, h1, h2, h3, h4, figure, .wp-block-group, .wp-block-buttons) {
+	margin: 0 !important;
+	max-width: none !important;
+}
+
+.wcblr-wk *, .wcblr-wk *::before, .wcblr-wk *::after { box-sizing: border-box; }
+
+.wcblr-wk a { color: inherit; text-decoration: none; font: inherit; }
+.wcblr-wk em { color: $wk-red; font-style: italic; }
+
+// links inside running text
+.wcblr-wk-body a,
+.wcblr-wk-day-b a,
+.wcblr-wk-moves a,
+.wcblr-wk-cost a,
+.wcblr-wk-ifs a,
+.wcblr-wk-deeper a,
+.wcblr-wk-passes-t a,
+.wcblr-wk-ev a,
+.wcblr-wk-steps a {
+	box-shadow: inset 0 -1.5px 0 rgba(200, 52, 75, 0.5);
+	transition: color 0.2s $wk-ease, box-shadow 0.2s $wk-ease;
+
+	&:hover { color: $wk-red; box-shadow: inset 0 -2px 0 $wk-red; }
+}
+
+.wcblr-wk-k,
+.wcblr-wk-n {
+	font-family: $wk-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	color: $wk-red;
+}
+
+.wcblr-wk-k.is-gold { color: $wk-gold-deep; }
+
+.wcblr-wk-body {
+	max-width: 60ch !important;
+	font-size: 17px !important;
+	line-height: 1.68 !important;
+	color: $wk-soft;
+
+	b { color: $wk-ink; }
+}
+
+.wcblr-wk-body.is-lead { margin: 0 0 clamp(24px, 2.4vw, 36px) !important; font-size: 18px !important; }
+
+.wcblr-wk-sec { padding-top: $wk-sec; }
+.wcblr-wk-sec.wcblr-wk-hero-sec { padding-top: 0; }
+
+.wcblr-wk-titles { margin-bottom: clamp(20px, 0.8rem + 1.4vw, 36px) !important; }
+
+.wcblr-post.wcblr-wk .wcblr-wk-bt {
+	margin-top: 12px !important;
+	font-family: $wk-serif !important;
+	font-size: clamp(40px, 1.1rem + 4vw, 88px) !important;
+	font-weight: 400 !important;
+	line-height: 1.04 !important;
+	padding-bottom: 0.06em;
+	letter-spacing: -0.045em !important;
+	color: $wk-ink;
+	text-wrap: balance;
+	scroll-margin-top: 90px;
+}
+
+.wcblr-wk-split {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+	gap: clamp(28px, 4vw, 72px);
+	align-items: start;
+}
+
+.wcblr-wk-split.is-route {
+	grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+	align-items: center;
+	margin-top: clamp(28px, 3vw, 44px) !important;
+}
+
+/* ---- Buttons ------------------------------------------------------------------------- */
+
+.wcblr-wk-actions {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 28px !important;
+}
+
+.wcblr-wk-actions .wp-block-button__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 15px 24px !important;
+	border-radius: 999px !important;
+	background: $wk-red !important;
+	color: #fff !important;
+	font-family: $wk-sans !important;
+	font-size: 15.5px !important;
+	font-weight: 700 !important;
+	transition: transform 0.4s $wk-spring, background 0.2s $wk-ease;
+
+	&::after { content: "\2192"; transition: transform 0.4s $wk-spring; }
+	&:hover { transform: translateY(-2px); background: $wk-red-deep !important; }
+	&:hover::after { transform: translateX(4px); }
+}
+
+/* ---- 1. Hero: the week as a calendar -------------------------------------------------- */
+
+.wcblr-wk-hero {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: clamp(28px, 4vw, 64px);
+	align-items: center;
+	padding-top: clamp(16px, 3vw, 48px);
+}
+
+.wcblr-wk-kicker {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 8px;
+	font-family: $wk-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 600;
+
+	span { padding: 6px 12px; border-radius: 999px; background: $wk-paper; box-shadow: inset 0 0 0 1px $wk-line; }
+	span:first-child { background: $wk-ink; color: $wk-paper; box-shadow: none; }
+}
+
+.wcblr-post.wcblr-wk .wcblr-wk-h1 {
+	margin-top: 22px !important;
+	font-family: $wk-serif !important;
+	font-size: clamp(48px, 1.2rem + 5vw, 108px) !important;
+	font-weight: 400 !important;
+	line-height: 0.98 !important;
+	letter-spacing: -0.05em !important;
+	color: $wk-ink;
+	text-wrap: balance;
+}
+
+.wcblr-wk-sub {
+	margin-top: 20px !important;
+	font-family: $wk-serif !important;
+	font-size: clamp(22px, 0.9rem + 1vw, 30px) !important;
+	font-style: italic;
+	line-height: 1.25 !important;
+	color: $wk-soft;
+}
+
+.wcblr-wk-intro {
+	max-width: 50ch !important;
+	margin-top: 16px !important;
+	font-size: 17px !important;
+	line-height: 1.62 !important;
+	color: $wk-soft;
+}
+
+.wcblr-wk-intro.is-dek { font-weight: 600; color: $wk-ink; }
+
+.wcblr-wk-cal {
+	display: flex !important;
+	flex-direction: column;
+	border-radius: 24px;
+	overflow: hidden;
+	background: #fff;
+	box-shadow: inset 0 0 0 1px $wk-line, $wk-shadow;
+}
+
+.wcblr-wk-cal-bar {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 14px 20px;
+	background: $wk-espresso;
+
+	small { font-family: $wk-mono; font-size: 11px; font-weight: 600; color: $wk-gold; }
+	b { font-family: $wk-serif; font-size: 18px; font-weight: 400; color: $wk-paper; }
+}
+
+.wcblr-wk-cal-grid {
+	display: grid;
+	grid-template-columns: repeat(6, minmax(0, 1fr));
+	gap: 6px;
+	padding: 16px 16px 6px;
+
+	.d {
+		grid-row: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		padding: 10px 10px 8px;
+		border-radius: 12px;
+		background: $wk-paper;
+		font-family: $wk-serif;
+		font-size: clamp(26px, 1rem + 1vw, 34px);
+		line-height: 1;
+		letter-spacing: -0.03em;
+
+		small { font-family: $wk-mono; font-size: 10.5px; font-weight: 600; letter-spacing: 0; color: $wk-muted; }
+	}
+
+	.e {
+		grid-row: 2;
+		padding: 9px 10px;
+		border-radius: 10px;
+		font-size: 12.5px;
+		font-weight: 700;
+		line-height: 1.2;
+	}
+
+	.e.is-bts { grid-column: 1 / 4; background: $wk-sky; color: #fff; }
+	.e.is-free { grid-column: 4 / 5; color: $wk-green; box-shadow: inset 0 0 0 1.5px $wk-green; }
+	.e.is-sat { grid-column: 5 / 6; background: $wk-gold; color: $wk-ink; }
+	.e.is-sun { grid-column: 6 / 7; background: $wk-red; color: #fff; }
+}
+
+.wcblr-wk-cal-row {
+	display: grid;
+	grid-template-columns: 14px 132px minmax(0, 1fr);
+	gap: 10px;
+	align-items: baseline;
+	margin: 0 20px;
+	padding: 12px 0;
+	border-bottom: 1px solid #efebe4;
+	font-size: 14.5px;
+	line-height: 1.45;
+	color: $wk-soft;
+
+	&:last-child { border-bottom: 0; margin-bottom: 8px; }
+
+	&::before { content: ""; width: 10px; height: 10px; border-radius: 50%; transform: translateY(1px); }
+
+	b { font-family: $wk-mono; font-size: 12px; font-weight: 600; color: $wk-ink; }
+}
+
+@each $name, $c in $wk-days {
+	.wcblr-wk-cal-row.is-#{$name}::before { background: nth($c, 1); }
+}
+
+.wcblr-wk-lede {
+	max-width: 36ch !important;
+	margin-top: clamp(40px, 4.4vw, 72px) !important;
+	font-family: $wk-serif !important;
+	font-size: clamp(26px, 1rem + 1.6vw, 42px) !important;
+	line-height: 1.2 !important;
+	letter-spacing: -0.02em;
+	color: $wk-ink;
+}
+
+// two kinds of days, as two cards with a header band and a "When" footer
+.wcblr-wk-pair {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 16px;
+	margin-top: clamp(24px, 2.6vw, 36px) !important;
+
+	> span {
+		display: flex;
+		flex-direction: column;
+		border-radius: 22px;
+		overflow: hidden;
+		background: $wk-paper;
+		box-shadow: inset 0 0 0 1px $wk-line;
+	}
+}
+
+.wcblr-wk-pair-h {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 16px 20px;
+
+	b { font-family: $wk-serif; font-size: clamp(22px, 0.9rem + 0.8vw, 28px); font-weight: 400; letter-spacing: -0.02em; }
+	small { padding: 4px 10px; border-radius: 999px; background: rgba(255, 255, 255, 0.2); font-family: $wk-mono; font-size: 10.5px; font-weight: 600; white-space: nowrap; }
+}
+
+.is-wc > .wcblr-wk-pair-h { background: $wk-red; color: #fff; }
+.is-bts > .wcblr-wk-pair-h { background: $wk-sky; color: #fff; }
+
+.wcblr-wk-pair-b { flex: 1; padding: 18px 20px 6px; font-size: 16px; line-height: 1.6; color: $wk-ink; }
+
+.wcblr-wk-pair-f {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 4px 12px;
+	margin: 12px 20px 18px;
+	padding-top: 12px;
+	border-top: 1px dashed $wk-line;
+	font-size: 14px;
+	font-weight: 600;
+
+	small { font-family: $wk-mono; font-size: 10.5px; font-weight: 600; color: $wk-muted; }
+}
+
+.wcblr-wk-index {
+	display: grid !important;
+	grid-template-columns: repeat(5, minmax(0, 1fr));
+	gap: 8px;
+	margin-top: 28px !important;
+
+	a {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding: 14px;
+		border-radius: 16px;
+		background: $wk-paper;
+		box-shadow: inset 0 0 0 1px $wk-line;
+		font-size: 14.5px;
+		font-weight: 600;
+		line-height: 1.3;
+		transition: transform 0.35s $wk-spring, background 0.2s $wk-ease;
+
+		&:hover { transform: translateY(-3px); background: #fff; }
+	}
+
+	b { font-family: $wk-mono; font-size: 11px; color: $wk-red; }
+}
+
+/* ---- 2. 01 The weekend: two days on one axis ------------------------------------------ */
+
+.wcblr-wk-days {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 16px;
+
+	> span {
+		display: flex;
+		flex-direction: column;
+		border-radius: 22px;
+		overflow: hidden;
+		background: $wk-paper;
+		box-shadow: inset 0 0 0 1px $wk-line;
+	}
+}
+
+.wcblr-wk-day-h {
+	display: flex;
+	align-items: baseline;
+	gap: 14px;
+	padding: 16px 22px;
+
+	b { flex: none; font-family: $wk-serif; font-size: 30px; font-weight: 400; line-height: 1; letter-spacing: -0.03em; white-space: nowrap; }
+	small { font-family: $wk-mono; font-size: 11px; font-weight: 600; }
+}
+
+.is-sat > .wcblr-wk-day-h { background: $wk-gold; color: $wk-ink; }
+.is-sun > .wcblr-wk-day-h { background: $wk-red; color: #fff; }
+
+// 08:00 to 18:00 = 0% to 100%
+.wcblr-wk-axis {
+	position: relative;
+	height: 30px;
+	margin: 22px 22px 0;
+	border-radius: 8px;
+	background: $wk-sand;
+}
+
+.wcblr-wk-fill {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	display: flex;
+	align-items: center;
+	padding: 0 10px;
+	border-radius: 8px;
+	font-family: $wk-mono;
+	font-size: 11px;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.is-sat .wcblr-wk-fill { left: 10%; width: 40%; background: $wk-gold; color: $wk-ink; }
+.is-sun .wcblr-wk-fill { left: 0; width: 95%; background: $wk-red; color: #fff; }
+
+.wcblr-wk-pin {
+	position: absolute;
+	left: calc(50% + 6px);
+	top: 50%;
+	transform: translateY(-50%);
+	font-family: $wk-mono;
+	font-size: 11px;
+	font-weight: 600;
+	color: $wk-gold-deep;
+
+	&::before { content: "\2190\00a0"; }
+}
+
+.wcblr-wk-axis-t {
+	display: flex;
+	justify-content: space-between;
+	margin: 6px 22px 0;
+
+	small { font-family: $wk-mono; font-size: 10.5px; color: $wk-muted; }
+}
+
+.wcblr-wk-day-b {
+	padding: 16px 22px 22px;
+	font-size: 15.5px;
+	line-height: 1.62;
+	color: $wk-soft;
+
+	> b { color: $wk-ink; }
+}
+
+.wcblr-wk-moves {
+	display: grid !important;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 12px;
+	margin-top: 16px !important;
+
+	> span {
+		display: block;
+		padding: 20px;
+		border-radius: 20px;
+		background: $wk-paper;
+		box-shadow: inset 0 0 0 1px $wk-line;
+		font-size: 14.5px;
+		line-height: 1.55;
+		color: $wk-soft;
+	}
+
+	i {
+		margin-bottom: 12px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 28px;
+		height: 28px;
+		border-radius: 8px;
+		background: $wk-ink;
+		color: $wk-gold;
+		font-family: $wk-mono;
+		font-size: 11px;
+		font-style: normal;
+		font-weight: 600;
+	}
+
+	b { display: block; margin-bottom: 8px; font-family: $wk-serif; font-size: 21px; font-weight: 400; line-height: 1.15; letter-spacing: -0.02em; color: $wk-ink; }
+}
+
+.wcblr-wk-cost {
+	display: grid !important;
+	grid-template-columns: auto auto minmax(0, 1fr);
+	gap: clamp(18px, 3vw, 40px);
+	align-items: center;
+	margin-top: 16px !important;
+	padding: 22px 26px;
+	border-radius: 22px;
+	background: $wk-sand;
+}
+
+.wcblr-wk-cost-n {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+
+	b { font-family: $wk-serif; font-size: 44px; font-weight: 400; line-height: 1; letter-spacing: -0.04em; color: $wk-red; }
+	small { font-family: $wk-mono; font-size: 11px; font-weight: 600; color: $wk-muted; }
+}
+
+.wcblr-wk-cost-n + .wcblr-wk-cost-n b { color: $wk-ink; }
+
+.wcblr-wk-cost-t { max-width: 52ch; font-size: 15.5px; line-height: 1.6; color: $wk-ink; }
+
+/* ---- 3. 02 Coming for the Tech Summit: the track to WordCamp -------------------------- */
+
+.wcblr-wk-track {
+	position: relative;
+	display: flex !important;
+	flex-direction: column;
+	gap: 14px;
+	padding: 24px 24px 24px 54px;
+	border-radius: 22px;
+	background: $wk-paper;
+	box-shadow: inset 0 0 0 1px $wk-line;
+
+	// the line down the stops
+	&::before {
+		content: "";
+		position: absolute;
+		left: 30px;
+		top: 34px;
+		bottom: 34px;
+		width: 3px;
+		border-radius: 3px;
+		background: $wk-line;
+	}
+
+	> span:not(.wcblr-wk-gap) {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		font-size: 14px;
+		line-height: 1.4;
+		color: $wk-soft;
+
+		&::before {
+			content: "";
+			position: absolute;
+			left: -31px;
+			top: 2px;
+			width: 17px;
+			height: 17px;
+			border-radius: 50%;
+			box-shadow: 0 0 0 4px $wk-paper;
+		}
+	}
+
+	small { font-family: $wk-mono; font-size: 11px; font-weight: 600; color: $wk-muted; }
+	b { font-family: $wk-serif; font-size: 22px; font-weight: 400; line-height: 1.15; letter-spacing: -0.02em; color: $wk-ink; }
+
+	.is-bts { order: 1; }
+	.is-free { order: 2; }
+	.wcblr-wk-gap { order: 3; }
+	.is-sat { order: 4; }
+	.is-sun { order: 5; }
+
+	.is-bts::before { background: $wk-sky; }
+	.is-free::before { background: $wk-paper; box-shadow: inset 0 0 0 3px $wk-green, 0 0 0 4px $wk-paper !important; }
+	.is-sat::before { background: $wk-gold; }
+	.is-sun::before { background: $wk-red; }
+}
+
+.wcblr-wk-gap {
+	align-self: flex-start;
+	padding: 5px 12px;
+	border-radius: 999px;
+	background: $wk-green-soft;
+	font-family: $wk-mono;
+	font-size: 11px;
+	font-weight: 600;
+	color: $wk-green;
+}
+
+.wcblr-wk-ifs {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 12px;
+	margin-top: clamp(24px, 2.6vw, 36px) !important;
+
+	> span {
+		padding: 22px;
+		border-radius: 20px;
+		background: $wk-paper;
+		box-shadow: inset 0 4px 0 $wk-line, inset 0 0 0 1px $wk-line;
+		font-size: 15px;
+		line-height: 1.6;
+		color: $wk-soft;
+	}
+
+	b { display: block; margin-bottom: 8px; font-family: $wk-serif; font-size: 21px; font-style: italic; font-weight: 400; line-height: 1.2; }
+}
+
+@each $name, $c in $wk-days {
+	.wcblr-wk-ifs > .is-#{$name} { box-shadow: inset 0 5px 0 nth($c, 1), inset 0 0 0 1px $wk-line; }
+}
+
+.wcblr-wk-ifs > .is-sun b { color: $wk-red-deep; }
+.wcblr-wk-ifs > .is-bts b { color: $wk-sky-deep; }
+.wcblr-wk-ifs > .is-sat b { color: $wk-gold-deep; }
+
+.wcblr-wk-todo {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+	gap: 12px 28px;
+	align-items: center;
+	margin-top: 16px !important;
+	padding: clamp(22px, 2.6vw, 32px);
+	border-radius: 24px;
+	background: $wk-espresso;
+	color: $wk-paper;
+}
+
+.wcblr-wk-todo-k { grid-column: 1 / -1; font-family: $wk-mono; font-size: 11px; font-weight: 600; color: $wk-gold; }
+.wcblr-wk-todo-t { grid-row: span 2; font-size: 16px; line-height: 1.65; color: rgba(251, 248, 241, 0.86); }
+
+.wcblr-wk-todo-c {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 14px 16px;
+	border-radius: 14px;
+	background: rgba(251, 248, 241, 0.08);
+	box-shadow: inset 0 0 0 1px rgba(251, 248, 241, 0.14);
+	font-size: 15px;
+	font-weight: 700;
+
+	b {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex: none;
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		background: $wk-gold;
+		color: $wk-ink;
+		font-family: $wk-mono;
+		font-size: 12px;
+	}
+
+	a { color: $wk-gold; box-shadow: inset 0 -1.5px 0 rgba(224, 165, 38, 0.5); }
+}
+
+.wcblr-wk-deeper {
+	display: block !important;
+	margin-top: 16px !important;
+	padding: 14px 18px;
+	border-radius: 16px;
+	background: $wk-paper;
+	box-shadow: inset 0 0 0 1px $wk-line;
+	font-size: 15.5px;
+	line-height: 1.5;
+
+	small { display: inline-block; margin-right: 12px; font-family: $wk-mono; font-size: 11px; font-weight: 600; color: $wk-red; }
+	a { font-weight: 700; }
+}
+
+/* ---- 4. 03 Coming for WordCamp: the summit in numbers, passes, the metro -------------- */
+
+.wcblr-wk-stats {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 10px;
+
+	> span {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		padding: 16px;
+		border-radius: 18px;
+		background: $wk-paper;
+		box-shadow: inset 0 0 0 1px $wk-line;
+		font-size: 13.5px;
+		line-height: 1.35;
+		color: $wk-soft;
+	}
+
+	b { font-family: $wk-serif; font-size: clamp(30px, 1rem + 1.4vw, 40px); font-weight: 400; line-height: 1; letter-spacing: -0.04em; color: $wk-sky; }
+
+	.is-theme {
+		grid-column: 1 / -1;
+		flex-direction: row;
+		align-items: baseline;
+		justify-content: space-between;
+		padding: 18px 20px;
+		background: $wk-sky;
+		box-shadow: none;
+		color: #fff;
+
+		small { font-family: $wk-mono; font-size: 11px; font-weight: 600; color: $wk-sky-soft; }
+		b { color: #fff; font-style: italic; }
+	}
+}
+
+.wcblr-wk-passes {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.3fr) repeat(2, minmax(0, 0.7fr));
+	gap: 16px;
+	align-items: end;
+	margin-top: clamp(28px, 3vw, 44px) !important;
+}
+
+.wcblr-wk-passes-t {
+	align-self: center;
+	max-width: 46ch;
+	font-size: 16.5px;
+	line-height: 1.65;
+	color: $wk-soft;
+
+	> b { color: $wk-ink; }
+}
+
+// lanyard badges: a strap, a punched hole, a coloured band
+.wcblr-wk-pass {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	margin-top: 34px;
+	padding: 34px 20px 20px;
+	border-radius: 18px;
+	background: #fff;
+	box-shadow: inset 0 0 0 1px $wk-line, $wk-shadow;
+	font-size: 14px;
+	color: $wk-soft;
+	text-align: center;
+
+	&::before {
+		content: "";
+		position: absolute;
+		left: 50%;
+		top: -34px;
+		width: 18px;
+		height: 46px;
+		margin-left: -9px;
+		border-radius: 4px;
+		background: $wk-sky;
+	}
+
+	&::after {
+		content: "";
+		position: absolute;
+		left: 50%;
+		top: 14px;
+		width: 34px;
+		height: 8px;
+		margin-left: -17px;
+		border-radius: 8px;
+		background: $wk-cream;
+		box-shadow: inset 0 0 0 1px $wk-line;
+	}
+
+	small { font-family: $wk-mono; font-size: 11px; font-weight: 600; color: $wk-muted; }
+	b { font-family: $wk-serif; font-size: 44px; font-weight: 400; line-height: 1.05; letter-spacing: -0.04em; color: $wk-ink; }
+	em { font-style: normal; font-weight: 700; color: $wk-ink; }
+	> span { font-size: 13px; color: $wk-muted; }
+}
+
+.wcblr-wk-pass.is-free b { color: $wk-green; }
+.wcblr-wk-pass.is-paid { transform: rotate(2deg); }
+.wcblr-wk-pass.is-free { transform: rotate(-2deg); }
+.wcblr-wk-pass.is-paid::before { background: $wk-ink; }
+
+.wcblr-wk-metro {
+	position: relative;
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0;
+	padding: 22px 22px 26px;
+	border-radius: 22px;
+	background: $wk-paper;
+	box-shadow: inset 0 0 0 1px $wk-line;
+}
+
+.wcblr-wk-metro-k { grid-column: 1 / -1; margin-bottom: 16px; font-family: $wk-mono; font-size: 11px; font-weight: 600; color: $wk-red; }
+
+.wcblr-wk-st {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	padding-top: 34px;
+	font-size: 13px;
+	line-height: 1.35;
+	color: $wk-soft;
+
+	// the line to the next station
+	&::after {
+		content: "";
+		position: absolute;
+		left: 10px;
+		right: -10px;
+		top: 9px;
+		height: 6px;
+		border-radius: 6px;
+	}
+
+	&::before {
+		content: "";
+		position: absolute;
+		left: 0;
+		top: 2px;
+		z-index: 1;
+		width: 20px;
+		height: 20px;
+		border-radius: 50%;
+		background: #fff;
+	}
+
+	b { font-family: $wk-serif; font-size: 22px; font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; color: $wk-ink; }
+	small { font-family: $wk-mono; font-size: 10.5px; font-weight: 600; color: $wk-muted; }
+}
+
+.wcblr-wk-st.is-start::after { background: $wk-purple; }
+.wcblr-wk-st.is-start::before { box-shadow: inset 0 0 0 5px $wk-purple; }
+.wcblr-wk-st.is-change::after { background: $wk-green; }
+.wcblr-wk-st.is-change::before { width: 24px; height: 24px; top: 0; left: -2px; box-shadow: inset 0 0 0 4px $wk-ink; }
+.wcblr-wk-st.is-end::after { display: none; }
+.wcblr-wk-st.is-end::before { background: $wk-green; box-shadow: 0 0 0 4px $wk-green-soft; }
+
+/* ---- 5. 04 Also that week: two listings ----------------------------------------------- */
+
+.wcblr-wk-extras {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 16px;
+
+	> span {
+		display: grid;
+		grid-template-columns: 84px minmax(0, 1fr);
+		gap: 20px;
+		align-items: start;
+		padding: 22px;
+		border-radius: 22px;
+		background: $wk-paper;
+		box-shadow: inset 0 0 0 1px $wk-line;
+	}
+
+	> .is-match { background: $wk-espresso; box-shadow: none; color: $wk-paper; }
+}
+
+.wcblr-wk-date {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 10px 0 12px;
+	border-radius: 16px;
+	background: $wk-green;
+	color: #fff;
+	font-family: $wk-serif;
+	font-size: 40px;
+	line-height: 1;
+	letter-spacing: -0.04em;
+
+	small { margin-bottom: 4px; font-family: $wk-mono; font-size: 11px; font-weight: 600; letter-spacing: 0; color: $wk-green-soft; }
+}
+
+.wcblr-wk-ev {
+	display: block;
+	font-size: 15.5px;
+	line-height: 1.6;
+	color: $wk-soft;
+
+	small { display: block; margin-bottom: 8px; font-family: $wk-mono; font-size: 11px; font-weight: 600; color: $wk-sky; }
+	a { font-weight: 700; color: $wk-ink; }
+}
+
+.is-match .wcblr-wk-ev { color: rgba(251, 248, 241, 0.86); }
+.is-match .wcblr-wk-ev small { color: $wk-gold; }
+.is-match .wcblr-wk-ev a { color: $wk-gold; box-shadow: inset 0 -1.5px 0 rgba(224, 165, 38, 0.5); }
+.is-match .wcblr-wk-date { background: $wk-gold; color: $wk-ink; }
+.is-match .wcblr-wk-date small { color: $wk-espresso; }
+
+/* ---- 6. 05 Make one trip count: hub, steps, plans ------------------------------------- */
+
+// one hotel on the left, three spokes out to the venues
+.wcblr-wk-base {
+	display: grid !important;
+	grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+	grid-template-rows: repeat(3, auto);
+	column-gap: 34px;
+	row-gap: 10px;
+}
+
+.wcblr-wk-hub {
+	grid-row: 1 / 4;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 8px;
+	padding: 22px;
+	border-radius: 22px;
+	background: $wk-espresso;
+	color: $wk-paper;
+
+	small { font-family: $wk-mono; font-size: 11px; font-weight: 600; color: $wk-gold; }
+	b { font-family: $wk-serif; font-size: 28px; font-weight: 400; line-height: 1.05; letter-spacing: -0.03em; }
+}
+
+.wcblr-wk-spoke {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	padding: 14px 16px;
+	border-radius: 16px;
+	background: $wk-paper;
+	box-shadow: inset 4px 0 0 $wk-line, inset 0 0 0 1px $wk-line;
+	font-size: 13.5px;
+	line-height: 1.4;
+	color: $wk-soft;
+
+	// the spoke back to the hotel
+	&::before {
+		content: "";
+		position: absolute;
+		left: -34px;
+		top: 50%;
+		width: 34px;
+		height: 3px;
+		margin-top: -1.5px;
+	}
+
+	small { font-family: $wk-mono; font-size: 10.5px; font-weight: 600; color: $wk-muted; }
+	b { font-family: $wk-serif; font-size: 22px; font-weight: 400; line-height: 1.1; color: $wk-ink; }
+}
+
+@each $name, $c in $wk-days {
+	.wcblr-wk-spoke.is-#{$name} { box-shadow: inset 5px 0 0 nth($c, 1), inset 0 0 0 1px $wk-line; }
+	.wcblr-wk-spoke.is-#{$name}::before { background: nth($c, 1); }
+}
+
+.wcblr-wk-before {
+	margin-top: clamp(32px, 3.4vw, 52px) !important;
+	font-family: $wk-serif !important;
+	font-size: clamp(24px, 1rem + 1vw, 32px) !important;
+	line-height: 1.2 !important;
+	letter-spacing: -0.02em;
+	color: $wk-soft;
+
+	b { font-weight: 400; color: $wk-ink; }
+}
+
+.wcblr-wk-steps {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 12px;
+	margin-top: 16px !important;
+
+	> span {
+		position: relative;
+		display: block;
+		padding: 20px;
+		border-radius: 20px;
+		background: $wk-paper;
+		box-shadow: inset 0 0 0 1px $wk-line;
+		font-size: 15px;
+		line-height: 1.6;
+		color: $wk-soft;
+	}
+
+	> span:not(:last-child)::after {
+		content: "\2192";
+		position: absolute;
+		right: -13px;
+		top: 22px;
+		z-index: 1;
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		background: $wk-cream;
+		font-size: 14px;
+		line-height: 26px;
+		text-align: center;
+		color: $wk-red;
+	}
+
+	i { display: block; margin-bottom: 10px; font-family: $wk-serif; font-size: 40px; font-style: normal; line-height: 1; color: $wk-red; }
+	> span:last-child { background: $wk-ink; color: rgba(251, 248, 241, 0.86); box-shadow: none; }
+	> span:last-child i { color: $wk-gold; }
+	> span:last-child a { color: $wk-gold; box-shadow: inset 0 -1.5px 0 rgba(224, 165, 38, 0.5); }
+}
+
+.wcblr-wk-plans {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 16px;
+	margin-top: clamp(28px, 3vw, 44px) !important;
+
+	> span {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		padding: 22px;
+		border-radius: 22px;
+		background: #fff;
+		box-shadow: inset 0 0 0 1px $wk-line, $wk-shadow;
+	}
+
+	> span > small { font-family: $wk-mono; font-size: 11px; font-weight: 600; color: $wk-red; }
+	> span > b { font-family: $wk-serif; font-size: clamp(24px, 1rem + 0.8vw, 30px); font-weight: 400; line-height: 1.08; letter-spacing: -0.03em; }
+}
+
+// Tue to Mon, coloured by what that day holds
+.wcblr-wk-dots {
+	display: grid;
+	grid-template-columns: repeat(7, minmax(0, 1fr));
+	gap: 5px;
+
+	span {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 34px;
+		border-radius: 9px;
+		background: $wk-paper;
+		box-shadow: inset 0 0 0 1px $wk-line;
+		font-family: $wk-mono;
+		font-size: 11px;
+		font-weight: 600;
+		color: #b9ad9d;
+	}
+
+	.is-bts { background: $wk-sky; color: #fff; box-shadow: none; }
+	.is-free { background: $wk-green-soft; color: $wk-green; box-shadow: inset 0 0 0 1.5px $wk-green; }
+	.is-sat { background: $wk-gold; color: $wk-ink; box-shadow: none; }
+	.is-sun { background: $wk-red; color: #fff; box-shadow: none; }
+	.is-city { background: $wk-ink; color: $wk-paper; box-shadow: none; }
+}
+
+.wcblr-wk-plan-b { flex: 1; font-size: 15px; line-height: 1.6; color: $wk-soft; }
+
+.wcblr-wk-need {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	padding-top: 12px;
+	border-top: 1px dashed $wk-line;
+	font-size: 14px;
+	font-weight: 700;
+
+	small { font-family: $wk-mono; font-size: 10.5px; font-weight: 600; color: $wk-muted; }
+}
+
+.wcblr-wk-pull {
+	max-width: 30ch !important;
+	margin: clamp(40px, 4.4vw, 72px) auto 0 !important;
+	font-family: $wk-serif !important;
+	font-size: clamp(24px, 1rem + 1.4vw, 36px) !important;
+	font-style: italic;
+	line-height: 1.25 !important;
+	letter-spacing: -0.015em;
+	text-align: center;
+	color: $wk-ink;
+}
+
+/* ---- 7. Close ------------------------------------------------------------------------- */
+
+.wcblr-wk-close {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+	gap: clamp(28px, 4vw, 64px);
+	align-items: center;
+	padding: clamp(28px, 4.4vw, 72px);
+	border-radius: 32px;
+	background: $wk-espresso;
+	color: $wk-paper;
+
+	.wcblr-wk-k.is-gold { color: $wk-gold; }
+	em { color: $wk-gold; }
+}
+
+.wcblr-post.wcblr-wk .wcblr-wk-close-t {
+	margin-top: 14px !important;
+	font-family: $wk-serif !important;
+	font-size: clamp(34px, 1rem + 2.8vw, 62px) !important;
+	font-weight: 400 !important;
+	line-height: 1.06 !important;
+	letter-spacing: -0.04em !important;
+	color: $wk-paper;
+	text-wrap: balance;
+}
+
+.wcblr-wk-close-b {
+	max-width: 52ch !important;
+	margin-top: 16px !important;
+	font-size: 17px !important;
+	line-height: 1.65 !important;
+	color: rgba(251, 248, 241, 0.82);
+}
+
+.wcblr-wk-gets {
+	display: flex !important;
+	flex-direction: column;
+	gap: 12px;
+	padding: 24px;
+	border-radius: 22px;
+	background: $wk-paper;
+	color: $wk-ink;
+
+	> span:not(.wcblr-wk-gets-h) {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		padding-left: 32px;
+
+		&::before {
+			content: "\2713";
+			position: absolute;
+			left: 0;
+			top: 1px;
+			width: 20px;
+			height: 20px;
+			border-radius: 50%;
+			background: $wk-ink;
+			color: #fff;
+			font-size: 11px;
+			font-weight: 700;
+			line-height: 20px;
+			text-align: center;
+		}
+	}
+
+	b { font-size: 15px; font-weight: 700; line-height: 1.35; }
+	small { font-size: 13.5px; line-height: 1.4; color: $wk-soft; }
+
+	.is-sat::before { background: $wk-gold !important; color: $wk-ink !important; }
+	.is-sun::before { background: $wk-red !important; }
+	.is-free::before { background: $wk-green !important; }
+}
+
+.wcblr-wk-gets-h {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 12px;
+	padding-bottom: 14px;
+	margin-bottom: 4px;
+	border-bottom: 2px dashed $wk-line;
+
+	b { font-family: $wk-serif; font-size: 52px !important; font-weight: 400 !important; line-height: 1 !important; letter-spacing: -0.04em; color: $wk-red; }
+	small { font-family: $wk-mono; font-size: 11.5px !important; font-weight: 600; color: $wk-muted !important; }
+}
+
+/* ---- Motion: the first screen only --------------------------------------------------- */
+
+@keyframes wcblr-wk-rise {
+	from { opacity: 0; transform: translateY(14px); }
+	to { opacity: 1; transform: none; }
+}
+
+@keyframes wcblr-wk-grow {
+	from { transform: scaleX(0); }
+	to { transform: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-wk-hero-main > * { animation: wcblr-wk-rise 0.7s $wk-ease backwards; }
+	.wcblr-wk-hero-main > :nth-child(2) { animation-delay: 0.06s; }
+	.wcblr-wk-hero-main > :nth-child(3) { animation-delay: 0.14s; }
+	.wcblr-wk-hero-main > :nth-child(4) { animation-delay: 0.2s; }
+	.wcblr-wk-hero-main > :nth-child(5) { animation-delay: 0.26s; }
+	.wcblr-wk-cal { animation: wcblr-wk-rise 0.8s $wk-ease 0.1s backwards; }
+	.wcblr-wk-cal-grid .e { transform-origin: left center; animation: wcblr-wk-grow 0.7s $wk-ease backwards; }
+	.wcblr-wk-cal-grid .e.is-bts { animation-delay: 0.45s; }
+	.wcblr-wk-cal-grid .e.is-free { animation-delay: 0.6s; }
+	.wcblr-wk-cal-grid .e.is-sat { animation-delay: 0.72s; }
+	.wcblr-wk-cal-grid .e.is-sun { animation-delay: 0.84s; }
+}
+
+/* ---- Breakpoints ---------------------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+	.wcblr-wk-hero,
+	.wcblr-wk-split,
+	.wcblr-wk-split.is-route,
+	.wcblr-wk-close { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-wk-cal { max-width: 620px; }
+	.wcblr-wk-index { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+	.wcblr-wk-moves { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.wcblr-wk-cost { grid-template-columns: auto auto; }
+	.wcblr-wk-cost-t { grid-column: 1 / -1; }
+	.wcblr-wk-passes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.wcblr-wk-passes-t { grid-column: 1 / -1; }
+	.wcblr-wk-pass { max-width: 300px; }
+	.wcblr-wk-base { max-width: 620px; }
+	.wcblr-wk-gets { max-width: 460px; }
+}
+
+@media (max-width: 760px) {
+	.wcblr-wk-pair,
+	.wcblr-wk-days,
+	.wcblr-wk-ifs,
+	.wcblr-wk-extras,
+	.wcblr-wk-steps,
+	.wcblr-wk-plans { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-wk-steps > span::after { display: none; }
+	.wcblr-wk-todo { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-wk-todo-t { grid-row: auto; }
+	// rows become a block with the dot pinned left
+	.wcblr-wk-cal-row { position: relative; display: block; padding-left: 22px; }
+	.wcblr-wk-cal-row::before { position: absolute; left: 0; top: 17px; transform: none; }
+	.wcblr-wk-cal-row b { display: block; margin-bottom: 2px; }
+}
+
+@media (max-width: 640px) {
+	.wcblr-wk-actions .wp-block-button { flex: 1 1 auto; }
+	.wcblr-wk-actions .wp-block-button__link { width: 100%; justify-content: center; }
+	.wcblr-wk-index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.wcblr-wk-moves { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-wk-close { padding: 26px 20px; border-radius: 24px; }
+	.wcblr-wk-cal-grid { gap: 4px; padding: 12px 12px 4px; }
+	.wcblr-wk-cal-grid .d { padding: 8px 6px 6px; }
+	// event bars become colour strips; the rows below spell each day out
+	.wcblr-wk-cal-grid .e { height: 10px; padding: 0; font-size: 0; border-radius: 6px; }
+	.wcblr-wk-cal-grid .e.is-free { box-shadow: inset 0 0 0 2px $wk-green; }
+	.wcblr-wk-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.wcblr-wk-stats > span:last-child { grid-column: 1 / -1; }
+	.wcblr-wk-base { grid-template-columns: minmax(0, 1fr); column-gap: 0; }
+	.wcblr-wk-hub { grid-row: auto; }
+	.wcblr-wk-spoke::before { display: none; }
+	.wcblr-wk-extras > span { grid-template-columns: 64px minmax(0, 1fr); gap: 14px; }
+	.wcblr-wk-date { font-size: 32px; }
+	.wcblr-wk-metro { grid-template-columns: minmax(0, 1fr); row-gap: 0; padding-left: 50px; }
+	.wcblr-wk-st { padding: 0 0 22px; }
+	.wcblr-wk-st::before { left: -32px; }
+	.wcblr-wk-st.is-change::before { left: -34px; }
+	.wcblr-wk-st::after { left: -25px; right: auto; top: 12px; bottom: -2px; width: 6px; height: auto; }
+}
