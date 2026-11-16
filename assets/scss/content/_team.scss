@@ -1,0 +1,1338 @@
+/* ==== B-04 What your WordPress team brings back from WordCamp Bengaluru ======================
+   17 Nov 2026. Publish Wed 18 Nov.
+
+   THE IDEA
+   Two halls, one Sunday. The whole post runs on one colour code: Xavier Hall = crimson,
+   Concert Hall = sky, and the seven sessions about running an agency = gold, numbered 1 to 7
+   in time order. The hero sets "send one" against "send two" on the real session slots; the
+   timeline under it is Sunday at a glance with the seven numbered; 01 lists the seven with the
+   same numbers and brackets the three back to back in Xavier Hall; 02 three team cards with a
+   seat per person; 03 a 17-of-24 meter; 04 a pinned role card and a 21-day listing bar; 05 a
+   Monday sheet; 06 three steps, a Contributor Day note and a note for your manager.
+
+   Session positions: (start - 09:00) / 450 min, width = duration / 450, from the live schedule
+   (checked 17 Nov 2026). Mobile turns the lanes vertical: the same numbers become top/height.
+
+   Scoped to .wcblr-tm. No custom properties, no url(), no place-items, no background-image.
+   Markup: wordcamp/communications/blog/posts/send-your-team/build.py. */
+
+@use "sass:list";
+@use "sass:math";
+
+$tm-ink: #2a1d14;
+$tm-espresso: #241a12;
+$tm-red: #c8344b;
+$tm-red-deep: #a32a3d;
+$tm-red-soft: #f6dfe2;
+$tm-gold: #e0a526;
+$tm-gold-deep: #8f640c;
+$tm-gold-soft: #f6e7c2;
+$tm-green: #136451;
+$tm-sky: #2f7d9a;
+$tm-sky-deep: #1f5a70;
+$tm-sky-soft: #dcebf1;
+$tm-cream: #f2ece0;
+$tm-paper: #fbf8f1;
+$tm-sand: #e8dfcf;
+$tm-muted: #7a6757;
+$tm-soft: #5c4a3b;
+$tm-line: #dad5cd;
+$tm-gray: #d9d1c4;
+$tm-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+$tm-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+$tm-serif: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif;
+$tm-sans: var(--wp--preset--font-family--hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif;
+$tm-mono: var(--wp--preset--font-family--jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
+$tm-frame: 1280px;
+$tm-gutter: clamp(16px, 5vw, 96px);
+$tm-pad: max(#{$tm-gutter}, calc((100vw - #{$tm-frame}) / 2));
+$tm-sec: clamp(56px, 1.5rem + 4.2vw, 104px);
+$tm-shadow: 0 24px 48px -28px rgba(36, 26, 18, 0.45);
+
+// Sunday, 09:00 = 0, in minutes: (start, duration), in markup order
+$tm-day: 450;
+$tm-x: (15 30) (60 30) (90 30) (150 30) (180 30) (210 45) (330 30) (360 30) (390 45);
+$tm-c: (60 15) (75 15) (90 15) (105 15) (150 60) (210 15) (225 15) (240 15) (330 15) (345 15) (360 15) (375 15) (390 15) (405 15) (420 15);
+// breaks: coffee 11:00, the group photo and lunch 13:15 to 14:30, coffee 16:15
+$tm-breaks: ("coffee": (120 30), "lunch": (255 75), "tea": (435 15));
+
+@function tm-pc($min) { @return math.div(math.round(math.div($min, $tm-day) * 10000), 100) * 1%; }
+
+/* ---- The ground ---------------------------------------------------------------------- */
+
+body:has(.wcblr-tm),
+body:has(.wcblr-tm) .wp-site-blocks > main {
+	background-color: $tm-cream !important;
+}
+
+body:has(.wcblr-tm) main::before,
+body:has(.wcblr-tm) main::after {
+	display: none !important;
+}
+
+body:has(.wcblr-tm) .wp-block-group:has(> .wp-block-group.alignwide > .wp-block-post-title) {
+	display: none !important;
+}
+
+body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px) !important; }
+
+.entry-content:has(> .wcblr-tm) {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+	max-width: none !important;
+}
+
+.entry-content > .wcblr-tm.alignfull {
+	width: 100vw !important;
+	max-width: none !important;
+	margin: 0 0 0 calc(50% - 50vw) !important;
+	box-sizing: border-box;
+	padding: clamp(8px, 1vw, 24px) $tm-pad clamp(64px, 2rem + 4vw, 120px) !important;
+	color: $tm-ink;
+	font-family: $tm-sans;
+	overflow-x: clip;
+}
+
+.wcblr-tm :where(p, h1, h2, h3, h4, figure, .wp-block-group, .wp-block-buttons) {
+	margin: 0 !important;
+	max-width: none !important;
+}
+
+.wcblr-tm *, .wcblr-tm *::before, .wcblr-tm *::after { box-sizing: border-box; }
+
+.wcblr-tm a { color: inherit; text-decoration: none; font: inherit; }
+.wcblr-tm em { color: $tm-red; font-style: italic; }
+
+// links inside running text
+.wcblr-tm-body a,
+.wcblr-tm-s-b a,
+.wcblr-tm-note a,
+.wcblr-tm-backs a,
+.wcblr-tm-tips a,
+.wcblr-tm-steps a,
+.wcblr-tm-cday a {
+	box-shadow: inset 0 -1.5px 0 rgba(200, 52, 75, 0.5);
+	transition: color 0.2s $tm-ease, box-shadow 0.2s $tm-ease;
+
+	&:hover { color: $tm-red; box-shadow: inset 0 -2px 0 $tm-red; }
+}
+
+.wcblr-tm-k,
+.wcblr-tm-n {
+	font-family: $tm-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	color: $tm-red;
+}
+
+.wcblr-tm-k.is-gold { color: $tm-gold-deep; }
+
+.wcblr-tm-body {
+	max-width: 60ch !important;
+	font-size: 17px !important;
+	line-height: 1.68 !important;
+	color: $tm-soft;
+
+	b { color: $tm-ink; }
+}
+
+.wcblr-tm-body.is-lead { margin: 0 0 clamp(24px, 2.4vw, 36px) !important; font-size: 18px !important; }
+
+.wcblr-tm-body.is-big {
+	max-width: 34ch !important;
+	font-family: $tm-serif !important;
+	font-size: clamp(22px, 0.9rem + 1vw, 30px) !important;
+	line-height: 1.35 !important;
+	letter-spacing: -0.015em;
+	color: $tm-ink;
+}
+
+.wcblr-tm-sec { padding-top: $tm-sec; }
+.wcblr-tm-sec.wcblr-tm-hero-sec { padding-top: 0; }
+
+.wcblr-tm-titles { margin-bottom: clamp(20px, 0.8rem + 1.4vw, 36px) !important; }
+
+.wcblr-post.wcblr-tm .wcblr-tm-bt {
+	margin-top: 12px !important;
+	font-family: $tm-serif !important;
+	font-size: clamp(40px, 1.1rem + 4vw, 88px) !important;
+	font-weight: 400 !important;
+	line-height: 1.04 !important;
+	padding-bottom: 0.06em;
+	letter-spacing: -0.045em !important;
+	color: $tm-ink;
+	text-wrap: balance;
+	scroll-margin-top: 90px;
+}
+
+.wcblr-tm-split {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+	gap: clamp(28px, 4vw, 72px);
+	align-items: center;
+}
+
+.wcblr-tm-split.is-buy { align-items: start; margin-top: clamp(28px, 3vw, 44px) !important; }
+
+.wcblr-tm-before {
+	margin-top: 24px !important;
+	font-family: $tm-serif !important;
+	font-size: clamp(24px, 1rem + 1vw, 32px) !important;
+	line-height: 1.2 !important;
+	letter-spacing: -0.02em;
+	color: $tm-soft;
+
+	b { font-weight: 400; color: $tm-ink; }
+}
+
+/* ---- Buttons ------------------------------------------------------------------------- */
+
+.wcblr-tm-actions {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 28px !important;
+}
+
+.wcblr-tm-actions .wp-block-button__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 15px 24px !important;
+	border-radius: 999px !important;
+	background: $tm-red !important;
+	color: #fff !important;
+	font-family: $tm-sans !important;
+	font-size: 15.5px !important;
+	font-weight: 700 !important;
+	transition: transform 0.4s $tm-spring, background 0.2s $tm-ease;
+
+	&::after { content: "\2192"; transition: transform 0.4s $tm-spring; }
+	&:hover { transform: translateY(-2px); background: $tm-red-deep !important; }
+	&:hover::after { transform: translateX(4px); }
+}
+
+/* ---- Lanes: one hall's sessions on the 09:00 to 16:30 axis ------------------------------ */
+
+.wcblr-tm-lane {
+	display: grid;
+	grid-template-columns: 64px minmax(0, 1fr);
+	gap: 10px;
+	align-items: center;
+
+	> small { font-family: $tm-mono; font-size: 11px; font-weight: 600; }
+	&.is-x > small { color: $tm-red; }
+	&.is-c > small { color: $tm-sky-deep; }
+}
+
+.wcblr-tm-track {
+	position: relative;
+	display: block;
+	height: 30px;
+	border-radius: 8px;
+	background: $tm-paper;
+	box-shadow: inset 0 0 0 1px $tm-line;
+
+	i {
+		position: absolute;
+		top: 3px;
+		bottom: 3px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 5px;
+		box-shadow: 0 0 0 1px #fff;
+		font-family: $tm-mono;
+		font-size: 11px;
+		font-style: normal;
+		font-weight: 700;
+		line-height: 1;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+}
+
+@each $hall, $list in ("x": $tm-x, "c": $tm-c) {
+	@for $n from 1 through list.length($list) {
+		$s: list.nth($list, $n);
+		.wcblr-tm-lane.is-#{$hall} .wcblr-tm-track > i:nth-child(#{$n}) {
+			left: tm-pc(list.nth($s, 1));
+			width: tm-pc(list.nth($s, 2));
+		}
+	}
+}
+
+// hall colours (hero), gray with gold highlights (the glance)
+.wcblr-tm-cover .wcblr-tm-lane.is-x i { background: $tm-red; }
+.wcblr-tm-cover .wcblr-tm-lane.is-c i { background: $tm-sky; }
+.wcblr-tm-cover .wcblr-tm-lane.is-missed i { background: transparent; box-shadow: inset 0 0 0 1.5px $tm-gray; }
+.wcblr-tm-cover .wcblr-tm-lane.is-missed > small { color: #b9ad9d; text-decoration: line-through; }
+
+.wcblr-tm-glance .wcblr-tm-track i { background: $tm-gray; color: $tm-ink; }
+.wcblr-tm-glance .wcblr-tm-track i.is-biz { background: $tm-gold; }
+.wcblr-tm-glance .wcblr-tm-track i.is-ws { background: $tm-ink; color: $tm-paper; font-size: 10px; font-weight: 600; }
+
+/* ---- 1. Hero ------------------------------------------------------------------------- */
+
+.wcblr-tm-hero {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+	gap: clamp(28px, 4vw, 64px);
+	align-items: center;
+	padding-top: clamp(16px, 3vw, 48px);
+}
+
+.wcblr-tm-kicker {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 8px;
+	font-family: $tm-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 600;
+
+	span { padding: 6px 12px; border-radius: 999px; background: $tm-paper; box-shadow: inset 0 0 0 1px $tm-line; }
+	span:first-child { background: $tm-ink; color: $tm-paper; box-shadow: none; }
+}
+
+.wcblr-post.wcblr-tm .wcblr-tm-h1 {
+	margin-top: 22px !important;
+	font-family: $tm-serif !important;
+	font-size: clamp(44px, 1.1rem + 4.4vw, 96px) !important;
+	font-weight: 400 !important;
+	line-height: 1 !important;
+	letter-spacing: -0.05em !important;
+	color: $tm-ink;
+	text-wrap: balance;
+}
+
+.wcblr-tm-intro {
+	max-width: 50ch !important;
+	margin-top: 22px !important;
+	font-size: 17px !important;
+	line-height: 1.62 !important;
+	color: $tm-soft;
+}
+
+.wcblr-tm-intro.is-dek { font-size: 18.5px !important; font-weight: 600; color: $tm-ink; }
+
+.wcblr-tm-cover {
+	display: flex !important;
+	flex-direction: column;
+	border-radius: 24px;
+	overflow: hidden;
+	background: #fff;
+	box-shadow: inset 0 0 0 1px $tm-line, $tm-shadow;
+}
+
+.wcblr-tm-cover-bar,
+.wcblr-tm-glance-bar {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 14px 20px;
+	background: $tm-espresso;
+
+	small { font-family: $tm-mono; font-size: 11px; font-weight: 600; color: $tm-gold; }
+	b { font-family: $tm-serif; font-size: 18px; font-weight: 400; color: $tm-paper; }
+}
+
+.wcblr-tm-cover-row {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin: 0 20px;
+	padding: 18px 0;
+	border-bottom: 1px solid #efebe4;
+
+	.wcblr-tm-lane { grid-template-columns: 58px minmax(0, 1fr); }
+	.wcblr-tm-track { height: 26px; }
+}
+
+.wcblr-tm-cover-h {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 4px;
+
+	b { font-family: $tm-serif; font-size: 26px; font-weight: 400; line-height: 1; letter-spacing: -0.03em; }
+	small { font-family: $tm-mono; font-size: 11px; font-weight: 600; color: $tm-muted; }
+}
+
+.wcblr-tm-cover-row + .wcblr-tm-cover-row .wcblr-tm-cover-h small { color: $tm-red; }
+
+.wcblr-tm-cover-f {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px 16px;
+	padding: 14px 20px 16px;
+
+	span { display: inline-flex; align-items: center; gap: 7px; font-family: $tm-mono; font-size: 10.5px; font-weight: 600; color: $tm-soft; }
+	span::before { content: ""; width: 12px; height: 12px; border-radius: 3px; }
+	.is-x::before { background: $tm-red; }
+	.is-c::before { background: $tm-sky; }
+	.is-off::before { box-shadow: inset 0 0 0 1.5px $tm-gray; }
+}
+
+.wcblr-tm-lede {
+	max-width: 38ch !important;
+	margin-top: clamp(40px, 4.4vw, 72px) !important;
+	font-family: $tm-serif !important;
+	font-size: clamp(24px, 1rem + 1.3vw, 36px) !important;
+	line-height: 1.28 !important;
+	letter-spacing: -0.02em;
+	color: $tm-ink;
+}
+
+.wcblr-tm-index {
+	display: grid !important;
+	grid-template-columns: repeat(6, minmax(0, 1fr));
+	gap: 8px;
+	margin-top: 28px !important;
+
+	a {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding: 14px;
+		border-radius: 16px;
+		background: $tm-paper;
+		box-shadow: inset 0 0 0 1px $tm-line;
+		font-size: 14.5px;
+		font-weight: 600;
+		line-height: 1.3;
+		transition: transform 0.35s $tm-spring, background 0.2s $tm-ease;
+
+		&:hover { transform: translateY(-3px); background: #fff; }
+	}
+
+	b { font-family: $tm-mono; font-size: 11px; color: $tm-red; }
+}
+
+// Sunday at a glance
+.wcblr-tm-glance {
+	display: flex !important;
+	flex-direction: column;
+	gap: 10px;
+	margin-top: clamp(28px, 3vw, 44px) !important;
+	padding-bottom: 20px;
+	border-radius: 24px;
+	overflow: hidden;
+	background: #fff;
+	box-shadow: inset 0 0 0 1px $tm-line, $tm-shadow;
+
+	> .wcblr-tm-lane, > .wcblr-tm-axis, > .wcblr-tm-breaks, > .wcblr-tm-cap { margin: 0 24px; }
+	> .wcblr-tm-axis { margin-top: 10px; }
+	.wcblr-tm-track { height: 40px; }
+}
+
+.wcblr-tm-axis,
+.wcblr-tm-breaks {
+	position: relative;
+	display: block;
+	height: 18px;
+	margin-left: 98px !important;
+}
+
+.wcblr-tm-axis small {
+	position: absolute;
+	top: 0;
+	font-family: $tm-mono;
+	font-size: 10.5px;
+	font-weight: 600;
+	color: $tm-muted;
+	transform: translateX(-50%);
+
+	&:nth-child(1) { left: 0; transform: none; }
+	&:nth-child(2) { left: tm-pc(120); }
+	&:nth-child(3) { left: tm-pc(240); }
+	&:nth-child(4) { left: tm-pc(360); }
+	&:nth-child(5) { right: 0; transform: none; }
+}
+
+.wcblr-tm-breaks span {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 999px;
+	background: $tm-sand;
+	font-family: $tm-mono;
+	font-size: 10px;
+	font-weight: 600;
+	color: $tm-soft;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+@each $name, $s in $tm-breaks {
+	.wcblr-tm-breaks .is-#{$name} { left: tm-pc(list.nth($s, 1)); width: tm-pc(list.nth($s, 2)); }
+}
+
+.wcblr-tm-breaks .is-tea { font-size: 0; }
+
+.wcblr-tm-cap {
+	margin-top: 6px !important;
+	padding-top: 14px;
+	border-top: 1px solid #efebe4;
+	font-size: 14px;
+	line-height: 1.5;
+	color: $tm-soft;
+
+	b { padding: 1px 6px; border-radius: 4px; background: $tm-gold; color: $tm-ink; }
+}
+
+/* ---- 2. 01 The seven sessions ---------------------------------------------------------- */
+
+.wcblr-tm-list {
+	display: flex !important;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.wcblr-tm-s {
+	display: grid;
+	grid-template-columns: 40px 170px minmax(0, 1fr);
+	gap: 18px;
+	align-items: start;
+	padding: 18px 22px;
+	border-radius: 18px;
+	background: $tm-paper;
+	box-shadow: inset 4px 0 0 $tm-sky, inset 0 0 0 1px $tm-line;
+
+	&.is-x { box-shadow: inset 4px 0 0 $tm-red, inset 0 0 0 1px $tm-line; }
+
+	> i {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 34px;
+		height: 34px;
+		border-radius: 9px;
+		background: $tm-gold;
+		color: $tm-ink;
+		font-family: $tm-mono;
+		font-size: 13px;
+		font-style: normal;
+		font-weight: 700;
+	}
+}
+
+.wcblr-tm-s-m {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+
+	b { font-family: $tm-serif; font-size: 26px; font-weight: 400; line-height: 1; letter-spacing: -0.03em; }
+	small { font-family: $tm-mono; font-size: 10.5px; font-weight: 600; line-height: 1.4; color: $tm-sky-deep; }
+}
+
+.wcblr-tm-s.is-x .wcblr-tm-s-m small { color: $tm-red; }
+
+.wcblr-tm-s-b {
+	display: block;
+	font-size: 15.5px;
+	line-height: 1.55;
+	color: $tm-soft;
+
+	strong { display: block; margin-bottom: 4px; font-size: 17px; font-weight: 700; line-height: 1.3; color: $tm-ink; }
+}
+
+// three back to back in Xavier Hall
+.wcblr-tm-run {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 12px;
+	border-radius: 22px;
+	background: $tm-red-soft;
+	box-shadow: inset 0 0 0 1.5px rgba(200, 52, 75, 0.35);
+
+	.wcblr-tm-s { background: #fff; }
+}
+
+.wcblr-tm-run-k {
+	padding: 2px 10px 4px;
+	font-family: $tm-mono;
+	font-size: 11px;
+	font-weight: 600;
+	color: $tm-red-deep;
+}
+
+// next door at 11:30
+.wcblr-tm-door {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr) minmax(0, 0.7fr);
+	gap: 14px;
+	align-items: stretch;
+	margin-top: 16px !important;
+	padding: 22px;
+	border-radius: 24px;
+	background: $tm-espresso;
+	color: $tm-paper;
+}
+
+.wcblr-tm-door-t {
+	display: block;
+	padding: 4px 8px 4px 4px;
+	font-size: 16.5px;
+	line-height: 1.6;
+	color: rgba(251, 248, 241, 0.88);
+
+	small { display: block; margin-bottom: 8px; font-family: $tm-mono; font-size: 11px; font-weight: 600; color: $tm-gold; }
+}
+
+.wcblr-tm-door-h {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	padding: 16px;
+	border-radius: 16px;
+	font-size: 13.5px;
+	line-height: 1.4;
+
+	small { font-family: $tm-mono; font-size: 10.5px; font-weight: 600; opacity: 0.85; }
+	b { font-family: $tm-serif; font-size: 26px; font-weight: 400; line-height: 1; letter-spacing: -0.02em; }
+
+	&.is-x { background: $tm-red; color: #fff; }
+	&.is-c { background: $tm-sky; color: #fff; }
+}
+
+/* ---- 3. 02 Who to send ----------------------------------------------------------------- */
+
+.wcblr-tm-teams {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 16px;
+
+	> span {
+		display: flex;
+		flex-direction: column;
+		border-radius: 22px;
+		overflow: hidden;
+		background: $tm-paper;
+		box-shadow: inset 0 0 0 1px $tm-line;
+	}
+}
+
+.wcblr-tm-team-h {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 16px 20px;
+	background: $tm-ink;
+	color: $tm-paper;
+
+	small { font-family: $tm-mono; font-size: 11px; font-weight: 600; color: $tm-gold; }
+	b { font-family: $tm-serif; font-size: 30px; font-weight: 400; line-height: 1; letter-spacing: -0.03em; }
+}
+
+.wcblr-tm-seats {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	padding: 20px 20px 4px;
+
+	i {
+		position: relative;
+		width: 30px;
+		height: 38px;
+
+		// a person: head and shoulders
+		&::before { content: ""; position: absolute; left: 8px; top: 0; width: 14px; height: 14px; border-radius: 50%; background: currentColor; }
+		&::after { content: ""; position: absolute; left: 0; bottom: 0; width: 30px; height: 20px; border-radius: 15px 15px 6px 6px; background: currentColor; }
+	}
+
+	.is-x { color: $tm-red; }
+	.is-c { color: $tm-sky; }
+	.is-biz { color: $tm-gold; }
+	.is-build { color: $tm-ink; }
+	.is-all { color: $tm-soft; width: 22px; height: 30px; }
+	.is-all::before { left: 6px; width: 10px; height: 10px; }
+	.is-all::after { width: 22px; height: 15px; }
+	.is-all:nth-child(odd) { color: $tm-ink; }
+}
+
+.wcblr-tm-team-b {
+	flex: 1;
+	display: block;
+	padding: 14px 20px 6px;
+	font-size: 15.5px;
+	line-height: 1.6;
+	color: $tm-soft;
+
+	> b { display: block; margin-bottom: 6px; font-family: $tm-serif; font-size: 23px; font-weight: 400; line-height: 1.12; letter-spacing: -0.02em; color: $tm-ink; }
+}
+
+.wcblr-tm-team-f {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px 14px;
+	margin: 12px 20px 18px;
+	padding-top: 12px;
+	border-top: 1px dashed $tm-line;
+
+	span { display: inline-flex; align-items: center; gap: 7px; font-family: $tm-mono; font-size: 10.5px; font-weight: 600; color: $tm-soft; }
+	span::before { content: ""; width: 10px; height: 10px; border-radius: 50%; }
+	.is-x::before { background: $tm-red; }
+	.is-c::before { background: $tm-sky; }
+	.is-biz::before { background: $tm-gold; }
+	.is-build::before { background: $tm-ink; }
+	.is-all::before { background: $tm-soft; }
+}
+
+.wcblr-tm-note {
+	max-width: 760px !important;
+	margin-top: 16px !important;
+	padding: 18px 22px;
+	border-radius: 18px;
+	background: $tm-sand;
+	font-size: 16px !important;
+	line-height: 1.6 !important;
+	color: $tm-ink;
+
+	small { display: block; margin-bottom: 6px; font-family: $tm-mono; font-size: 11px; font-weight: 600; color: $tm-red; }
+}
+
+/* ---- 4. 03 What your team brings back -------------------------------------------------- */
+
+.wcblr-tm-backs {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 14px;
+	align-items: stretch;
+
+	> span {
+		display: block;
+		padding: 22px;
+		border-radius: 22px;
+		background: $tm-paper;
+		box-shadow: inset 0 0 0 1px $tm-line;
+		font-size: 15.5px;
+		line-height: 1.62;
+		color: $tm-soft;
+	}
+
+	> span > i {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 28px;
+		height: 28px;
+		margin-bottom: 14px;
+		border-radius: 8px;
+		background: $tm-ink;
+		color: $tm-gold;
+		font-family: $tm-mono;
+		font-size: 11px;
+		font-style: normal;
+		font-weight: 600;
+	}
+
+	> span > b { display: block; margin-bottom: 8px; font-family: $tm-serif; font-size: 23px; font-weight: 400; line-height: 1.15; letter-spacing: -0.02em; color: $tm-ink; }
+
+	> .is-meter { background: #fff; box-shadow: inset 0 0 0 1px $tm-line, $tm-shadow; }
+}
+
+.wcblr-tm-meter {
+	display: block;
+	margin-top: 18px;
+	padding-top: 16px;
+	border-top: 1px dashed $tm-line;
+}
+
+.wcblr-tm-meter-n {
+	display: flex;
+	align-items: baseline;
+	gap: 10px;
+	margin-bottom: 10px;
+
+	b { font-family: $tm-serif; font-size: 48px; font-weight: 400; line-height: 1; letter-spacing: -0.04em; color: $tm-red; }
+	small { font-family: $tm-mono; font-size: 11px; font-weight: 600; line-height: 1.4; color: $tm-muted; }
+}
+
+.wcblr-tm-cells {
+	display: grid;
+	grid-template-columns: repeat(12, minmax(0, 1fr));
+	gap: 4px;
+
+	i { height: 16px; border-radius: 4px; box-shadow: inset 0 0 0 1.5px $tm-gray; }
+	i.is-on { background: $tm-red; box-shadow: none; }
+}
+
+/* ---- 5. 04 Struggling to hire? --------------------------------------------------------- */
+
+.wcblr-tm-split-t { display: flex !important; flex-direction: column; }
+
+// a cork-coloured board with one pinned role card, another card behind it
+.wcblr-tm-board {
+	position: relative;
+	display: block !important;
+	padding: 22px 26px 30px;
+	border-radius: 24px;
+	background: $tm-sand;
+}
+
+.wcblr-tm-board-k {
+	display: block;
+	margin-bottom: 18px;
+	font-family: $tm-mono;
+	font-size: 11px;
+	font-weight: 600;
+	color: $tm-gold-deep;
+}
+
+.wcblr-tm-card {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	max-width: 420px;
+	padding: 24px 22px 20px;
+	border-radius: 6px;
+	background: #fff;
+	box-shadow: 0 1px 0 $tm-line, $tm-shadow;
+	transform: rotate(-1.2deg);
+
+	&.is-back {
+		position: absolute;
+		z-index: 0;
+		right: 22px;
+		top: 54px;
+		width: 52%;
+		height: 62%;
+		background: $tm-paper;
+		box-shadow: 0 1px 0 $tm-line;
+		transform: rotate(3deg);
+	}
+}
+
+.wcblr-tm-card-pin {
+	position: absolute;
+	left: 50%;
+	top: -8px;
+	width: 18px;
+	height: 18px;
+	margin-left: -9px;
+	border-radius: 50%;
+	background: $tm-red;
+	box-shadow: inset -3px -3px 0 rgba(0, 0, 0, 0.18), 0 3px 6px rgba(36, 26, 18, 0.3);
+}
+
+.wcblr-tm-card-h {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	padding-bottom: 12px;
+	border-bottom: 2px solid $tm-ink;
+
+	small { font-family: $tm-mono; font-size: 11px; font-weight: 600; color: $tm-muted; }
+	b { font-family: $tm-serif; font-size: 34px; font-weight: 400; line-height: 1; letter-spacing: -0.03em; }
+}
+
+.wcblr-tm-chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+
+	span { padding: 5px 10px; border-radius: 999px; background: $tm-paper; box-shadow: inset 0 0 0 1px $tm-line; font-size: 12.5px; font-weight: 600; color: $tm-soft; }
+	span:first-child { background: $tm-ink; color: $tm-paper; box-shadow: none; }
+}
+
+.wcblr-tm-card-f {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 64px;
+	gap: 14px;
+	align-items: end;
+	padding-top: 12px;
+	border-top: 1px dashed $tm-line;
+}
+
+.wcblr-tm-card-who {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	font-size: 14px;
+	font-weight: 700;
+	line-height: 1.35;
+
+	small { font-family: $tm-mono; font-size: 10.5px; font-weight: 600; color: $tm-muted; }
+}
+
+.wcblr-tm-qr {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 64px;
+	height: 64px;
+	border-radius: 6px;
+	box-shadow: inset 0 0 0 2px $tm-ink, inset 0 0 0 6px #fff, inset 0 0 0 8px $tm-ink;
+	font-family: $tm-mono;
+	font-size: 9.5px;
+	font-weight: 700;
+	line-height: 1.2;
+	text-align: center;
+}
+
+.wcblr-tm-tips {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px;
+	margin-top: clamp(24px, 2.6vw, 36px) !important;
+
+	> span {
+		display: block;
+		padding: 20px 22px;
+		border-radius: 20px;
+		background: $tm-paper;
+		box-shadow: inset 0 0 0 1px $tm-line;
+		font-size: 15.5px;
+		line-height: 1.6;
+		color: $tm-soft;
+	}
+
+	> span > i { display: block; margin-bottom: 8px; font-family: $tm-serif; font-size: 40px; font-style: normal; line-height: 1; color: $tm-red; }
+	> .is-jobs { background: #fff; box-shadow: inset 0 0 0 1px $tm-line, $tm-shadow; }
+}
+
+// a listing's life on jobs.wordpress.net: about a day of review, then 21 days live
+.wcblr-tm-life { display: block; margin-top: 16px; }
+
+.wcblr-tm-life-bar {
+	position: relative;
+	display: flex;
+	height: 30px;
+	border-radius: 8px;
+	overflow: hidden;
+	font-family: $tm-mono;
+	font-size: 10.5px;
+	font-weight: 600;
+	line-height: 30px;
+	white-space: nowrap;
+}
+
+.wcblr-tm-life-rev { flex: 0 0 9%; background: $tm-sand; color: $tm-soft; font-size: 0; }
+.wcblr-tm-life-live { flex: 1; padding-right: 10px; background: $tm-green; color: #fff; text-align: right; }
+
+.wcblr-tm-life-wc {
+	position: absolute;
+	left: 40%;
+	top: 0;
+	bottom: 0;
+	padding: 0 8px;
+	background: $tm-red;
+	color: #fff;
+}
+
+.wcblr-tm-life-t {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 6px;
+
+	small { font-family: $tm-mono; font-size: 10.5px; color: $tm-muted; }
+}
+
+.wcblr-tm-ad {
+	margin-top: 16px !important;
+	padding: clamp(22px, 3vw, 36px);
+	border-radius: 24px;
+	background: $tm-espresso;
+	font-family: $tm-serif !important;
+	font-size: clamp(20px, 0.8rem + 0.9vw, 26px) !important;
+	line-height: 1.4 !important;
+	letter-spacing: -0.01em;
+	color: rgba(251, 248, 241, 0.86);
+
+	b { font-weight: 400; color: $tm-gold; }
+}
+
+/* ---- 6. 05 The Monday after ------------------------------------------------------------ */
+
+.wcblr-tm-mon {
+	display: flex !important;
+	flex-direction: column;
+	border-radius: 24px;
+	overflow: hidden;
+	background: #fff;
+	box-shadow: inset 0 0 0 1px $tm-line, $tm-shadow;
+}
+
+.wcblr-tm-mon-h {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1.3fr);
+	gap: 10px;
+	align-items: stretch;
+	padding: 16px;
+	background: $tm-espresso;
+
+	> span { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border-radius: 14px; background: $tm-red; color: #fff; }
+	> .is-mon { background: $tm-paper; color: $tm-ink; }
+	> .is-arrow { align-self: center; padding: 0; background: none; font-size: 20px; text-align: center; color: $tm-gold; }
+	> .is-arrow::before { content: "\2192"; }
+
+	small { font-family: $tm-mono; font-size: 10.5px; font-weight: 600; opacity: 0.85; }
+	b { font-family: $tm-serif; font-size: 22px; font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; }
+}
+
+.wcblr-tm-mon-cols,
+.wcblr-tm-mon-row {
+	display: grid;
+	grid-template-columns: 80px minmax(0, 1fr) minmax(0, 1fr);
+	gap: 12px;
+	align-items: center;
+	margin: 0 20px;
+}
+
+.wcblr-tm-mon-cols {
+	padding: 16px 0 8px;
+
+	small { font-family: $tm-mono; font-size: 10.5px; font-weight: 600; color: $tm-muted; }
+}
+
+.wcblr-tm-mon-row {
+	padding: 10px 0;
+	border-top: 1px solid #efebe4;
+
+	b { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: $tm-ink; color: $tm-gold; font-family: $tm-mono; font-size: 12px; }
+	i { height: 12px; border-radius: 999px; background: $tm-sand; }
+	i + i { width: 80%; }
+}
+
+.wcblr-tm-mon-f {
+	margin: 8px 20px 20px;
+	padding: 12px 14px;
+	border-radius: 12px;
+	background: $tm-gold-soft;
+	font-family: $tm-serif;
+	font-size: 17px;
+	font-style: italic;
+	color: $tm-ink;
+}
+
+/* ---- 7. 06 Buying for your team -------------------------------------------------------- */
+
+.wcblr-tm-steps {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 12px;
+
+	> span {
+		position: relative;
+		display: block;
+		padding: 20px;
+		border-radius: 20px;
+		background: $tm-paper;
+		box-shadow: inset 0 0 0 1px $tm-line;
+		font-size: 15.5px;
+		line-height: 1.6;
+		color: $tm-soft;
+	}
+
+	> span:not(:last-child)::after {
+		content: "\2192";
+		position: absolute;
+		right: -13px;
+		top: 22px;
+		z-index: 1;
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		background: $tm-cream;
+		font-size: 14px;
+		line-height: 26px;
+		text-align: center;
+		color: $tm-red;
+	}
+
+	i { display: block; margin-bottom: 10px; font-family: $tm-serif; font-size: 40px; font-style: normal; line-height: 1; color: $tm-red; }
+	b { color: $tm-ink; }
+	> span:last-child { background: $tm-ink; color: rgba(251, 248, 241, 0.86); box-shadow: none; }
+	> span:last-child i { color: $tm-gold; }
+}
+
+.wcblr-tm-cday {
+	display: grid !important;
+	grid-template-columns: 64px minmax(0, 1fr);
+	gap: 18px;
+	align-items: start;
+	margin-top: 22px !important;
+	padding: 20px;
+	border-radius: 20px;
+	background: $tm-gold-soft;
+	font-size: 15.5px !important;
+	line-height: 1.6 !important;
+	color: $tm-ink;
+}
+
+.wcblr-tm-cday-d {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 8px 0 10px;
+	border-radius: 12px;
+	background: $tm-gold;
+	font-family: $tm-serif;
+	font-size: 30px;
+	line-height: 1;
+
+	small { font-family: $tm-mono; font-size: 10.5px; font-weight: 600; }
+}
+
+// a note to forward
+.wcblr-tm-memo {
+	display: flex !important;
+	flex-direction: column;
+	gap: 0;
+	padding: 24px;
+	border-radius: 6px;
+	background: #fff;
+	box-shadow: inset 0 4px 0 $tm-red, 0 1px 0 $tm-line, $tm-shadow;
+}
+
+.wcblr-tm-memo-h {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	padding-bottom: 14px;
+	margin-bottom: 4px;
+	border-bottom: 2px dashed $tm-line;
+
+	small { font-family: $tm-mono; font-size: 11px; font-weight: 600; color: $tm-red; }
+	b { font-family: $tm-serif; font-size: 26px; font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; }
+}
+
+.wcblr-tm-memo-i {
+	position: relative;
+	display: block;
+	padding: 11px 0 11px 32px;
+	border-bottom: 1px solid #efebe4;
+	font-size: 15.5px;
+	line-height: 1.45;
+
+	&:last-child { border-bottom: 0; padding-bottom: 0; }
+
+	&::before {
+		content: "\2713";
+		position: absolute;
+		left: 0;
+		top: 12px;
+		width: 20px;
+		height: 20px;
+		border-radius: 50%;
+		background: $tm-ink;
+		color: #fff;
+		font-size: 11px;
+		font-weight: 700;
+		line-height: 20px;
+		text-align: center;
+	}
+}
+
+/* ---- 8. Close ------------------------------------------------------------------------- */
+
+.wcblr-tm-close {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+	gap: clamp(28px, 4vw, 64px);
+	align-items: center;
+	padding: clamp(28px, 4.4vw, 72px);
+	border-radius: 32px;
+	background: $tm-espresso;
+	color: $tm-paper;
+
+	.wcblr-tm-k.is-gold { color: $tm-gold; }
+	em { color: $tm-gold; }
+}
+
+.wcblr-post.wcblr-tm .wcblr-tm-close-t {
+	margin-top: 14px !important;
+	font-family: $tm-serif !important;
+	font-size: clamp(40px, 1rem + 3.4vw, 76px) !important;
+	font-weight: 400 !important;
+	line-height: 1.02 !important;
+	letter-spacing: -0.045em !important;
+	color: $tm-paper;
+	text-wrap: balance;
+}
+
+.wcblr-tm-close-b {
+	max-width: 52ch !important;
+	margin-top: 16px !important;
+	font-size: 17px !important;
+	line-height: 1.65 !important;
+	color: rgba(251, 248, 241, 0.82);
+}
+
+.wcblr-tm-close-b + .wcblr-tm-close-b { margin-top: 8px !important; }
+
+.wcblr-tm-gets {
+	display: flex !important;
+	flex-direction: column;
+	gap: 12px;
+	padding: 24px;
+	border-radius: 22px;
+	background: $tm-paper;
+	color: $tm-ink;
+
+	> span:not(.wcblr-tm-gets-h) {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		padding-left: 32px;
+
+		&::before {
+			content: "\2713";
+			position: absolute;
+			left: 0;
+			top: 1px;
+			width: 20px;
+			height: 20px;
+			border-radius: 50%;
+			background: $tm-ink;
+			color: #fff;
+			font-size: 11px;
+			font-weight: 700;
+			line-height: 20px;
+			text-align: center;
+		}
+	}
+
+	b { font-size: 15px; font-weight: 700; line-height: 1.35; }
+	small { font-size: 13.5px; line-height: 1.4; color: $tm-soft; }
+
+	.is-x::before { background: $tm-red !important; }
+	.is-c::before { background: $tm-sky !important; }
+	.is-biz::before { background: $tm-gold !important; color: $tm-ink !important; }
+}
+
+.wcblr-tm-gets-h {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 12px;
+	padding-bottom: 14px;
+	margin-bottom: 4px;
+	border-bottom: 2px dashed $tm-line;
+
+	b { font-family: $tm-serif; font-size: 52px !important; font-weight: 400 !important; line-height: 1 !important; letter-spacing: -0.04em; color: $tm-red; }
+	small { font-family: $tm-mono; font-size: 11.5px !important; font-weight: 600; color: $tm-muted !important; }
+}
+
+/* ---- Motion: the first screen only --------------------------------------------------- */
+
+@keyframes wcblr-tm-rise {
+	from { opacity: 0; transform: translateY(14px); }
+	to { opacity: 1; transform: none; }
+}
+
+@keyframes wcblr-tm-pop {
+	from { opacity: 0; transform: scaleY(0.2); }
+	to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wcblr-tm-hero-main > * { animation: wcblr-tm-rise 0.7s $tm-ease backwards; }
+	.wcblr-tm-hero-main > :nth-child(2) { animation-delay: 0.06s; }
+	.wcblr-tm-hero-main > :nth-child(3) { animation-delay: 0.16s; }
+	.wcblr-tm-cover { animation: wcblr-tm-rise 0.8s $tm-ease 0.1s backwards; }
+	.wcblr-tm-cover-row + .wcblr-tm-cover-row .wcblr-tm-lane.is-c i { animation: wcblr-tm-pop 0.5s $tm-spring 0.7s backwards; }
+}
+
+/* ---- Breakpoints ---------------------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+	.wcblr-tm-hero,
+	.wcblr-tm-split,
+	.wcblr-tm-close { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-tm-cover { max-width: 620px; }
+	.wcblr-tm-index { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+	.wcblr-tm-door { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.wcblr-tm-door-t { grid-column: 1 / -1; }
+	.wcblr-tm-backs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.wcblr-tm-backs > .is-meter { grid-column: 2; grid-row: 1 / span 2; }
+	.wcblr-tm-board, .wcblr-tm-mon, .wcblr-tm-memo { max-width: 620px; }
+	.wcblr-tm-gets { max-width: 460px; }
+}
+
+@media (max-width: 860px) {
+	.wcblr-tm-teams,
+	.wcblr-tm-backs,
+	.wcblr-tm-tips,
+	.wcblr-tm-steps { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-tm-backs > .is-meter { grid-column: auto; grid-row: auto; }
+	.wcblr-tm-steps > span::after { display: none; }
+	.wcblr-tm-s { grid-template-columns: 34px minmax(0, 1fr); gap: 8px 14px; }
+	.wcblr-tm-s-b { grid-column: 2; }
+	.wcblr-tm-s-m { flex-direction: row; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; }
+}
+
+// phones: Sunday at a glance stands up, time runs down the page
+@media (max-width: 640px) {
+	.wcblr-tm-actions .wp-block-button { flex: 1 1 auto; }
+	.wcblr-tm-actions .wp-block-button__link { width: 100%; justify-content: center; }
+	.wcblr-tm-index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.wcblr-tm-close { padding: 26px 20px; border-radius: 24px; }
+	.wcblr-tm-door { grid-template-columns: minmax(0, 1fr); padding: 18px; }
+	.wcblr-tm-cover-row .wcblr-tm-lane { grid-template-columns: 52px minmax(0, 1fr); gap: 8px; }
+	.wcblr-tm-cover-row { margin: 0 16px; }
+	.wcblr-tm-board { padding: 18px 16px 24px; }
+	.wcblr-tm-card.is-back { display: none; }
+	.wcblr-tm-mon-cols, .wcblr-tm-mon-row { grid-template-columns: 44px minmax(0, 1fr) minmax(0, 1fr); margin: 0 16px; }
+	.wcblr-tm-mon-cols small:first-child { font-size: 0; }
+	.wcblr-tm-mon-h { grid-template-columns: minmax(0, 1fr); padding: 12px; }
+	.wcblr-tm-mon-h > .is-arrow { transform: rotate(90deg); }
+	.wcblr-tm-cday { grid-template-columns: 52px minmax(0, 1fr); gap: 14px; padding: 16px; }
+	.wcblr-tm-memo { padding: 20px 18px; }
+	.wcblr-tm-s { padding: 16px; }
+	.wcblr-tm-life-wc { left: 33%; }
+
+	.wcblr-tm-glance {
+		display: grid !important;
+		grid-template-columns: 54px minmax(0, 1fr) minmax(0, 1fr);
+		grid-template-rows: auto 12px 560px auto;
+		gap: 10px 8px;
+		padding-bottom: 16px;
+
+		> .wcblr-tm-glance-bar { grid-column: 1 / -1; }
+		> .wcblr-tm-lane, > .wcblr-tm-axis, > .wcblr-tm-breaks, > .wcblr-tm-cap { margin: 0 !important; }
+		> .wcblr-tm-axis { grid-column: 1; grid-row: 3; height: auto; margin-left: 16px !important; }
+		> .wcblr-tm-breaks { grid-column: 2 / 4; grid-row: 3; height: auto; margin-right: 16px !important; }
+		> .wcblr-tm-lane { position: relative; z-index: 1; grid-row: 3; display: block; }
+		> .wcblr-tm-lane > small { position: absolute; left: 0; top: -24px; }
+		> .wcblr-tm-breaks { z-index: 0; }
+		> .wcblr-tm-lane.is-x { grid-column: 2; }
+		> .wcblr-tm-lane.is-c { grid-column: 3; margin-right: 16px !important; }
+		> .wcblr-tm-cap { grid-column: 1 / -1; grid-row: 4; margin: 0 16px !important; }
+		> .wcblr-tm-glance-bar { grid-row: 1; }
+		.wcblr-tm-track { height: 100%; background: transparent; box-shadow: none; }
+		.wcblr-tm-breaks span { font-size: 0; }
+		.wcblr-tm-track i { left: 0 !important; right: 0; width: auto !important; top: auto; bottom: auto; }
+	}
+
+	.wcblr-tm-glance .wcblr-tm-axis small { transform: translateY(-50%); left: 0 !important; right: auto !important; }
+	.wcblr-tm-glance .wcblr-tm-axis small:nth-child(1) { top: 0; transform: none; }
+	.wcblr-tm-glance .wcblr-tm-axis small:nth-child(2) { top: tm-pc(120); }
+	.wcblr-tm-glance .wcblr-tm-axis small:nth-child(3) { top: tm-pc(240); }
+	.wcblr-tm-glance .wcblr-tm-axis small:nth-child(4) { top: tm-pc(360); }
+	.wcblr-tm-glance .wcblr-tm-axis small:nth-child(5) { top: auto; bottom: 0; transform: none; }
+
+	@each $name, $s in $tm-breaks {
+		.wcblr-tm-glance .wcblr-tm-breaks .is-#{$name} { left: 0; right: 0; width: auto; top: tm-pc(list.nth($s, 1)); bottom: auto; height: tm-pc(list.nth($s, 2)); border-radius: 8px; opacity: 0.7; }
+	}
+
+	@each $hall, $list in ("x": $tm-x, "c": $tm-c) {
+		@for $n from 1 through list.length($list) {
+			$s: list.nth($list, $n);
+			.wcblr-tm-glance .wcblr-tm-lane.is-#{$hall} .wcblr-tm-track > i:nth-child(#{$n}) {
+				top: tm-pc(list.nth($s, 1));
+				height: tm-pc(list.nth($s, 2));
+			}
+		}
+	}
+}
