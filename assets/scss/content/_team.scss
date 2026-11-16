@@ -1,17 +1,19 @@
 /* ==== B-04 What your WordPress team brings back from WordCamp Bengaluru ======================
    17 Nov 2026. Publish Wed 18 Nov.
 
-   THE IDEA
-   Two halls, one Sunday. The whole post runs on one colour code: Xavier Hall = crimson,
-   Concert Hall = sky, and the seven sessions about running an agency = gold, numbered 1 to 7
-   in time order. The hero sets "send one" against "send two" on the real session slots; the
-   timeline under it is Sunday at a glance with the seven numbered; 01 lists the seven with the
-   same numbers and brackets the three back to back in Xavier Hall; 02 three team cards with a
-   seat per person; 03 a 17-of-24 meter; 04 a pinned role card and a 21-day listing bar; 05 a
-   Monday sheet; 06 three steps, a Contributor Day note and a note for your manager.
+   THE IDEA (v2): the team brief
+   The post is the paperwork an agency passes round before sending people to an event, so every
+   section is a different object instead of another card: a stamped memo, a printed timetable
+   marked in highlighter and red pen, an agenda printout with a margin bracket and a sticky note,
+   three till receipts, a dark band of numbers, a cork board and a ticked checklist, a two-day
+   calendar, an email to forward, and a perforated ticket.
+
+   Marks: gold highlighter = the seven sessions about running an agency, numbered 1 to 7 in a
+   red pen circle (same numbers in the timetable and the agenda). Xavier Hall = crimson,
+   Concert Hall = sky.
 
    Session positions: (start - 09:00) / 450 min, width = duration / 450, from the live schedule
-   (checked 17 Nov 2026). Mobile turns the lanes vertical: the same numbers become top/height.
+   (checked 17 Nov 2026). Phones turn the timetable vertical.
 
    Scoped to .wcblr-tm. No custom properties, no url(), no place-items, no background-image.
    Markup: wordcamp/communications/blog/posts/send-your-team/build.py. */
@@ -23,21 +25,23 @@ $tm-ink: #2a1d14;
 $tm-espresso: #241a12;
 $tm-red: #c8344b;
 $tm-red-deep: #a32a3d;
-$tm-red-soft: #f6dfe2;
 $tm-gold: #e0a526;
 $tm-gold-deep: #8f640c;
 $tm-gold-soft: #f6e7c2;
+$tm-sticky: #f7e3a1;
 $tm-green: #136451;
 $tm-sky: #2f7d9a;
 $tm-sky-deep: #1f5a70;
 $tm-sky-soft: #dcebf1;
 $tm-cream: #f2ece0;
-$tm-paper: #fbf8f1;
+$tm-paper: #fffdf8;
 $tm-sand: #e8dfcf;
 $tm-muted: #7a6757;
 $tm-soft: #5c4a3b;
 $tm-line: #dad5cd;
-$tm-gray: #d9d1c4;
+$tm-rule: #e9e1d3;
+$tm-gray: #cfc5b5;
+$tm-hl: rgba(224, 165, 38, 0.5);
 $tm-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
 $tm-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
 $tm-serif: var(--wp--preset--font-family--fraunces), Fraunces, Georgia, serif;
@@ -47,16 +51,46 @@ $tm-frame: 1280px;
 $tm-gutter: clamp(16px, 5vw, 96px);
 $tm-pad: max(#{$tm-gutter}, calc((100vw - #{$tm-frame}) / 2));
 $tm-sec: clamp(56px, 1.5rem + 4.2vw, 104px);
-$tm-shadow: 0 24px 48px -28px rgba(36, 26, 18, 0.45);
+$tm-paper-shadow: 0 1px 0 rgba(36, 26, 18, 0.06), 0 18px 36px -22px rgba(36, 26, 18, 0.45);
 
 // Sunday, 09:00 = 0, in minutes: (start, duration), in markup order
 $tm-day: 450;
 $tm-x: (15 30) (60 30) (90 30) (150 30) (180 30) (210 45) (330 30) (360 30) (390 45);
 $tm-c: (60 15) (75 15) (90 15) (105 15) (150 60) (210 15) (225 15) (240 15) (330 15) (345 15) (360 15) (375 15) (390 15) (405 15) (420 15);
-// breaks: coffee 11:00, the group photo and lunch 13:15 to 14:30, coffee 16:15
 $tm-breaks: ("coffee": (120 30), "lunch": (255 75), "tea": (435 15));
 
 @function tm-pc($min) { @return math.div(math.round(math.div($min, $tm-day) * 10000), 100) * 1%; }
+
+// a strip of tape holding paper down
+@mixin tm-tape($left: 50%, $rot: -3deg) {
+	content: "";
+	position: absolute;
+	left: $left;
+	top: -13px;
+	width: 108px;
+	height: 26px;
+	margin-left: -54px;
+	background: rgba(232, 223, 207, 0.86);
+	box-shadow: 0 1px 2px rgba(36, 26, 18, 0.12);
+	transform: rotate($rot);
+}
+
+// the red pen circle around a number
+@mixin tm-pen($size: 30px) {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: $size;
+	height: $size;
+	border: 2px solid $tm-red;
+	border-radius: 58% 42% 52% 48% / 46% 56% 44% 54%;
+	color: $tm-red;
+	font-family: $tm-mono;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 700;
+	transform: rotate(-8deg);
+}
 
 /* ---- The ground ---------------------------------------------------------------------- */
 
@@ -103,12 +137,19 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 .wcblr-tm a { color: inherit; text-decoration: none; font: inherit; }
 .wcblr-tm em { color: $tm-red; font-style: italic; }
 
+// highlighter
+.wcblr-tm-hl {
+	padding: 0 0.12em;
+	background-color: $tm-hl;
+	-webkit-box-decoration-break: clone;
+	box-decoration-break: clone;
+}
+
 // links inside running text
 .wcblr-tm-body a,
 .wcblr-tm-s-b a,
-.wcblr-tm-note a,
-.wcblr-tm-backs a,
-.wcblr-tm-tips a,
+.wcblr-tm-ps a,
+.wcblr-tm-check a,
 .wcblr-tm-steps a,
 .wcblr-tm-cday a {
 	box-shadow: inset 0 -1.5px 0 rgba(200, 52, 75, 0.5);
@@ -116,17 +157,6 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 
 	&:hover { color: $tm-red; box-shadow: inset 0 -2px 0 $tm-red; }
 }
-
-.wcblr-tm-k,
-.wcblr-tm-n {
-	font-family: $tm-mono !important;
-	font-size: 11.5px !important;
-	font-weight: 600;
-	letter-spacing: 0.04em;
-	color: $tm-red;
-}
-
-.wcblr-tm-k.is-gold { color: $tm-gold-deep; }
 
 .wcblr-tm-body {
 	max-width: 60ch !important;
@@ -137,13 +167,13 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	b { color: $tm-ink; }
 }
 
-.wcblr-tm-body.is-lead { margin: 0 0 clamp(24px, 2.4vw, 36px) !important; font-size: 18px !important; }
+.wcblr-tm-body.is-lead { margin: 0 0 clamp(28px, 3vw, 44px) !important; font-size: 18px !important; }
 
 .wcblr-tm-body.is-big {
-	max-width: 34ch !important;
+	max-width: 32ch !important;
 	font-family: $tm-serif !important;
 	font-size: clamp(22px, 0.9rem + 1vw, 30px) !important;
-	line-height: 1.35 !important;
+	line-height: 1.38 !important;
 	letter-spacing: -0.015em;
 	color: $tm-ink;
 }
@@ -151,16 +181,30 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 .wcblr-tm-sec { padding-top: $tm-sec; }
 .wcblr-tm-sec.wcblr-tm-hero-sec { padding-top: 0; }
 
-.wcblr-tm-titles { margin-bottom: clamp(20px, 0.8rem + 1.4vw, 36px) !important; }
+// section heads: a number on a rule, then the title
+.wcblr-tm-titles { margin-bottom: clamp(24px, 1rem + 1.4vw, 40px) !important; }
+
+.wcblr-tm-n {
+	display: flex !important;
+	align-items: center;
+	gap: 14px;
+	font-family: $tm-mono !important;
+	font-size: 12px !important;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	color: $tm-red;
+
+	&::after { content: ""; flex: 1; height: 1px; background: $tm-ink; opacity: 0.25; }
+}
 
 .wcblr-post.wcblr-tm .wcblr-tm-bt {
-	margin-top: 12px !important;
+	margin-top: 14px !important;
 	font-family: $tm-serif !important;
 	font-size: clamp(34px, 1rem + 2.6vw, 60px) !important;
 	font-weight: 400 !important;
 	line-height: 1.04 !important;
 	padding-bottom: 0.06em;
-	letter-spacing: -0.045em !important;
+	letter-spacing: -0.04em !important;
 	color: $tm-ink;
 	text-wrap: balance;
 	scroll-margin-top: 90px;
@@ -168,23 +212,11 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 
 .wcblr-tm-split {
 	display: grid !important;
-	grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
 	gap: clamp(28px, 4vw, 72px);
-	align-items: center;
+	align-items: start;
 }
 
-.wcblr-tm-split.is-buy { align-items: start; margin-top: clamp(28px, 3vw, 44px) !important; }
-
-.wcblr-tm-before {
-	margin-top: 24px !important;
-	font-family: $tm-serif !important;
-	font-size: clamp(24px, 1rem + 1vw, 32px) !important;
-	line-height: 1.2 !important;
-	letter-spacing: -0.02em;
-	color: $tm-soft;
-
-	b { font-weight: 400; color: $tm-ink; }
-}
+.wcblr-tm-split-t { display: flex !important; flex-direction: column; }
 
 /* ---- Buttons ------------------------------------------------------------------------- */
 
@@ -201,27 +233,191 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	gap: 10px;
 	padding: 15px 24px !important;
 	border-radius: 999px !important;
-	background: $tm-red !important;
-	color: #fff !important;
+	background: $tm-gold !important;
+	color: $tm-ink !important;
 	font-family: $tm-sans !important;
 	font-size: 15.5px !important;
 	font-weight: 700 !important;
 	transition: transform 0.4s $tm-spring, background 0.2s $tm-ease;
 
 	&::after { content: "\2192"; transition: transform 0.4s $tm-spring; }
-	&:hover { transform: translateY(-2px); background: $tm-red-deep !important; }
+	&:hover { transform: translateY(-2px); background: #f0b93a !important; }
 	&:hover::after { transform: translateX(4px); }
 }
 
-/* ---- Lanes: one hall's sessions on the 09:00 to 16:30 axis ------------------------------ */
+/* ---- 1. Hero: the brief ------------------------------------------------------------------- */
+
+.wcblr-tm-hero {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+	gap: clamp(32px, 5vw, 88px);
+	align-items: center;
+	padding-top: clamp(16px, 2vw, 32px);
+}
+
+.wcblr-tm-kicker {
+	display: flex !important;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 18px;
+	font-family: $tm-mono !important;
+	font-size: 12px !important;
+	font-weight: 600;
+	color: $tm-muted;
+}
+
+.wcblr-tm-stamp {
+	padding: 6px 12px 5px;
+	border: 2.5px solid $tm-red;
+	border-radius: 4px;
+	color: $tm-red;
+	font-size: 13px;
+	font-weight: 800;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	transform: rotate(-4deg);
+	opacity: 0.92;
+}
+
+.wcblr-post.wcblr-tm .wcblr-tm-h1 {
+	margin-top: 26px !important;
+	font-family: $tm-serif !important;
+	font-size: clamp(38px, 1rem + 3vw, 72px) !important;
+	font-weight: 400 !important;
+	line-height: 1.02 !important;
+	letter-spacing: -0.045em !important;
+	color: $tm-ink;
+	text-wrap: balance;
+}
+
+.wcblr-tm-dek {
+	max-width: 52ch !important;
+	margin-top: 24px !important;
+	font-size: 18px !important;
+	font-weight: 600;
+	line-height: 1.6 !important;
+	color: $tm-ink;
+}
+
+.wcblr-tm-memo {
+	position: relative;
+	display: flex !important;
+	flex-direction: column;
+	padding: 28px 30px 26px;
+	background: $tm-paper;
+	box-shadow: $tm-paper-shadow;
+	transform: rotate(1.4deg);
+
+	&::before { @include tm-tape(50%, -2deg); }
+}
+
+.wcblr-tm-memo-top {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	padding-bottom: 12px;
+	margin-bottom: 6px;
+	border-bottom: 2px solid $tm-ink;
+
+	b { font-family: $tm-serif; font-size: 34px; font-weight: 400; line-height: 1; letter-spacing: -0.03em; }
+	small { font-family: $tm-mono; font-size: 11px; font-weight: 600; color: $tm-muted; }
+}
+
+.wcblr-tm-field {
+	display: grid;
+	grid-template-columns: 78px minmax(0, 1fr);
+	gap: 12px;
+	align-items: baseline;
+	padding: 10px 0;
+	border-bottom: 1px dotted $tm-gray;
+	font-size: 15.5px;
+	line-height: 1.4;
+
+	small { font-family: $tm-mono; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: $tm-muted; }
+}
+
+.wcblr-tm-memo-note {
+	margin-top: 18px;
+	font-family: $tm-serif;
+	font-size: 24px;
+	font-style: italic;
+	line-height: 1.2;
+	color: $tm-red;
+
+	.wcblr-tm-hl { color: $tm-ink; }
+}
+
+.wcblr-tm-lede {
+	max-width: 33em !important;
+	margin-top: clamp(56px, 6vw, 104px) !important;
+	font-family: $tm-serif !important;
+	font-size: clamp(22px, 0.9rem + 1.1vw, 32px) !important;
+	line-height: 1.34 !important;
+	letter-spacing: -0.02em;
+	color: $tm-ink;
+}
+
+.wcblr-tm-index {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: 10px 28px;
+	margin-top: clamp(28px, 3vw, 44px) !important;
+	padding: 16px 0;
+	border-top: 1.5px solid $tm-ink;
+	border-bottom: 1px solid $tm-line;
+
+	a {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 8px;
+		font-size: 14.5px;
+		font-weight: 600;
+		transition: color 0.2s $tm-ease;
+
+		&:hover { color: $tm-red; }
+	}
+
+	b { font-family: $tm-mono; font-size: 11px; color: $tm-red; }
+}
+
+/* ---- The printed timetable ------------------------------------------------------------ */
+
+.wcblr-tm-sheet {
+	position: relative;
+	display: flex !important;
+	flex-direction: column;
+	gap: 10px;
+	margin-top: clamp(36px, 4vw, 60px) !important;
+	padding: 26px 30px 22px;
+	background: $tm-paper;
+	box-shadow: $tm-paper-shadow;
+
+	&::before { @include tm-tape(12%, -4deg); }
+	&::after { @include tm-tape(88%, 3deg); }
+}
+
+.wcblr-tm-sheet-h {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 12px;
+	padding-bottom: 12px;
+	margin-bottom: 6px;
+	border-bottom: 2px solid $tm-ink;
+
+	b { font-family: $tm-serif; font-size: 26px; font-weight: 400; letter-spacing: -0.02em; }
+	small { font-family: $tm-mono; font-size: 11px; font-weight: 600; color: $tm-muted; }
+}
 
 .wcblr-tm-lane {
+	position: relative;
+	z-index: 1;
 	display: grid;
-	grid-template-columns: 64px minmax(0, 1fr);
+	grid-template-columns: 74px minmax(0, 1fr);
 	gap: 10px;
 	align-items: center;
 
-	> small { font-family: $tm-mono; font-size: 11px; font-weight: 600; }
+	> small { font-family: $tm-mono; font-size: 11px; font-weight: 700; }
 	&.is-x > small { color: $tm-red; }
 	&.is-c > small { color: $tm-sky-deep; }
 }
@@ -229,28 +425,26 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 .wcblr-tm-track {
 	position: relative;
 	display: block;
-	height: 30px;
-	border-radius: 8px;
-	background: $tm-paper;
-	box-shadow: inset 0 0 0 1px $tm-line;
+	height: 44px;
 
 	i {
 		position: absolute;
-		top: 3px;
-		bottom: 3px;
+		top: 4px;
+		bottom: 4px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		border-radius: 5px;
-		box-shadow: 0 0 0 1px #fff;
-		font-family: $tm-mono;
-		font-size: 11px;
+		border: 1.5px solid $tm-gray;
+		border-radius: 3px;
+		background: $tm-paper;
 		font-style: normal;
-		font-weight: 700;
-		line-height: 1;
-		overflow: hidden;
+		overflow: visible;
 		white-space: nowrap;
 	}
+
+	i.is-biz { border-color: transparent; background: $tm-hl; }
+	i.is-biz b { @include tm-pen(26px); font-size: 11px; background: $tm-paper; }
+	i.is-ws { border: 1.5px dashed $tm-ink; font-family: $tm-mono; font-size: 10.5px; font-weight: 700; }
 }
 
 @each $hall, $list in ("x": $tm-x, "c": $tm-c) {
@@ -263,214 +457,15 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	}
 }
 
-// hall colours (hero), gray with gold highlights (the glance)
-.wcblr-tm-cover .wcblr-tm-lane.is-x i { background: $tm-red; }
-.wcblr-tm-cover .wcblr-tm-lane.is-c i { background: $tm-sky; }
-.wcblr-tm-cover .wcblr-tm-lane.is-missed i { background: transparent; box-shadow: inset 0 0 0 1.5px $tm-gray; }
-.wcblr-tm-cover .wcblr-tm-lane.is-missed > small { color: #b9ad9d; text-decoration: line-through; }
-
-.wcblr-tm-glance .wcblr-tm-track i { background: $tm-gray; color: $tm-ink; }
-.wcblr-tm-glance .wcblr-tm-track i.is-biz { background: $tm-gold; }
-.wcblr-tm-glance .wcblr-tm-track i.is-ws { background: $tm-ink; color: $tm-paper; font-size: 10px; font-weight: 600; }
-
-/* ---- 1. Hero ------------------------------------------------------------------------- */
-
-.wcblr-tm-hero {
-	display: grid !important;
-	grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-	gap: clamp(28px, 4vw, 64px);
-	align-items: center;
-	padding-top: clamp(16px, 2vw, 32px);
-}
-
-.wcblr-tm-kicker {
-	display: flex !important;
-	flex-wrap: wrap;
-	gap: 8px;
-	font-family: $tm-mono !important;
-	font-size: 11.5px !important;
-	font-weight: 600;
-
-	span { padding: 6px 12px; border-radius: 999px; background: $tm-paper; box-shadow: inset 0 0 0 1px $tm-line; }
-	span:first-child { background: $tm-ink; color: $tm-paper; box-shadow: none; }
-}
-
-.wcblr-post.wcblr-tm .wcblr-tm-h1 {
-	margin-top: 22px !important;
-	font-family: $tm-serif !important;
-	font-size: clamp(38px, 1rem + 3vw, 72px) !important;
-	font-weight: 400 !important;
-	line-height: 1.02 !important;
-	letter-spacing: -0.045em !important;
-	color: $tm-ink;
-	text-wrap: balance;
-}
-
-.wcblr-tm-intro {
-	max-width: 50ch !important;
-	margin-top: 22px !important;
-	font-size: 17px !important;
-	line-height: 1.62 !important;
-	color: $tm-soft;
-}
-
-.wcblr-tm-intro.is-dek { font-size: 18.5px !important; font-weight: 600; color: $tm-ink; }
-
-.wcblr-tm-cover {
-	display: flex !important;
-	flex-direction: column;
-	border-radius: 24px;
-	overflow: hidden;
-	background: #fff;
-	box-shadow: inset 0 0 0 1px $tm-line, $tm-shadow;
-}
-
-.wcblr-tm-cover-bar,
-.wcblr-tm-glance-bar {
-	display: flex;
-	align-items: baseline;
-	justify-content: space-between;
-	gap: 12px;
-	padding: 14px 20px;
-	background: $tm-espresso;
-
-	small { font-family: $tm-mono; font-size: 11px; font-weight: 600; color: $tm-gold; }
-	b { font-family: $tm-serif; font-size: 18px; font-weight: 400; color: $tm-paper; }
-}
-
-.wcblr-tm-cover-row {
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-	margin: 0 20px;
-	padding: 18px 0;
-	border-bottom: 1px solid #efebe4;
-
-	.wcblr-tm-lane { grid-template-columns: 58px minmax(0, 1fr); }
-	.wcblr-tm-track { height: 26px; }
-}
-
-.wcblr-tm-cover-h {
-	display: flex;
-	align-items: baseline;
-	justify-content: space-between;
-	gap: 12px;
-	margin-bottom: 4px;
-
-	b { font-family: $tm-serif; font-size: 26px; font-weight: 400; line-height: 1; letter-spacing: -0.03em; }
-	small { font-family: $tm-mono; font-size: 11px; font-weight: 600; color: $tm-muted; }
-}
-
-.wcblr-tm-cover-row + .wcblr-tm-cover-row .wcblr-tm-cover-h small { color: $tm-red; }
-
-.wcblr-tm-cover-f {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 6px 16px;
-	padding: 14px 20px 16px;
-
-	span { display: inline-flex; align-items: center; gap: 7px; font-family: $tm-mono; font-size: 10.5px; font-weight: 600; color: $tm-soft; }
-	span::before { content: ""; width: 12px; height: 12px; border-radius: 3px; }
-	.is-x::before { background: $tm-red; }
-	.is-c::before { background: $tm-sky; }
-	.is-off::before { box-shadow: inset 0 0 0 1.5px $tm-gray; }
-}
-
-.wcblr-tm-split.is-intro {
-	grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
-	align-items: start;
-	margin-top: clamp(44px, 4.4vw, 80px) !important;
-}
-
-.wcblr-tm-lede {
-	font-family: $tm-serif !important;
-	font-size: clamp(22px, 0.9rem + 1.1vw, 32px) !important;
-	line-height: 1.28 !important;
-	letter-spacing: -0.02em;
-	color: $tm-ink;
-}
-
-.wcblr-tm-index {
-	display: grid !important;
-	grid-template-columns: repeat(6, minmax(0, 1fr));
-	gap: 8px;
-	margin-top: 28px !important;
-
-	a {
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-		padding: 14px;
-		border-radius: 16px;
-		background: $tm-paper;
-		box-shadow: inset 0 0 0 1px $tm-line;
-		font-size: 14.5px;
-		font-weight: 600;
-		line-height: 1.3;
-		transition: transform 0.35s $tm-spring, background 0.2s $tm-ease;
-
-		&:hover { transform: translateY(-3px); background: #fff; }
-	}
-
-	b { font-family: $tm-mono; font-size: 11px; color: $tm-red; }
-}
-
-.wcblr-tm-index-k { display: none; }
-
-// beside the lede: an "in this post" list
-.is-intro .wcblr-tm-index {
-	grid-template-columns: minmax(0, 1fr);
-	gap: 0;
-	margin-top: 0 !important;
-	padding: 6px 20px 8px;
-	border-radius: 20px;
-	background: $tm-paper;
-	box-shadow: inset 0 0 0 1px $tm-line;
-
-	.wcblr-tm-index-k { display: block; padding: 12px 0 8px; font-family: $tm-mono; font-size: 11px; font-weight: 600; color: $tm-muted; }
-
-	a {
-		flex-direction: row;
-		align-items: baseline;
-		gap: 14px;
-		padding: 11px 0;
-		border-radius: 0;
-		background: none;
-		box-shadow: none;
-		border-top: 1px solid #ebe4d8;
-		font-size: 15px;
-
-		&::after { content: "\2193"; margin-left: auto; color: $tm-muted; transition: transform 0.3s $tm-spring, color 0.2s $tm-ease; }
-		&:hover { transform: none; background: none; color: $tm-red; }
-		&:hover::after { transform: translateY(3px); color: $tm-red; }
-	}
-}
-
-// Sunday at a glance
-.wcblr-tm-glance {
-	display: flex !important;
-	flex-direction: column;
-	gap: 10px;
-	margin-top: clamp(28px, 3vw, 44px) !important;
-	padding-bottom: 20px;
-	border-radius: 24px;
-	overflow: hidden;
-	background: #fff;
-	box-shadow: inset 0 0 0 1px $tm-line, $tm-shadow;
-
-	> .wcblr-tm-lane, > .wcblr-tm-axis, > .wcblr-tm-breaks, > .wcblr-tm-cap { margin: 0 24px; }
-	> .wcblr-tm-axis { margin-top: 10px; }
-	.wcblr-tm-track { height: 40px; }
-}
-
 .wcblr-tm-axis,
 .wcblr-tm-breaks {
 	position: relative;
 	display: block;
-	height: 18px;
-	margin-left: 98px !important;
+	height: 16px;
+	margin-left: 84px !important;
 }
 
+// hour rules run down through both lanes
 .wcblr-tm-axis small {
 	position: absolute;
 	top: 0;
@@ -480,11 +475,14 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	color: $tm-muted;
 	transform: translateX(-50%);
 
+	&::after { content: ""; position: absolute; left: 50%; top: 20px; height: 140px; border-left: 1px dashed $tm-rule; }
 	&:nth-child(1) { left: 0; transform: none; }
+	&:nth-child(1)::after { left: 0; }
 	&:nth-child(2) { left: tm-pc(120); }
 	&:nth-child(3) { left: tm-pc(240); }
 	&:nth-child(4) { left: tm-pc(360); }
 	&:nth-child(5) { right: 0; transform: none; }
+	&:nth-child(5)::after { left: auto; right: 0; }
 }
 
 .wcblr-tm-breaks span {
@@ -494,14 +492,11 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border-radius: 999px;
-	background: $tm-sand;
-	font-family: $tm-mono;
-	font-size: 10px;
-	font-weight: 600;
-	color: $tm-soft;
+	font-family: $tm-serif;
+	font-size: 13px;
+	font-style: italic;
+	color: $tm-muted;
 	white-space: nowrap;
-	overflow: hidden;
 }
 
 @each $name, $s in $tm-breaks {
@@ -511,58 +506,66 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 .wcblr-tm-breaks .is-tea { font-size: 0; }
 
 .wcblr-tm-cap {
-	margin-top: 6px !important;
-	padding-top: 14px;
-	border-top: 1px solid #efebe4;
+	margin-top: 8px;
+	padding-top: 12px;
+	border-top: 1px solid $tm-rule;
 	font-size: 14px;
 	line-height: 1.5;
 	color: $tm-soft;
-
-	b { padding: 1px 6px; border-radius: 4px; background: $tm-gold; color: $tm-ink; }
 }
 
-/* ---- 2. 01 The seven sessions ---------------------------------------------------------- */
+/* ---- 2. 01 The agenda printout ------------------------------------------------------------ */
 
-.wcblr-tm-list {
+.wcblr-tm-agenda-wrap {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+	gap: clamp(28px, 5vw, 88px);
+	align-items: start;
+	margin-bottom: clamp(28px, 3vw, 44px) !important;
+}
+
+.wcblr-tm-sticky {
+	position: relative;
+	padding: 26px 24px 22px;
+	background: $tm-sticky;
+	box-shadow: 0 18px 24px -18px rgba(36, 26, 18, 0.5);
+	font-family: $tm-serif !important;
+	font-size: 18px !important;
+	font-style: italic;
+	line-height: 1.45 !important;
+	color: $tm-ink;
+	transform: rotate(2.2deg);
+
+	&::before { @include tm-tape(50%, 2deg); }
+}
+
+.wcblr-tm-agenda {
 	display: flex !important;
 	flex-direction: column;
-	gap: 10px;
+	padding: 8px 30px 12px;
+	background: $tm-paper;
+	box-shadow: $tm-paper-shadow;
 }
 
 .wcblr-tm-s {
 	display: grid;
-	grid-template-columns: 40px 170px minmax(0, 1fr);
+	grid-template-columns: 44px 168px minmax(0, 1fr);
 	gap: 18px;
 	align-items: start;
-	padding: 18px 22px;
-	border-radius: 18px;
-	background: $tm-paper;
-	box-shadow: inset 4px 0 0 $tm-sky, inset 0 0 0 1px $tm-line;
+	padding: 20px 0;
+	border-bottom: 1px solid $tm-rule;
 
-	&.is-x { box-shadow: inset 4px 0 0 $tm-red, inset 0 0 0 1px $tm-line; }
-
-	> i {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 34px;
-		height: 34px;
-		border-radius: 9px;
-		background: $tm-gold;
-		color: $tm-ink;
-		font-family: $tm-mono;
-		font-size: 13px;
-		font-style: normal;
-		font-weight: 700;
-	}
+	> i { @include tm-pen(32px); margin-top: 2px; }
 }
+
+.wcblr-tm-agenda > .wcblr-tm-s:last-child { border-bottom: 0; }
 
 .wcblr-tm-s-m {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 6px;
 
-	b { font-family: $tm-serif; font-size: 26px; font-weight: 400; line-height: 1; letter-spacing: -0.03em; }
+	b { align-self: flex-start; padding: 0 4px; background: $tm-hl; font-family: $tm-serif; font-size: 28px; font-weight: 400; line-height: 1.05; letter-spacing: -0.03em; }
 	small { font-family: $tm-mono; font-size: 10.5px; font-weight: 600; line-height: 1.4; color: $tm-sky-deep; }
 }
 
@@ -574,252 +577,265 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	line-height: 1.55;
 	color: $tm-soft;
 
-	strong { display: block; margin-bottom: 4px; font-size: 17px; font-weight: 700; line-height: 1.3; color: $tm-ink; }
+	strong { display: block; margin-bottom: 4px; font-family: $tm-serif; font-size: 21px; font-weight: 400; line-height: 1.2; letter-spacing: -0.015em; color: $tm-ink; }
+	a { box-shadow: none; }
+	a:hover { box-shadow: inset 0 -2px 0 $tm-red; }
 }
 
-// three back to back in Xavier Hall
+// the red margin bracket around three in a row
 .wcblr-tm-run {
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-	padding: 12px;
-	border-radius: 22px;
-	background: $tm-red-soft;
-	box-shadow: inset 0 0 0 1.5px rgba(200, 52, 75, 0.35);
+	position: relative;
+	display: block;
+	margin: 6px 0 6px -14px;
+	padding-left: 11px;
+	border-left: 3px solid $tm-red;
 
-	.wcblr-tm-s { background: #fff; }
+	.wcblr-tm-s:last-child { border-bottom: 0; }
 }
 
 .wcblr-tm-run-k {
-	padding: 2px 10px 4px;
-	font-family: $tm-mono;
-	font-size: 11px;
-	font-weight: 600;
-	color: $tm-red-deep;
+	display: inline-block;
+	margin-top: 14px;
+	font-family: $tm-serif;
+	font-size: 16px;
+	font-style: italic;
+	color: $tm-red;
 }
 
-// next door at 11:30
-.wcblr-tm-door {
+/* ---- 3. 02 Who to send: receipts --------------------------------------------------------- */
+
+.wcblr-tm-receipts {
 	display: grid !important;
-	grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr) minmax(0, 0.7fr);
-	gap: 14px;
-	align-items: stretch;
-	margin-top: 16px !important;
-	padding: 22px;
-	border-radius: 24px;
-	background: $tm-espresso;
-	color: $tm-paper;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: clamp(20px, 3vw, 40px);
+	align-items: start;
+	padding: 0 clamp(0px, 2vw, 24px);
 }
 
-.wcblr-tm-door-t {
-	display: block;
-	padding: 4px 8px 4px 4px;
-	font-size: 16.5px;
-	line-height: 1.6;
-	color: rgba(251, 248, 241, 0.88);
-
-	small { display: block; margin-bottom: 8px; font-family: $tm-mono; font-size: 11px; font-weight: 600; color: $tm-gold; }
-}
-
-.wcblr-tm-door-h {
+.wcblr-tm-rc {
 	display: flex;
 	flex-direction: column;
-	gap: 6px;
-	padding: 16px;
-	border-radius: 16px;
-	font-size: 13.5px;
-	line-height: 1.4;
-
-	small { font-family: $tm-mono; font-size: 10.5px; font-weight: 600; opacity: 0.85; }
-	b { font-family: $tm-serif; font-size: 26px; font-weight: 400; line-height: 1; letter-spacing: -0.02em; }
-
-	&.is-x { background: $tm-red; color: #fff; }
-	&.is-c { background: $tm-sky; color: #fff; }
-}
-
-/* ---- 3. 02 Who to send ----------------------------------------------------------------- */
-
-.wcblr-tm-teams {
-	display: grid !important;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 16px;
-
-	> span {
-		display: flex;
-		flex-direction: column;
-		border-radius: 22px;
-		overflow: hidden;
-		background: $tm-paper;
-		box-shadow: inset 0 0 0 1px $tm-line;
-	}
-}
-
-.wcblr-tm-team-h {
-	display: flex;
-	align-items: baseline;
-	justify-content: space-between;
-	gap: 12px;
-	padding: 16px 20px;
-	background: $tm-ink;
-	color: $tm-paper;
-
-	small { font-family: $tm-mono; font-size: 11px; font-weight: 600; color: $tm-gold; }
-	b { font-family: $tm-serif; font-size: 30px; font-weight: 400; line-height: 1; letter-spacing: -0.03em; }
-}
-
-.wcblr-tm-seats {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 8px;
-	padding: 20px 20px 4px;
-
-	i {
-		position: relative;
-		width: 30px;
-		height: 38px;
-
-		// a person: head and shoulders
-		&::before { content: ""; position: absolute; left: 8px; top: 0; width: 14px; height: 14px; border-radius: 50%; background: currentColor; }
-		&::after { content: ""; position: absolute; left: 0; bottom: 0; width: 30px; height: 20px; border-radius: 15px 15px 6px 6px; background: currentColor; }
-	}
-
-	.is-x { color: $tm-red; }
-	.is-c { color: $tm-sky; }
-	.is-biz { color: $tm-gold; }
-	.is-build { color: $tm-ink; }
-	.is-all { color: $tm-soft; width: 22px; height: 30px; }
-	.is-all::before { left: 6px; width: 10px; height: 10px; }
-	.is-all::after { width: 22px; height: 15px; }
-	.is-all:nth-child(odd) { color: $tm-ink; }
-}
-
-.wcblr-tm-team-b {
-	flex: 1;
-	display: block;
-	padding: 14px 20px 6px;
-	font-size: 15.5px;
-	line-height: 1.6;
-	color: $tm-soft;
-
-	> b { display: block; margin-bottom: 6px; font-family: $tm-serif; font-size: 23px; font-weight: 400; line-height: 1.12; letter-spacing: -0.02em; color: $tm-ink; }
-}
-
-.wcblr-tm-team-f {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 6px 14px;
-	margin: 12px 20px 18px;
-	padding-top: 12px;
-	border-top: 1px dashed $tm-line;
-
-	span { display: inline-flex; align-items: center; gap: 7px; font-family: $tm-mono; font-size: 10.5px; font-weight: 600; color: $tm-soft; }
-	span::before { content: ""; width: 10px; height: 10px; border-radius: 50%; }
-	.is-x::before { background: $tm-red; }
-	.is-c::before { background: $tm-sky; }
-	.is-biz::before { background: $tm-gold; }
-	.is-build::before { background: $tm-ink; }
-	.is-all::before { background: $tm-soft; }
-}
-
-.wcblr-tm-note {
-	max-width: 760px !important;
-	margin-top: 16px !important;
-	padding: 18px 22px;
-	border-radius: 18px;
-	background: $tm-sand;
-	font-size: 16px !important;
-	line-height: 1.6 !important;
+	padding: 24px 24px 22px;
+	border-top: 2px dashed $tm-gray;
+	border-bottom: 2px dashed $tm-gray;
+	background: $tm-paper;
+	box-shadow: $tm-paper-shadow;
+	font-family: $tm-mono;
 	color: $tm-ink;
 
-	small { display: block; margin-bottom: 6px; font-family: $tm-mono; font-size: 11px; font-weight: 600; color: $tm-red; }
+	&:nth-child(1) { transform: rotate(-1.4deg); margin-top: 12px; }
+	&:nth-child(2) { transform: rotate(0.8deg); }
+	&:nth-child(3) { transform: rotate(-0.5deg); margin-top: 28px; }
 }
 
-/* ---- 4. 03 What your team brings back -------------------------------------------------- */
+.wcblr-tm-rc-h {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
+	padding-bottom: 14px;
+	margin-bottom: 8px;
+	border-bottom: 1px dashed $tm-gray;
+	text-align: center;
 
-.wcblr-tm-backs {
-	display: grid !important;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 14px;
-	align-items: stretch;
-
-	> span {
-		display: block;
-		padding: 22px;
-		border-radius: 22px;
-		background: $tm-paper;
-		box-shadow: inset 0 0 0 1px $tm-line;
-		font-size: 15.5px;
-		line-height: 1.62;
-		color: $tm-soft;
-	}
-
-	> span > i {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 28px;
-		height: 28px;
-		margin-bottom: 14px;
-		border-radius: 8px;
-		background: $tm-ink;
-		color: $tm-gold;
-		font-family: $tm-mono;
-		font-size: 11px;
-		font-style: normal;
-		font-weight: 600;
-	}
-
-	> span > b { display: block; margin-bottom: 8px; font-family: $tm-serif; font-size: 23px; font-weight: 400; line-height: 1.15; letter-spacing: -0.02em; color: $tm-ink; }
-
-	> .is-meter { background: #fff; box-shadow: inset 0 0 0 1px $tm-line, $tm-shadow; }
+	small { font-size: 10px; font-weight: 600; color: $tm-muted; }
+	b { font-size: 15px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; }
 }
 
-.wcblr-tm-meter {
+.wcblr-tm-rc-l {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	padding: 8px 0;
+	font-size: 13px;
+
+	> span:first-child { display: inline-flex; align-items: center; gap: 8px; }
+	> span:first-child::before { content: ""; width: 9px; height: 9px; background: $tm-gray; }
+	&.is-x > span:first-child::before { background: $tm-red; }
+	&.is-c > span:first-child::before { background: $tm-sky; }
+	&.is-biz > span:first-child::before { background: $tm-gold; }
+}
+
+.wcblr-tm-rc-t {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 8px;
+	padding-top: 12px;
+	border-top: 2px solid $tm-ink;
+	font-size: 15px;
+	font-weight: 800;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+
+	span:last-child { font-family: $tm-serif; font-size: 30px; font-weight: 400; letter-spacing: -0.02em; line-height: 0.9; text-transform: none; }
+}
+
+.wcblr-tm-rc-b {
 	display: block;
 	margin-top: 18px;
-	padding-top: 16px;
-	border-top: 1px dashed $tm-line;
+	font-family: $tm-sans;
+	font-size: 14.5px;
+	line-height: 1.55;
+	color: $tm-soft;
+
+	b { display: block; margin-bottom: 4px; font-family: $tm-serif; font-size: 20px; font-weight: 400; line-height: 1.15; letter-spacing: -0.015em; color: $tm-ink; }
 }
 
-.wcblr-tm-meter-n {
+.wcblr-tm-ps {
+	max-width: 62ch !important;
+	margin-top: clamp(32px, 3.4vw, 52px) !important;
+	font-size: 16.5px !important;
+	line-height: 1.6 !important;
+	color: $tm-soft;
+
+	b { margin-right: 6px; font-family: $tm-serif; font-size: 22px; font-style: italic; font-weight: 400; color: $tm-red; }
+}
+
+/* ---- 4. 03 A dark band of numbers -------------------------------------------------------- */
+
+.wcblr-tm-sec.wcblr-tm-dark {
+	margin: $tm-sec calc(-1 * #{$tm-pad}) 0 !important;
+	padding: clamp(56px, 6vw, 96px) $tm-pad;
+	background: $tm-espresso;
+	color: $tm-cream;
+
+	.wcblr-tm-n { color: $tm-gold; }
+	.wcblr-tm-n::after { background: $tm-cream; }
+	.wcblr-tm-bt { color: $tm-cream !important; }
+	em { color: $tm-gold; }
+}
+
+.wcblr-tm-split.is-back { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); align-items: center; }
+
+.wcblr-tm-big {
+	display: flex !important;
+	flex-direction: column;
+	gap: 14px;
+
+	b { font-family: $tm-serif; font-size: clamp(120px, 4rem + 9vw, 240px); font-weight: 400; line-height: 0.82; letter-spacing: -0.06em; color: $tm-gold; }
+	b small { font-size: 0.36em; letter-spacing: -0.03em; color: rgba(242, 236, 224, 0.5); }
+	span { max-width: 18ch; font-family: $tm-mono; font-size: 13px; font-weight: 600; line-height: 1.5; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(242, 236, 224, 0.75); }
+}
+
+.wcblr-tm-backs {
+	display: flex !important;
+	flex-direction: column;
+
+	> span {
+		position: relative;
+		display: block;
+		padding: 22px 0 22px 54px;
+		border-top: 1px solid rgba(242, 236, 224, 0.18);
+		font-size: 16px;
+		line-height: 1.62;
+		color: rgba(242, 236, 224, 0.78);
+	}
+
+	> span:last-child { border-bottom: 1px solid rgba(242, 236, 224, 0.18); }
+	i { position: absolute; left: 0; top: 30px; font-family: $tm-mono; font-size: 12px; font-style: normal; font-weight: 700; color: $tm-gold; }
+	b { display: block; margin-bottom: 6px; font-family: $tm-serif; font-size: 25px; font-weight: 400; line-height: 1.15; letter-spacing: -0.02em; color: $tm-cream; }
+	a { color: $tm-gold; box-shadow: inset 0 -1.5px 0 rgba(224, 165, 38, 0.5); }
+	a:hover { box-shadow: inset 0 -2px 0 $tm-gold; }
+}
+
+/* ---- 5. 04 Hiring: checklist and cork board ------------------------------------------------ */
+
+.wcblr-tm-split.is-hire { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); }
+
+.wcblr-tm-check-h {
+	margin-top: 28px !important;
+	font-family: $tm-serif !important;
+	font-size: clamp(22px, 0.9rem + 0.9vw, 28px) !important;
+	line-height: 1.2 !important;
+	letter-spacing: -0.02em;
+	color: $tm-ink;
+}
+
+.wcblr-tm-check {
+	display: flex !important;
+	flex-direction: column;
+	margin-top: 16px !important;
+	padding: 6px 26px;
+	background: $tm-paper;
+	box-shadow: $tm-paper-shadow;
+
+	> span {
+		position: relative;
+		display: block;
+		padding: 18px 0 18px 44px;
+		border-bottom: 1px solid $tm-rule;
+		font-size: 15.5px;
+		line-height: 1.6;
+		color: $tm-soft;
+
+		// a hand-drawn box, ticked in red
+		&::before { content: ""; position: absolute; left: 2px; top: 21px; width: 20px; height: 20px; border: 2px solid $tm-ink; border-radius: 3px; transform: rotate(-4deg); }
+		&::after { content: "\2713"; position: absolute; left: 5px; top: 8px; font-size: 28px; font-weight: 700; line-height: 1; color: $tm-red; transform: rotate(8deg); }
+	}
+
+	> span:last-child { border-bottom: 0; }
+}
+
+// a listing's life on jobs.wordpress.net: about a day of review, then 21 days live
+.wcblr-tm-life { display: block; margin-top: 14px; }
+
+.wcblr-tm-life-bar {
+	position: relative;
 	display: flex;
-	align-items: baseline;
-	gap: 10px;
-	margin-bottom: 10px;
-
-	b { font-family: $tm-serif; font-size: 48px; font-weight: 400; line-height: 1; letter-spacing: -0.04em; color: $tm-red; }
-	small { font-family: $tm-mono; font-size: 11px; font-weight: 600; line-height: 1.4; color: $tm-muted; }
+	height: 28px;
+	border: 1.5px solid $tm-ink;
+	border-radius: 3px;
+	overflow: hidden;
+	font-family: $tm-mono;
+	font-size: 10.5px;
+	font-weight: 700;
+	line-height: 25px;
+	white-space: nowrap;
 }
 
-.wcblr-tm-cells {
-	display: grid;
-	grid-template-columns: repeat(12, minmax(0, 1fr));
-	gap: 4px;
+.wcblr-tm-life-rev { flex: 0 0 9%; border-right: 1.5px dashed $tm-ink; }
+.wcblr-tm-life-live { flex: 1; padding-right: 10px; background: $tm-hl; text-align: right; color: $tm-ink; }
 
-	i { height: 16px; border-radius: 4px; box-shadow: inset 0 0 0 1.5px $tm-gray; }
-	i.is-on { background: $tm-red; box-shadow: none; }
+.wcblr-tm-life-wc {
+	position: absolute;
+	left: 38%;
+	top: 0;
+	bottom: 0;
+	padding: 0 8px;
+	background: $tm-red;
+	color: #fff;
 }
 
-/* ---- 5. 04 Struggling to hire? --------------------------------------------------------- */
+.wcblr-tm-life-t {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 6px;
 
-.wcblr-tm-split-t { display: flex !important; flex-direction: column; }
+	small { font-family: $tm-mono; font-size: 10.5px; color: $tm-muted; }
+}
 
-// a cork-coloured board with one pinned role card, another card behind it
 .wcblr-tm-board {
 	position: relative;
 	display: block !important;
-	padding: 22px 26px 30px;
-	border-radius: 24px;
-	background: $tm-sand;
+	min-height: 440px;
+	padding: 24px 26px 30px;
+	border-radius: 6px;
+	background: #c9a77c;
+	box-shadow: inset 0 0 0 8px #8a6a46, inset 0 0 0 10px #6f5236, $tm-paper-shadow;
 }
 
 .wcblr-tm-board-k {
-	display: block;
-	margin-bottom: 18px;
+	position: relative;
+	z-index: 2;
+	display: inline-block;
+	margin: 6px 0 22px 4px;
+	padding: 4px 10px;
+	background: $tm-paper;
 	font-family: $tm-mono;
 	font-size: 11px;
-	font-weight: 600;
-	color: $tm-gold-deep;
+	font-weight: 700;
+	transform: rotate(-2deg);
 }
 
 .wcblr-tm-card {
@@ -828,24 +844,16 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
-	max-width: 420px;
-	padding: 24px 22px 20px;
-	border-radius: 6px;
-	background: #fff;
-	box-shadow: 0 1px 0 $tm-line, $tm-shadow;
-	transform: rotate(-1.2deg);
+	max-width: 380px;
+	margin-left: 12px;
+	padding: 26px 22px 20px;
+	background: $tm-paper;
+	box-shadow: 0 14px 24px -14px rgba(36, 26, 18, 0.6);
+	transform: rotate(-1.6deg);
 
-	&.is-back {
-		position: absolute;
-		z-index: 0;
-		right: 22px;
-		top: 54px;
-		width: 52%;
-		height: 62%;
-		background: $tm-paper;
-		box-shadow: 0 1px 0 $tm-line;
-		transform: rotate(3deg);
-	}
+	&.is-back, &.is-back2 { position: absolute; z-index: 0; width: 42%; height: 46%; margin: 0; padding: 0; }
+	&.is-back { right: 28px; top: 70px; transform: rotate(4deg); background: $tm-sky-soft; }
+	&.is-back2 { right: 44px; bottom: 34px; height: 30%; transform: rotate(-3deg); background: $tm-gold-soft; }
 }
 
 .wcblr-tm-card-pin {
@@ -857,7 +865,7 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	margin-left: -9px;
 	border-radius: 50%;
 	background: $tm-red;
-	box-shadow: inset -3px -3px 0 rgba(0, 0, 0, 0.18), 0 3px 6px rgba(36, 26, 18, 0.3);
+	box-shadow: inset -3px -3px 0 rgba(0, 0, 0, 0.18), 0 3px 6px rgba(36, 26, 18, 0.35);
 }
 
 .wcblr-tm-card-h {
@@ -876,17 +884,17 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	flex-wrap: wrap;
 	gap: 6px;
 
-	span { padding: 5px 10px; border-radius: 999px; background: $tm-paper; box-shadow: inset 0 0 0 1px $tm-line; font-size: 12.5px; font-weight: 600; color: $tm-soft; }
-	span:first-child { background: $tm-ink; color: $tm-paper; box-shadow: none; }
+	span { padding: 4px 10px; border: 1.5px solid $tm-gray; border-radius: 999px; font-size: 12.5px; font-weight: 600; color: $tm-soft; }
+	span:first-child { border-color: $tm-ink; background: $tm-ink; color: $tm-paper; }
 }
 
 .wcblr-tm-card-f {
 	display: grid;
-	grid-template-columns: minmax(0, 1fr) 64px;
+	grid-template-columns: minmax(0, 1fr) 62px;
 	gap: 14px;
 	align-items: end;
 	padding-top: 12px;
-	border-top: 1px dashed $tm-line;
+	border-top: 1px dashed $tm-gray;
 }
 
 .wcblr-tm-card-who {
@@ -904,10 +912,9 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 64px;
-	height: 64px;
-	border-radius: 6px;
-	box-shadow: inset 0 0 0 2px $tm-ink, inset 0 0 0 6px #fff, inset 0 0 0 8px $tm-ink;
+	width: 62px;
+	height: 62px;
+	box-shadow: inset 0 0 0 2px $tm-ink, inset 0 0 0 6px $tm-paper, inset 0 0 0 8px $tm-ink;
 	font-family: $tm-mono;
 	font-size: 9.5px;
 	font-weight: 700;
@@ -915,274 +922,215 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	text-align: center;
 }
 
-.wcblr-tm-tips {
+.wcblr-tm-quote {
+	position: relative;
+	max-width: 30ch !important;
+	margin: clamp(56px, 6vw, 96px) auto 0 !important;
+	padding-top: 56px;
+	font-family: $tm-serif !important;
+	font-size: clamp(24px, 1rem + 1.4vw, 38px) !important;
+	line-height: 1.24 !important;
+	letter-spacing: -0.02em;
+	text-align: center;
+	color: $tm-ink;
+
+	&::before { content: "\201C"; position: absolute; left: 50%; top: 0; transform: translateX(-50%); font-size: 110px; line-height: 1; color: $tm-red; }
+	b { font-weight: 400; font-style: italic; color: $tm-red; }
+}
+
+/* ---- 6. 05 The Monday after: a two-day calendar ------------------------------------------ */
+
+.wcblr-tm-split.is-monday { grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); align-items: center; }
+
+.wcblr-tm-cal {
 	display: grid !important;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: 12px;
-	margin-top: clamp(24px, 2.6vw, 36px) !important;
-
-	> span {
-		display: block;
-		padding: 20px 22px;
-		border-radius: 20px;
-		background: $tm-paper;
-		box-shadow: inset 0 0 0 1px $tm-line;
-		font-size: 15.5px;
-		line-height: 1.6;
-		color: $tm-soft;
-	}
-
-	> span > i { display: block; margin-bottom: 8px; font-family: $tm-serif; font-size: 40px; font-style: normal; line-height: 1; color: $tm-red; }
-	> .is-jobs { background: #fff; box-shadow: inset 0 0 0 1px $tm-line, $tm-shadow; }
+	background: $tm-paper;
+	box-shadow: $tm-paper-shadow;
 }
 
-// a listing's life on jobs.wordpress.net: about a day of review, then 21 days live
-.wcblr-tm-life { display: block; margin-top: 16px; }
-
-.wcblr-tm-life-bar {
-	position: relative;
+.wcblr-tm-cal-d {
 	display: flex;
-	height: 30px;
-	border-radius: 8px;
-	overflow: hidden;
-	font-family: $tm-mono;
-	font-size: 10.5px;
-	font-weight: 600;
-	line-height: 30px;
-	white-space: nowrap;
-}
-
-.wcblr-tm-life-rev { flex: 0 0 9%; background: $tm-sand; color: $tm-soft; font-size: 0; }
-.wcblr-tm-life-live { flex: 1; padding-right: 10px; background: $tm-green; color: #fff; text-align: right; }
-
-.wcblr-tm-life-wc {
-	position: absolute;
-	left: 40%;
-	top: 0;
-	bottom: 0;
-	padding: 0 8px;
-	background: $tm-red;
-	color: #fff;
-}
-
-.wcblr-tm-life-t {
-	display: flex;
-	justify-content: space-between;
-	margin-top: 6px;
-
-	small { font-family: $tm-mono; font-size: 10.5px; color: $tm-muted; }
-}
-
-.wcblr-tm-ad {
-	margin-top: 16px !important;
-	padding: clamp(22px, 3vw, 36px);
-	border-radius: 24px;
-	background: $tm-espresso;
-	font-family: $tm-serif !important;
-	font-size: clamp(20px, 0.8rem + 0.9vw, 26px) !important;
-	line-height: 1.4 !important;
-	letter-spacing: -0.01em;
-	color: rgba(251, 248, 241, 0.86);
-
-	b { font-weight: 400; color: $tm-gold; }
-}
-
-/* ---- 6. 05 The Monday after ------------------------------------------------------------ */
-
-.wcblr-tm-mon {
-	display: flex !important;
 	flex-direction: column;
-	border-radius: 24px;
-	overflow: hidden;
-	background: #fff;
-	box-shadow: inset 0 0 0 1px $tm-line, $tm-shadow;
-}
-
-.wcblr-tm-mon-h {
-	display: grid;
-	grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1.3fr);
 	gap: 10px;
-	align-items: stretch;
-	padding: 16px;
-	background: $tm-espresso;
+	min-height: 320px;
+	padding: 18px 18px 22px;
 
-	> span { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border-radius: 14px; background: $tm-red; color: #fff; }
-	> .is-mon { background: $tm-paper; color: $tm-ink; }
-	> .is-arrow { align-self: center; padding: 0; background: none; font-size: 20px; text-align: center; color: $tm-gold; }
-	> .is-arrow::before { content: "\2192"; }
-
-	small { font-family: $tm-mono; font-size: 10.5px; font-weight: 600; opacity: 0.85; }
-	b { font-family: $tm-serif; font-size: 22px; font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; }
+	> small { font-family: $tm-mono; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: $tm-muted; }
+	> b { margin: -4px 0 6px; padding-bottom: 12px; border-bottom: 2px solid $tm-ink; font-family: $tm-serif; font-size: 52px; font-weight: 400; line-height: 1; letter-spacing: -0.04em; }
+	&.is-mon { border-left: 1px solid $tm-rule; }
 }
 
-.wcblr-tm-mon-cols,
-.wcblr-tm-mon-row {
-	display: grid;
-	grid-template-columns: 80px minmax(0, 1fr) minmax(0, 1fr);
-	gap: 12px;
-	align-items: center;
-	margin: 0 20px;
+.wcblr-tm-ev {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 14px 14px 16px;
+	border-radius: 6px;
+	font-size: 14px;
+	line-height: 1.45;
+
+	small { font-family: $tm-mono; font-size: 10.5px; font-weight: 700; opacity: 0.85; }
+	strong { font-family: $tm-serif; font-size: 21px; font-weight: 400; line-height: 1.15; letter-spacing: -0.015em; }
+
+	&.is-wc { flex: 1; background: $tm-red; color: #fff; }
+	&.is-after { border-left: 4px solid $tm-sky; background: $tm-sky-soft; color: $tm-ink; }
 }
 
-.wcblr-tm-mon-cols {
-	padding: 16px 0 8px;
+.wcblr-tm-ev-li {
+	position: relative;
+	padding: 6px 0 6px 28px;
+	border-bottom: 1px dashed $tm-rule;
+	font-size: 14.5px;
+	line-height: 1.4;
 
-	small { font-family: $tm-mono; font-size: 10.5px; font-weight: 600; color: $tm-muted; }
+	&::before { content: ""; position: absolute; left: 2px; top: 8px; width: 14px; height: 14px; border: 2px solid $tm-ink; border-radius: 2px; }
 }
 
-.wcblr-tm-mon-row {
-	padding: 10px 0;
-	border-top: 1px solid #efebe4;
-
-	b { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: $tm-ink; color: $tm-gold; font-family: $tm-mono; font-size: 12px; }
-	i { height: 12px; border-radius: 999px; background: $tm-sand; }
-	i + i { width: 80%; }
-}
-
-.wcblr-tm-mon-f {
-	margin: 8px 20px 20px;
-	padding: 12px 14px;
-	border-radius: 12px;
-	background: $tm-gold-soft;
-	font-family: $tm-serif;
-	font-size: 17px;
-	font-style: italic;
-	color: $tm-ink;
-}
-
-/* ---- 7. 06 Buying for your team -------------------------------------------------------- */
+/* ---- 7. 06 Buying: a connected line, an email to forward ---------------------------------- */
 
 .wcblr-tm-steps {
 	display: grid !important;
 	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 12px;
+	gap: clamp(20px, 3vw, 40px);
 
 	> span {
 		position: relative;
 		display: block;
-		padding: 20px;
-		border-radius: 20px;
-		background: $tm-paper;
-		box-shadow: inset 0 0 0 1px $tm-line;
+		padding-top: 66px;
 		font-size: 15.5px;
 		line-height: 1.6;
 		color: $tm-soft;
 	}
 
-	> span:not(:last-child)::after {
-		content: "\2192";
+	// the line joining one step to the next
+	> span:not(:last-child)::after { content: ""; position: absolute; left: 56px; right: calc(-1 * clamp(20px, 3vw, 40px)); top: 24px; border-top: 2px dashed $tm-ink; opacity: 0.4; }
+
+	i {
 		position: absolute;
-		right: -13px;
-		top: 22px;
-		z-index: 1;
-		width: 26px;
-		height: 26px;
+		left: 0;
+		top: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 48px;
+		height: 48px;
+		border: 2px solid $tm-ink;
 		border-radius: 50%;
 		background: $tm-cream;
-		font-size: 14px;
-		line-height: 26px;
-		text-align: center;
-		color: $tm-red;
+		font-family: $tm-serif;
+		font-size: 24px;
+		font-style: normal;
 	}
 
-	i { display: block; margin-bottom: 10px; font-family: $tm-serif; font-size: 40px; font-style: normal; line-height: 1; color: $tm-red; }
+	> span:last-child i { border-color: $tm-red; background: $tm-red; color: #fff; }
 	b { color: $tm-ink; }
-	> span:last-child { background: $tm-ink; color: rgba(251, 248, 241, 0.86); box-shadow: none; }
-	> span:last-child i { color: $tm-gold; }
 }
+
+.wcblr-tm-split.is-buy { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); margin-top: clamp(40px, 4.4vw, 72px) !important; }
 
 .wcblr-tm-cday {
 	display: grid !important;
-	grid-template-columns: 64px minmax(0, 1fr);
+	grid-template-columns: 62px minmax(0, 1fr);
 	gap: 18px;
 	align-items: start;
-	margin-top: 22px !important;
-	padding: 20px;
-	border-radius: 20px;
-	background: $tm-gold-soft;
+	margin-top: 26px !important;
+	padding-top: 22px;
+	border-top: 1px solid $tm-line;
 	font-size: 15.5px !important;
 	line-height: 1.6 !important;
 	color: $tm-ink;
 }
 
+// a tear-off calendar date
 .wcblr-tm-cday-d {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding: 8px 0 10px;
-	border-radius: 12px;
-	background: $tm-gold;
+	overflow: hidden;
+	padding-bottom: 8px;
+	border-radius: 6px;
+	background: $tm-paper;
+	box-shadow: $tm-paper-shadow;
 	font-family: $tm-serif;
 	font-size: 30px;
 	line-height: 1;
 
-	small { font-family: $tm-mono; font-size: 10.5px; font-weight: 600; }
+	small { align-self: stretch; margin-bottom: 6px; padding: 4px 0; background: $tm-gold; font-family: $tm-mono; font-size: 10.5px; font-weight: 700; text-align: center; }
 }
 
-// a note to forward
-.wcblr-tm-memo {
+.wcblr-tm-mail {
 	display: flex !important;
 	flex-direction: column;
-	gap: 0;
-	padding: 24px;
-	border-radius: 6px;
-	background: #fff;
-	box-shadow: inset 0 4px 0 $tm-red, 0 1px 0 $tm-line, $tm-shadow;
+	overflow: hidden;
+	border-radius: 10px;
+	background: $tm-paper;
+	box-shadow: $tm-paper-shadow, 0 0 0 1px $tm-line;
 }
 
-.wcblr-tm-memo-h {
+.wcblr-tm-mail-k {
+	position: relative;
+	padding: 12px 16px 12px 70px;
+	background: $tm-sand;
+	font-family: $tm-mono;
+	font-size: 11.5px;
+	font-weight: 700;
+
+	// window dots
+	&::before { content: ""; position: absolute; left: 16px; top: 50%; width: 10px; height: 10px; margin-top: -5px; border-radius: 50%; background: $tm-red; box-shadow: 15px 0 0 $tm-gold, 30px 0 0 $tm-green; }
+}
+
+.wcblr-tm-mail-f {
+	display: grid;
+	grid-template-columns: 70px minmax(0, 1fr);
+	gap: 10px;
+	align-items: baseline;
+	margin: 0 20px;
+	padding: 11px 0;
+	border-bottom: 1px solid $tm-rule;
+	font-size: 14.5px;
+	font-weight: 600;
+
+	small { font-family: $tm-mono; font-size: 10.5px; font-weight: 600; color: $tm-muted; }
+}
+
+.wcblr-tm-mail-b {
 	display: flex;
 	flex-direction: column;
-	gap: 6px;
-	padding-bottom: 14px;
-	margin-bottom: 4px;
-	border-bottom: 2px dashed $tm-line;
+	gap: 10px;
+	padding: 18px 20px 22px;
 
-	small { font-family: $tm-mono; font-size: 11px; font-weight: 600; color: $tm-red; }
-	b { font-family: $tm-serif; font-size: 26px; font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; }
+	span { position: relative; padding-left: 20px; font-size: 15.5px; line-height: 1.5; }
+	span::before { content: ""; position: absolute; left: 2px; top: 9px; width: 7px; height: 7px; background: $tm-red; }
 }
 
-.wcblr-tm-memo-i {
+/* ---- 8. Close: a ticket ---------------------------------------------------------------- */
+
+.wcblr-tm-ticket {
 	position: relative;
-	display: block;
-	padding: 11px 0 11px 32px;
-	border-bottom: 1px solid #efebe4;
-	font-size: 15.5px;
-	line-height: 1.45;
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) 300px;
+	border-radius: 20px;
+	background: $tm-espresso;
+	color: $tm-cream;
 
-	&:last-child { border-bottom: 0; padding-bottom: 0; }
+	em { color: $tm-gold; }
 
-	&::before {
-		content: "\2713";
-		position: absolute;
-		left: 0;
-		top: 12px;
-		width: 20px;
-		height: 20px;
-		border-radius: 50%;
-		background: $tm-ink;
-		color: #fff;
-		font-size: 11px;
-		font-weight: 700;
-		line-height: 20px;
-		text-align: center;
-	}
+	// the notches either end of the perforation
+	&::before,
+	&::after { content: ""; position: absolute; right: 286px; width: 28px; height: 28px; border-radius: 50%; background: $tm-cream; }
+	&::before { top: -14px; }
+	&::after { bottom: -14px; }
 }
 
-/* ---- 8. Close ------------------------------------------------------------------------- */
+.wcblr-tm-ticket-main { padding: clamp(28px, 4.4vw, 64px); }
 
-.wcblr-tm-close {
-	display: grid !important;
-	grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-	gap: clamp(28px, 4vw, 64px);
-	align-items: center;
-	padding: clamp(28px, 4.4vw, 72px);
-	border-radius: 32px;
-	background: $tm-espresso;
-	color: $tm-paper;
-
-	.wcblr-tm-k.is-gold { color: $tm-gold; }
-	em { color: $tm-gold; }
+.wcblr-tm-k {
+	font-family: $tm-mono !important;
+	font-size: 11.5px !important;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	color: $tm-gold;
 }
 
 .wcblr-post.wcblr-tm .wcblr-tm-close-t {
@@ -1192,72 +1140,44 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	font-weight: 400 !important;
 	line-height: 1.02 !important;
 	letter-spacing: -0.045em !important;
-	color: $tm-paper;
+	color: $tm-cream;
 	text-wrap: balance;
 }
 
 .wcblr-tm-close-b {
-	max-width: 52ch !important;
+	max-width: 50ch !important;
 	margin-top: 16px !important;
 	font-size: 17px !important;
 	line-height: 1.65 !important;
-	color: rgba(251, 248, 241, 0.82);
+	color: rgba(242, 236, 224, 0.82);
 }
 
 .wcblr-tm-close-b + .wcblr-tm-close-b { margin-top: 8px !important; }
 
-.wcblr-tm-gets {
+.wcblr-tm-stub {
 	display: flex !important;
 	flex-direction: column;
-	gap: 12px;
-	padding: 24px;
-	border-radius: 22px;
-	background: $tm-paper;
-	color: $tm-ink;
+	justify-content: center;
+	gap: 6px;
+	padding: 36px 32px;
+	border-left: 2px dashed rgba(242, 236, 224, 0.3);
+	text-align: center;
 
-	> span:not(.wcblr-tm-gets-h) {
-		position: relative;
-		display: flex;
-		flex-direction: column;
-		padding-left: 32px;
-
-		&::before {
-			content: "\2713";
-			position: absolute;
-			left: 0;
-			top: 1px;
-			width: 20px;
-			height: 20px;
-			border-radius: 50%;
-			background: $tm-ink;
-			color: #fff;
-			font-size: 11px;
-			font-weight: 700;
-			line-height: 20px;
-			text-align: center;
-		}
-	}
-
-	b { font-size: 15px; font-weight: 700; line-height: 1.35; }
-	small { font-size: 13.5px; line-height: 1.4; color: $tm-soft; }
-
-	.is-x::before { background: $tm-red !important; }
-	.is-c::before { background: $tm-sky !important; }
-	.is-biz::before { background: $tm-gold !important; color: $tm-ink !important; }
+	small { font-family: $tm-mono; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(242, 236, 224, 0.7); }
+	b { font-family: $tm-serif; font-size: 76px; font-weight: 400; line-height: 1; letter-spacing: -0.05em; color: $tm-gold; }
+	> span { font-size: 14.5px; color: rgba(242, 236, 224, 0.85); }
 }
 
-.wcblr-tm-gets-h {
-	display: flex;
-	align-items: baseline;
-	justify-content: space-between;
-	gap: 12px;
-	padding-bottom: 14px;
-	margin-bottom: 4px;
-	border-bottom: 2px dashed $tm-line;
-
-	b { font-family: $tm-serif; font-size: 52px !important; font-weight: 400 !important; line-height: 1 !important; letter-spacing: -0.04em; color: $tm-red; }
-	small { font-family: $tm-mono; font-size: 11.5px !important; font-weight: 600; color: $tm-muted !important; }
+.wcblr-tm-stub .wcblr-tm-stub-l {
+	margin-top: 4px;
+	padding-top: 10px;
+	border-top: 1px dashed rgba(242, 236, 224, 0.25);
+	font-family: $tm-mono;
+	font-size: 11.5px;
+	font-weight: 600;
 }
+
+.wcblr-tm-stub > span:nth-of-type(2) { margin-top: 14px; }
 
 /* ---- Motion: the first screen only --------------------------------------------------- */
 
@@ -1266,107 +1186,110 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	to { opacity: 1; transform: none; }
 }
 
-@keyframes wcblr-tm-pop {
-	from { opacity: 0; transform: scaleY(0.2); }
-	to { opacity: 1; transform: none; }
+@keyframes wcblr-tm-drop {
+	from { opacity: 0; transform: translateY(-10px) rotate(4deg); }
+	to { opacity: 1; transform: rotate(1.4deg); }
+}
+
+@keyframes wcblr-tm-thump {
+	0% { opacity: 0; transform: scale(1.6) rotate(-4deg); }
+	60% { opacity: 1; transform: scale(0.94) rotate(-4deg); }
+	100% { opacity: 0.92; transform: rotate(-4deg); }
 }
 
 @media (prefers-reduced-motion: no-preference) {
 	.wcblr-tm-hero-main > * { animation: wcblr-tm-rise 0.7s $tm-ease backwards; }
 	.wcblr-tm-hero-main > :nth-child(2) { animation-delay: 0.06s; }
-	.wcblr-tm-hero-main > :nth-child(3) { animation-delay: 0.16s; }
-	.wcblr-tm-cover { animation: wcblr-tm-rise 0.8s $tm-ease 0.1s backwards; }
-	.wcblr-tm-cover-row + .wcblr-tm-cover-row .wcblr-tm-lane.is-c i { animation: wcblr-tm-pop 0.5s $tm-spring 0.7s backwards; }
+	.wcblr-tm-hero-main > :nth-child(3) { animation-delay: 0.14s; }
+	.wcblr-tm-stamp { animation: wcblr-tm-thump 0.5s $tm-ease 0.5s backwards; }
+	.wcblr-tm-memo { animation: wcblr-tm-drop 0.8s $tm-ease 0.15s backwards; }
 }
 
 /* ---- Breakpoints ---------------------------------------------------------------------- */
 
 @media (max-width: 1100px) {
 	.wcblr-tm-hero,
-	.wcblr-tm-split,
-	.wcblr-tm-split.is-intro,
-	.wcblr-tm-close { grid-template-columns: minmax(0, 1fr); }
-	.wcblr-tm-cover { max-width: 620px; }
-	.wcblr-tm-index, .is-intro .wcblr-tm-index { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; }
-	.is-intro .wcblr-tm-index .wcblr-tm-index-k { grid-column: 1 / -1; }
-	.wcblr-tm-door { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-	.wcblr-tm-door-t { grid-column: 1 / -1; }
-	.wcblr-tm-backs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-	.wcblr-tm-backs > .is-meter { grid-column: 2; grid-row: 1 / span 2; }
-	.wcblr-tm-board, .wcblr-tm-mon, .wcblr-tm-memo { max-width: 620px; }
-	.wcblr-tm-gets { max-width: 460px; }
+	.wcblr-tm-agenda-wrap,
+	.wcblr-tm-split.is-back,
+	.wcblr-tm-split.is-hire,
+	.wcblr-tm-split.is-monday,
+	.wcblr-tm-split.is-buy { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-tm-memo { max-width: 520px; }
+	.wcblr-tm-sticky { max-width: 440px; }
+	.wcblr-tm-board, .wcblr-tm-cal, .wcblr-tm-mail { max-width: 620px; }
+	.wcblr-tm-big { flex-direction: row; align-items: flex-end; gap: 24px; }
 }
 
 @media (max-width: 860px) {
-	.wcblr-tm-teams,
-	.wcblr-tm-backs,
-	.wcblr-tm-tips,
-	.wcblr-tm-steps { grid-template-columns: minmax(0, 1fr); }
-	.wcblr-tm-backs > .is-meter { grid-column: auto; grid-row: auto; }
-	.wcblr-tm-steps > span::after { display: none; }
-	.wcblr-tm-s { grid-template-columns: 34px minmax(0, 1fr); gap: 8px 14px; }
+	.wcblr-tm-receipts { grid-template-columns: minmax(0, 1fr); max-width: 420px; padding: 0; }
+	.wcblr-tm-rc:nth-child(n) { margin-top: 0; }
+	.wcblr-tm-steps { grid-template-columns: minmax(0, 1fr); gap: 0; }
+	.wcblr-tm-steps > span { padding: 8px 0 28px 66px; min-height: 76px; }
+	.wcblr-tm-steps > span:not(:last-child)::after { left: 23px; right: auto; top: 52px; bottom: 0; border-top: 0; border-left: 2px dashed $tm-ink; }
+	.wcblr-tm-s { grid-template-columns: 40px minmax(0, 1fr); gap: 8px 14px; }
 	.wcblr-tm-s-b { grid-column: 2; }
 	.wcblr-tm-s-m { flex-direction: row; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; }
+	.wcblr-tm-ticket { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-tm-ticket::before, .wcblr-tm-ticket::after { display: none; }
+	.wcblr-tm-stub { border-left: 0; border-top: 2px dashed rgba(242, 236, 224, 0.3); }
 }
 
-// phones: Sunday at a glance stands up, time runs down the page
+// phones: the timetable stands up, time runs down the page
 @media (max-width: 640px) {
 	.wcblr-tm-actions .wp-block-button { flex: 1 1 auto; }
 	.wcblr-tm-actions .wp-block-button__link { width: 100%; justify-content: center; }
-	.wcblr-tm-index, .is-intro .wcblr-tm-index { grid-template-columns: minmax(0, 1fr); }
-	.wcblr-tm-close { padding: 26px 20px; border-radius: 24px; }
-	.wcblr-tm-door { grid-template-columns: minmax(0, 1fr); padding: 18px; }
-	.wcblr-tm-cover-row .wcblr-tm-lane { grid-template-columns: 52px minmax(0, 1fr); gap: 8px; }
-	.wcblr-tm-cover-row { margin: 0 16px; }
-	.wcblr-tm-board { padding: 18px 16px 24px; }
-	.wcblr-tm-card.is-back { display: none; }
-	.wcblr-tm-mon-cols, .wcblr-tm-mon-row { grid-template-columns: 44px minmax(0, 1fr) minmax(0, 1fr); margin: 0 16px; }
-	.wcblr-tm-mon-cols small:first-child { font-size: 0; }
-	.wcblr-tm-mon-h { grid-template-columns: minmax(0, 1fr); padding: 12px; }
-	.wcblr-tm-mon-h > .is-arrow { transform: rotate(90deg); }
-	.wcblr-tm-cday { grid-template-columns: 52px minmax(0, 1fr); gap: 14px; padding: 16px; }
-	.wcblr-tm-memo { padding: 20px 18px; }
-	.wcblr-tm-s { padding: 16px; }
+	.wcblr-tm-memo { padding: 24px 20px 22px; }
+	.wcblr-tm-field { grid-template-columns: 70px minmax(0, 1fr); }
+	.wcblr-tm-index { flex-direction: column; gap: 10px; }
+	.wcblr-tm-agenda { padding: 4px 18px 8px; }
+	.wcblr-tm-check { padding: 4px 18px; }
+	.wcblr-tm-board { min-height: 0; padding: 18px 16px 26px; }
+	.wcblr-tm-card { margin-left: 0; }
+	.wcblr-tm-card.is-back, .wcblr-tm-card.is-back2 { display: none; }
+	.wcblr-tm-cal { grid-template-columns: minmax(0, 1fr); }
+	.wcblr-tm-cal-d { min-height: 0; }
+	.wcblr-tm-cal-d.is-mon { border-left: 0; border-top: 1px solid $tm-rule; }
+	.wcblr-tm-ev.is-wc { min-height: 120px; }
 	.wcblr-tm-life-wc { left: 33%; }
+	.wcblr-tm-stub b { font-size: 60px; }
 
-	.wcblr-tm-glance {
+	.wcblr-tm-sheet {
 		display: grid !important;
-		grid-template-columns: 54px minmax(0, 1fr) minmax(0, 1fr);
-		grid-template-rows: auto 12px 560px auto;
+		grid-template-columns: 46px minmax(0, 1fr) minmax(0, 1fr);
+		grid-template-rows: auto 14px 560px auto;
 		gap: 10px 8px;
-		padding-bottom: 16px;
+		padding: 22px 16px 18px;
 
-		> .wcblr-tm-glance-bar { grid-column: 1 / -1; }
-		> .wcblr-tm-lane, > .wcblr-tm-axis, > .wcblr-tm-breaks, > .wcblr-tm-cap { margin: 0 !important; }
-		> .wcblr-tm-axis { grid-column: 1; grid-row: 3; height: auto; margin-left: 16px !important; }
-		> .wcblr-tm-breaks { grid-column: 2 / 4; grid-row: 3; height: auto; margin-right: 16px !important; }
-		> .wcblr-tm-lane { position: relative; z-index: 1; grid-row: 3; display: block; }
+		> .wcblr-tm-sheet-h { grid-column: 1 / -1; grid-row: 1; flex-direction: column; gap: 4px; }
+		> .wcblr-tm-axis { grid-column: 1; grid-row: 3; height: auto; margin: 0 !important; }
+		> .wcblr-tm-breaks { grid-column: 2 / 4; grid-row: 3; height: auto; margin: 0 !important; z-index: 0; }
+		> .wcblr-tm-lane { grid-row: 3; display: block; }
 		> .wcblr-tm-lane > small { position: absolute; left: 0; top: -24px; }
-		> .wcblr-tm-breaks { z-index: 0; }
 		> .wcblr-tm-lane.is-x { grid-column: 2; }
-		> .wcblr-tm-lane.is-c { grid-column: 3; margin-right: 16px !important; }
-		> .wcblr-tm-cap { grid-column: 1 / -1; grid-row: 4; margin: 0 16px !important; }
-		> .wcblr-tm-glance-bar { grid-row: 1; }
-		.wcblr-tm-track { height: 100%; background: transparent; box-shadow: none; }
-		.wcblr-tm-breaks span { font-size: 0; }
-		.wcblr-tm-track i { left: 0 !important; right: 0; width: auto !important; top: auto; bottom: auto; }
+		> .wcblr-tm-lane.is-c { grid-column: 3; }
+		> .wcblr-tm-cap { grid-column: 1 / -1; grid-row: 4; }
+		.wcblr-tm-track { height: 100%; }
+		.wcblr-tm-track i { left: 2px !important; right: 2px; width: auto !important; top: auto; bottom: auto; }
+		.wcblr-tm-breaks span { font-size: 12px; }
+		.wcblr-tm-track i.is-biz b { width: 20px; height: 20px; font-size: 10px; border-width: 1.5px; }
 	}
 
-	.wcblr-tm-glance .wcblr-tm-axis small { transform: translateY(-50%); left: 0 !important; right: auto !important; }
-	.wcblr-tm-glance .wcblr-tm-axis small:nth-child(1) { top: 0; transform: none; }
-	.wcblr-tm-glance .wcblr-tm-axis small:nth-child(2) { top: tm-pc(120); }
-	.wcblr-tm-glance .wcblr-tm-axis small:nth-child(3) { top: tm-pc(240); }
-	.wcblr-tm-glance .wcblr-tm-axis small:nth-child(4) { top: tm-pc(360); }
-	.wcblr-tm-glance .wcblr-tm-axis small:nth-child(5) { top: auto; bottom: 0; transform: none; }
+	.wcblr-tm-sheet .wcblr-tm-axis small { left: 0 !important; right: auto !important; transform: translateY(-50%); }
+	.wcblr-tm-sheet .wcblr-tm-axis small::after { display: none; }
+	.wcblr-tm-sheet .wcblr-tm-axis small:nth-child(1) { top: 0; transform: none; }
+	.wcblr-tm-sheet .wcblr-tm-axis small:nth-child(2) { top: tm-pc(120); }
+	.wcblr-tm-sheet .wcblr-tm-axis small:nth-child(3) { top: tm-pc(240); }
+	.wcblr-tm-sheet .wcblr-tm-axis small:nth-child(4) { top: tm-pc(360); }
+	.wcblr-tm-sheet .wcblr-tm-axis small:nth-child(5) { top: auto; bottom: 0; transform: none; }
 
 	@each $name, $s in $tm-breaks {
-		.wcblr-tm-glance .wcblr-tm-breaks .is-#{$name} { left: 0; right: 0; width: auto; top: tm-pc(list.nth($s, 1)); bottom: auto; height: tm-pc(list.nth($s, 2)); border-radius: 8px; opacity: 0.7; }
+		.wcblr-tm-sheet .wcblr-tm-breaks .is-#{$name} { left: 0; right: 0; width: auto; top: tm-pc(list.nth($s, 1)); bottom: auto; height: tm-pc(list.nth($s, 2)); }
 	}
 
 	@each $hall, $list in ("x": $tm-x, "c": $tm-c) {
 		@for $n from 1 through list.length($list) {
 			$s: list.nth($list, $n);
-			.wcblr-tm-glance .wcblr-tm-lane.is-#{$hall} .wcblr-tm-track > i:nth-child(#{$n}) {
+			.wcblr-tm-sheet .wcblr-tm-lane.is-#{$hall} .wcblr-tm-track > i:nth-child(#{$n}) {
 				top: tm-pc(list.nth($s, 1));
 				height: tm-pc(list.nth($s, 2));
 			}
