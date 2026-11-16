@@ -156,7 +156,7 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 .wcblr-post.wcblr-tm .wcblr-tm-bt {
 	margin-top: 12px !important;
 	font-family: $tm-serif !important;
-	font-size: clamp(40px, 1.1rem + 4vw, 88px) !important;
+	font-size: clamp(34px, 1rem + 2.6vw, 60px) !important;
 	font-weight: 400 !important;
 	line-height: 1.04 !important;
 	padding-bottom: 0.06em;
@@ -277,10 +277,10 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 
 .wcblr-tm-hero {
 	display: grid !important;
-	grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+	grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
 	gap: clamp(28px, 4vw, 64px);
 	align-items: center;
-	padding-top: clamp(16px, 3vw, 48px);
+	padding-top: clamp(16px, 2vw, 32px);
 }
 
 .wcblr-tm-kicker {
@@ -298,10 +298,10 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 .wcblr-post.wcblr-tm .wcblr-tm-h1 {
 	margin-top: 22px !important;
 	font-family: $tm-serif !important;
-	font-size: clamp(44px, 1.1rem + 4.4vw, 96px) !important;
+	font-size: clamp(38px, 1rem + 3vw, 72px) !important;
 	font-weight: 400 !important;
-	line-height: 1 !important;
-	letter-spacing: -0.05em !important;
+	line-height: 1.02 !important;
+	letter-spacing: -0.045em !important;
 	color: $tm-ink;
 	text-wrap: balance;
 }
@@ -376,11 +376,15 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	.is-off::before { box-shadow: inset 0 0 0 1.5px $tm-gray; }
 }
 
+.wcblr-tm-split.is-intro {
+	grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
+	align-items: start;
+	margin-top: clamp(44px, 4.4vw, 80px) !important;
+}
+
 .wcblr-tm-lede {
-	max-width: 38ch !important;
-	margin-top: clamp(40px, 4.4vw, 72px) !important;
 	font-family: $tm-serif !important;
-	font-size: clamp(24px, 1rem + 1.3vw, 36px) !important;
+	font-size: clamp(22px, 0.9rem + 1.1vw, 32px) !important;
 	line-height: 1.28 !important;
 	letter-spacing: -0.02em;
 	color: $tm-ink;
@@ -409,6 +413,37 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 	}
 
 	b { font-family: $tm-mono; font-size: 11px; color: $tm-red; }
+}
+
+.wcblr-tm-index-k { display: none; }
+
+// beside the lede: an "in this post" list
+.is-intro .wcblr-tm-index {
+	grid-template-columns: minmax(0, 1fr);
+	gap: 0;
+	margin-top: 0 !important;
+	padding: 6px 20px 8px;
+	border-radius: 20px;
+	background: $tm-paper;
+	box-shadow: inset 0 0 0 1px $tm-line;
+
+	.wcblr-tm-index-k { display: block; padding: 12px 0 8px; font-family: $tm-mono; font-size: 11px; font-weight: 600; color: $tm-muted; }
+
+	a {
+		flex-direction: row;
+		align-items: baseline;
+		gap: 14px;
+		padding: 11px 0;
+		border-radius: 0;
+		background: none;
+		box-shadow: none;
+		border-top: 1px solid #ebe4d8;
+		font-size: 15px;
+
+		&::after { content: "\2193"; margin-left: auto; color: $tm-muted; transition: transform 0.3s $tm-spring, color 0.2s $tm-ease; }
+		&:hover { transform: none; background: none; color: $tm-red; }
+		&:hover::after { transform: translateY(3px); color: $tm-red; }
+	}
 }
 
 // Sunday at a glance
@@ -1153,7 +1188,7 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 .wcblr-post.wcblr-tm .wcblr-tm-close-t {
 	margin-top: 14px !important;
 	font-family: $tm-serif !important;
-	font-size: clamp(40px, 1rem + 3.4vw, 76px) !important;
+	font-size: clamp(36px, 1rem + 2.8vw, 64px) !important;
 	font-weight: 400 !important;
 	line-height: 1.02 !important;
 	letter-spacing: -0.045em !important;
@@ -1249,9 +1284,11 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 @media (max-width: 1100px) {
 	.wcblr-tm-hero,
 	.wcblr-tm-split,
+	.wcblr-tm-split.is-intro,
 	.wcblr-tm-close { grid-template-columns: minmax(0, 1fr); }
 	.wcblr-tm-cover { max-width: 620px; }
-	.wcblr-tm-index { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+	.wcblr-tm-index, .is-intro .wcblr-tm-index { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; }
+	.is-intro .wcblr-tm-index .wcblr-tm-index-k { grid-column: 1 / -1; }
 	.wcblr-tm-door { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 	.wcblr-tm-door-t { grid-column: 1 / -1; }
 	.wcblr-tm-backs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1276,7 +1313,7 @@ body:has(.wcblr-tm) .wp-site-blocks > main { padding-top: clamp(16px, 3vw, 40px)
 @media (max-width: 640px) {
 	.wcblr-tm-actions .wp-block-button { flex: 1 1 auto; }
 	.wcblr-tm-actions .wp-block-button__link { width: 100%; justify-content: center; }
-	.wcblr-tm-index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.wcblr-tm-index, .is-intro .wcblr-tm-index { grid-template-columns: minmax(0, 1fr); }
 	.wcblr-tm-close { padding: 26px 20px; border-radius: 24px; }
 	.wcblr-tm-door { grid-template-columns: minmax(0, 1fr); padding: 18px; }
 	.wcblr-tm-cover-row .wcblr-tm-lane { grid-template-columns: 52px minmax(0, 1fr); gap: 8px; }
