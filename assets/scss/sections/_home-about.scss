@@ -1160,6 +1160,46 @@ body.home p.wcblr-hero-day__body {
 	color: $ha-soft !important;
 }
 
+/* 19 Nov: each day names its venue (people were heading to BIC on Sunday) */
+body.home p.wcblr-hero-day__where {
+	margin-top: 6px !important;
+	font-size: 14px !important;
+	font-weight: 600;
+	line-height: 1.45 !important;
+	color: $ha-ink !important;
+}
+
+body.home p.wcblr-hero-day__where span {
+	display: inline-block;
+	margin-right: 8px;
+	padding: 2px 7px;
+	border-radius: 5px;
+	background: rgba(42, 29, 20, 0.07);
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	vertical-align: 1px;
+}
+
+body.home p.wcblr-hero-day__where a {
+	color: inherit !important;
+	text-decoration: underline;
+	text-decoration-thickness: 1.5px;
+	text-underline-offset: 3px;
+}
+
+body.home .wcblr-hero-day--sat p.wcblr-hero-day__where a { text-decoration-color: #c99a2e; }
+body.home .wcblr-hero-day--sun p.wcblr-hero-day__where a { text-decoration-color: #16705a; }
+
+body.home p.wcblr-pass__transit a {
+	color: $ha-ink !important;
+	font-weight: 600;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
 body.home p.wcblr-hero-day__body strong {
 	color: $ha-ink;
 	font-weight: 600;
