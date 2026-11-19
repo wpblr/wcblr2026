@@ -112,6 +112,24 @@ body.admin-bar .wp-site-blocks > header.wp-block-template-part {
 	}
 }
 
+/* 19 Nov: the Venue item made the nav wider, so the lockup wrapped to two or three
+   lines. Keep the lockup on one line and take the room from the item padding. */
+@media (min-width: #{$ch-collapse + 1}) {
+	.wcblr-header .wcblr-site-logo { flex-shrink: 0 !important; }
+
+	.wcblr-header .wcblr-site-logo .wp-block-site-title,
+	.wcblr-header .wcblr-site-logo .wp-block-site-title a,
+	.wcblr-header .wcblr-site-logo p { white-space: nowrap !important; }
+
+	.wcblr-header .wp-block-navigation .wp-block-navigation-item__content { padding: 9px 10px !important; }
+}
+
+@media (min-width: #{$ch-collapse + 1}) and (max-width: 1399px) {
+	.wcblr-header .wp-block-navigation { font-size: 14px !important; }
+	.wcblr-header .wp-block-navigation .wp-block-navigation-item__content { padding: 9px 8px !important; }
+	.wcblr-header .wcblr-header-ctas .wp-block-button__link { padding: 11px 16px !important; }
+}
+
 /* Dropdowns hang as floating sheets of the same paper. */
 .wcblr-header .wp-block-navigation__submenu-container {
 	border: 1px solid rgba(42, 29, 20, 0.08) !important;
